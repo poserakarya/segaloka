@@ -1,0 +1,28 @@
+﻿.segaloka-button {
+  min-height: var(--button-height-md);
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  padding: 0 16px;
+
+  border: 0;
+  border-radius: var(--button-radius);
+
+  font-family: var(--ui-font-primary);
+  font-size: var(--button-font-size);
+  font-weight: var(--button-font-weight);
+
+  cursor: pointer;
+}
+
+.segaloka-button--primary {
+  background: var(--ui-primary);
+  color: var(--ui-text-inverse);
+}
+
+.segaloka-button--primary:hover {
+  background: var(--ui-primary-hover);
+}

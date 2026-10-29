@@ -1,0 +1,1279 @@
+﻿.affiliate-v2 {
+  --aff-blue: #0874ef;
+  --aff-dark: #10284b;
+  --aff-muted: #657b93;
+  --aff-line: #dbe7f3;
+  color: var(--aff-dark);
+  background: #fff;
+}
+
+.affiliate-v2 .affiliate-shell {
+  width: min(1110px, calc(100% - 32px));
+  margin-inline: auto;
+}
+
+.aff2-section {
+  padding: 68px 0;
+}
+
+.aff2-heading {
+  max-width: 700px;
+  margin: 0 auto 32px;
+  text-align: center;
+}
+
+.aff2-heading > span {
+  color: var(--aff-blue);
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+}
+
+.aff2-heading h2 {
+  margin: 7px 0 7px;
+  color: #10284b;
+  font-size: clamp(25px, 3vw, 34px);
+  line-height: 1.08;
+  letter-spacing: -.04em;
+}
+
+.aff2-heading p {
+  margin: 0;
+  color: #718399;
+  font-size: 11px;
+  line-height: 1.65;
+}
+
+/* HERO */
+
+.aff2-hero {
+  min-height: 455px;
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 10% 30%, rgba(40,147,255,.14), transparent 25%),
+    linear-gradient(135deg,#dff2ff,#eef8ff);
+}
+
+.aff2-hero-photo {
+  position: absolute;
+  inset: 0 0 0 36%;
+  background-image:
+    linear-gradient(
+      90deg,
+      rgba(231,246,255,1) 0%,
+      rgba(231,246,255,.62) 13%,
+      rgba(231,246,255,.05) 38%
+    ),
+    url("/images/affiliate/affiliate-hero.png");
+  background-size: cover;
+  background-position: center;
+}
+
+.aff2-hero-inner {
+  min-height: 455px;
+  display: flex;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+}
+
+.aff2-hero-panel {
+  width: min(500px, 49%);
+  padding: 32px;
+  border: 1px solid rgba(255,255,255,.75);
+  border-radius: 22px;
+  background: rgba(255,255,255,.92);
+  box-shadow: 0 22px 55px rgba(38,84,134,.12);
+  backdrop-filter: blur(7px);
+}
+
+.aff2-eyebrow {
+  width: max-content;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 9px;
+  border-radius: 999px;
+  background: #e8f4ff;
+  color: var(--aff-blue);
+  font-size: 9px;
+  font-weight: 900;
+}
+
+.aff2-hero-panel h1 {
+  margin: 14px 0 13px;
+  line-height: .98;
+  letter-spacing: -.055em;
+}
+
+.aff2-hero-panel h1 span,
+.aff2-hero-panel h1 strong {
+  display: block;
+}
+
+.aff2-hero-panel h1 span {
+  color: #10284b;
+  font-size: clamp(37px,4.2vw,55px);
+  font-weight: 850;
+}
+
+.aff2-hero-panel h1 strong {
+  margin-top: 5px;
+  color: var(--aff-blue);
+  font-size: clamp(37px,4.2vw,55px);
+  font-weight: 900;
+}
+
+.aff2-hero-panel > p {
+  max-width: 430px;
+  margin: 0;
+  color: #536c86;
+  font-size: 13px;
+  line-height: 1.65;
+}
+
+.aff2-hero-benefits {
+  display: flex;
+  gap: 17px;
+  margin-top: 22px;
+}
+
+.aff2-hero-benefits > div {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.aff2-hero-benefits span {
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border-radius: 9px;
+}
+
+.aff2-hero-benefits .is-1 {
+  background: #e3f8ee;
+  color: #079767;
+}
+
+.aff2-hero-benefits .is-2 {
+  background: #fff2da;
+  color: #d98a00;
+}
+
+.aff2-hero-benefits .is-3 {
+  background: #ece9ff;
+  color: #7354da;
+}
+
+.aff2-hero-benefits strong {
+  color: #52677d;
+  font-size: 8px;
+}
+
+/* WORK */
+
+.aff2-work {
+  background:
+    radial-gradient(circle at 92% 20%,rgba(22,132,244,.06),transparent 23%),
+    #fff;
+}
+
+.aff2-work-grid {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 54px;
+  max-width: 850px;
+  margin: 0 auto;
+}
+
+.aff2-work-grid article {
+  position: relative;
+  text-align: center;
+}
+
+.aff2-work-icon {
+  width: 76px;
+  height: 76px;
+  display: grid;
+  place-items: center;
+  margin: 0 auto 16px;
+  position: relative;
+  border-radius: 50%;
+}
+
+.aff2-work-icon b {
+  width: 23px;
+  height: 23px;
+  display: grid;
+  place-items: center;
+  position: absolute;
+  right: -3px;
+  bottom: 1px;
+  border: 3px solid #fff;
+  border-radius: 50%;
+  color: #fff;
+  font-size: 8px;
+}
+
+.aff2-work-icon.is-1 {
+  background: #e4f2ff;
+  color: #0874ef;
+}
+
+.aff2-work-icon.is-1 b {
+  background: #0874ef;
+}
+
+.aff2-work-icon.is-2 {
+  background: #e3f9f2;
+  color: #08a878;
+}
+
+.aff2-work-icon.is-2 b {
+  background: #08a878;
+}
+
+.aff2-work-icon.is-3 {
+  background: #fff2d9;
+  color: #e39300;
+}
+
+.aff2-work-icon.is-3 b {
+  background: #e39300;
+}
+
+.aff2-work-grid h3 {
+  margin: 0 0 6px;
+  font-size: 14px;
+}
+
+.aff2-work-grid p {
+  margin: 0;
+  color: #74869a;
+  font-size: 10px;
+  line-height: 1.55;
+}
+
+.aff2-step-arrow {
+  position: absolute;
+  right: -38px;
+  top: 28px;
+  color: #8bc8ff;
+}
+
+/* PRODUCTS */
+
+.aff2-products {
+  background:
+    radial-gradient(circle at 85% 20%,rgba(45,150,255,.08),transparent 25%),
+    linear-gradient(180deg,#eff8ff,#e9f5ff);
+}
+
+.aff2-product-grid {
+  display: grid;
+  grid-template-columns: repeat(4,1fr);
+  gap: 14px;
+}
+
+.aff2-product-grid article {
+  overflow: hidden;
+  border: 1px solid #d9e7f4;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 9px 25px rgba(35,75,119,.05);
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.aff2-product-grid article:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 15px 32px rgba(35,75,119,.10);
+}
+
+.aff2-product-photo {
+  height: 122px;
+  position: relative;
+  background:
+    linear-gradient(135deg,#dbeeff,#eef7ff);
+  background-size: cover;
+  background-position: center;
+}
+
+.aff2-product-photo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg,transparent 45%,rgba(12,41,72,.12));
+}
+
+.aff2-product-photo > span {
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  position: absolute;
+  z-index: 2;
+  left: 13px;
+  bottom: -18px;
+  border: 4px solid #fff;
+  border-radius: 50%;
+  background: #e5f2ff;
+  color: #0874ef;
+}
+
+.aff2-product-photo.is-2 > span,
+.aff2-product-photo.is-5 > span {
+  background: #e6f8f1;
+  color: #07976b;
+}
+
+.aff2-product-photo.is-3 > span,
+.aff2-product-photo.is-6 > span {
+  background: #f0ebff;
+  color: #7552db;
+}
+
+.aff2-product-photo.is-4 > span,
+.aff2-product-photo.is-7 > span {
+  background: #fff0df;
+  color: #d98600;
+}
+
+.aff2-product-body {
+  min-height: 110px;
+  padding: 28px 14px 14px;
+}
+
+.aff2-product-body h3 {
+  margin: 0 0 5px;
+  font-size: 12px;
+}
+
+.aff2-product-body p {
+  margin: 0;
+  color: #77889a;
+  font-size: 9px;
+  line-height: 1.55;
+}
+
+/* BENEFITS */
+
+.aff2-benefits {
+  background: #fff;
+}
+
+.aff2-benefit-grid {
+  display: grid;
+  grid-template-columns: repeat(4,1fr);
+  gap: 14px;
+}
+
+.aff2-benefit-grid article {
+  min-height: 180px;
+  padding: 20px;
+  border: 1px solid #dfe8f2;
+  border-radius: 15px;
+  background: linear-gradient(145deg,#fff,#f8fbff);
+}
+
+.aff2-benefit-grid article > span {
+  width: 47px;
+  height: 47px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+}
+
+.aff2-benefit-grid .is-1 {
+  background: #fff0d7;
+  color: #e08a00;
+}
+
+.aff2-benefit-grid .is-2 {
+  background: #e5f2ff;
+  color: #0874ef;
+}
+
+.aff2-benefit-grid .is-3 {
+  background: #e3f8ee;
+  color: #079767;
+}
+
+.aff2-benefit-grid .is-4 {
+  background: #eee8ff;
+  color: #7450dc;
+}
+
+.aff2-benefit-grid h3 {
+  margin: 16px 0 6px;
+  font-size: 12px;
+}
+
+.aff2-benefit-grid p {
+  margin: 0;
+  color: #74869a;
+  font-size: 9px;
+  line-height: 1.6;
+}
+
+/* DASHBOARD */
+
+.aff2-dashboard {
+  background:
+    radial-gradient(circle at 80% 40%,rgba(20,125,245,.10),transparent 27%),
+    linear-gradient(135deg,#f2f9ff,#e9f5ff);
+}
+
+.aff2-dashboard-grid {
+  display: grid;
+  grid-template-columns: .75fr 1.25fr;
+  align-items: center;
+  gap: 55px;
+}
+
+.aff2-heading-left {
+  margin: 0 0 24px;
+  text-align: left;
+}
+
+.aff2-tools {
+  overflow: hidden;
+  border: 1px solid #d8e6f3;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 13px 34px rgba(37,78,124,.07);
+}
+
+.aff2-tools > div {
+  min-height: 49px;
+  display: grid;
+  grid-template-columns: 30px 1fr 16px;
+  align-items: center;
+  gap: 9px;
+  padding: 7px 12px;
+  border-bottom: 1px solid #e7eef5;
+}
+
+.aff2-tools > div:last-child {
+  border-bottom: 0;
+}
+
+.aff2-tools > div > span {
+  width: 29px;
+  height: 29px;
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+  background: #e9f4ff;
+  color: #0874ef;
+}
+
+.aff2-tools strong {
+  font-size: 9px;
+}
+
+.aff2-tools > div > svg {
+  color: #0874ef;
+}
+
+.aff2-dashboard-card {
+  overflow: hidden;
+  border: 7px solid #d9ecff;
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: 0 28px 65px rgba(34,88,151,.16);
+}
+
+.aff2-dashboard-card > header {
+  min-height: 47px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 14px;
+  border-bottom: 1px solid #e5edf5;
+}
+
+.aff2-dashboard-card > header > div {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.aff2-dashboard-card > header > div > span {
+  width: 23px;
+  height: 23px;
+  display: grid;
+  place-items: center;
+  border-radius: 7px;
+  background: #0874ef;
+  color: #fff;
+  font-size: 8px;
+  font-weight: 900;
+}
+
+.aff2-dashboard-card > header strong {
+  font-size: 9px;
+}
+
+.aff2-dashboard-card > header em {
+  color: #8795a4;
+  font-size: 7px;
+  font-style: normal;
+}
+
+.aff2-dashboard-body {
+  min-height: 350px;
+  display: grid;
+  grid-template-columns: 105px 1fr;
+}
+
+.aff2-dashboard-body aside {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 12px 7px;
+  border-right: 1px solid #e5edf4;
+  background: #fbfdff;
+}
+
+.aff2-dashboard-body aside b,
+.aff2-dashboard-body aside span {
+  padding: 7px;
+  border-radius: 7px;
+  font-size: 7px;
+}
+
+.aff2-dashboard-body aside b {
+  background: #0874ef;
+  color: #fff;
+}
+
+.aff2-dashboard-body aside span {
+  color: #8090a1;
+}
+
+.aff2-dashboard-body > section {
+  padding: 18px;
+  background: #f8fbff;
+}
+
+.aff2-dashboard-body small {
+  color: #8595a5;
+  font-size: 7px;
+}
+
+.aff2-dashboard-body h3 {
+  margin: 3px 0 13px;
+  font-size: 14px;
+}
+
+.aff2-stats {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 8px;
+}
+
+.aff2-stats div {
+  padding: 10px;
+  border: 1px solid #e0e8f1;
+  border-radius: 9px;
+  background: #fff;
+}
+
+.aff2-stats span,
+.aff2-stats strong {
+  display: block;
+}
+
+.aff2-stats span {
+  color: #8493a3;
+  font-size: 7px;
+}
+
+.aff2-stats strong {
+  margin-top: 5px;
+  font-size: 14px;
+}
+
+.aff2-chart {
+  margin-top: 9px;
+  padding: 11px;
+  border: 1px solid #e0e8f1;
+  border-radius: 9px;
+  background: #fff;
+}
+
+.aff2-chart > header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.aff2-chart > header strong {
+  font-size: 8px;
+}
+
+.aff2-chart > header span {
+  color: #8999a9;
+  font-size: 7px;
+}
+
+.aff2-chart > div {
+  height: 92px;
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  margin-top: 10px;
+  border-bottom: 1px solid #e6edf4;
+}
+
+.aff2-chart i {
+  flex: 1;
+  border-radius: 4px 4px 0 0;
+  background: linear-gradient(#4ba9ff,#0874ef);
+}
+
+.aff2-chart i:nth-child(1){height:25%}
+.aff2-chart i:nth-child(2){height:40%}
+.aff2-chart i:nth-child(3){height:32%}
+.aff2-chart i:nth-child(4){height:57%}
+.aff2-chart i:nth-child(5){height:49%}
+.aff2-chart i:nth-child(6){height:72%}
+.aff2-chart i:nth-child(7){height:84%}
+
+.aff2-link-preview {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 9px;
+  padding: 9px;
+  border: 1px solid #dfe8f2;
+  border-radius: 8px;
+  background: #fff;
+  color: #60758b;
+  font-size: 8px;
+}
+
+/* FAQ */
+
+.aff2-faq {
+  background:
+    radial-gradient(circle at 10% 85%,rgba(26,137,247,.09),transparent 23%),
+    linear-gradient(180deg,#f1f9ff,#e6f5ff);
+}
+
+.aff2-faq-grid {
+  display: grid;
+  grid-template-columns: .6fr 1.4fr;
+  gap: 45px;
+  align-items: end;
+}
+
+.aff2-support-side {
+  position: relative;
+}
+
+.aff2-travel-art {
+  height: 125px;
+  position: relative;
+}
+
+.aff2-suitcase {
+  width: 68px;
+  height: 79px;
+  position: absolute;
+  left: 32px;
+  bottom: 0;
+  border-radius: 12px 12px 8px 8px;
+  background: linear-gradient(135deg,#2e9cf8,#0874ef);
+  box-shadow: 0 12px 22px rgba(8,116,239,.16);
+}
+
+.aff2-suitcase::before {
+  content: "";
+  width: 30px;
+  height: 17px;
+  position: absolute;
+  left: 19px;
+  top: -14px;
+  border: 5px solid #0874ef;
+  border-bottom: 0;
+  border-radius: 8px 8px 0 0;
+}
+
+.aff2-hat {
+  width: 78px;
+  height: 20px;
+  position: absolute;
+  left: 87px;
+  bottom: 14px;
+  border-radius: 50%;
+  background: #f0bd68;
+  transform: rotate(-11deg);
+}
+
+.aff2-hat::after {
+  content: "";
+  width: 43px;
+  height: 27px;
+  position: absolute;
+  left: 18px;
+  top: -17px;
+  border-radius: 50% 50% 40% 40%;
+  background: #e5ad54;
+}
+
+.aff2-travel-art > svg {
+  position: absolute;
+  left: 160px;
+  bottom: 40px;
+  color: #51aafa;
+  transform: rotate(-15deg);
+}
+
+.aff2-support-card {
+  display: grid;
+  grid-template-columns: 40px 1fr 17px;
+  align-items: center;
+  gap: 10px;
+  padding: 14px;
+  border: 1px solid #cfe3f6;
+  border-radius: 13px;
+  background: rgba(255,255,255,.88);
+  color: inherit;
+  text-decoration: none;
+  box-shadow: 0 12px 28px rgba(37,82,131,.08);
+}
+
+.aff2-support-card > span {
+  width: 39px;
+  height: 39px;
+  display: grid;
+  place-items: center;
+  border-radius: 11px;
+  background: #e5f2ff;
+  color: #0874ef;
+}
+
+.aff2-support-card strong,
+.aff2-support-card em,
+.aff2-support-card small {
+  display: block;
+}
+
+.aff2-support-card strong {
+  font-size: 10px;
+}
+
+.aff2-support-card em {
+  margin-top: 2px;
+  color: #0874ef;
+  font-size: 9px;
+  font-style: normal;
+  font-weight: 800;
+}
+
+.aff2-support-card small {
+  margin-top: 3px;
+  color: #8494a5;
+  font-size: 8px;
+  line-height: 1.4;
+}
+
+.aff2-support-card > svg {
+  color: #0874ef;
+}
+
+.aff2-faq-list {
+  overflow: hidden;
+  border-radius: 13px;
+}
+
+.aff2-faq-list article {
+  margin-bottom: 7px;
+  border: 1px solid #d8e6f3;
+  border-radius: 10px;
+  background: rgba(255,255,255,.92);
+}
+
+.aff2-faq-list article:last-child {
+  margin-bottom: 0;
+}
+
+.aff2-faq-list button {
+  width: 100%;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 0 14px;
+  border: 0;
+  background: transparent;
+  color: #243d59;
+  text-align: left;
+  font: inherit;
+  font-size: 9px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.aff2-faq-list button svg {
+  color: #0874ef;
+  transition: transform .18s ease;
+}
+
+.aff2-faq-list article.is-open button svg {
+  transform: rotate(180deg);
+}
+
+.aff2-faq-list p {
+  margin: -1px 14px 13px;
+  padding-top: 9px;
+  border-top: 1px solid #edf2f7;
+  color: #718399;
+  font-size: 9px;
+  line-height: 1.6;
+}
+
+/* RTL */
+
+html[dir="rtl"] .aff2-heading-left,
+html[dir="rtl"] .aff2-faq-list button {
+  text-align: right;
+}
+
+html[dir="rtl"] .aff2-product-photo > span {
+  left: auto;
+  right: 13px;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 900px) {
+  .aff2-hero-photo {
+    inset: 0;
+    opacity: .32;
+  }
+
+  .aff2-hero-panel {
+    width: min(560px,100%);
+  }
+
+  .aff2-product-grid,
+  .aff2-benefit-grid {
+    grid-template-columns: repeat(2,1fr);
+  }
+
+  .aff2-dashboard-grid,
+  .aff2-faq-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .aff2-heading-left {
+    text-align: center;
+  }
+
+  .aff2-dashboard-grid > div:first-child {
+    max-width: 650px;
+    margin-inline: auto;
+  }
+
+  .aff2-dashboard-card {
+    width: min(730px,100%);
+    margin-inline: auto;
+  }
+
+  .aff2-support-side {
+    max-width: 450px;
+    margin-inline: auto;
+  }
+}
+
+@media (max-width: 620px) {
+  .aff2-section {
+    padding: 52px 0;
+  }
+
+  .affiliate-v2 .affiliate-shell {
+    width: min(100% - 24px,1110px);
+  }
+
+  .aff2-hero,
+  .aff2-hero-inner {
+    min-height: 520px;
+  }
+
+  .aff2-hero-inner {
+    align-items: flex-end;
+    padding-bottom: 24px;
+  }
+
+  .aff2-hero-photo {
+    background-image:
+      linear-gradient(
+        180deg,
+        rgba(229,245,255,.06) 0%,
+        rgba(229,245,255,.22) 38%,
+        rgba(229,245,255,.96) 78%
+      ),
+      url("/images/affiliate/affiliate-hero.png");
+    background-position: 65% center;
+    opacity: 1;
+  }
+
+  .aff2-hero-panel {
+    padding: 21px;
+    border-radius: 18px;
+  }
+
+  .aff2-hero-panel h1 span,
+  .aff2-hero-panel h1 strong {
+    font-size: 38px;
+  }
+
+  .aff2-hero-benefits {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 9px;
+  }
+
+  .aff2-work-grid {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+
+  .aff2-step-arrow {
+    display: none;
+  }
+
+  .aff2-product-grid,
+  .aff2-benefit-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .aff2-product-photo {
+    height: 170px;
+  }
+
+  .aff2-dashboard-body {
+    grid-template-columns: 77px 1fr;
+  }
+
+  .aff2-dashboard-body aside {
+    padding-inline: 4px;
+  }
+
+  .aff2-dashboard-body aside b,
+  .aff2-dashboard-body aside span {
+    padding-inline: 4px;
+    font-size: 6px;
+  }
+
+  .aff2-dashboard-body > section {
+    padding: 10px;
+  }
+
+  .aff2-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .aff2-faq-grid {
+    gap: 24px;
+  }
+}
+
+/* =========================================================
+   SEGALOKA AFFILIATE — CANONICAL TYPOGRAPHY
+   Mengikuti design system Segaloka / Partner Travel.
+   Jangan gunakan ukuran teks mikro 6–9px untuk konten utama.
+   ========================================================= */
+
+.affiliate-page,
+.affiliate-page *,
+.aff2-page,
+.aff2-page * {
+  font-family: var(--font-jakarta), "Plus Jakarta Sans", Arial, sans-serif;
+}
+
+.affiliate-page,
+.aff2-page {
+  --aff-type-hero: clamp(38px, 4vw, 55px);
+  --aff-type-section: clamp(22px, 2.2vw, 28px);
+  --aff-type-subsection: 20px;
+  --aff-type-card: 15px;
+  --aff-type-body: 12px;
+  --aff-type-helper: 11px;
+  --aff-type-small: 10px;
+
+  font-size: 14px;
+  line-height: 1.5;
+  font-weight: 400;
+  color: #10284b;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* ---------- HERO ---------- */
+
+.aff2-hero-panel h1 {
+  font-family: inherit !important;
+  font-size: var(--aff-type-hero) !important;
+  font-weight: 750 !important;
+  line-height: 1.06 !important;
+  letter-spacing: -0.045em !important;
+}
+
+.aff2-hero-panel h1 strong {
+  font-family: inherit !important;
+  font-size: inherit !important;
+  font-weight: 800 !important;
+  line-height: inherit !important;
+}
+
+.aff2-hero-panel > p,
+.aff2-hero-copy > p,
+.aff2-hero-panel p {
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.65;
+}
+
+/* ---------- SECTION HEADINGS ---------- */
+
+.aff2-section-heading h2,
+.aff2-section-title h2,
+.aff2-heading h2 {
+  font-family: inherit !important;
+  font-size: var(--aff-type-section) !important;
+  font-weight: 750 !important;
+  line-height: 1.2 !important;
+  letter-spacing: -0.035em !important;
+}
+
+.aff2-section-heading p,
+.aff2-section-title p,
+.aff2-heading p {
+  font-family: inherit !important;
+  font-size: var(--aff-type-body) !important;
+  font-weight: 400 !important;
+  line-height: 1.6 !important;
+}
+
+/* ---------- EYEBROW / KICKER ---------- */
+
+.aff2-kicker,
+.aff2-eyebrow,
+.aff2-section-kicker {
+  font-family: inherit !important;
+  font-size: var(--aff-type-small) !important;
+  font-weight: 750 !important;
+  line-height: 1.35 !important;
+  letter-spacing: 0.04em !important;
+}
+
+/* ---------- CARDS ---------- */
+
+.aff2-page article h3,
+.aff2-page .aff2-card h3,
+.aff2-page .aff2-product-card h3,
+.aff2-page .aff2-benefit-card h3,
+.aff2-page .aff2-step-card h3,
+.aff2-page .aff2-feature-card h3 {
+  font-family: inherit !important;
+  font-size: var(--aff-type-card) !important;
+  font-weight: 700 !important;
+  line-height: 1.35 !important;
+  letter-spacing: -0.015em !important;
+}
+
+.aff2-page article p,
+.aff2-page .aff2-card p,
+.aff2-page .aff2-product-card p,
+.aff2-page .aff2-benefit-card p,
+.aff2-page .aff2-step-card p,
+.aff2-page .aff2-feature-card p {
+  font-family: inherit !important;
+  font-size: var(--aff-type-helper) !important;
+  font-weight: 400 !important;
+  line-height: 1.55 !important;
+}
+
+/* ---------- THREE STEPS ---------- */
+
+.aff2-page .aff2-step strong,
+.aff2-page .aff2-step-title,
+.aff2-page .aff2-step-card strong {
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  line-height: 1.35 !important;
+}
+
+.aff2-page .aff2-step small,
+.aff2-page .aff2-step p {
+  font-size: var(--aff-type-helper) !important;
+  line-height: 1.5 !important;
+}
+
+/* ---------- PRODUCT / SERVICE GRID ---------- */
+
+.aff2-page .aff2-product-card strong,
+.aff2-page .aff2-service-card strong,
+.aff2-page .aff2-product-title {
+  font-size: var(--aff-type-card) !important;
+  font-weight: 700 !important;
+  line-height: 1.35 !important;
+}
+
+.aff2-page .aff2-product-card small,
+.aff2-page .aff2-service-card small {
+  font-size: var(--aff-type-helper) !important;
+  line-height: 1.5 !important;
+}
+
+/* ---------- BENEFITS ---------- */
+
+.aff2-page .aff2-benefit-card strong,
+.aff2-page .aff2-benefit-card h3 {
+  font-size: var(--aff-type-card) !important;
+  font-weight: 700 !important;
+  line-height: 1.35 !important;
+}
+
+.aff2-page .aff2-benefit-card p {
+  font-size: var(--aff-type-helper) !important;
+  line-height: 1.55 !important;
+}
+
+/* ---------- DASHBOARD PREVIEW ----------
+   Preview UI boleh sedikit lebih kecil karena merupakan mockup,
+   tetapi tetap harus terbaca.
+   ----------------------------------------------------------- */
+
+.aff2-dashboard-card {
+  font-family: inherit;
+}
+
+.aff2-dashboard-card > header strong {
+  font-size: 11px !important;
+  font-weight: 700 !important;
+}
+
+.aff2-dashboard-card small,
+.aff2-dashboard-card span {
+  font-size: 9px;
+  line-height: 1.35;
+}
+
+.aff2-dashboard-card strong {
+  font-size: 11px;
+  line-height: 1.35;
+}
+
+.aff2-tools strong {
+  font-size: 11px !important;
+  font-weight: 700 !important;
+}
+
+.aff2-chart > header strong {
+  font-size: 10px !important;
+  font-weight: 700 !important;
+}
+
+/* ---------- FAQ ---------- */
+
+.aff2-page .aff2-faq h2,
+.aff2-page .aff2-faq-heading h2 {
+  font-size: var(--aff-type-section) !important;
+  font-weight: 750 !important;
+  line-height: 1.2 !important;
+  letter-spacing: -0.035em !important;
+}
+
+.aff2-page .aff2-faq button,
+.aff2-page .aff2-faq-question {
+  font-family: inherit !important;
+  font-size: 12px !important;
+  font-weight: 650 !important;
+  line-height: 1.45 !important;
+}
+
+.aff2-page .aff2-faq-answer,
+.aff2-page .aff2-faq-answer p {
+  font-size: var(--aff-type-helper) !important;
+  font-weight: 400 !important;
+  line-height: 1.65 !important;
+}
+
+/* ---------- SUPPORT ---------- */
+
+.aff2-support-card strong {
+  font-size: 13px !important;
+  font-weight: 700 !important;
+}
+
+.aff2-support-card a {
+  font-size: 11px !important;
+  font-weight: 700 !important;
+}
+
+.aff2-support-card p,
+.aff2-support-card small {
+  font-size: var(--aff-type-helper) !important;
+  line-height: 1.5 !important;
+}
+
+/* ---------- BUTTON / LINK ---------- */
+
+.aff2-page button,
+.aff2-page a {
+  font-family: inherit;
+}
+
+.aff2-page .aff2-button,
+.aff2-page .aff2-primary-button,
+.aff2-page .aff2-cta-button {
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  line-height: 1 !important;
+}
+
+/* ---------- MOBILE ---------- */
+
+@media (max-width: 767px) {
+  .affiliate-page,
+  .aff2-page {
+    --aff-type-hero: 34px;
+    --aff-type-section: 21px;
+    --aff-type-subsection: 18px;
+    --aff-type-card: 14px;
+    --aff-type-body: 12px;
+    --aff-type-helper: 11px;
+    --aff-type-small: 10px;
+  }
+
+  .aff2-hero-panel h1 {
+    font-size: 34px !important;
+    line-height: 1.07 !important;
+    letter-spacing: -0.04em !important;
+  }
+
+  .aff2-hero-panel > p,
+  .aff2-hero-copy > p,
+  .aff2-hero-panel p {
+    font-size: 12px !important;
+    line-height: 1.6 !important;
+  }
+
+  .aff2-section-heading h2,
+  .aff2-section-title h2,
+  .aff2-heading h2,
+  .aff2-page .aff2-faq h2,
+  .aff2-page .aff2-faq-heading h2 {
+    font-size: 21px !important;
+  }
+}
+

@@ -1,0 +1,258 @@
+"use strict";
+
+const API_BASE = "https://api.segaloka.com";
+
+const el = id => document.getElementById(id);
+
+const translations = {
+  id: {
+    heroTitle:"Jelajahi dunia dengan lebih mudah.",
+    heroDesc:"Temukan perjalanan domestik, internasional, dan wisata halal dalam satu platform.",
+    heading:"Selamat datang!",
+    subtitle:"Masuk atau buat akun Traveler untuk memulai perjalanan Anda.",
+    login:"Masuk",register:"Daftar",email:"Alamat Email",
+    password:"Password",fullName:"Nama Lengkap",phone:"Nomor Telepon",
+    confirm:"Konfirmasi Password",remember:"Ingat saya",forgot:"Lupa password?",
+    google:"Lanjutkan dengan Google",or:"atau",registerSubmit:"Daftar Traveler",
+    terms:"Saya menyetujui Syarat & Ketentuan serta Kebijakan Privasi Segaloka.",
+    otpTitle:"Verifikasi Email",otpDesc:"Masukkan kode 6 digit yang dikirim ke email Anda.",
+    otpLabel:"Kode OTP",verify:"Verifikasi dan Masuk",back:"Kembali ke Login",
+    show:"Lihat",hide:"Sembunyikan",
+    mismatch:"Konfirmasi password tidak sesuai.",
+    unavailable:"Fitur ini belum tersedia pada API Segaloka.",
+    error:"Permintaan gagal. Silakan coba kembali.",
+    footer:"Akun Anda dilindungi dengan verifikasi keamanan Segaloka."
+  },
+  en: {
+    heroTitle:"Explore the world with ease.",
+    heroDesc:"Discover domestic, international, and halal travel in one platform.",
+    heading:"Welcome!",
+    subtitle:"Sign in or create a Traveler account to start your journey.",
+    login:"Sign In",register:"Sign Up",email:"Email Address",
+    password:"Password",fullName:"Full Name",phone:"Phone Number",
+    confirm:"Confirm Password",remember:"Remember me",forgot:"Forgot password?",
+    google:"Continue with Google",or:"or",registerSubmit:"Create Traveler Account",
+    terms:"I agree to Segaloka's Terms & Conditions and Privacy Policy.",
+    otpTitle:"Email Verification",otpDesc:"Enter the 6-digit code sent to your email.",
+    otpLabel:"OTP Code",verify:"Verify and Sign In",back:"Back to Sign In",
+    show:"Show",hide:"Hide",
+    mismatch:"Passwords do not match.",
+    unavailable:"This feature is not yet available on the Segaloka API.",
+    error:"Request failed. Please try again.",
+    footer:"Your account is protected by Segaloka security verification."
+  },
+  ar: {
+    heroTitle:"استكشف العالم بكل سهولة.",
+    heroDesc:"اكتشف الرحلات المحلية والدولية والسياحة الحلال في منصة واحدة.",
+    heading:"مرحباً بك!",
+    subtitle:"سجّل الدخول أو أنشئ حساب مسافر لبدء رحلتك.",
+    login:"تسجيل الدخول",register:"إنشاء حساب",email:"البريد الإلكتروني",
+    password:"كلمة المرور",fullName:"الاسم الكامل",phone:"رقم الهاتف",
+    confirm:"تأكيد كلمة المرور",remember:"تذكرني",forgot:"نسيت كلمة المرور؟",
+    google:"المتابعة باستخدام Google",or:"أو",registerSubmit:"إنشاء حساب مسافر",
+    terms:"أوافق على شروط وأحكام سيجالوكا وسياسة الخصوصية.",
+    otpTitle:"التحقق من البريد الإلكتروني",otpDesc:"أدخل الرمز المكون من 6 أرقام المرسل إلى بريدك.",
+    otpLabel:"رمز التحقق",verify:"تحقق وسجّل الدخول",back:"العودة لتسجيل الدخول",
+    show:"إظهار",hide:"إخفاء",
+    mismatch:"كلمتا المرور غير متطابقتين.",
+    unavailable:"هذه الميزة غير متاحة بعد في واجهة Segaloka API.",
+    error:"فشل الطلب. يرجى المحاولة مجدداً.",
+    footer:"حسابك محمي بواسطة نظام التحقق الأمني في Segaloka."
+  }
+};
+
+let language = "id";
+let challengeId = null;
+let otpExpiry = null;
+let otpTicker = null;
+
+function t(key) {
+  return translations[language][key] || key;
+}
+
+function showMessage(text, error = false) {
+  const box = el("message");
+  box.textContent = text;
+  box.classList.remove("hidden");
+  box.classList.toggle("error", error);
+}
+
+function clearMessage() {
+  el("message").classList.add("hidden");
+}
+
+function translate() {
+  document.documentElement.lang = language;
+  document.documentElement.dir = language === "ar" ? "rtl" : "ltr";
+  for (const id of ["heroTitle","heroDesc","heading","subtitle","otpTitle","otpDesc"]) {
+    el(id).textContent = t(id);
+  }
+  document.querySelectorAll("[data-i18n]").forEach(node => {
+    node.textContent = t(node.dataset.i18n);
+  });
+  el("loginTab").textContent = t("login");
+  el("registerTab").textContent = t("register");
+  el("loginSubmit").textContent = t("login");
+  el("registerSubmit").textContent = t("registerSubmit");
+  el("googleButton").textContent = "G  " + t("google");
+  el("forgotLink").textContent = t("forgot");
+  el("termsLabel").textContent = t("terms");
+  el("otpSubmit").textContent = t("verify");
+  el("backButton").textContent = t("back");
+  el("footerNote").textContent = t("footer");
+  document.querySelectorAll("[data-toggle]").forEach(btn => {
+    btn.textContent = t("show");
+  });
+}
+
+function setTab(tab) {
+  clearMessage();
+  const login = tab === "login";
+  el("loginForm").classList.toggle("hidden", !login);
+  el("registerForm").classList.toggle("hidden", login);
+  el("loginTab").classList.toggle("active", login);
+  el("registerTab").classList.toggle("active", !login);
+}
+
+async function api(path, payload) {
+  const response = await fetch(API_BASE + path, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "omit",
+    body: JSON.stringify(payload)
+  });
+
+  const data = await response.json().catch(() => ({}));
+
+  if (!response.ok) {
+    const error = new Error(
+      typeof data.message === "string" ? data.message : t("error")
+    );
+    error.status = response.status;
+    throw error;
+  }
+  return data;
+}
+
+function setBusy(id, busy) {
+  el(id).disabled = busy;
+}
+
+function showOtp(data) {
+  if (
+    data.code !== "OTP_REQUIRED" ||
+    typeof data.challengeId !== "string"
+  ) {
+    throw new Error("Unexpected authentication response");
+  }
+
+  challengeId = data.challengeId;
+  otpExpiry = Date.now() + 300000;
+  el("authArea").classList.add("hidden");
+  el("otpForm").classList.remove("hidden");
+  el("otpCode").value = "";
+  clearMessage();
+
+  clearInterval(otpTicker);
+  otpTicker = setInterval(() => {
+    const remaining = Math.max(
+      0, Math.ceil((otpExpiry - Date.now()) / 1000)
+    );
+    const minutes = Math.floor(remaining / 60);
+    const seconds = String(remaining % 60).padStart(2, "0");
+    el("otpTimer").textContent = `${minutes}:${seconds}`;
+    if (!remaining) clearInterval(otpTicker);
+  }, 1000);
+}
+
+el("loginForm").addEventListener("submit", async event => {
+  event.preventDefault();
+  clearMessage();
+  setBusy("loginSubmit", true);
+  try {
+    const result = await api("/auth/login", {
+      email: el("loginEmail").value.trim(),
+      password: el("loginPassword").value
+    });
+    showOtp(result);
+  } catch (error) {
+    showMessage(error.message, true);
+  } finally {
+    setBusy("loginSubmit", false);
+  }
+});
+
+el("otpForm").addEventListener("submit", async event => {
+  event.preventDefault();
+  clearMessage();
+  setBusy("otpSubmit", true);
+  try {
+    const result = await api("/auth/login/verify-otp", {
+      challengeId,
+      code: el("otpCode").value.trim()
+    });
+
+    if (result.authenticated !== true || !result.session) {
+      throw new Error("OTP verification did not establish a session");
+    }
+
+    // Session handoff to the existing Traveler application
+    // must use its established authentication mechanism.
+    // Do not store bearer tokens in localStorage.
+    showMessage("OTP verified. Traveler session integration is required.");
+  } catch (error) {
+    showMessage(error.message, true);
+  } finally {
+    setBusy("otpSubmit", false);
+  }
+});
+
+el("registerForm").addEventListener("submit", async event => {
+  event.preventDefault();
+  clearMessage();
+
+  if (el("registerPassword").value !== el("confirmPassword").value) {
+    showMessage(t("mismatch"), true);
+    return;
+  }
+
+  // Registration endpoint and payload must be verified against
+  // the existing Segaloka API before enabling account creation.
+  showMessage(t("unavailable"), true);
+});
+
+el("googleButton").addEventListener("click", () => {
+  showMessage(t("unavailable"), true);
+});
+
+el("forgotLink").addEventListener("click", event => {
+  event.preventDefault();
+  showMessage(t("unavailable"), true);
+});
+
+el("loginTab").addEventListener("click", () => setTab("login"));
+el("registerTab").addEventListener("click", () => setTab("register"));
+
+el("backButton").addEventListener("click", () => {
+  challengeId = null;
+  clearInterval(otpTicker);
+  el("otpForm").classList.add("hidden");
+  el("authArea").classList.remove("hidden");
+  setTab("login");
+});
+
+el("language").addEventListener("change", event => {
+  language = event.target.value;
+  translate();
+});
+
+document.querySelectorAll("[data-toggle]").forEach(button => {
+  button.addEventListener("click", () => {
+    const input = el(button.dataset.toggle);
+    const visible = input.type === "text";
+    input.type = visible ? "password" : "text";
+    button.textContent = t(visible ? "show" : "hide");
+  });
+});
+
+translate();

@@ -1,0 +1,3270 @@
+﻿===== CURRENT SegaDealsClient.tsx =====
+"use client";
+
+import {
+  ArrowRight,
+  CalendarDays,
+  CheckCircle2,
+  ChevronDown,
+  CircleDollarSign,
+  FileText,
+  HelpCircle,
+  MapPin,
+  Minus,
+  Pencil,
+  PlaneTakeoff,
+  Plus,
+  Search,
+  Send,
+  ShieldCheck,
+  Sparkles,
+  Users,
+  WalletCards,
+} from "lucide-react";
+
+import {
+  useMarketplacePreferences,
+} from "@/components/providers/MarketplacePreferencesProvider";
+
+import {
+  getSegaDealsTravelerTotal,
+  segaDealsDestinations,
+  segaDealsIndonesiaCities,
+  segaDealsTripTypes,
+  type SegaDealsTripType,
+  type SegaDealsTraveler,
+} from "@/data/segadeals";
+
+import {
+  useMemo,
+  useState,
+} from "react";
+
+type Language = "ID" | "EN" | "AR";
+
+const copy = {
+  ID: {
+    home: "Beranda",
+
+    heroKicker: "SEGADEALS · REQUEST PERJALANAN",
+    heroTitle:
+      "Tentukan perjalanan Anda. Biarkan Travel memberikan penawaran terbaik.",
+    heroDesc:
+      "Cukup tentukan kebutuhan utama perjalanan seperti jenis perjalanan, kota keberangkatan, tujuan, jumlah traveler, budget, dan waktu keberangkatan. Request Anda akan diteruskan ke Travel yang sesuai dan mengaktifkan SegaDeals.",
+    createRequest: "Buat Request SegaDeals",
+    learn: "Pelajari Cara Kerjanya",
+
+    request: "Request Traveler",
+    matching: "Travel Sesuai",
+    offers: "Penawaran Travel",
+
+    aboutKicker: "MENGENAL SEGADEALS",
+    aboutTitle: "Anda tentukan kebutuhan. Travel yang memberikan pilihan.",
+    aboutDesc:
+      "SegaDeals mempermudah Traveler mendapatkan pilihan perjalanan tanpa harus mencari paket satu per satu. Traveler membuat request sederhana, lalu sistem meneruskannya kepada Travel yang sesuai dengan jenis perjalanan dan mengaktifkan fitur SegaDeals.",
+
+    whyTitle: "Kenapa menggunakan SegaDeals?",
+    benefits: [
+      [
+        "Sesuai kebutuhan Anda",
+        "Mulai dari kebutuhan perjalanan Anda sendiri, bukan dari paket yang sudah ditentukan.",
+      ],
+      [
+        "Diteruskan ke Travel yang tepat",
+        "Request hanya diteruskan kepada Travel yang sesuai dengan jenis perjalanan dan mengaktifkan SegaDeals.",
+      ],
+      [
+        "Dapatkan beberapa penawaran",
+        "Travel dapat membalas request dengan penawaran perjalanan yang menarik.",
+      ],
+      [
+        "Anda yang menentukan",
+        "Bandingkan penawaran yang masuk dan pilih yang paling pas untuk Anda.",
+      ],
+    ],
+
+    howKicker: "CARA MENGGUNAKAN",
+    howTitle: "Dari request sampai perjalanan Anda",
+    steps: [
+      [
+        "Buat Request",
+        "Pilih jenis perjalanan dan isi kebutuhan utama Anda.",
+      ],
+      [
+        "Sistem Mencocokkan Travel",
+        "Request diteruskan hanya ke Travel yang sesuai dan mengaktifkan SegaDeals.",
+      ],
+      [
+        "Travel Membuat Penawaran",
+        "Travel yang menerima request dapat memberikan penawaran terbaiknya.",
+      ],
+      [
+        "Bandingkan Penawaran",
+        "Lihat harga, jadwal, hotel, maskapai, fasilitas, dan detail lainnya.",
+      ],
+      [
+        "Pilih yang Paling Pas",
+        "Pilih satu penawaran yang paling sesuai dengan kebutuhan dan budget Anda.",
+      ],
+      [
+        "Lanjut ke Transaksi",
+        "Sistem membuat transaksi untuk pembayaran dan proses dokumen Traveler.",
+      ],
+    ],
+
+    flowKicker: "CARA SEGADEALS BEKERJA",
+    flowTitle: "Satu request dapat menerima beberapa penawaran Travel.",
+    flowDesc:
+      "Travel tidak mengubah request Anda. Travel membalas kebutuhan tersebut dengan penawaran masing-masing. Anda bebas membandingkan dan memilih satu penawaran yang paling cocok.",
+    flowPoints: [
+      "Request hanya dikirim ke Travel yang relevan dengan jenis perjalanan.",
+      "Travel harus mengaktifkan fitur SegaDeals untuk menerima request.",
+      "Budget Traveler menjadi acuan kebutuhan, bukan harga transaksi otomatis.",
+      "Setiap Travel dapat memberikan harga dan fasilitas yang berbeda.",
+      "Setelah satu penawaran dipilih, sistem melanjutkan ke proses transaksi.",
+    ],
+
+    important: "Privasi & proses transaksi",
+    importantItems: [
+      "Dokumen pribadi tidak diperlukan saat baru membuat request.",
+      "Data Traveler lengkap diminta setelah Anda memilih penawaran.",
+      "Link/halaman transaksi dibuat melalui sistem Segaloka.",
+      "Pembayaran dan kebutuhan dokumen mengikuti transaksi yang dipilih.",
+    ],
+
+    builderKicker: "BUAT REQUEST SEGADEALS",
+    builderTitle: "Perjalanan seperti apa yang Anda inginkan?",
+    builderDesc:
+      "Isi kebutuhan utama terlebih dahulu. Pada tahap UI ini request belum dikirim ke backend.",
+
+    tripType: "Jenis Perjalanan",
+    origin: "Dari",
+    destination: "Tujuan Masuk",
+    travelers: "Traveler",
+    budget: "Budget",
+    departure: "Tanggal & Bulan",
+    notes: "Catatan",
+    optional: "Opsional",
+
+    tripPlaceholder: "Pilih jenis perjalanan",
+    originPlaceholder: "Pilih kota keberangkatan",
+    destinationPlaceholder: "Pilih tujuan masuk",
+    travelerPlaceholder: "Tentukan jumlah traveler",
+    budgetPlaceholder: "Masukkan budget",
+    departurePlaceholder: "Pilih tanggal & bulan",
+    notesPlaceholder:
+      "Tambahkan kebutuhan khusus bila ada",
+
+    sendRequest: "Kirim Request ke Travel",
+    uiNotice:
+      "Pengiriman request akan diaktifkan setelah alur backend SegaDeals terhubung.",
+
+    faqKicker: "PERTANYAAN UMUM",
+    faqTitle: "Tentang SegaDeals",
+    faqs: [
+      [
+        "Apakah SegaDeals adalah paket perjalanan?",
+        "Bukan. SegaDeals adalah fitur untuk membuat request perjalanan dan menerima penawaran dari Travel yang sesuai.",
+      ],
+      [
+        "Travel mana yang menerima request saya?",
+        "Hanya Travel yang sesuai dengan jenis perjalanan dan mengaktifkan fitur SegaDeals yang dapat menerima request tersebut.",
+      ],
+      [
+        "Apakah Travel harus mengikuti budget saya?",
+        "Budget menjadi acuan kebutuhan Traveler. Travel dapat memberikan penawaran dengan harga dan fasilitas yang menurut mereka paling sesuai.",
+      ],
+      [
+        "Apakah saya harus memilih penawaran yang masuk?",
+        "Tidak. Traveler bebas membandingkan penawaran dan menentukan mana yang paling sesuai.",
+      ],
+      [
+        "Kapan saya diminta mengisi dokumen Traveler?",
+        "Data dan dokumen lengkap diminta setelah Anda memilih penawaran dan proses transaksi dibuat.",
+      ],
+      [
+        "Bagaimana pembayaran dilakukan?",
+        "Setelah penawaran dipilih, sistem Segaloka membuat transaksi untuk melanjutkan pembayaran sesuai ketentuan yang berlaku.",
+      ],
+    ],
+  },
+
+  EN: {
+    home: "Home",
+
+    heroKicker: "SEGADEALS · TRAVEL REQUEST",
+    heroTitle:
+      "Define your journey. Let Travel companies send their best offers.",
+    heroDesc:
+      "Tell us the essentials: travel type, departure city, destination, number of travelers, budget, and departure time. Your request is matched with eligible Travel companies that have SegaDeals enabled.",
+    createRequest: "Create SegaDeals Request",
+    learn: "How It Works",
+
+    request: "Traveler Request",
+    matching: "Matched Travel",
+    offers: "Travel Offers",
+
+    aboutKicker: "DISCOVER SEGADEALS",
+    aboutTitle: "You define the need. Travel companies provide the choices.",
+    aboutDesc:
+      "SegaDeals helps Travelers find suitable travel options without searching through packages one by one. Create a simple request and Segaloka routes it to relevant Travel companies with SegaDeals enabled.",
+
+    whyTitle: "Why use SegaDeals?",
+    benefits: [
+      [
+        "Built around your needs",
+        "Start from your own travel requirements instead of a predefined package.",
+      ],
+      [
+        "Matched to relevant Travel",
+        "Requests are routed only to eligible Travel companies with SegaDeals enabled.",
+      ],
+      [
+        "Receive multiple offers",
+        "Matched Travel companies can respond with attractive travel offers.",
+      ],
+      [
+        "You make the choice",
+        "Compare incoming offers and choose the one that fits you best.",
+      ],
+    ],
+
+    howKicker: "HOW TO USE",
+    howTitle: "From request to your journey",
+    steps: [
+      ["Create a Request", "Choose your travel type and enter your essential needs."],
+      ["Travel Matching", "Segaloka routes the request to relevant SegaDeals-enabled Travel companies."],
+      ["Travel Sends an Offer", "Matched Travel companies can respond with their best offers."],
+      ["Compare Offers", "Review prices, schedules, hotels, airlines, facilities, and other details."],
+      ["Choose the Best Fit", "Select the offer that best matches your needs and budget."],
+      ["Continue to Transaction", "Segaloka creates the transaction flow for payment and Traveler documents."],
+    ],
+
+    flowKicker: "HOW SEGADEALS WORKS",
+    flowTitle: "One request can receive multiple Travel offers.",
+    flowDesc:
+      "Travel companies do not modify your request. They respond to it with their own offers. You can compare them and select the one that fits you best.",
+    flowPoints: [
+      "Requests are routed only to Travel companies relevant to the travel type.",
+      "Travel companies must enable SegaDeals to receive requests.",
+      "The Traveler's budget is a reference, not an automatic transaction price.",
+      "Each Travel company may offer different prices and facilities.",
+      "Once an offer is selected, the system continues to the transaction process.",
+    ],
+
+    important: "Privacy & transaction process",
+    importantItems: [
+      "Personal documents are not required when creating the initial request.",
+      "Complete Traveler data is requested after an offer is selected.",
+      "The transaction page/link is generated through Segaloka.",
+      "Payment and document requirements follow the selected transaction.",
+    ],
+
+    builderKicker: "CREATE SEGADEALS REQUEST",
+    builderTitle: "What kind of journey are you looking for?",
+    builderDesc:
+      "Enter the essentials first. At this UI stage, requests are not yet submitted to the backend.",
+
+    tripType: "Travel Type",
+    origin: "From",
+    destination: "Entry Destination",
+    travelers: "Travelers",
+    budget: "Budget",
+    departure: "Date & Month",
+    notes: "Notes",
+    optional: "Optional",
+
+    tripPlaceholder: "Choose travel type",
+    originPlaceholder: "Choose departure city",
+    destinationPlaceholder: "Choose entry destination",
+    travelerPlaceholder: "Set number of travelers",
+    budgetPlaceholder: "Enter your budget",
+    departurePlaceholder: "Choose date & month",
+    notesPlaceholder: "Add special requirements if needed",
+
+    sendRequest: "Send Request to Travel",
+    uiNotice:
+      "Request submission will be enabled when the SegaDeals backend flow is connected.",
+
+    faqKicker: "FREQUENTLY ASKED QUESTIONS",
+    faqTitle: "About SegaDeals",
+    faqs: [
+      [
+        "Is SegaDeals a travel package?",
+        "No. SegaDeals lets Travelers create travel requests and receive offers from matched Travel companies.",
+      ],
+      [
+        "Which Travel companies receive my request?",
+        "Only eligible Travel companies matching the travel type and with SegaDeals enabled can receive it.",
+      ],
+      [
+        "Must Travel companies follow my exact budget?",
+        "Your budget is a reference. Travel companies may provide offers with prices and facilities they consider suitable.",
+      ],
+      [
+        "Do I have to choose an offer?",
+        "No. You can compare the offers received and decide which one fits you best.",
+      ],
+      [
+        "When do I submit Traveler documents?",
+        "Complete data and documents are requested after an offer is selected and a transaction is created.",
+      ],
+      [
+        "How does payment work?",
+        "After you select an offer, Segaloka creates the transaction flow so you can continue to payment.",
+      ],
+    ],
+  },
+
+  AR: {
+    home: "الرئيسية",
+
+    heroKicker: "SEGADEALS · طلب رحلة",
+    heroTitle:
+      "حدد رحلتك ودع شركات السفر تقدم لك أفضل العروض.",
+    heroDesc:
+      "حدد نوع الرحلة ومدينة المغادرة والوجهة وعدد المسافرين والميزانية وموعد السفر. يقوم Segaloka بتوجيه طلبك إلى شركات السفر المناسبة التي فعّلت SegaDeals.",
+    createRequest: "إنشاء طلب SegaDeals",
+    learn: "طريقة العمل",
+
+    request: "طلب المسافر",
+    matching: "شركة سفر مناسبة",
+    offers: "عروض السفر",
+
+    aboutKicker: "تعرّف على SEGADEALS",
+    aboutTitle: "أنت تحدد احتياجك، وشركات السفر تقدم الخيارات.",
+    aboutDesc:
+      "تساعد SegaDeals المسافر على إيجاد خيارات مناسبة دون البحث في الباقات واحدة تلو الأخرى. أنشئ طلباً بسيطاً وسيقوم Segaloka بتوجيهه إلى شركات السفر المناسبة التي فعّلت SegaDeals.",
+
+    whyTitle: "لماذا تستخدم SegaDeals؟",
+    benefits: [
+      ["حسب احتياجك", "ابدأ من متطلبات رحلتك بدلاً من باقة محددة مسبقاً."],
+      ["مطابقة مع السفر المناسب", "يتم توجيه الطلب فقط إلى شركات السفر المؤهلة التي فعّلت SegaDeals."],
+      ["استقبل عدة عروض", "يمكن لشركات السفر المناسبة الرد بعروض سفر جذابة."],
+      ["الاختيار لك", "قارن العروض واختر العرض الأنسب لك."],
+    ],
+
+    howKicker: "طريقة الاستخدام",
+    howTitle: "من الطلب إلى رحلتك",
+    steps: [
+      ["أنشئ الطلب", "اختر نوع الرحلة وأدخل احتياجاتك الأساسية."],
+      ["مطابقة شركات السفر", "يتم إرسال الطلب إلى شركات السفر المناسبة التي فعّلت SegaDeals."],
+      ["إرسال العرض", "يمكن لشركات السفر المطابقة تقديم أفضل عروضها."],
+      ["قارن العروض", "راجع الأسعار والمواعيد والفنادق وشركات الطيران والخدمات."],
+      ["اختر الأنسب", "اختر العرض الأنسب لاحتياجاتك وميزانيتك."],
+      ["انتقل إلى المعاملة", "ينشئ Segaloka مسار المعاملة للدفع ومستندات المسافر."],
+    ],
+
+    flowKicker: "كيف تعمل SEGADEALS",
+    flowTitle: "يمكن لطلب واحد استقبال عدة عروض من شركات السفر.",
+    flowDesc:
+      "لا تقوم شركات السفر بتغيير طلبك، بل ترد عليه بعروضها الخاصة. ويمكنك المقارنة واختيار العرض الأنسب.",
+    flowPoints: [
+      "يتم توجيه الطلب فقط إلى شركات السفر المناسبة لنوع الرحلة.",
+      "يجب على شركة السفر تفعيل SegaDeals لاستقبال الطلبات.",
+      "ميزانية المسافر مرجع للاحتياج وليست سعراً تلقائياً للمعاملة.",
+      "يمكن لكل شركة سفر تقديم سعر وخدمات مختلفة.",
+      "بعد اختيار عرض واحد ينتقل النظام إلى عملية المعاملة.",
+    ],
+
+    important: "الخصوصية وعملية المعاملة",
+    importantItems: [
+      "لا يلزم تقديم المستندات الشخصية عند إنشاء الطلب الأولي.",
+      "يتم طلب بيانات المسافر الكاملة بعد اختيار العرض.",
+      "يتم إنشاء صفحة أو رابط المعاملة عبر Segaloka.",
+      "الدفع والمستندات المطلوبة تتبع المعاملة المختارة.",
+    ],
+
+    builderKicker: "إنشاء طلب SEGADEALS",
+    builderTitle: "ما الرحلة التي تبحث عنها؟",
+    builderDesc:
+      "أدخل الاحتياجات الأساسية أولاً. في مرحلة الواجهة الحالية لن يتم إرسال الطلب إلى النظام الخلفي.",
+
+    tripType: "نوع الرحلة",
+    origin: "من",
+    destination: "وجهة الدخول",
+    travelers: "المسافرون",
+    budget: "الميزانية",
+    departure: "التاريخ والشهر",
+    notes: "ملاحظات",
+    optional: "اختياري",
+
+    tripPlaceholder: "اختر نوع الرحلة",
+    originPlaceholder: "اختر مدينة المغادرة",
+    destinationPlaceholder: "اختر وجهة الدخول",
+    travelerPlaceholder: "حدد عدد المسافرين",
+    budgetPlaceholder: "أدخل الميزانية",
+    departurePlaceholder: "اختر التاريخ والشهر",
+    notesPlaceholder: "أضف متطلبات خاصة عند الحاجة",
+
+    sendRequest: "إرسال الطلب إلى شركات السفر",
+    uiNotice:
+      "سيتم تفعيل إرسال الطلب بعد ربط مسار SegaDeals بالنظام الخلفي.",
+
+    faqKicker: "الأسئلة الشائعة",
+    faqTitle: "حول SegaDeals",
+    faqs: [
+      ["هل SegaDeals باقة سفر؟", "لا. تتيح SegaDeals للمسافر إنشاء طلب واستقبال عروض من شركات السفر المناسبة."],
+      ["من يستقبل طلبي؟", "فقط شركات السفر المؤهلة لنوع الرحلة والتي فعّلت SegaDeals."],
+      ["هل يجب الالتزام بميزانيتي تماماً؟", "الميزانية مرجع للاحتياج ويمكن لشركة السفر تقديم السعر والخدمات المناسبة."],
+      ["هل يجب أن أختار أحد العروض؟", "لا. يمكنك مقارنة العروض واختيار الأنسب لك."],
+      ["متى أقدم مستندات المسافر؟", "يتم طلب البيانات والمستندات الكاملة بعد اختيار العرض وإنشاء المعاملة."],
+      ["كيف يتم الدفع؟", "بعد اختيار العرض ينشئ Segaloka مسار المعاملة للانتقال إلى الدفع."],
+    ],
+  },
+} as const;
+
+const benefitIcons = [
+  Search,
+  ShieldCheck,
+  Sparkles,
+  CheckCircle2,
+];
+
+const stepIcons = [
+  FileText,
+  Search,
+  Send,
+  Sparkles,
+  CheckCircle2,
+  WalletCards,
+];
+
+export default function SegaDealsClient() {
+  const {
+    language,
+    direction,
+    currency,
+    locale,
+  } = useMarketplacePreferences();
+
+  const [tripType, setTripType] =
+    useState<SegaDealsTripType>("Umrah");
+
+  const [origin, setOrigin] = useState("");
+  const [originQuery, setOriginQuery] = useState("");
+  const [originOpen, setOriginOpen] = useState(false);
+
+  const [destination, setDestination] = useState("");
+  const [customDestination, setCustomDestination] = useState("");
+
+  const [travelers, setTravelers] =
+    useState<SegaDealsTraveler>({
+      adult: 1,
+      child: 0,
+      infant: 0,
+    });
+
+  const [budget, setBudget] = useState("");
+  const [departureDate, setDepartureDate] = useState("");
+  const [notes, setNotes] = useState("");
+
+  const [requestStage, setRequestStage] =
+    useState<"form" | "review" | "confirmed">("form");
+
+  const filteredOrigins = useMemo(() => {
+    const query = originQuery.trim().toLocaleLowerCase();
+
+    if (!query) {
+      return segaDealsIndonesiaCities;
+    }
+
+    return segaDealsIndonesiaCities.filter((city) =>
+      city.toLocaleLowerCase().includes(query),
+    );
+  }, [originQuery]);
+
+  const destinationOptions =
+    segaDealsDestinations[tripType];
+
+  const selectedDestination =
+    tripType === "Custom"
+      ? customDestination.trim()
+      : destination;
+
+  const travelerTotal =
+    getSegaDealsTravelerTotal(travelers);
+
+  const numericBudget =
+    Number(budget.replace(/[^0-9]/g, ""));
+
+  const isRequestValid =
+    origin.trim().length > 0 &&
+    selectedDestination.length > 0 &&
+    travelerTotal > 0 &&
+    numericBudget > 0 &&
+    departureDate.length > 0;
+
+  const minimumDate = new Date()
+    .toISOString()
+    .slice(0, 10);
+
+  const budgetDisplay = numericBudget
+    ? new Intl.NumberFormat(locale, {
+        style: "currency",
+        currency,
+        maximumFractionDigits:
+          currency === "IDR" ? 0 : 2,
+        minimumFractionDigits: 0,
+      }).format(numericBudget)
+    : "-";
+
+  const departureDisplay = departureDate
+    ? new Intl.DateTimeFormat(locale, {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      }).format(
+        new Date(`${departureDate}T00:00:00`),
+      )
+    : "-";
+
+  const updateTraveler = (
+    key: keyof SegaDealsTraveler,
+    delta: number,
+  ) => {
+    setTravelers((current) => {
+      const next = Math.max(0, current[key] + delta);
+
+      if (
+        key === "adult" &&
+        next === 0 &&
+        current.child === 0 &&
+        current.infant === 0
+      ) {
+        return current;
+      }
+
+      return {
+        ...current,
+        [key]: next,
+      };
+    });
+  };
+
+  const chooseTripType = (
+    nextType: SegaDealsTripType,
+  ) => {
+    setTripType(nextType);
+    setDestination("");
+    setCustomDestination("");
+    setRequestStage("form");
+  };
+
+  const chooseOrigin = (city: string) => {
+    setOrigin(city);
+    setOriginQuery(city);
+    setOriginOpen(false);
+  };
+
+  const resetRequest = () => {
+    setTripType("Umrah");
+    setOrigin("");
+    setOriginQuery("");
+    setDestination("");
+    setCustomDestination("");
+    setTravelers({
+      adult: 1,
+      child: 0,
+      infant: 0,
+    });
+    setBudget("");
+    setDepartureDate("");
+    setNotes("");
+    setRequestStage("form");
+  };
+
+  const t =
+    copy[(language as Language) ?? "ID"] ??
+    copy.ID;
+
+  const scrollToRequest = () => {
+    document
+      .getElementById("segadeals-request")
+      ?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+  };
+
+  const scrollToHow = () => {
+    document
+      .getElementById("segadeals-how")
+      ?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+  };
+
+  return (
+    <main
+      className="segadeals-page"
+      dir={direction}
+      lang={
+        language === "AR"
+          ? "ar"
+          : language === "EN"
+            ? "en"
+            : "id"
+      }
+    >
+      <section className="segadeals-hero">
+        <div className="segadeals-shell segadeals-hero-inner">
+          <div className="segadeals-breadcrumb">
+            <a href="/">{t.home}</a>
+            <span>/</span>
+            <strong>SegaDeals</strong>
+          </div>
+
+          <div className="segadeals-hero-grid">
+            <div className="segadeals-hero-copy">
+              <span className="segadeals-eyebrow">
+                {t.heroKicker}
+              </span>
+
+              <h1>{t.heroTitle}</h1>
+              <p>{t.heroDesc}</p>
+
+              <div className="segadeals-hero-actions">
+                <button
+                  type="button"
+                  className="segadeals-button segadeals-button-primary"
+                  onClick={scrollToRequest}
+                >
+                  {t.createRequest}
+                  <ArrowRight size={16} />
+                </button>
+
+                <button
+                  type="button"
+                  className="segadeals-button segadeals-button-secondary"
+                  onClick={scrollToHow}
+                >
+                  {t.learn}
+                </button>
+              </div>
+            </div>
+
+            <div className="segadeals-request-visual">
+              <div className="segadeals-request-node is-main">
+                <div className="segadeals-request-node-icon">
+                  <Users size={22} />
+                </div>
+                <div>
+                  <span>01</span>
+                  <strong>{t.request}</strong>
+                </div>
+              </div>
+
+              <div className="segadeals-request-line" />
+
+              <div className="segadeals-request-node">
+                <div className="segadeals-request-node-icon">
+                  <Search size={20} />
+                </div>
+                <div>
+                  <span>02</span>
+                  <strong>{t.matching}</strong>
+                </div>
+              </div>
+
+              <div className="segadeals-request-line" />
+
+              <div className="segadeals-request-node">
+                <div className="segadeals-request-node-icon">
+                  <Sparkles size={20} />
+                </div>
+                <div>
+                  <span>03</span>
+                  <strong>{t.offers}</strong>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="segadeals-section">
+        <div className="segadeals-shell">
+          <div className="segadeals-intro">
+            <span className="segadeals-section-eyebrow">
+              {t.aboutKicker}
+            </span>
+            <h2>{t.aboutTitle}</h2>
+            <p>{t.aboutDesc}</p>
+          </div>
+
+          <h3 className="segadeals-benefit-title">
+            {t.whyTitle}
+          </h3>
+
+          <div className="segadeals-benefit-grid">
+            {t.benefits.map((item, index) => {
+              const Icon = benefitIcons[index];
+
+              return (
+                <article
+                  className="segadeals-benefit-card"
+                  key={item[0]}
+                >
+                  <div className="segadeals-icon-box">
+                    <Icon size={22} />
+                  </div>
+                  <h3>{item[0]}</h3>
+                  <p>{item[1]}</p>
+                </article>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      <section
+        className="segadeals-section segadeals-how-section"
+        id="segadeals-how"
+      >
+        <div className="segadeals-shell">
+          <div className="segadeals-section-heading">
+            <span className="segadeals-section-eyebrow">
+              {t.howKicker}
+            </span>
+            <h2>{t.howTitle}</h2>
+          </div>
+
+          <div className="segadeals-step-grid segadeals-step-grid-six">
+            {t.steps.map((step, index) => {
+              const Icon = stepIcons[index];
+
+              return (
+                <article
+                  className="segadeals-step"
+                  key={step[0]}
+                >
+                  <div className="segadeals-step-number">
+                    {String(index + 1).padStart(2, "0")}
+                  </div>
+
+                  <div className="segadeals-step-icon">
+                    <Icon size={21} />
+                  </div>
+
+                  <h3>{step[0]}</h3>
+                  <p>{step[1]}</p>
+                </article>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      <section className="segadeals-section">
+        <div className="segadeals-shell segadeals-deal-grid">
+          <div className="segadeals-deal-copy">
+            <span className="segadeals-section-eyebrow">
+              {t.flowKicker}
+            </span>
+
+            <h2>{t.flowTitle}</h2>
+            <p>{t.flowDesc}</p>
+
+            <div className="segadeals-deal-points">
+              {t.flowPoints.map((point) => (
+                <div key={point}>
+                  <CheckCircle2 size={18} />
+                  <span>{point}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <aside className="segadeals-important-card">
+            <div className="segadeals-important-title">
+              <ShieldCheck size={22} />
+              <h3>{t.important}</h3>
+            </div>
+
+            {t.importantItems.map((item) => (
+              <div
+                className="segadeals-important-item"
+                key={item}
+              >
+                <span />
+                <p>{item}</p>
+              </div>
+            ))}
+          </aside>
+        </div>
+      </section>
+
+      <section
+        className="segadeals-section segadeals-request-section segadeals-request-v3"
+        id="segadeals-request"
+      >
+        <div className="segadeals-shell">
+          <div className="segadeals-builder-heading">
+            <div>
+              <span className="segadeals-section-eyebrow">
+                {t.builderKicker}
+              </span>
+              <h2>{t.builderTitle}</h2>
+              <p>
+                Tentukan kebutuhan utama perjalanan Anda.
+                Travel akan melengkapi detail hotel, maskapai,
+                durasi, fasilitas, dan harga melalui penawaran.
+              </p>
+            </div>
+
+            <div className="segadeals-builder-status">
+              <ShieldCheck size={18} />
+              <span>Data pribadi belum diperlukan</span>
+            </div>
+          </div>
+
+          <div className="segadeals-builder-layout">
+            <aside className="segadeals-builder-aside">
+              <div className="segadeals-builder-aside-copy">
+                <span>REQUEST → OFFER</span>
+                <h3>
+                  Satu kebutuhan,
+                  beberapa pilihan Travel.
+                </h3>
+                <p>
+                  Anda cukup menentukan kebutuhan utama.
+                  Travel yang sesuai akan memberikan
+                  penawaran untuk dibandingkan.
+                </p>
+              </div>
+
+              <div className="segadeals-builder-collage">
+                <div className="segadeals-builder-photo segadeals-builder-photo-main">
+                  <div>
+                    <strong>Umrah</strong>
+                    <span>Makkah & Madinah</span>
+                  </div>
+                </div>
+
+                <div className="segadeals-builder-photo segadeals-builder-photo-second">
+                  <div>
+                    <strong>Halal Tour</strong>
+                    <span>Jelajahi dunia</span>
+                  </div>
+                </div>
+
+                <div className="segadeals-builder-photo segadeals-builder-photo-third">
+                  <div>
+                    <strong>Domestik</strong>
+                    <span>Indonesia</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="segadeals-builder-aside-flow">
+                <div>
+                  <span>01</span>
+                  <strong>Buat request</strong>
+                </div>
+                <div>
+                  <span>02</span>
+                  <strong>Terima penawaran</strong>
+                </div>
+                <div>
+                  <span>03</span>
+                  <strong>Pilih Travel</strong>
+                </div>
+              </div>
+            </aside>
+
+            <div className="segadeals-builder-card">
+              {requestStage === "form" && (
+                <>
+                  <div className="segadeals-builder-card-head">
+                    <div>
+                      <span>LANGKAH 1 DARI 2</span>
+                      <h3>Detail Request</h3>
+                    </div>
+
+                    <div className="segadeals-currency-badge">
+                      <CircleDollarSign size={16} />
+                      {currency}
+                    </div>
+                  </div>
+
+                  <div className="segadeals-builder-block">
+                    <div className="segadeals-builder-label">
+                      <span>Jenis Perjalanan</span>
+                      <small>Pilih satu</small>
+                    </div>
+
+                    <div className="segadeals-trip-types">
+                      {segaDealsTripTypes.map((type) => (
+                        <button
+                          key={type}
+                          type="button"
+                          className={
+                            tripType === type
+                              ? "is-active"
+                              : ""
+                          }
+                          onClick={() =>
+                            chooseTripType(type)
+                          }
+                        >
+                          <PlaneTakeoff size={17} />
+                          <span>{type}</span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="segadeals-builder-grid">
+                    <div className="segadeals-builder-field">
+                      <label htmlFor="segadeals-origin">
+                        Dari
+                      </label>
+
+                      <div className="segadeals-control segadeals-combobox">
+                        <MapPin size={18} />
+
+                        <input
+                          id="segadeals-origin"
+                          type="text"
+                          autoComplete="off"
+                          value={originQuery}
+                          placeholder="Cari kota keberangkatan"
+                          onFocus={() =>
+                            setOriginOpen(true)
+                          }
+                          onChange={(event) => {
+                            setOriginQuery(
+                              event.target.value,
+                            );
+                            setOrigin("");
+                            setOriginOpen(true);
+                          }}
+                        />
+
+                        <ChevronDown size={16} />
+
+                        {originOpen && (
+                          <div className="segadeals-combobox-menu">
+                            {filteredOrigins.length > 0 ? (
+                              filteredOrigins.map((city) => (
+                                <button
+                                  key={city}
+                                  type="button"
+                                  onMouseDown={(event) =>
+                                    event.preventDefault()
+                                  }
+                                  onClick={() =>
+                                    chooseOrigin(city)
+                                  }
+                                >
+                                  <MapPin size={15} />
+                                  <span>{city}</span>
+                                </button>
+                              ))
+                            ) : (
+                              <div className="segadeals-combobox-empty">
+                                Kota tidak ditemukan.
+                              </div>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="segadeals-builder-field">
+                      <label htmlFor="segadeals-destination">
+                        {tripType === "Umrah"
+                          ? "Tujuan Masuk"
+                          : "Tujuan"}
+                      </label>
+
+                      {tripType === "Custom" ? (
+                        <div className="segadeals-control">
+                          <MapPin size={18} />
+                          <input
+                            id="segadeals-destination"
+                            type="text"
+                            value={customDestination}
+                            placeholder="Tulis tujuan perjalanan"
+                            onChange={(event) =>
+                              setCustomDestination(
+                                event.target.value,
+                              )
+                            }
+                          />
+                        </div>
+                      ) : (
+                        <div className="segadeals-control">
+                          <MapPin size={18} />
+
+                          <select
+                            id="segadeals-destination"
+                            value={destination}
+                            onChange={(event) =>
+                              setDestination(
+                                event.target.value,
+                              )
+                            }
+                          >
+                            <option value="">
+                              Pilih tujuan
+                            </option>
+
+                            {destinationOptions.map(
+                              (item) => (
+                                <option
+                                  key={item}
+                                  value={item}
+                                >
+                                  {item}
+                                </option>
+                              ),
+                            )}
+                          </select>
+
+                          <ChevronDown size={16} />
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="segadeals-builder-block">
+                    <div className="segadeals-builder-label">
+                      <span>Traveler</span>
+                      <small>
+                        {travelerTotal} traveler
+                      </small>
+                    </div>
+
+                    <div className="segadeals-traveler-grid">
+                      {(
+                        [
+                          [
+                            "adult",
+                            "Dewasa",
+                            "12 tahun ke atas",
+                          ],
+                          [
+                            "child",
+                            "Anak",
+                            "2–11 tahun",
+                          ],
+                          [
+                            "infant",
+                            "Bayi",
+                            "Di bawah 2 tahun",
+                          ],
+                        ] as const
+                      ).map(
+                        ([key, label, description]) => (
+                          <div
+                            className="segadeals-traveler-item"
+                            key={key}
+                          >
+                            <div>
+                              <strong>{label}</strong>
+                              <span>{description}</span>
+                            </div>
+
+                            <div className="segadeals-stepper">
+                              <button
+                                type="button"
+                                aria-label={`Kurangi ${label}`}
+                                onClick={() =>
+                                  updateTraveler(
+                                    key,
+                                    -1,
+                                  )
+                                }
+                                disabled={
+                                  travelers[key] === 0 ||
+                                  (key === "adult" &&
+                                    travelers.adult ===
+                                      1 &&
+                                    travelers.child ===
+                                      0 &&
+                                    travelers.infant ===
+                                      0)
+                                }
+                              >
+                                <Minus size={15} />
+                              </button>
+
+                              <strong>
+                                {travelers[key]}
+                              </strong>
+
+                              <button
+                                type="button"
+                                aria-label={`Tambah ${label}`}
+                                onClick={() =>
+                                  updateTraveler(
+                                    key,
+                                    1,
+                                  )
+                                }
+                              >
+                                <Plus size={15} />
+                              </button>
+                            </div>
+                          </div>
+                        ),
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="segadeals-builder-grid">
+                    <div className="segadeals-builder-field">
+                      <label htmlFor="segadeals-budget">
+                        Budget
+                      </label>
+
+                      <div className="segadeals-control">
+                        <CircleDollarSign size={18} />
+
+                        <span className="segadeals-control-prefix">
+                          {currency}
+                        </span>
+
+                        <input
+                          id="segadeals-budget"
+                          type="text"
+                          inputMode="numeric"
+                          value={budget}
+                          placeholder={
+                            currency === "IDR"
+                              ? "Contoh 30000000"
+                              : "Masukkan budget"
+                          }
+                          onChange={(event) =>
+                            setBudget(
+                              event.target.value.replace(
+                                /[^0-9]/g,
+                                "",
+                              ),
+                            )
+                          }
+                        />
+                      </div>
+
+                      {numericBudget > 0 && (
+                        <small className="segadeals-field-helper">
+                          {budgetDisplay}
+                        </small>
+                      )}
+                    </div>
+
+                    <div className="segadeals-builder-field">
+                      <label htmlFor="segadeals-date">
+                        Tanggal Keberangkatan
+                      </label>
+
+                      <div className="segadeals-control">
+                        <CalendarDays size={18} />
+
+                        <input
+                          id="segadeals-date"
+                          type="date"
+                          min={minimumDate}
+                          value={departureDate}
+                          onChange={(event) =>
+                            setDepartureDate(
+                              event.target.value,
+                            )
+                          }
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="segadeals-builder-field">
+                    <label htmlFor="segadeals-notes">
+                      Catatan
+                      <span>Opsional</span>
+                    </label>
+
+                    <textarea
+                      id="segadeals-notes"
+                      rows={4}
+                      value={notes}
+                      placeholder="Contoh: membawa lansia, membutuhkan penerbangan langsung, atau kebutuhan khusus lainnya."
+                      onChange={(event) =>
+                        setNotes(event.target.value)
+                      }
+                    />
+                  </div>
+
+                  <div className="segadeals-builder-submit">
+                    <div>
+                      <ShieldCheck size={17} />
+                      <p>
+                        Hotel, maskapai, durasi dan
+                        fasilitas akan diberikan Travel
+                        melalui penawaran.
+                      </p>
+                    </div>
+
+                    <button
+                      type="button"
+                      className="segadeals-button segadeals-button-primary"
+                      disabled={!isRequestValid}
+                      onClick={() =>
+                        setRequestStage("review")
+                      }
+                    >
+                      Review Request
+                      <ArrowRight size={17} />
+                    </button>
+                  </div>
+                </>
+              )}
+
+              {requestStage === "review" && (
+                <div className="segadeals-review">
+                  <div className="segadeals-builder-card-head">
+                    <div>
+                      <span>LANGKAH 2 DARI 2</span>
+                      <h3>Review Request</h3>
+                    </div>
+
+                    <button
+                      type="button"
+                      className="segadeals-review-edit"
+                      onClick={() =>
+                        setRequestStage("form")
+                      }
+                    >
+                      <Pencil size={15} />
+                      Edit
+                    </button>
+                  </div>
+
+                  <div className="segadeals-review-hero">
+                    <div>
+                      <span>{tripType}</span>
+                      <h4>
+                        {origin} → {selectedDestination}
+                      </h4>
+                    </div>
+
+                    <PlaneTakeoff size={28} />
+                  </div>
+
+                  <div className="segadeals-review-grid">
+                    <div>
+                      <span>Traveler</span>
+                      <strong>
+                        {travelerTotal} traveler
+                      </strong>
+                      <small>
+                        {travelers.adult} Dewasa ·{" "}
+                        {travelers.child} Anak ·{" "}
+                        {travelers.infant} Bayi
+                      </small>
+                    </div>
+
+                    <div>
+                      <span>Budget</span>
+                      <strong>{budgetDisplay}</strong>
+                      <small>
+                        Mata uang: {currency}
+                      </small>
+                    </div>
+
+                    <div>
+                      <span>Keberangkatan</span>
+                      <strong>
+                        {departureDisplay}
+                      </strong>
+                    </div>
+
+                    <div>
+                      <span>Tujuan</span>
+                      <strong>
+                        {selectedDestination}
+                      </strong>
+                    </div>
+                  </div>
+
+                  {notes.trim() && (
+                    <div className="segadeals-review-notes">
+                      <span>Catatan</span>
+                      <p>{notes}</p>
+                    </div>
+                  )}
+
+                  <div className="segadeals-review-notice">
+                    <ShieldCheck size={20} />
+                    <div>
+                      <strong>
+                        Periksa kembali request Anda
+                      </strong>
+                      <p>
+                        Tahap ini masih UI-only.
+                        Request belum dikirim atau
+                        disimpan ke backend Segaloka.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="segadeals-review-actions">
+                    <button
+                      type="button"
+                      className="segadeals-button segadeals-button-secondary"
+                      onClick={() =>
+                        setRequestStage("form")
+                      }
+                    >
+                      Kembali & Edit
+                    </button>
+
+                    <button
+                      type="button"
+                      className="segadeals-button segadeals-button-primary"
+                      onClick={() =>
+                        setRequestStage("confirmed")
+                      }
+                    >
+                      <Send size={17} />
+                      Konfirmasi Request
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {requestStage === "confirmed" && (
+                <div className="segadeals-confirmed">
+                  <div className="segadeals-confirmed-icon">
+                    <CheckCircle2 size={34} />
+                  </div>
+
+                  <span>SIMULASI UI BERHASIL</span>
+
+                  <h3>Request Anda sudah siap.</h3>
+
+                  <p>
+                    Tampilan dan validasi Request
+                    Builder telah selesai. Belum ada
+                    data yang dikirim ke Travel atau
+                    disimpan ke backend pada tahap ini.
+                  </p>
+
+                  <div className="segadeals-confirmed-summary">
+                    <strong>
+                      {origin} → {selectedDestination}
+                    </strong>
+                    <span>
+                      {tripType} · {travelerTotal} traveler
+                      · {budgetDisplay}
+                    </span>
+                  </div>
+
+                  <button
+                    type="button"
+                    className="segadeals-button segadeals-button-primary"
+                    onClick={resetRequest}
+                  >
+                    Buat Request Baru
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </section>
+      <section className="segadeals-section segadeals-faq-section">
+        <div className="segadeals-shell">
+          <div className="segadeals-section-heading">
+            <span className="segadeals-section-eyebrow">
+              {t.faqKicker}
+            </span>
+            <h2>{t.faqTitle}</h2>
+          </div>
+
+          <div className="segadeals-faq-list">
+            {t.faqs.map((faq) => (
+              <details
+                className="segadeals-faq"
+                key={faq[0]}
+              >
+                <summary>
+                  <span>{faq[0]}</span>
+                  <HelpCircle size={19} />
+                </summary>
+                <p>{faq[1]}</p>
+              </details>
+            ))}
+          </div>
+        </div>
+      </section>
+    </main>
+  );
+}
+
+
+===== CURRENT segadeals.css =====
+/* SEGALOKA SEGADEALS PAGE V1 */
+
+.segadeals-page {
+  --sgd-blue: #0877df;
+  --sgd-blue-dark: #075eae;
+  --sgd-navy: #102a43;
+  --sgd-text: #20344a;
+  --sgd-muted: #66788a;
+  --sgd-border: #e3eaf1;
+  --sgd-soft: #f5f9fd;
+  --sgd-yellow: #ffca28;
+
+  background: #ffffff;
+  color: var(--sgd-text);
+  font-family: inherit;
+  font-size: 15px;
+  line-height: 1.65;
+}
+
+.segadeals-page *,
+.segadeals-page *::before,
+.segadeals-page *::after {
+  box-sizing: border-box;
+}
+
+.segadeals-shell {
+  width: min(1180px, calc(100% - 48px));
+  margin-inline: auto;
+}
+
+.segadeals-hero {
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(
+      circle at 82% 22%,
+      rgba(255, 202, 40, 0.22),
+      transparent 28%
+    ),
+    linear-gradient(
+      135deg,
+      #eef8ff 0%,
+      #f7fbff 48%,
+      #fffaf0 100%
+    );
+}
+
+.segadeals-hero::before {
+  content: "";
+  position: absolute;
+  width: 520px;
+  height: 520px;
+  border-radius: 999px;
+  background: rgba(8, 119, 223, 0.05);
+  inset-inline-end: -180px;
+  top: -260px;
+}
+
+.segadeals-hero-inner {
+  position: relative;
+  z-index: 1;
+  padding-block: 30px 78px;
+}
+
+.segadeals-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 50px;
+  color: #7b8a99;
+  font-size: 12px;
+}
+
+.segadeals-breadcrumb a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.segadeals-breadcrumb strong {
+  color: var(--sgd-navy);
+  font-weight: 700;
+}
+
+.segadeals-hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(380px, 0.95fr);
+  gap: 80px;
+  align-items: center;
+}
+
+.segadeals-eyebrow,
+.segadeals-section-eyebrow {
+  display: inline-block;
+  color: var(--sgd-blue);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.11em;
+}
+
+.segadeals-hero-copy h1 {
+  max-width: 690px;
+  margin: 14px 0 18px;
+  color: var(--sgd-navy);
+  font-size: clamp(38px, 4.7vw, 62px);
+  font-weight: 750;
+  letter-spacing: -0.045em;
+  line-height: 1.02;
+}
+
+.segadeals-hero-copy > p {
+  max-width: 650px;
+  margin: 0;
+  color: var(--sgd-muted);
+  font-size: 16px;
+  line-height: 1.75;
+}
+
+.segadeals-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 30px;
+}
+
+.segadeals-button {
+  min-height: 44px;
+  border-radius: 9px;
+  padding: 0 19px;
+  border: 1px solid transparent;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 750;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.segadeals-button-primary {
+  background: var(--sgd-blue);
+  color: #ffffff;
+}
+
+.segadeals-button-primary:hover {
+  background: var(--sgd-blue-dark);
+}
+
+.segadeals-button-secondary {
+  background: #ffffff;
+  border-color: #d6e1eb;
+  color: var(--sgd-navy);
+}
+
+.segadeals-hero-visual {
+  position: relative;
+  min-height: 390px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.segadeals-orbit {
+  position: absolute;
+  border: 1px solid rgba(8, 119, 223, 0.13);
+  border-radius: 999px;
+}
+
+.segadeals-orbit-one {
+  width: 360px;
+  height: 360px;
+}
+
+.segadeals-orbit-two {
+  width: 285px;
+  height: 285px;
+}
+
+.segadeals-ticket {
+  position: relative;
+  z-index: 2;
+  width: min(350px, 88%);
+  border: 1px solid rgba(255,255,255,.8);
+  border-radius: 24px;
+  background:
+    linear-gradient(
+      145deg,
+      #0877df,
+      #075eae
+    );
+  color: #ffffff;
+  padding: 26px;
+  box-shadow: 0 28px 70px rgba(7, 94, 174, 0.22);
+  transform: rotate(-4deg);
+}
+
+.segadeals-ticket::before,
+.segadeals-ticket::after {
+  content: "";
+  position: absolute;
+  top: 58%;
+  width: 22px;
+  height: 22px;
+  background: #f6fbff;
+  border-radius: 999px;
+}
+
+.segadeals-ticket::before {
+  left: -11px;
+}
+
+.segadeals-ticket::after {
+  right: -11px;
+}
+
+.segadeals-ticket-top,
+.segadeals-ticket-route {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.segadeals-ticket-top {
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.segadeals-ticket-main {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin: 52px 0 48px;
+}
+
+.segadeals-ticket-main strong {
+  margin-top: 9px;
+  font-size: 30px;
+  line-height: 1;
+}
+
+.segadeals-ticket-main span {
+  margin-top: 7px;
+  opacity: 0.78;
+  font-size: 12px;
+}
+
+.segadeals-ticket-route {
+  padding-top: 18px;
+  border-top: 1px dashed rgba(255,255,255,.42);
+  justify-content: flex-start;
+  gap: 8px;
+  font-size: 12px;
+}
+
+.segadeals-floating-card {
+  position: absolute;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 14px;
+  border: 1px solid #e1eaf2;
+  border-radius: 10px;
+  background: rgba(255,255,255,.96);
+  box-shadow: 0 15px 40px rgba(16, 42, 67, 0.12);
+  color: var(--sgd-navy);
+  font-size: 12px;
+  font-weight: 750;
+}
+
+.segadeals-floating-card svg {
+  color: var(--sgd-blue);
+}
+
+.segadeals-floating-card-one {
+  inset-inline-start: 0;
+  top: 68px;
+}
+
+.segadeals-floating-card-two {
+  inset-inline-end: 0;
+  bottom: 65px;
+}
+
+.segadeals-section {
+  padding-block: 82px;
+}
+
+.segadeals-intro {
+  max-width: 820px;
+}
+
+.segadeals-intro h2,
+.segadeals-section-heading h2,
+.segadeals-deal-copy h2 {
+  margin: 8px 0 14px;
+  color: var(--sgd-navy);
+  font-size: 32px;
+  font-weight: 750;
+  letter-spacing: -0.025em;
+  line-height: 1.16;
+}
+
+.segadeals-intro > p,
+.segadeals-section-heading > p,
+.segadeals-deal-copy > p {
+  margin: 0;
+  color: var(--sgd-muted);
+  line-height: 1.75;
+}
+
+.segadeals-benefit-title {
+  margin: 46px 0 18px;
+  color: var(--sgd-navy);
+  font-size: 16px;
+  font-weight: 750;
+}
+
+.segadeals-benefit-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.segadeals-benefit-card {
+  border: 1px solid var(--sgd-border);
+  border-radius: 14px;
+  padding: 22px;
+  background: #ffffff;
+}
+
+.segadeals-icon-box,
+.segadeals-step-icon,
+.segadeals-empty-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 11px;
+  display: grid;
+  place-items: center;
+  background: #eaf5ff;
+  color: var(--sgd-blue);
+}
+
+.segadeals-benefit-card h3,
+.segadeals-step h3 {
+  margin: 17px 0 7px;
+  color: var(--sgd-navy);
+  font-size: 15px;
+  font-weight: 750;
+}
+
+.segadeals-benefit-card p,
+.segadeals-step p {
+  margin: 0;
+  color: var(--sgd-muted);
+  font-size: 13px;
+  line-height: 1.65;
+}
+
+.segadeals-how-section {
+  background: var(--sgd-soft);
+}
+
+.segadeals-section-heading {
+  max-width: 720px;
+  margin-bottom: 34px;
+}
+
+.segadeals-step-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.segadeals-step {
+  position: relative;
+  min-height: 215px;
+  border: 1px solid #e0e9f1;
+  border-radius: 14px;
+  background: #ffffff;
+  padding: 22px;
+}
+
+.segadeals-step-number {
+  position: absolute;
+  inset-inline-end: 18px;
+  top: 15px;
+  color: #dce7f0;
+  font-size: 27px;
+  font-weight: 800;
+}
+
+.segadeals-deal-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(330px, .9fr);
+  gap: 72px;
+  align-items: center;
+}
+
+.segadeals-deal-points {
+  display: grid;
+  gap: 13px;
+  margin-top: 28px;
+}
+
+.segadeals-deal-points > div {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.segadeals-deal-points svg {
+  flex: 0 0 auto;
+  margin-top: 3px;
+  color: #16a66a;
+}
+
+.segadeals-deal-points span {
+  color: #42566b;
+  font-size: 14px;
+}
+
+.segadeals-important-card {
+  border-radius: 18px;
+  padding: 26px;
+  background: var(--sgd-navy);
+  color: #ffffff;
+}
+
+.segadeals-important-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 22px;
+}
+
+.segadeals-important-title svg {
+  color: var(--sgd-yellow);
+}
+
+.segadeals-important-title h3 {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 750;
+}
+
+.segadeals-important-item {
+  display: flex;
+  gap: 11px;
+  padding: 13px 0;
+  border-top: 1px solid rgba(255,255,255,.12);
+}
+
+.segadeals-important-item > span {
+  flex: 0 0 auto;
+  width: 6px;
+  height: 6px;
+  margin-top: 9px;
+  border-radius: 999px;
+  background: var(--sgd-yellow);
+}
+
+.segadeals-important-item p {
+  margin: 0;
+  color: rgba(255,255,255,.78);
+  font-size: 13px;
+}
+
+.segadeals-available-section {
+  background:
+    linear-gradient(
+      180deg,
+      #f8fbfe,
+      #ffffff
+    );
+}
+
+.segadeals-empty {
+  min-height: 180px;
+  border: 1px dashed #cbd9e5;
+  border-radius: 16px;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  padding: 32px;
+  text-align: start;
+}
+
+.segadeals-empty h3 {
+  margin: 0 0 5px;
+  color: var(--sgd-navy);
+  font-size: 17px;
+  font-weight: 750;
+}
+
+.segadeals-empty p {
+  max-width: 610px;
+  margin: 0;
+  color: var(--sgd-muted);
+  font-size: 13px;
+}
+
+.segadeals-faq-section {
+  padding-top: 72px;
+}
+
+.segadeals-faq-list {
+  max-width: 900px;
+  display: grid;
+  gap: 10px;
+}
+
+.segadeals-faq {
+  border: 1px solid var(--sgd-border);
+  border-radius: 12px;
+  background: #ffffff;
+  overflow: hidden;
+}
+
+.segadeals-faq summary {
+  min-height: 60px;
+  padding: 16px 18px;
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  color: var(--sgd-navy);
+  font-size: 14px;
+  font-weight: 750;
+}
+
+.segadeals-faq summary::-webkit-details-marker {
+  display: none;
+}
+
+.segadeals-faq summary svg {
+  flex: 0 0 auto;
+  color: var(--sgd-blue);
+}
+
+.segadeals-faq p {
+  margin: 0;
+  padding: 0 18px 18px;
+  color: var(--sgd-muted);
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.segadeals-page[dir="rtl"] {
+  letter-spacing: 0;
+}
+
+.segadeals-page[dir="rtl"] .segadeals-hero-copy h1,
+.segadeals-page[dir="rtl"] .segadeals-eyebrow,
+.segadeals-page[dir="rtl"] .segadeals-section-eyebrow {
+  letter-spacing: 0;
+}
+
+.segadeals-page[dir="rtl"] .segadeals-button-primary svg {
+  transform: rotate(180deg);
+}
+
+@media (max-width: 980px) {
+  .segadeals-hero-grid {
+    grid-template-columns: 1fr 360px;
+    gap: 35px;
+  }
+
+  .segadeals-benefit-grid,
+  .segadeals-step-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .segadeals-deal-grid {
+    gap: 36px;
+  }
+}
+
+@media (max-width: 760px) {
+  .segadeals-shell {
+    width: min(100% - 28px, 1180px);
+  }
+
+  .segadeals-hero-inner {
+    padding-block: 22px 50px;
+  }
+
+  .segadeals-breadcrumb {
+    margin-bottom: 30px;
+  }
+
+  .segadeals-hero-grid {
+    grid-template-columns: 1fr;
+    gap: 26px;
+  }
+
+  .segadeals-hero-copy h1 {
+    margin-top: 10px;
+    font-size: 36px;
+  }
+
+  .segadeals-hero-copy > p {
+    font-size: 14px;
+  }
+
+  .segadeals-hero-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .segadeals-button {
+    width: 100%;
+  }
+
+  .segadeals-hero-visual {
+    min-height: 330px;
+  }
+
+  .segadeals-ticket {
+    width: min(310px, 86%);
+  }
+
+  .segadeals-floating-card-one {
+    inset-inline-start: 2px;
+    top: 42px;
+  }
+
+  .segadeals-floating-card-two {
+    inset-inline-end: 2px;
+    bottom: 35px;
+  }
+
+  .segadeals-section {
+    padding-block: 58px;
+  }
+
+  .segadeals-intro h2,
+  .segadeals-section-heading h2,
+  .segadeals-deal-copy h2 {
+    font-size: 26px;
+  }
+
+  .segadeals-benefit-grid,
+  .segadeals-step-grid,
+  .segadeals-deal-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .segadeals-step {
+    min-height: 0;
+  }
+
+  .segadeals-empty {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 430px) {
+  .segadeals-hero-copy h1 {
+    font-size: 32px;
+  }
+
+  .segadeals-ticket-main {
+    margin-block: 42px 38px;
+  }
+
+  .segadeals-ticket-main strong {
+    font-size: 26px;
+  }
+
+  .segadeals-floating-card {
+    font-size: 10px;
+    padding: 9px 10px;
+  }
+}
+
+/* ==========================================================
+   SEGALOKA SEGADEALS — REQUEST MARKETPLACE V2
+   ========================================================== */
+
+.segadeals-request-visual {
+  min-height: 390px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: stretch;
+  max-width: 410px;
+  margin-inline: auto;
+  width: 100%;
+}
+
+.segadeals-request-node {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 76px;
+  padding: 16px 18px;
+  border: 1px solid #dce8f2;
+  border-radius: 16px;
+  background: rgba(255,255,255,.96);
+  box-shadow: 0 14px 35px rgba(16,42,67,.08);
+}
+
+.segadeals-request-node.is-main {
+  border-color: rgba(8,119,223,.24);
+  box-shadow: 0 18px 45px rgba(8,119,223,.13);
+}
+
+.segadeals-request-node-icon {
+  flex: 0 0 auto;
+  width: 43px;
+  height: 43px;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  background: #eaf5ff;
+  color: #0877df;
+}
+
+.segadeals-request-node div:last-child {
+  display: flex;
+  flex-direction: column;
+}
+
+.segadeals-request-node span {
+  color: #8da0b3;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .08em;
+}
+
+.segadeals-request-node strong {
+  color: #102a43;
+  font-size: 15px;
+  font-weight: 750;
+}
+
+.segadeals-request-line {
+  width: 2px;
+  height: 25px;
+  margin-inline: auto;
+  background: linear-gradient(
+    #a9d4f8,
+    #dbeaf7
+  );
+}
+
+.segadeals-step-grid-six {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.segadeals-request-section {
+  background:
+    linear-gradient(
+      180deg,
+      #f6faff 0%,
+      #ffffff 100%
+    );
+}
+
+.segadeals-request-card {
+  border: 1px solid #dde7f0;
+  border-radius: 18px;
+  background: #ffffff;
+  padding: 26px;
+  box-shadow: 0 16px 45px rgba(16,42,67,.06);
+}
+
+.segadeals-request-form-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.segadeals-field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.segadeals-field > span {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: #20344a;
+  font-size: 12px;
+  font-weight: 750;
+}
+
+.segadeals-field > span small {
+  color: #8a9aaa;
+  font-size: 10px;
+  font-weight: 500;
+}
+
+.segadeals-field-full {
+  grid-column: 1 / -1;
+}
+
+.segadeals-input-shell {
+  min-height: 48px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  border: 1px solid #dce5ed;
+  border-radius: 10px;
+  padding: 0 13px;
+  background: #ffffff;
+}
+
+.segadeals-input-shell:focus-within,
+.segadeals-field textarea:focus {
+  border-color: #0877df;
+  box-shadow: 0 0 0 3px rgba(8,119,223,.08);
+}
+
+.segadeals-input-shell > svg {
+  flex: 0 0 auto;
+  color: #0877df;
+}
+
+.segadeals-input-shell input,
+.segadeals-input-shell select {
+  width: 100%;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: #20344a;
+  font: inherit;
+  font-size: 13px;
+}
+
+.segadeals-input-shell select {
+  appearance: none;
+}
+
+.segadeals-input-shell select + svg {
+  color: #71869a;
+}
+
+.segadeals-field textarea {
+  width: 100%;
+  resize: vertical;
+  border: 1px solid #dce5ed;
+  border-radius: 10px;
+  outline: 0;
+  padding: 13px;
+  color: #20344a;
+  background: #ffffff;
+  font: inherit;
+  font-size: 13px;
+}
+
+.segadeals-input-shell input::placeholder,
+.segadeals-field textarea::placeholder {
+  color: #97a6b5;
+}
+
+.segadeals-request-submit {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 22px;
+  padding-top: 22px;
+  margin-top: 22px;
+  border-top: 1px solid #e7edf3;
+}
+
+.segadeals-request-submit p {
+  margin: 0;
+  max-width: 650px;
+  color: #788a9c;
+  font-size: 11px;
+}
+
+.segadeals-request-submit button:disabled {
+  opacity: .55;
+  cursor: not-allowed;
+}
+
+.segadeals-page[dir="rtl"]
+.segadeals-request-node span {
+  letter-spacing: 0;
+}
+
+@media (max-width: 980px) {
+  .segadeals-step-grid-six {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .segadeals-request-form-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .segadeals-request-visual {
+    min-height: 300px;
+  }
+
+  .segadeals-step-grid-six,
+  .segadeals-request-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .segadeals-field-full {
+    grid-column: auto;
+  }
+
+  .segadeals-request-card {
+    padding: 18px;
+  }
+
+  .segadeals-request-submit {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .segadeals-request-submit button {
+    width: 100%;
+  }
+}
+
+/* ==========================================================
+   SEGALOKA SEGADEALS — REQUEST BUILDER V3
+   ========================================================== */
+
+.segadeals-request-v3 {
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(
+      circle at 8% 18%,
+      rgba(8, 119, 223, .09),
+      transparent 28%
+    ),
+    linear-gradient(
+      180deg,
+      #f1f8ff 0%,
+      #f8fbff 50%,
+      #ffffff 100%
+    );
+}
+
+.segadeals-builder-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 32px;
+  margin-bottom: 30px;
+}
+
+.segadeals-builder-heading > div:first-child {
+  max-width: 760px;
+}
+
+.segadeals-builder-heading h2 {
+  margin: 8px 0 10px;
+  color: var(--sgd-navy);
+  font-size: clamp(30px, 3vw, 42px);
+  line-height: 1.08;
+  letter-spacing: -.035em;
+}
+
+.segadeals-builder-heading p {
+  margin: 0;
+  color: var(--sgd-muted);
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.segadeals-builder-status {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 13px;
+  border: 1px solid #cfe4f7;
+  border-radius: 999px;
+  background: rgba(255,255,255,.85);
+  color: #31536f;
+  font-size: 11px;
+  font-weight: 750;
+}
+
+.segadeals-builder-status svg {
+  color: #16a66a;
+}
+
+.segadeals-builder-layout {
+  display: grid;
+  grid-template-columns:
+    minmax(280px, .72fr)
+    minmax(0, 1.65fr);
+  gap: 24px;
+  align-items: stretch;
+}
+
+.segadeals-builder-aside {
+  min-width: 0;
+  border-radius: 24px;
+  padding: 28px;
+  overflow: hidden;
+  background:
+    linear-gradient(
+      155deg,
+      #071f42 0%,
+      #083d72 55%,
+      #0877df 130%
+    );
+  color: #fff;
+  box-shadow:
+    0 24px 70px rgba(16,42,67,.16);
+}
+
+.segadeals-builder-aside-copy > span {
+  color: #7fc5ff;
+  font-size: 10px;
+  font-weight: 850;
+  letter-spacing: .13em;
+}
+
+.segadeals-builder-aside-copy h3 {
+  margin: 11px 0 10px;
+  max-width: 330px;
+  font-size: 27px;
+  line-height: 1.12;
+  letter-spacing: -.03em;
+}
+
+.segadeals-builder-aside-copy p {
+  margin: 0;
+  color: rgba(255,255,255,.68);
+  font-size: 12px;
+  line-height: 1.65;
+}
+
+.segadeals-builder-collage {
+  position: relative;
+  height: 330px;
+  margin: 28px 0;
+}
+
+.segadeals-builder-photo {
+  position: absolute;
+  overflow: hidden;
+  border: 3px solid rgba(255,255,255,.8);
+  border-radius: 18px;
+  background-color: #174f82;
+  background-position: center;
+  background-size: cover;
+  box-shadow: 0 18px 35px rgba(0,0,0,.22);
+}
+
+.segadeals-builder-photo::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      180deg,
+      transparent 40%,
+      rgba(3,17,37,.78)
+    );
+}
+
+.segadeals-builder-photo > div {
+  position: absolute;
+  z-index: 1;
+  inset-inline: 15px;
+  bottom: 13px;
+  display: flex;
+  flex-direction: column;
+}
+
+.segadeals-builder-photo strong {
+  font-size: 13px;
+}
+
+.segadeals-builder-photo span {
+  color: rgba(255,255,255,.72);
+  font-size: 10px;
+}
+
+.segadeals-builder-photo-main {
+  inset-inline-start: 0;
+  top: 0;
+  width: 68%;
+  height: 245px;
+  background-image:
+    linear-gradient(
+      rgba(8,61,114,.12),
+      rgba(8,61,114,.12)
+    ),
+    url("/images/segadeals/segadeals-request-kaaba.webp");
+}
+
+.segadeals-builder-photo-second {
+  inset-inline-end: 0;
+  top: 58px;
+  width: 46%;
+  height: 180px;
+  background-image:
+    linear-gradient(
+      rgba(8,61,114,.12),
+      rgba(8,61,114,.12)
+    ),
+    url("/images/segadeals/segadeals-request-mosque.webp");
+}
+
+.segadeals-builder-photo-third {
+  inset-inline-start: 17%;
+  bottom: 0;
+  width: 58%;
+  height: 125px;
+  background-image:
+    linear-gradient(
+      rgba(8,61,114,.12),
+      rgba(8,61,114,.12)
+    ),
+    url("/images/segadeals/segadeals-request-bali.webp");
+}
+
+.segadeals-builder-aside-flow {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 7px;
+}
+
+.segadeals-builder-aside-flow > div {
+  min-width: 0;
+  padding: 10px;
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 11px;
+  background: rgba(255,255,255,.06);
+}
+
+.segadeals-builder-aside-flow span {
+  display: block;
+  color: #70bfff;
+  font-size: 9px;
+  font-weight: 850;
+}
+
+.segadeals-builder-aside-flow strong {
+  display: block;
+  margin-top: 3px;
+  color: #fff;
+  font-size: 10px;
+  line-height: 1.35;
+}
+
+.segadeals-builder-card {
+  min-width: 0;
+  border: 1px solid #dbe7f1;
+  border-radius: 24px;
+  padding: 28px;
+  background: rgba(255,255,255,.97);
+  box-shadow:
+    0 24px 70px rgba(16,42,67,.09);
+}
+
+.segadeals-builder-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 24px;
+}
+
+.segadeals-builder-card-head span {
+  color: #8296a8;
+  font-size: 9px;
+  font-weight: 850;
+  letter-spacing: .12em;
+}
+
+.segadeals-builder-card-head h3 {
+  margin: 3px 0 0;
+  color: var(--sgd-navy);
+  font-size: 23px;
+  line-height: 1.2;
+}
+
+.segadeals-currency-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 34px;
+  padding: 0 11px;
+  border: 1px solid #d7e5f1;
+  border-radius: 999px;
+  background: #f7fbff;
+  color: var(--sgd-blue);
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.segadeals-builder-block {
+  margin-bottom: 23px;
+}
+
+.segadeals-builder-label {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 9px;
+}
+
+.segadeals-builder-label > span,
+.segadeals-builder-field > label {
+  color: var(--sgd-navy);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.segadeals-builder-label small {
+  color: #8ca0b2;
+  font-size: 10px;
+}
+
+.segadeals-trip-types {
+  display: grid;
+  grid-template-columns:
+    repeat(6, minmax(0, 1fr));
+  gap: 7px;
+}
+
+.segadeals-trip-types button {
+  min-width: 0;
+  min-height: 68px;
+  border: 1px solid #dce6ef;
+  border-radius: 12px;
+  background: #fff;
+  color: #52687d;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font: inherit;
+  font-size: 10px;
+  font-weight: 750;
+  transition:
+    border-color .18s ease,
+    background .18s ease,
+    color .18s ease,
+    transform .18s ease;
+}
+
+.segadeals-trip-types button:hover {
+  transform: translateY(-1px);
+  border-color: #9bcdf6;
+}
+
+.segadeals-trip-types button.is-active {
+  border-color: #0877df;
+  background: #eaf5ff;
+  color: #0877df;
+  box-shadow:
+    inset 0 0 0 1px rgba(8,119,223,.08);
+}
+
+.segadeals-builder-grid {
+  display: grid;
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.segadeals-builder-field {
+  min-width: 0;
+  position: relative;
+}
+
+.segadeals-builder-field > label {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-bottom: 7px;
+}
+
+.segadeals-builder-field > label > span {
+  color: #94a3b1;
+  font-size: 9px;
+  font-weight: 600;
+}
+
+.segadeals-control {
+  position: relative;
+  min-height: 50px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid #d9e4ed;
+  border-radius: 11px;
+  padding: 0 13px;
+  background: #fff;
+  transition:
+    border-color .18s ease,
+    box-shadow .18s ease;
+}
+
+.segadeals-control:focus-within {
+  border-color: #0877df;
+  box-shadow:
+    0 0 0 3px rgba(8,119,223,.08);
+}
+
+.segadeals-control > svg {
+  flex: 0 0 auto;
+  color: #0877df;
+}
+
+.segadeals-control > svg:last-child {
+  color: #8093a5;
+}
+
+.segadeals-control input,
+.segadeals-control select {
+  width: 100%;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: #20344a;
+  font: inherit;
+  font-size: 12px;
+}
+
+.segadeals-control select {
+  appearance: none;
+}
+
+.segadeals-control input::placeholder {
+  color: #9aabb9;
+}
+
+.segadeals-control-prefix {
+  padding-inline-end: 7px;
+  border-inline-end: 1px solid #e2eaf1;
+  color: #526b80;
+  font-size: 10px;
+  font-weight: 850;
+}
+
+.segadeals-field-helper {
+  display: block;
+  margin-top: 5px;
+  color: #72879a;
+  font-size: 10px;
+}
+
+.segadeals-combobox {
+  z-index: 15;
+}
+
+.segadeals-combobox-menu {
+  position: absolute;
+  z-index: 30;
+  top: calc(100% + 7px);
+  inset-inline: 0;
+  max-height: 240px;
+  overflow-y: auto;
+  border: 1px solid #dce6ef;
+  border-radius: 12px;
+  padding: 6px;
+  background: #fff;
+  box-shadow:
+    0 20px 50px rgba(16,42,67,.16);
+}
+
+.segadeals-combobox-menu button {
+  width: 100%;
+  min-height: 38px;
+  border: 0;
+  border-radius: 8px;
+  padding: 0 9px;
+  background: transparent;
+  color: #30485e;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-align: start;
+  font: inherit;
+  font-size: 11px;
+}
+
+.segadeals-combobox-menu button:hover {
+  background: #edf7ff;
+  color: #0877df;
+}
+
+.segadeals-combobox-menu svg {
+  color: #0877df;
+}
+
+.segadeals-combobox-empty {
+  padding: 12px;
+  color: #8395a5;
+  font-size: 11px;
+}
+
+.segadeals-traveler-grid {
+  display: grid;
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+  gap: 9px;
+}
+
+.segadeals-traveler-item {
+  min-width: 0;
+  min-height: 75px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  border: 1px solid #dce6ef;
+  border-radius: 12px;
+  padding: 12px;
+  background: #fbfdff;
+}
+
+.segadeals-traveler-item > div:first-child {
+  min-width: 0;
+}
+
+.segadeals-traveler-item strong {
+  display: block;
+  color: var(--sgd-navy);
+  font-size: 11px;
+}
+
+.segadeals-traveler-item span {
+  display: block;
+  margin-top: 2px;
+  color: #8a9baa;
+  font-size: 8px;
+  line-height: 1.3;
+}
+
+.segadeals-stepper {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.segadeals-stepper button {
+  width: 27px;
+  height: 27px;
+  border: 1px solid #cddce8;
+  border-radius: 8px;
+  background: #fff;
+  color: #0877df;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+}
+
+.segadeals-stepper button:disabled {
+  color: #b5c1cb;
+  background: #f3f6f8;
+  cursor: not-allowed;
+}
+
+.segadeals-stepper strong {
+  min-width: 14px;
+  text-align: center;
+  font-size: 12px;
+}
+
+.segadeals-builder-field textarea {
+  width: 100%;
+  min-height: 94px;
+  resize: vertical;
+  border: 1px solid #d9e4ed;
+  border-radius: 11px;
+  outline: 0;
+  padding: 12px 13px;
+  background: #fff;
+  color: #20344a;
+  font: inherit;
+  font-size: 12px;
+}
+
+.segadeals-builder-field textarea:focus {
+  border-color: #0877df;
+  box-shadow:
+    0 0 0 3px rgba(8,119,223,.08);
+}
+
+.segadeals-builder-field textarea::placeholder {
+  color: #9aabb9;
+}
+
+.segadeals-builder-submit {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  margin-top: 23px;
+  padding-top: 20px;
+  border-top: 1px solid #e7edf3;
+}
+
+.segadeals-builder-submit > div {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  max-width: 440px;
+}
+
+.segadeals-builder-submit > div svg {
+  flex: 0 0 auto;
+  margin-top: 2px;
+  color: #16a66a;
+}
+
+.segadeals-builder-submit p {
+  margin: 0;
+  color: #7a8d9e;
+  font-size: 10px;
+  line-height: 1.55;
+}
+
+.segadeals-builder-submit button:disabled {
+  opacity: .45;
+  cursor: not-allowed;
+}
+
+.segadeals-review-edit {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid #d7e4ef;
+  border-radius: 9px;
+  min-height: 34px;
+  padding: 0 11px;
+  background: #fff;
+  color: #0877df;
+  cursor: pointer;
+  font: inherit;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.segadeals-review-hero {
+  min-height: 112px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  border-radius: 16px;
+  padding: 22px;
+  background:
+    linear-gradient(
+      135deg,
+      #072958,
+      #0877df
+    );
+  color: #fff;
+}
+
+.segadeals-review-hero span {
+  color: #a8d7ff;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.segadeals-review-hero h4 {
+  margin: 5px 0 0;
+  font-size: 22px;
+  line-height: 1.2;
+}
+
+.segadeals-review-grid {
+  display: grid;
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.segadeals-review-grid > div,
+.segadeals-review-notes {
+  border: 1px solid #e0e8ef;
+  border-radius: 12px;
+  padding: 14px;
+  background: #fbfdff;
+}
+
+.segadeals-review-grid span,
+.segadeals-review-notes > span {
+  display: block;
+  color: #8a9cac;
+  font-size: 9px;
+  font-weight: 750;
+}
+
+.segadeals-review-grid strong {
+  display: block;
+  margin-top: 4px;
+  color: var(--sgd-navy);
+  font-size: 13px;
+}
+
+.segadeals-review-grid small {
+  display: block;
+  margin-top: 3px;
+  color: #8091a0;
+  font-size: 9px;
+}
+
+.segadeals-review-notes {
+  margin-top: 10px;
+}
+
+.segadeals-review-notes p {
+  margin: 5px 0 0;
+  color: #455c71;
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+.segadeals-review-notice {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+  border: 1px solid #cfe7da;
+  border-radius: 12px;
+  padding: 13px;
+  background: #f2fbf6;
+}
+
+.segadeals-review-notice svg {
+  flex: 0 0 auto;
+  color: #16a66a;
+}
+
+.segadeals-review-notice strong {
+  display: block;
+  color: #24523c;
+  font-size: 11px;
+}
+
+.segadeals-review-notice p {
+  margin: 3px 0 0;
+  color: #638071;
+  font-size: 9px;
+  line-height: 1.5;
+}
+
+.segadeals-review-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 9px;
+  margin-top: 20px;
+}
+
+.segadeals-confirmed {
+  min-height: 520px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.segadeals-confirmed-icon {
+  width: 72px;
+  height: 72px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: #eaf9f1;
+  color: #16a66a;
+}
+
+.segadeals-confirmed > span {
+  margin-top: 18px;
+  color: #0877df;
+  font-size: 9px;
+  font-weight: 850;
+  letter-spacing: .13em;
+}
+
+.segadeals-confirmed h3 {
+  margin: 8px 0;
+  color: var(--sgd-navy);
+  font-size: 26px;
+}
+
+.segadeals-confirmed > p {
+  max-width: 520px;
+  margin: 0;
+  color: #718497;
+  font-size: 12px;
+  line-height: 1.65;
+}
+
+.segadeals-confirmed-summary {
+  min-width: min(100%, 430px);
+  margin: 20px 0;
+  border: 1px solid #dce7ef;
+  border-radius: 13px;
+  padding: 14px 18px;
+  background: #f8fbfe;
+}
+
+.segadeals-confirmed-summary strong,
+.segadeals-confirmed-summary span {
+  display: block;
+}
+
+.segadeals-confirmed-summary strong {
+  color: var(--sgd-navy);
+  font-size: 13px;
+}
+
+.segadeals-confirmed-summary span {
+  margin-top: 4px;
+  color: #7d8f9f;
+  font-size: 10px;
+}
+
+.segadeals-page[dir="rtl"]
+.segadeals-review-hero svg {
+  transform: rotate(180deg);
+}
+
+@media (max-width: 1050px) {
+  .segadeals-builder-layout {
+    grid-template-columns:
+      minmax(250px, .65fr)
+      minmax(0, 1.35fr);
+  }
+
+  .segadeals-trip-types {
+    grid-template-columns:
+      repeat(3, minmax(0, 1fr));
+  }
+
+  .segadeals-traveler-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 820px) {
+  .segadeals-builder-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .segadeals-builder-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .segadeals-builder-aside {
+    padding: 24px;
+  }
+
+  .segadeals-builder-collage {
+    max-width: 520px;
+  }
+
+  .segadeals-builder-card {
+    padding: 22px;
+  }
+}
+
+@media (max-width: 620px) {
+  .segadeals-request-v3 {
+    padding-block: 52px;
+  }
+
+  .segadeals-builder-heading {
+    margin-bottom: 22px;
+  }
+
+  .segadeals-builder-heading h2 {
+    font-size: 28px;
+  }
+
+  .segadeals-builder-aside {
+    border-radius: 18px;
+    padding: 19px;
+  }
+
+  .segadeals-builder-aside-copy h3 {
+    font-size: 23px;
+  }
+
+  .segadeals-builder-collage {
+    height: 275px;
+  }
+
+  .segadeals-builder-photo-main {
+    height: 205px;
+  }
+
+  .segadeals-builder-photo-second {
+    height: 150px;
+  }
+
+  .segadeals-builder-photo-third {
+    height: 105px;
+  }
+
+  .segadeals-builder-aside-flow {
+    grid-template-columns: 1fr;
+  }
+
+  .segadeals-builder-card {
+    border-radius: 18px;
+    padding: 17px;
+  }
+
+  .segadeals-builder-grid,
+  .segadeals-review-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .segadeals-trip-types {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+  .segadeals-trip-types button {
+    min-height: 60px;
+  }
+
+  .segadeals-builder-submit,
+  .segadeals-review-actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .segadeals-builder-submit button,
+  .segadeals-review-actions button {
+    width: 100%;
+  }
+
+  .segadeals-review-hero {
+    padding: 18px;
+  }
+
+  .segadeals-review-hero h4 {
+    font-size: 18px;
+  }
+}
+

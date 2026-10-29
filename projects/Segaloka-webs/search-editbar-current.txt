@@ -1,0 +1,761 @@
+============================================================
+FILE: src/components/search/SearchEditBar.tsx
+============================================================
+"use client";
+
+import {
+  CalendarDays,
+  MapPin,
+  Search,
+  UsersRound,
+} from "lucide-react";
+
+import {
+  useMemo,
+  useState,
+} from "react";
+
+import {
+  useRouter,
+} from "next/navigation";
+
+
+type Props = {
+  category: string;
+  initialOrigin: string;
+  initialDestination: string;
+  initialTravelers: string;
+  initialDate: string;
+};
+
+
+type Panel =
+  | "origin"
+  | "destination"
+  | "traveler"
+  | "date"
+  | null;
+
+
+const origins = [
+  "Jakarta",
+  "Makassar",
+  "Surabaya",
+  "Medan",
+  "Bandung",
+  "Yogyakarta",
+  "Semarang",
+  "Balikpapan",
+];
+
+
+const umrahTypes = [
+  "Hemat",
+  "Regular",
+  "Plus",
+  "First",
+];
+
+
+const categoryOptions: Record<string, string[]> = {
+  Umrah: umrahTypes,
+
+  Haji: [
+    "Haji Reguler",
+    "Haji Plus",
+    "Haji Khusus",
+  ],
+
+  "Halal Tour": [
+    "Jepang",
+    "Korea Selatan",
+    "Turkiye",
+    "Dubai",
+    "Eropa",
+  ],
+
+  "Tour Domestic": [
+    "Bali",
+    "Lombok",
+    "Labuan Bajo",
+    "Yogyakarta",
+    "Raja Ampat",
+  ],
+
+  "Tour International": [
+    "Jepang",
+    "Korea Selatan",
+    "Turkiye",
+    "Dubai",
+    "Singapura",
+  ],
+
+  SegaDeals: [
+    "Umrah",
+    "Halal Tour",
+    "Tour Domestic",
+    "Tour International",
+  ],
+};
+
+
+function parseDate(
+  value: string,
+) {
+  if (!value) {
+    return "";
+  }
+
+  return value;
+}
+
+
+function formatDate(
+  value: string,
+) {
+  if (!value) {
+    return "Pilih tanggal";
+  }
+
+  const date =
+    new Date(
+      `${value}T00:00:00`,
+    );
+
+  if (
+    Number.isNaN(
+      date.getTime(),
+    )
+  ) {
+    return value;
+  }
+
+  return new Intl.DateTimeFormat(
+    "id-ID",
+    {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+    },
+  ).format(date);
+}
+
+
+export function SearchEditBar({
+  category,
+  initialOrigin,
+  initialDestination,
+  initialTravelers,
+  initialDate,
+}: Props) {
+
+  const router =
+    useRouter();
+
+
+  const [panel, setPanel] =
+    useState<Panel>(
+      null,
+    );
+
+
+  const [origin, setOrigin] =
+    useState(
+      initialOrigin ||
+      "Jakarta",
+    );
+
+
+  const initialUmrahType =
+    umrahTypes.includes(
+      initialDestination,
+    )
+      ? initialDestination
+      : "Hemat";
+
+
+  const [
+    destination,
+    setDestination,
+  ] =
+    useState(
+      category === "Umrah"
+        ? initialUmrahType
+        : initialDestination,
+    );
+
+
+  const [
+    travelers,
+    setTravelers,
+  ] =
+    useState(
+      Math.max(
+        1,
+        Number(
+          initialTravelers ||
+          2,
+        ),
+      ),
+    );
+
+
+  const [
+    selectedDate,
+    setSelectedDate,
+  ] =
+    useState(
+      parseDate(
+        initialDate,
+      ),
+    );
+
+
+  const options =
+    useMemo(
+      () =>
+        categoryOptions[
+          category
+        ] || [],
+      [
+        category,
+      ],
+    );
+
+
+  const canSearch =
+    origin.trim().length > 0 &&
+    destination.trim().length > 0 &&
+    travelers > 0 &&
+    selectedDate.length > 0;
+
+
+  function submitSearch() {
+
+    if (!canSearch) {
+      return;
+    }
+
+    const params =
+      new URLSearchParams();
+
+    params.set(
+      "category",
+      category,
+    );
+
+    params.set(
+      "origin",
+      origin,
+    );
+
+    params.set(
+      "destination",
+      destination,
+    );
+
+    params.set(
+      "travelers",
+      String(
+        travelers,
+      ),
+    );
+
+    params.set(
+      "date",
+      selectedDate,
+    );
+
+    setPanel(null);
+
+    router.push(
+      `/search?${params.toString()}`,
+    );
+  }
+
+
+  return (
+    <div className="search-edit-bar">
+
+
+      <div className="search-edit-control">
+
+        <button
+          type="button"
+          className="search-edit-field"
+          onClick={() =>
+            setPanel(
+              panel === "origin"
+                ? null
+                : "origin",
+            )
+          }
+        >
+          <MapPin size={18} />
+
+          <span>
+            <small>Dari</small>
+
+            <strong>
+              {origin}
+            </strong>
+          </span>
+        </button>
+
+
+        {panel === "origin" && (
+
+          <div className="search-edit-dropdown">
+
+            <strong>
+              Kota keberangkatan
+            </strong>
+
+            <div className="search-edit-option-list">
+
+              {origins.map(
+                (value) => (
+
+                  <button
+                    key={value}
+                    type="button"
+                    className={
+                      value === origin
+                        ? "active"
+                        : ""
+                    }
+                    onClick={() => {
+                      setOrigin(
+                        value,
+                      );
+
+                      setPanel(
+                        null,
+                      );
+                    }}
+                  >
+                    {value}
+                  </button>
+
+                ),
+              )}
+
+            </div>
+
+          </div>
+
+        )}
+
+      </div>
+
+
+      <div className="search-edit-control">
+
+        <button
+          type="button"
+          className="search-edit-field"
+          onClick={() =>
+            setPanel(
+              panel ===
+                "destination"
+                ? null
+                : "destination",
+            )
+          }
+        >
+
+          <MapPin size={18} />
+
+          <span>
+
+            <small>
+              {category === "Umrah"
+                ? "Tujuan Umrah"
+                : `Tujuan ${category}`}
+            </small>
+
+            <strong>
+              {destination ||
+                "Pilih tujuan"}
+            </strong>
+
+          </span>
+
+        </button>
+
+
+        {panel ===
+          "destination" && (
+
+          <div className="search-edit-dropdown search-edit-destination">
+
+            <strong>
+              {category === "Umrah"
+                ? "Pilih Paket Umrah"
+                : "Pilih Tujuan"}
+            </strong>
+
+
+            {category ===
+            "Umrah" ? (
+
+              <div className="search-umrah-options">
+
+                {umrahTypes.map(
+                  (value) => (
+
+                    <button
+                      key={value}
+                      type="button"
+                      className={
+                        value ===
+                        destination
+                          ? "active"
+                          : ""
+                      }
+                      onClick={() => {
+                        setDestination(
+                          value,
+                        );
+
+                        setPanel(
+                          null,
+                        );
+                      }}
+                    >
+                      {value}
+                    </button>
+
+                  ),
+                )}
+
+              </div>
+
+            ) : (
+
+              <div className="search-edit-option-list">
+
+                {options.map(
+                  (value) => (
+
+                    <button
+                      key={value}
+                      type="button"
+                      className={
+                        value ===
+                        destination
+                          ? "active"
+                          : ""
+                      }
+                      onClick={() => {
+                        setDestination(
+                          value,
+                        );
+
+                        setPanel(
+                          null,
+                        );
+                      }}
+                    >
+                      {value}
+                    </button>
+
+                  ),
+                )}
+
+              </div>
+
+            )}
+
+          </div>
+
+        )}
+
+      </div>
+
+
+      <div className="search-edit-control">
+
+        <button
+          type="button"
+          className="search-edit-field"
+          onClick={() =>
+            setPanel(
+              panel === "date"
+                ? null
+                : "date",
+            )
+          }
+        >
+
+          <CalendarDays
+            size={18}
+          />
+
+          <span>
+
+            <small>
+              Tanggal
+            </small>
+
+            <strong>
+              {formatDate(
+                selectedDate,
+              )}
+            </strong>
+
+          </span>
+
+        </button>
+
+
+        {panel === "date" && (
+
+          <div className="search-edit-dropdown search-edit-date">
+
+            <strong>
+              Pilih tanggal
+            </strong>
+
+            <input
+              type="date"
+              value={
+                selectedDate
+              }
+              min={
+                new Date()
+                  .toISOString()
+                  .slice(
+                    0,
+                    10,
+                  )
+              }
+              onChange={(event) => {
+                setSelectedDate(
+                  event.target.value,
+                );
+
+                if (
+                  event.target.value
+                ) {
+                  setPanel(
+                    null,
+                  );
+                }
+              }}
+            />
+
+          </div>
+
+        )}
+
+      </div>
+
+
+      <div className="search-edit-control">
+
+        <button
+          type="button"
+          className="search-edit-field"
+          onClick={() =>
+            setPanel(
+              panel ===
+                "traveler"
+                ? null
+                : "traveler",
+            )
+          }
+        >
+
+          <UsersRound
+            size={18}
+          />
+
+          <span>
+
+            <small>
+              Traveler
+            </small>
+
+            <strong>
+              {travelers} orang
+            </strong>
+
+          </span>
+
+        </button>
+
+
+        {panel ===
+          "traveler" && (
+
+          <div className="search-edit-dropdown search-edit-traveler">
+
+            <div>
+
+              <strong>
+                Traveler
+              </strong>
+
+              <small>
+                Jumlah peserta
+              </small>
+
+            </div>
+
+
+            <div className="search-edit-counter">
+
+              <button
+                type="button"
+                disabled={
+                  travelers <= 1
+                }
+                onClick={() =>
+                  setTravelers(
+                    (value) =>
+                      Math.max(
+                        1,
+                        value - 1,
+                      ),
+                  )
+                }
+              >
+                −
+              </button>
+
+
+              <strong>
+                {travelers}
+              </strong>
+
+
+              <button
+                type="button"
+                onClick={() =>
+                  setTravelers(
+                    (value) =>
+                      value + 1,
+                  )
+                }
+              >
+                +
+              </button>
+
+            </div>
+
+          </div>
+
+        )}
+
+      </div>
+
+
+      <button
+        type="button"
+        className="search-edit-submit"
+        disabled={!canSearch}
+        onClick={
+          submitSearch
+        }
+      >
+
+        <Search size={18} />
+
+        Cari
+
+      </button>
+
+    </div>
+  );
+}
+
+============================================================
+CSS SEARCH-EDIT-* DARI globals.css
+============================================================
+03557:   color: rgba(255, 255, 255, .92);
+03558: }
+03559: 
+03560: 
+03561: /* ==========================================================
+03562:    SEARCH EDIT BAR
+03563:    ========================================================== */
+03564: 
+03565: .search-results-page
+03566: .search-results-search-shell {
+03567:   font-size: 14px;
+03568: }
+03569: 
+03570: .search-results-page
+03571: .search-results-search-shell label {
+03572:   font-size: 11px;
+03573:   line-height: 1.25;
+03574:   font-weight: 500;
+03575:   letter-spacing: 0;
+03576:   color: #7b8da5;
+03577: }
+03578: 
+03579: .search-results-page
+03580: .search-results-search-shell input,
+03581: 
+03582: .search-results-page
+03583: .search-results-search-shell select,
+03584: 
+03585: .search-results-page
+03586: .search-results-search-shell button {
+03587:   font-family: inherit;
+03588: }
+03589: 
+03590: .search-results-page
+03591: .search-results-search-shell input,
+03592: 
+03593: .search-results-page
+03594: .search-results-search-shell select {
+03595:   font-size: 14px;
+03596:   line-height: 1.35;
+03597:   font-weight: 600;
+
+------------------------------------------------------------
+03597:   font-weight: 600;
+03598:   color: var(--search-navy);
+03599: }
+03600: 
+03601: .search-results-page
+03602: .search-results-search-shell button {
+03603:   font-size: 14px;
+03604:   line-height: 1.2;
+03605:   font-weight: 700;
+03606: }
+03607: 
+03608: 
+03609: /* ==========================================================
+03610:    MAIN CONTENT
+03611:    ========================================================== */
+03612: 
+03613: .search-results-page .search-results-main {
+03614:   font-size: 14px;
+03615:   line-height: 1.5;
+03616: }
+03617: 
+03618: 
+03619: /* ==========================================================
+03620:    BREADCRUMB
+03621:    ========================================================== */
+03622: 
+03623: .search-results-page .search-breadcrumb {
+03624:   font-size: 11px;
+03625:   line-height: 1.4;
+03626:   font-weight: 500;
+03627:   letter-spacing: 0;
+03628:   color: #8494aa;
+03629: }
+03630: 
+03631: .search-results-page .search-breadcrumb a {
+03632:   font-size: inherit;
+03633:   font-weight: inherit;
+03634: }
+03635: 
+03636: 
+03637: /* ==========================================================
+
+------------------------------------------------------------

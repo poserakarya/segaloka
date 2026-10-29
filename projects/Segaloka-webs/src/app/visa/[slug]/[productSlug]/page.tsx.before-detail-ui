@@ -1,0 +1,378 @@
+import { notFound } from "next/navigation";
+
+import {
+  getVisaDetailMock,
+  getVisaProductBySlug,
+} from "@/ui/visa-detail";
+
+type VisaProductPageProps = {
+  params: Promise<{
+    slug: string;
+    productSlug: string;
+  }>;
+};
+
+function formatRupiah(
+  value: number,
+) {
+  return new Intl.NumberFormat(
+    "id-ID",
+    {
+      style: "currency",
+      currency: "IDR",
+      maximumFractionDigits: 0,
+    },
+  ).format(value);
+}
+
+export default async function VisaProductPage({
+  params,
+}: VisaProductPageProps) {
+  const {
+    slug,
+    productSlug,
+  } = await params;
+
+  const country =
+    getVisaDetailMock(slug);
+
+  const product =
+    getVisaProductBySlug(
+      productSlug,
+    );
+
+  if (
+    !country ||
+    !product ||
+    product.countrySlug !== slug
+  ) {
+    notFound();
+  }
+
+  return (
+    <main
+      style={{
+        minHeight: "100vh",
+        background: "#f8fbff",
+        color: "#172033",
+        fontFamily:
+          '"Plus Jakarta Sans", system-ui, sans-serif',
+      }}
+    >
+      <section
+        style={{
+          minHeight: 330,
+          padding: "40px 20px",
+          display: "flex",
+          alignItems: "flex-end",
+          color: "#fff",
+          backgroundImage:
+            `linear-gradient(90deg, rgba(5,29,67,.82), rgba(5,29,67,.25)), url("${country.country.image}")`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      >
+        <div
+          style={{
+            width:
+              "min(1180px, 100%)",
+            margin: "0 auto",
+          }}
+        >
+          <div
+            style={{
+              fontSize: 14,
+              fontWeight: 700,
+            }}
+          >
+            {country.country.name}
+          </div>
+
+          <h1
+            style={{
+              margin:
+                "10px 0 8px",
+              fontSize:
+                "clamp(32px, 4vw, 52px)",
+            }}
+          >
+            {product.title}
+          </h1>
+
+          <p
+            style={{
+              maxWidth: 680,
+              lineHeight: 1.7,
+            }}
+          >
+            {product.description}
+          </p>
+        </div>
+      </section>
+
+      <div
+        style={{
+          width:
+            "min(1180px, calc(100% - 32px))",
+          margin:
+            "28px auto 60px",
+          display: "grid",
+          gridTemplateColumns:
+            "minmax(0, 1fr) 360px",
+          gap: 24,
+        }}
+      >
+        <section>
+          <article
+            style={{
+              padding: 24,
+              background: "#fff",
+              border:
+                "1px solid #e4e7ec",
+              borderRadius: 16,
+            }}
+          >
+            <div
+              style={{
+                fontSize: 13,
+                color: "#667085",
+              }}
+            >
+              Disediakan oleh
+            </div>
+
+            <h2
+              style={{
+                margin:
+                  "5px 0 4px",
+              }}
+            >
+              {product.vendor.name}
+            </h2>
+
+            <div
+              style={{
+                color: "#1473e6",
+                fontSize: 13,
+                fontWeight: 700,
+              }}
+            >
+              {product.vendor.verified
+                ? "✓ Vendor Terverifikasi"
+                : ""}
+            </div>
+          </article>
+
+          <article
+            style={{
+              marginTop: 18,
+              padding: 24,
+              background: "#fff",
+              border:
+                "1px solid #e4e7ec",
+              borderRadius: 16,
+            }}
+          >
+            <h2>
+              Detail Visa
+            </h2>
+
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns:
+                  "repeat(2, minmax(0, 1fr))",
+                gap: 16,
+                marginTop: 20,
+              }}
+            >
+              <div>
+                <small>
+                  Jenis Visa
+                </small>
+                <strong
+                  style={{
+                    display: "block",
+                    marginTop: 4,
+                  }}
+                >
+                  {product.visaType}
+                </strong>
+              </div>
+
+              <div>
+                <small>
+                  Entry
+                </small>
+                <strong
+                  style={{
+                    display: "block",
+                    marginTop: 4,
+                  }}
+                >
+                  {product.entryType}
+                </strong>
+              </div>
+
+              <div>
+                <small>
+                  Masa Berlaku
+                </small>
+                <strong
+                  style={{
+                    display: "block",
+                    marginTop: 4,
+                  }}
+                >
+                  {product.validity}
+                </strong>
+              </div>
+
+              <div>
+                <small>
+                  Masa Tinggal
+                </small>
+                <strong
+                  style={{
+                    display: "block",
+                    marginTop: 4,
+                  }}
+                >
+                  {product.stayDuration}
+                </strong>
+              </div>
+
+              <div>
+                <small>
+                  Estimasi Proses
+                </small>
+                <strong
+                  style={{
+                    display: "block",
+                    marginTop: 4,
+                  }}
+                >
+                  {product.processTime}
+                </strong>
+              </div>
+            </div>
+          </article>
+
+          <article
+            style={{
+              marginTop: 18,
+              padding: 24,
+              background: "#fff",
+              border:
+                "1px solid #e4e7ec",
+              borderRadius: 16,
+            }}
+          >
+            <h2>
+              Termasuk Layanan
+            </h2>
+
+            <ul
+              style={{
+                lineHeight: 2,
+              }}
+            >
+              {product.included.map(
+                (item) => (
+                  <li key={item}>
+                    ✓ {item}
+                  </li>
+                ),
+              )}
+            </ul>
+          </article>
+        </section>
+
+        <aside
+          style={{
+            alignSelf: "start",
+            position: "sticky",
+            top: 90,
+            padding: 24,
+            background: "#fff",
+            border:
+              "1px solid #e4e7ec",
+            borderRadius: 16,
+            boxShadow:
+              "0 12px 32px rgba(8,40,82,.08)",
+          }}
+        >
+          <small>
+            Harga per traveler
+          </small>
+
+          <div
+            style={{
+              margin:
+                "6px 0 18px",
+              color: "#1473e6",
+              fontSize: 28,
+              fontWeight: 800,
+            }}
+          >
+            {product.price > 0
+              ? formatRupiah(
+                  product.price,
+                )
+              : "Hubungi Vendor"}
+          </div>
+
+          <div
+            style={{
+              marginBottom: 18,
+              padding: 14,
+              background: "#f5f9ff",
+              borderRadius: 12,
+            }}
+          >
+            <strong>
+              {product.vendor.name}
+            </strong>
+
+            {product.vendor.rating && (
+              <div
+                style={{
+                  marginTop: 5,
+                  fontSize: 13,
+                }}
+              >
+                ★ {product.vendor.rating}
+
+                {product.vendor.reviewCount
+                  ? ` (${product.vendor.reviewCount} ulasan)`
+                  : ""}
+              </div>
+            )}
+          </div>
+
+          <a
+            href={
+              `/booking/${product.slug}?type=visa&country=${slug}&visaProduct=${product.slug}`
+            }
+            style={{
+              minHeight: 48,
+              display: "flex",
+              alignItems: "center",
+              justifyContent:
+                "center",
+              borderRadius: 12,
+              background:
+                "#1473e6",
+              color: "#fff",
+              textDecoration:
+                "none",
+              fontWeight: 700,
+            }}
+          >
+            Pesan Sekarang
+          </a>
+        </aside>
+      </div>
+    </main>
+  );
+}

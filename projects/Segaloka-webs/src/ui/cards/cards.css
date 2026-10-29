@@ -1,0 +1,40 @@
+﻿.segaloka-card {
+  overflow: hidden;
+
+  background: var(--card-background);
+  border: 1px solid var(--card-border);
+  border-radius: var(--card-radius);
+  box-shadow: var(--card-shadow);
+}
+
+.segaloka-package-card {
+  overflow: hidden;
+
+  background: var(--card-background);
+  border: 1px solid var(--card-border);
+  border-radius: var(--package-card-radius);
+  box-shadow: var(--card-shadow);
+}
+
+.segaloka-package-card__image {
+  width: 100%;
+  height: var(--package-card-image-height);
+  object-fit: cover;
+}
+
+.segaloka-package-card__title {
+  font-size: var(--package-card-title-size);
+  font-weight: var(--package-card-title-weight);
+  color: var(--ui-text);
+}
+
+.segaloka-package-card__meta {
+  font-size: var(--package-card-meta-size);
+  color: var(--ui-text-secondary);
+}
+
+.segaloka-package-card__price {
+  font-size: var(--package-card-price-size);
+  font-weight: var(--package-card-price-weight);
+  color: var(--ui-text);
+}

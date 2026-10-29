@@ -1,0 +1,172 @@
+﻿
+========== src\ui\search\search.config.ts ==========
+
+========== src\ui\search\search.types.ts ==========
+
+========== src\app\search\page.tsx ==========
+    6: searchParams: Promise<{
+    7: category?: string;
+   22: searchParams,
+   24: const params = await searchParams;
+   28: category={params.category || ""}
+
+========== src\components\search\SearchResultsClient.tsx ==========
+    4: VisaCategory,
+    5: } from "@/ui/visa-category";
+    8: useSearchParams,
+   33: featuredPackages,
+   48: category: string;
+  107: category: "Umrah",
+  124: category: "Umrah",
+  141: category: "Umrah",
+  179: function categoryFor(
+  206: function normalizeCategory(
+  337: category,
+  355: const initialCategory =
+  356: normalizeCategory(category);
+  360: if (initialCategory === "visa") {
+  362: <VisaCategory
+  373: const categoryPackages =
+  377: featuredPackages.filter(
+  379: normalizeCategory(
+  380: categoryFor(item).label,
+  382: initialCategory,
+  386: * STRICT CATEGORY:
+  387: * kategori hanya boleh menampilkan paket
+  388: * yang memang termasuk kategori tersebut.
+  390: * Jika belum ada paket pada kategori ini,
+  392: * ke paket dari kategori lain.
+  397: initialCategory,
+  407: initialCategory ===
+  415: categoryPackages.flatMap(
+  428: categoryPackages,
+  429: initialCategory,
+  437: categoryPackages
+  442: .filter(
+  455: categoryPackages,
+  467: ...categoryPackages.map(
+  474: categoryPackages,
+  514: ? values.filter(
+  543: .filter((item) =>
+  544: featuredPackages.some(
+  548: .filter(
+  551: const categoryMatch =
+  552: normalizeCategory(
+  553: item.category,
+  555: initialCategory;
+  560: initialCategory === "umrah"
+  591: categoryMatch &&
+  602: initialCategory,
+  615: categoryPackages.filter(
+  727: categoryPackages,
+  760: Tujuan {category}
+ 1055: {category}
+ 1059: Temukan Paket {category}
+ 1075: category={category}
+ 1108: {category}
+ 1118: Paket {category} dari {origin}
+ 1423: const categoryData =
+ 1424: categoryFor(item);
+ 1427: categoryData.Icon;
+ 1447: <span className="reference-package-category">
+ 1448: {categoryData.label}
+ 1592: {categoryPackages.length === 0 ? (
+ 1595: Belum ada paket {category} yang tersedia
+ 1599: Paket untuk kategori {category} belum tersedia saat ini. Silakan cek kembali nanti.
+ 1609: Ubah atau reset filter untuk melihat kembali paket {category} yang tersedia.
+
+========== src\components\search\SearchEditBar.tsx ==========
+   29: category: string;
+   69: const categoryOptions: Record<string, string[]> = {
+  124: SegaDeals: [
+  414: category,
+  560: category,
+  567: categoryOptions[
+  568: category
+  570: [category],
+  584: return origins.filter(
+  603: return destinationOptions.filter(
+  696: new URLSearchParams();
+  698: if (category) {
+  700: "category",
+  701: category,
+  742: router.push(
+  989: {category === "Umrah"
+
+========== src\components\home\Hero.tsx ==========
+   39: labelKey: "category.umrah" as const,
+   44: labelKey: "category.hajj" as const,
+   49: labelKey: "category.halalTour" as const,
+   54: labelKey: "category.domesticTour" as const,
+   59: labelKey: "category.internationalTour" as const,
+   63: value: "SegaDeals",
+   64: labelKey: "category.segaDeals" as const,
+   69: labelKey: "category.visa" as const,
+  336: const segaDealsDestinations = [
+  342: const segaDealsPopularDestinations = [
+  355: * Negara asal SegaDeals.
+  359: const segaDealsOriginCountries = [
+  417: const segaDealsPopularOrigins = [
+  429: const segaDealsCitiesByCountry: Record<string, string[]> = {
+  833: ].filter(Boolean).join(" ")}
+  978: const [showSegaDealsInfo, setShowSegaDealsInfo] =
+  980: /* SEGADEALS_MODAL_ESCAPE_V1 */
+  982: if (!showSegaDealsInfo) {
+  988: setShowSegaDealsInfo(false);
+  997: }, [showSegaDealsInfo]);
+ 1012: const isSegaDeals = active === "SegaDeals";
+ 1033: return indonesiaCities.filter((city) =>
+ 1047: return segaDealsPopularOrigins;
+ 1050: return segaDealsOriginCountries.filter(
+ 1060: segaDealsCitiesByCountry[
+ 1076: return segaOriginCities.filter(
+ 1105: if (isSegaDeals) {
+ 1106: return segaDealsDestinations;
+ 1115: isSegaDeals,
+ 1138: if (isSegaDeals) {
+ 1139: return segaDealsPopularDestinations;
+ 1145: return destinations.filter((item) =>
+ 1154: isSegaDeals,
+ 1298: function changeCategory(category: string) {
+ 1299: setActive(category);
+ 1305: if (category === "Haji") {
+ 1322: if (category === "SegaDeals") {
+ 1323: setShowSegaDealsInfo(false);
+ 1337: ? VISA_DESTINATION_COUNTRIES.filter((country) =>
+ 1529: if (isSegaDeals) {
+ 1560: <div className="hero-popover hero-segadeals-origin-popover">
+ 1605: segaDealsCitiesByCountry[
+ 2215: .filter(Boolean)
+ 2586: isSegaDeals
+ 2618: new URLSearchParams();
+ 2621: "category",
+ 2627: isSegaDeals
+ 2745: router.push(
+ 2800: changeCategory(value)
+ 2819: {isSegaDeals ? (
+ 2820: <div className="hero-segadeals-about">
+ 2821: <div className="hero-segadeals-about-icon">
+ 2825: <div className="hero-segadeals-about-content">
+ 2826: <strong>Tentang SegaDeals</strong>
+ 2836: className="hero-segadeals-about-action"
+ 2838: window.location.assign("/segadeals")
+ 2841: Lihat SegaDeals
+ 2873: {showSegaDealsInfo && (
+ 2875: className="segadeals-info-overlay"
+ 2878: setShowSegaDealsInfo(false)
+ 2882: className="segadeals-info-modal"
+ 2885: aria-labelledby="segadeals-title"
+ 2892: className="segadeals-info-close"
+ 2895: setShowSegaDealsInfo(false)
+ 2901: <div className="segadeals-info-icon">
+ 2905: <h2 id="segadeals-title">
+ 2906: {t("segaDeals.infoTitle")}
+ 2910: {t("segaDeals.description")}
+ 2913: <div className="segadeals-fee-info">
+ 2918: {t("segaDeals.serviceFeeTitle")}
+ 2922: {t("segaDeals.serviceFeePrefix")}{" "}
+ 2926: . {t("segaDeals.serviceFeeSuffix")}
+ 2933: className="segadeals-info-action"
+ 2935: setShowSegaDealsInfo(false);
+ 2936: window.location.assign("/segadeals");
+ 2939: Mulai SegaDeals

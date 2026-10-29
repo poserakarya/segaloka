@@ -1,0 +1,330 @@
+﻿import http from 'node:http';
+import { randomBytes } from 'node:crypto';
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+import { signIngressRequest } from '../../../services/api/src/security/ingress-identity-v3.js';
+
+const host = '127.0.0.1';
+const port = 4201;
+const apiOrigin = 'http://127.0.0.1:4190';
+
+const root = resolve(
+  fileURLToPath(new URL('../../../', import.meta.url))
+);
+
+function loadIngressSecret() {
+  const envPath = resolve(root, 'services/api/.env');
+  const text = readFileSync(envPath, 'utf8');
+
+  const match = text.match(
+    /^INGRESS_IDENTITY_SECRET\s*=\s*(.+)$/m
+  );
+
+  if (!match) {
+    throw new Error('INGRESS_SECRET_NOT_FOUND');
+  }
+
+  const value = match[1].trim();
+
+  const secret = (
+    value.startsWith('"') && value.endsWith('"')
+  ) ? value.slice(1, -1) : value;
+
+  if (secret.length < 32) {
+    throw new Error('INVALID_INGRESS_SECRET');
+  }
+
+  return secret;
+}
+
+const ingressSecret = loadIngressSecret();
+const sessions = new Map();
+
+function json(res, status, data, headers = {}) {
+  res.writeHead(status, {
+    'Content-Type': 'application/json; charset=utf-8',
+    'Cache-Control': 'no-store',
+    'X-Content-Type-Options': 'nosniff',
+    ...headers
+  });
+
+  res.end(JSON.stringify(data));
+}
+
+async function readBody(req) {
+  const chunks = [];
+  let size = 0;
+
+  for await (const chunk of req) {
+    size += chunk.length;
+
+    if (size > 4096) {
+      throw new Error('BODY_TOO_LARGE');
+    }
+
+    chunks.push(chunk);
+  }
+
+  return Buffer.concat(chunks);
+}
+
+function cookies(req) {
+  const value = req.headers.cookie || '';
+
+  return Object.fromEntries(
+    value.split(';')
+      .map(x => x.trim())
+      .filter(Boolean)
+      .map(x => {
+        const index = x.indexOf('=');
+        return [
+          x.slice(0, index),
+          x.slice(index + 1)
+        ];
+      })
+  );
+}
+
+function getSession(req) {
+  const id = cookies(req).segaloka_travel_session;
+
+  return id ? sessions.get(id) : null;
+}
+
+async function apiRequest(method, target, data, accessToken) {
+  const body = data === undefined
+    ? Buffer.alloc(0)
+    : Buffer.from(JSON.stringify(data));
+
+  const signed = signIngressRequest(
+    ingressSecret,
+    {
+      ip: '127.0.0.1',
+      method,
+      target,
+      body
+    }
+  );
+
+  const response = await fetch(apiOrigin + target, {
+    method,
+    headers: {
+      ...signed,
+      ...(data === undefined
+        ? {}
+        : { 'Content-Type': 'application/json' }),
+      ...(accessToken
+        ? { Authorization: `Bearer ${accessToken}` }
+        : {})
+    },
+    ...(data === undefined ? {} : { body }),
+    signal: AbortSignal.timeout(10000)
+  });
+
+  const result = await response.json();
+
+  return {
+    status: response.status,
+    data: result
+  };
+}
+
+function accessTokenOf(session) {
+  return session?.accessToken ||
+    session?.access_token ||
+    null;
+}
+
+function refreshTokenOf(session) {
+  return session?.refreshToken ||
+    session?.refresh_token ||
+    null;
+}
+
+function travelMembership(me) {
+  return Array.isArray(me.memberships) &&
+    me.memberships.some(m =>
+      typeof m.role === 'string' &&
+      (
+        m.role === 'TRAVEL_OWNER' ||
+        m.role === 'TRAVEL_ADMIN' ||
+        m.role.startsWith('TRAVEL_')
+      )
+    );
+}
+
+const server = http.createServer(async (req, res) => {
+  try {
+    const path = new URL(
+      req.url,
+      `http://${host}:${port}`
+    ).pathname;
+
+    if (req.method === 'GET' && path === '/bff/health') {
+      return json(res, 200, { status: 'ok' });
+    }
+
+    if (req.method === 'POST' && path === '/bff/login') {
+      const body = JSON.parse(
+        (await readBody(req)).toString('utf8')
+      );
+
+      if (
+        typeof body.email !== 'string' ||
+        typeof body.password !== 'string'
+      ) {
+        return json(res, 400, {
+          code: 'INVALID_LOGIN_REQUEST'
+        });
+      }
+
+      const login = await apiRequest(
+        'POST',
+        '/auth/login',
+        {
+          email: body.email,
+          password: body.password
+        }
+      );
+
+      if (login.status !== 200) {
+        return json(res, login.status, {
+          code: login.data.code || 'LOGIN_FAILED',
+          message: login.data.message || 'Login gagal.'
+        });
+      }
+
+      const accessToken = accessTokenOf(
+        login.data.session
+      );
+
+      const refreshToken = refreshTokenOf(
+        login.data.session
+      );
+
+      if (!accessToken || !refreshToken) {
+        return json(res, 502, {
+          code: 'INVALID_SESSION_RESPONSE'
+        });
+      }
+
+      const me = await apiRequest(
+        'GET',
+        '/auth/me',
+        undefined,
+        accessToken
+      );
+
+      if (
+        me.status !== 200 ||
+        !travelMembership(me.data)
+      ) {
+        await apiRequest('POST', '/auth/logout', {
+          refreshToken
+        });
+
+        return json(res, 403, {
+          code: 'TRAVEL_ACCESS_REQUIRED',
+          message: 'Akun tidak memiliki akses Dashboard Travel.'
+        });
+      }
+
+      const sessionId = randomBytes(32).toString('hex');
+
+      sessions.set(sessionId, {
+        accessToken,
+        refreshToken,
+        user: me.data.user,
+        memberships: me.data.memberships
+      });
+
+      return json(
+        res,
+        200,
+        {
+          authenticated: true,
+          user: me.data.user,
+          memberships: me.data.memberships
+        },
+        {
+          'Set-Cookie':
+            `segaloka_travel_session=${sessionId}; ` +
+            'HttpOnly; SameSite=Strict; Path=/bff'
+        }
+      );
+    }
+
+    if (req.method === 'GET' && path === '/bff/me') {
+      const session = getSession(req);
+
+      if (!session) {
+        return json(res, 401, {
+          authenticated: false
+        });
+      }
+
+      const me = await apiRequest(
+        'GET',
+        '/auth/me',
+        undefined,
+        session.accessToken
+      );
+
+      if (me.status !== 200) {
+        return json(res, 401, {
+          authenticated: false
+        });
+      }
+
+      return json(res, 200, me.data);
+    }
+
+    if (req.method === 'POST' && path === '/bff/logout') {
+      const id = cookies(req).segaloka_travel_session;
+      const session = getSession(req);
+
+      if (session) {
+        await apiRequest('POST', '/auth/logout', {
+          refreshToken: session.refreshToken
+        });
+      }
+
+      if (id) sessions.delete(id);
+
+      return json(
+        res,
+        200,
+        { success: true },
+        {
+          'Set-Cookie':
+            'segaloka_travel_session=; ' +
+            'HttpOnly; SameSite=Strict; Path=/bff; Max-Age=0'
+        }
+      );
+    }
+
+    return json(res, 404, {
+      code: 'NOT_FOUND'
+    });
+  } catch (error) {
+    const status = error.message === 'BODY_TOO_LARGE'
+      ? 413
+      : error instanceof SyntaxError
+        ? 400
+        : 503;
+
+    return json(res, status, {
+      code: status === 503
+        ? 'SERVICE_UNAVAILABLE'
+        : 'INVALID_REQUEST'
+    });
+  }
+});
+
+server.listen(port, host, () => {
+  console.log(
+    `Segaloka Travel BFF: http://${host}:${port}`
+  );
+});

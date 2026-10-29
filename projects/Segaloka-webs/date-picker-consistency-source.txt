@@ -1,0 +1,2925 @@
+============================================================
+FILE: .\src\components\home\Hero.tsx
+============================================================
+00001: "use client";
+00002: 
+00003: import {
+00004:   Banknote,
+00005:   Building2,
+00006:   CalendarDays,
+00007:   ChevronLeft,
+00008:   ChevronRight,
+00009:   CircleMinus,
+00010:   CirclePlus,
+00011:   Globe2,
+00012: 
+00013:   FileBadge,
+00014:   Info,
+00015:   MapPin,
+00016:   Search,
+00017:   Sparkles,
+00018:   Ticket,
+00019:   UsersRound,
+00020:   X,
+00021: } from "lucide-react";
+00022: 
+00023: import Image from "next/image";
+00024: import { useRouter } from "next/navigation";
+00025: import {
+00026:   useEffect,
+00027:   useMemo,
+00028:   useRef,
+00029:   useState,
+00030: } from "react";
+00031: import { useMarketplacePreferences } from "@/components/providers/MarketplacePreferencesProvider";
+00032: import { marketplaceTranslate } from "@/lib/marketplace-i18n";
+00033: 
+00034: 
+00035: const categories = [
+00036:   {
+00037:     value: "Umrah",
+00038:     labelKey: "category.umrah" as const,
+00039:     icon: Building2,
+00040:   },
+00041:   {
+------------------------------------------------------------
+00626:   "Regular",
+00627:   "Plus",
+00628:   "First",
+00629: ];
+00630: 
+00631: 
+00632: const hajiClasses = [
+00633:   "Plus",
+00634:   "Plus VVIP",
+00635: ];
+00636: 
+00637: 
+00638: function getMonthNames(locale: string) {
+00639:   const formatter = new Intl.DateTimeFormat(locale, {
+00640:     month: "long",
+00641:   });
+00642: 
+00643:   return Array.from(
+00644:     { length: 12 },
+00645:     (_, month) =>
+00646:       formatter.format(
+00647:         new Date(2026, month, 1),
+00648:       ),
+00649:   );
+00650: }
+00651: 
+00652: 
+00653: function getDayNames(locale: string) {
+00654:   const formatter = new Intl.DateTimeFormat(locale, {
+00655:     weekday: "short",
+00656:   });
+00657: 
+00658:   const sunday = new Date(2026, 0, 4);
+00659: 
+00660:   return Array.from(
+00661:     { length: 7 },
+00662:     (_, index) => {
+00663:       const date = new Date(sunday);
+00664: 
+00665:       date.setDate(
+00666:         sunday.getDate() + index,
+00667:       );
+00668: 
+00669:       return formatter.format(date);
+00670:     },
+00671:   );
+00672: }
+00673: 
+------------------------------------------------------------
+00668: 
+00669:       return formatter.format(date);
+00670:     },
+00671:   );
+00672: }
+00673: 
+00674: 
+00675: type OpenPanel =
+00676:   | "origin"
+00677:   | "destination"
+00678:   | "traveler"
+00679:   | "budget"
+00680:   | "date"
+00681:   | "year"
+00682:   | null;
+00683: 
+00684: 
+00685: function rupiah(
+00686:   value: number,
+00687:   formatter: (amountInIdr: number) => string,
+00688: ) {
+00689:   return formatter(value);
+00690: }
+00691: 
+00692: 
+00693: function formatDate(
+00694:   date: Date | null,
+00695:   locale: string,
+00696:   emptyLabel: string,
+00697: ) {
+00698:   if (!date) {
+00699:     return emptyLabel;
+00700:   }
+00701: 
+00702:   return new Intl.DateTimeFormat(locale, {
+00703:     day: "numeric",
+00704:     month: "short",
+00705:     year: "numeric",
+00706:   }).format(date);
+00707: }
+00708: 
+00709: 
+00710: function getCalendarDays(year: number, month: number) {
+00711:   const firstDay = new Date(year, month, 1).getDay();
+00712:   const numberOfDays = new Date(
+00713:     year,
+00714:     month + 1,
+00715:     0,
+------------------------------------------------------------
+00704:     month: "short",
+00705:     year: "numeric",
+00706:   }).format(date);
+00707: }
+00708: 
+00709: 
+00710: function getCalendarDays(year: number, month: number) {
+00711:   const firstDay = new Date(year, month, 1).getDay();
+00712:   const numberOfDays = new Date(
+00713:     year,
+00714:     month + 1,
+00715:     0,
+00716:   ).getDate();
+00717: 
+00718:   const result: Array<number | null> = [];
+00719: 
+00720:   for (let index = 0; index < firstDay; index += 1) {
+00721:     result.push(null);
+00722:   }
+00723: 
+00724:   for (let day = 1; day <= numberOfDays; day += 1) {
+00725:     result.push(day);
+00726:   }
+00727: 
+00728:   while (result.length % 7 !== 0) {
+00729:     result.push(null);
+00730:   }
+00731: 
+00732:   return result;
+00733: }
+00734: 
+00735: 
+00736: function CalendarMonth({
+00737:   year,
+00738:   month,
+00739:   selectedDate,
+00740:   onSelect,
+00741:   locale,
+00742: }: {
+00743:   year: number;
+00744:   month: number;
+00745:   selectedDate: Date | null;
+00746:   onSelect: (date: Date) => void;
+00747:   locale: string;
+00748: }) {
+00749:   const days = getCalendarDays(year, month);
+00750:   const monthNames = getMonthNames(locale);
+00751:   const dayNames = getDayNames(locale);
+------------------------------------------------------------
+00741:   locale,
+00742: }: {
+00743:   year: number;
+00744:   month: number;
+00745:   selectedDate: Date | null;
+00746:   onSelect: (date: Date) => void;
+00747:   locale: string;
+00748: }) {
+00749:   const days = getCalendarDays(year, month);
+00750:   const monthNames = getMonthNames(locale);
+00751:   const dayNames = getDayNames(locale);
+00752: 
+00753:   const today = new Date();
+00754:   today.setHours(0, 0, 0, 0);
+00755: 
+00756:   return (
+00757:     <div className="hero-calendar-month">
+00758:       <h4>
+00759:         {monthNames[month]} {year}
+00760:       </h4>
+00761: 
+00762:       <div className="hero-calendar-weekdays">
+00763:         {dayNames.map((name, index) => (
+00764:           <span
+00765:             key={name}
+00766:             className={index === 0 ? "sunday" : ""}
+00767:           >
+00768:             {name}
+00769:           </span>
+00770:         ))}
+00771:       </div>
+00772: 
+00773:       <div className="hero-calendar-days">
+00774:         {days.map((day, index) => {
+00775:           if (!day) {
+00776:             return (
+00777:               <span
+00778:                 key={`empty-${index}`}
+00779:                 className="empty"
+00780:               />
+00781:             );
+00782:           }
+00783: 
+00784:           const candidate = new Date(
+00785:             year,
+00786:             month,
+00787:             day,
+00788:           );
+------------------------------------------------------------
+00778:                 key={`empty-${index}`}
+00779:                 className="empty"
+00780:               />
+00781:             );
+00782:           }
+00783: 
+00784:           const candidate = new Date(
+00785:             year,
+00786:             month,
+00787:             day,
+00788:           );
+00789: 
+00790:           candidate.setHours(0, 0, 0, 0);
+00791: 
+00792:           const disabled = candidate < today;
+00793: 
+00794:           const selected =
+00795:             selectedDate &&
+00796:             candidate.getFullYear() ===
+00797:               selectedDate.getFullYear() &&
+00798:             candidate.getMonth() ===
+00799:               selectedDate.getMonth() &&
+00800:             candidate.getDate() ===
+00801:               selectedDate.getDate();
+00802: 
+00803:           return (
+00804:             <button
+00805:               key={day}
+00806:               type="button"
+00807:               disabled={disabled}
+00808:               className={selected ? "selected" : ""}
+00809:               onClick={() => {
+00810:                 if (!disabled) {
+00811:                   onSelect(candidate);
+00812:                 }
+00813:               }}
+00814:             >
+00815:               {day}
+00816:             </button>
+00817:           );
+00818:         })}
+00819:       </div>
+00820:     </div>
+00821:   );
+00822: }
+00823: 
+00824: 
+00825: export function Hero() {
+------------------------------------------------------------
+00819:       </div>
+00820:     </div>
+00821:   );
+00822: }
+00823: 
+00824: 
+00825: export function Hero() {
+00826:   const { currency, formatCurrency, language, locale } = useMarketplacePreferences();
+00827:   const t = (
+00828:     key: Parameters<typeof marketplaceTranslate>[1],
+00829:   ) => marketplaceTranslate(language, key);
+00830: 
+00831:   const monthNames = getMonthNames(locale);
+00832:   const router = useRouter();
+00833:   const [active, setActive] = useState("Umrah");
+00834: 
+00835:   const [adult, setAdult] = useState(2);
+00836:   const [child, setChild] = useState(0);
+00837:   const [infant, setInfant] = useState(0);
+00838: 
+00839:   const [travelClass, setTravelClass] =
+00840:     useState("Hemat");
+00841: 
+00842:   const [origin, setOrigin] =
+00843:     useState("Jakarta");
+00844: 
+00845:   const [originQuery, setOriginQuery] =
+00846:     useState("");
+00847: 
+00848:   const [destination, setDestination] =
+00849:     useState("");
+00850: 
+00851:   const [destinationQuery, setDestinationQuery] =
+00852:     useState("");
+00853: 
+00854:   const [budget, setBudget] =
+00855:     useState("");
+00856: 
+00857:   const [hotelStars, setHotelStars] =
+00858:     useState<number | null>(null);
+00859: 
+00860:   const [segaOriginCountry, setSegaOriginCountry] =
+00861:     useState("Indonesia");
+00862: 
+00863:   const [segaOriginCountryQuery, setSegaOriginCountryQuery] =
+00864:     useState("");
+00865: 
+00866:   const [segaOriginCity, setSegaOriginCity] =
+------------------------------------------------------------
+00860:   const [segaOriginCountry, setSegaOriginCountry] =
+00861:     useState("Indonesia");
+00862: 
+00863:   const [segaOriginCountryQuery, setSegaOriginCountryQuery] =
+00864:     useState("");
+00865: 
+00866:   const [segaOriginCity, setSegaOriginCity] =
+00867:     useState("Jakarta");
+00868: 
+00869:   const [segaOriginCityQuery, setSegaOriginCityQuery] =
+00870:     useState("");
+00871: 
+00872:   const [selectedDate, setSelectedDate] =
+00873:     useState<Date | null>(null);
+00874: 
+00875:   const [calendarCursor, setCalendarCursor] =
+00876:     useState(() => {
+00877:       const now = new Date();
+00878: 
+00879:       return new Date(
+00880:         now.getFullYear(),
+00881:         now.getMonth(),
+00882:         1,
+00883:       );
+00884:     });
+00885: 
+00886:   const currentYear = new Date().getFullYear();
+00887: 
+00888:   const [hajiYear, setHajiYear] =
+00889:     useState<number | null>(null);
+00890: 
+00891:   const [openPanel, setOpenPanel] =
+00892:     useState<OpenPanel>(null);
+00893: 
+00894:   const [showSegaDealsInfo, setShowSegaDealsInfo] =
+00895:     useState(false);
+00896:   /* SEGADEALS_MODAL_ESCAPE_V1 */
+00897:   useEffect(() => {
+00898:     if (!showSegaDealsInfo) {
+00899:       return;
+00900:     }
+00901: 
+00902:     const handleKeyDown = (event: KeyboardEvent) => {
+00903:       if (event.key === "Escape") {
+00904:         setShowSegaDealsInfo(false);
+00905:       }
+00906:     };
+00907: 
+------------------------------------------------------------
+01059:       item.toLowerCase().includes(query),
+01060:     );
+01061:   }, [
+01062:     destinationQuery,
+01063:     destinations,
+01064:     isHalalTour,
+01065:     isDomestic,
+01066:     isInternational,
+01067:     isSegaDeals,
+01068:   ]);
+01069: 
+01070: 
+01071:   const hajiYears = Array.from(
+01072:     { length: 6 },
+01073:     (_, index) => currentYear + index,
+01074:   );
+01075: 
+01076:   const isHajiYearDisabled = (year: number) => {
+01077:     /*
+01078:      * UI sementara Segaloka:
+01079:      * musim Haji 2026 sudah berlalu.
+01080:      *
+01081:      * Nantinya status availability / closed / sold-out
+01082:      * wajib berasal dari konfigurasi paket Haji Travel,
+01083:      * bukan hardcode di frontend.
+01084:      */
+01085:     return year === 2026;
+01086:   };
+01087: 
+01088: 
+01089:   const firstCalendarYear =
+01090:     calendarCursor.getFullYear();
+01091: 
+01092:   const firstCalendarMonth =
+01093:     calendarCursor.getMonth();
+01094: 
+01095:   const secondCalendarDate = new Date(
+01096:     firstCalendarYear,
+01097:     firstCalendarMonth + 1,
+01098:     1,
+01099:   );
+01100: 
+01101:   const todayCalendarMonth = new Date();
+01102: 
+01103:   todayCalendarMonth.setDate(1);
+01104:   todayCalendarMonth.setHours(0, 0, 0, 0);
+01105: 
+01106:   const canGoPrevious =
+------------------------------------------------------------
+01095:   const secondCalendarDate = new Date(
+01096:     firstCalendarYear,
+01097:     firstCalendarMonth + 1,
+01098:     1,
+01099:   );
+01100: 
+01101:   const todayCalendarMonth = new Date();
+01102: 
+01103:   todayCalendarMonth.setDate(1);
+01104:   todayCalendarMonth.setHours(0, 0, 0, 0);
+01105: 
+01106:   const canGoPrevious =
+01107:     calendarCursor.getTime() >
+01108:     todayCalendarMonth.getTime();
+01109: 
+01110:   const calendarYears = Array.from(
+01111:     { length: 7 },
+01112:     (_, index) =>
+01113:       todayCalendarMonth.getFullYear() + index,
+01114:   );
+01115: 
+01116: 
+01117:   function moveCalendarMonth(offset: number) {
+01118:     setCalendarCursor((current) => {
+01119:       const candidate = new Date(
+01120:         current.getFullYear(),
+01121:         current.getMonth() + offset,
+01122:         1,
+01123:       );
+01124: 
+01125:       if (
+01126:         candidate.getTime() <
+01127:         todayCalendarMonth.getTime()
+01128:       ) {
+01129:         return new Date(
+01130:           todayCalendarMonth.getFullYear(),
+01131:           todayCalendarMonth.getMonth(),
+01132:           1,
+01133:         );
+01134:       }
+01135: 
+01136:       return candidate;
+01137:     });
+01138:   }
+01139: 
+01140: 
+01141:   function changeCalendarMonth(month: number) {
+01142:     setCalendarCursor((current) => {
+------------------------------------------------------------
+01131:           todayCalendarMonth.getMonth(),
+01132:           1,
+01133:         );
+01134:       }
+01135: 
+01136:       return candidate;
+01137:     });
+01138:   }
+01139: 
+01140: 
+01141:   function changeCalendarMonth(month: number) {
+01142:     setCalendarCursor((current) => {
+01143:       const candidate = new Date(
+01144:         current.getFullYear(),
+01145:         month,
+01146:         1,
+01147:       );
+01148: 
+01149:       if (
+01150:         candidate.getTime() <
+01151:         todayCalendarMonth.getTime()
+01152:       ) {
+01153:         return new Date(
+01154:           todayCalendarMonth.getFullYear(),
+01155:           todayCalendarMonth.getMonth(),
+01156:           1,
+01157:         );
+01158:       }
+01159: 
+01160:       return candidate;
+01161:     });
+01162:   }
+01163: 
+01164: 
+01165:   function changeCalendarYear(year: number) {
+01166:     setCalendarCursor((current) => {
+01167:       let month = current.getMonth();
+01168: 
+01169:       if (
+01170:         year === todayCalendarMonth.getFullYear() &&
+01171:         month < todayCalendarMonth.getMonth()
+01172:       ) {
+01173:         month = todayCalendarMonth.getMonth();
+01174:       }
+01175: 
+01176:       return new Date(
+01177:         year,
+01178:         month,
+------------------------------------------------------------
+01207:     };
+01208:   }, []);
+01209: 
+01210: 
+01211:   function changeCategory(category: string) {
+01212:     setActive(category);
+01213:     setOpenPanel(null);
+01214:     setDestination("");
+01215:     setDestinationQuery("");
+01216:     setBudget("");
+01217: 
+01218:     if (category === "Haji") {
+01219:       setSelectedDate(null);
+01220: 
+01221:       if (
+01222:         travelClass !== "Plus" &&
+01223:         travelClass !== "Plus VVIP"
+01224:       ) {
+01225:         setTravelClass("Plus");
+01226:       }
+01227:     } else {
+01228:       setHajiYear(null);
+01229: 
+01230:       if (travelClass === "Plus VVIP") {
+01231:         setTravelClass("Hemat");
+01232:       }
+01233:     }
+01234: 
+01235:     if (category === "SegaDeals") {
+01236:       setShowSegaDealsInfo(true);
+01237:     }
+01238:   }
+01239: 
+01240: 
+01241:   function DestinationField() {
+01242:     return (
+01243:       <div className="hero-field-wrap">
+01244:         <button
+01245:           type="button"
+01246:           className="hero-field"
+01247:           onClick={() =>
+01248:             setOpenPanel(
+01249:               openPanel === "destination"
+01250:                 ? null
+01251:                 : "destination",
+01252:             )
+01253:           }
+01254:         >
+------------------------------------------------------------
+01929:                 setOpenPanel(null)
+01930:               }
+01931:             >
+01932:               {t("common.apply")}
+01933:             </button>
+01934:           </div>
+01935:         )}
+01936:       </div>
+01937:     );
+01938:   }
+01939: 
+01940: 
+01941:   function DateYearField() {
+01942:     const isYear = isHaji;
+01943: 
+01944:     return (
+01945:       <div className="hero-field-wrap">
+01946:         <button
+01947:           type="button"
+01948:           className="hero-field"
+01949:           onClick={() =>
+01950:             setOpenPanel(
+01951:               isYear
+01952:                 ? openPanel === "year"
+01953:                   ? null
+01954:                   : "year"
+01955:                 : openPanel === "date"
+01956:                   ? null
+01957:                   : "date",
+01958:             )
+01959:           }
+01960:         >
+01961:           <span className="hero-field-icon">
+01962:             <CalendarDays size={19} />
+01963:           </span>
+01964: 
+01965:           <span className="hero-field-content">
+01966:             <small>
+01967:               {isYear ? t("hero.year") : t("hero.date")}
+01968:             </small>
+01969: 
+01970:             <strong>
+01971:               {isYear
+01972:                 ? hajiYear
+01973:                   ? String(hajiYear)
+01974:                   : t("search.selectYear")
+01975:                 : formatDate(selectedDate, locale, t("search.selectDate"))}
+01976:             </strong>
+------------------------------------------------------------
+01969: 
+01970:             <strong>
+01971:               {isYear
+01972:                 ? hajiYear
+01973:                   ? String(hajiYear)
+01974:                   : t("search.selectYear")
+01975:                 : formatDate(selectedDate, locale, t("search.selectDate"))}
+01976:             </strong>
+01977:           </span>
+01978:         </button>
+01979: 
+01980: 
+01981:         {openPanel === "year" && isYear && (
+01982:           <div className="hero-popover hero-year-popover">
+01983:             <h3>
+01984:               {t("calendar.selectDepartureYear")}
+01985:             </h3>
+01986: 
+01987:             <div className="hero-year-options">
+01988:               {hajiYears.map((year) => {
+01989:                 const disabled =
+01990:                   isHajiYearDisabled(year);
+01991: 
+01992:                 return (
+01993:                   <button
+01994:                     key={year}
+01995:                     type="button"
+01996:                     disabled={disabled}
+01997:                     aria-disabled={disabled}
+01998:                     className={
+01999:                       [
+02000:                         year === hajiYear
+02001:                           ? "selected"
+02002:                           : "",
+02003:                         disabled
+02004:                           ? "disabled"
+02005:                           : "",
+02006:                       ]
+02007:                         .filter(Boolean)
+02008:                         .join(" ")
+02009:                     }
+02010:                     onClick={() => {
+02011:                       if (disabled) {
+02012:                         return;
+02013:                       }
+02014: 
+02015:                       setHajiYear(year);
+02016:                       setOpenPanel(null);
+------------------------------------------------------------
+02007:                         .filter(Boolean)
+02008:                         .join(" ")
+02009:                     }
+02010:                     onClick={() => {
+02011:                       if (disabled) {
+02012:                         return;
+02013:                       }
+02014: 
+02015:                       setHajiYear(year);
+02016:                       setOpenPanel(null);
+02017:                     }}
+02018:                   >
+02019:                     {year}
+02020: 
+02021:                     {disabled && (
+02022:                       <span
+02023:                         className="hero-year-status"
+02024:                         aria-hidden="true"
+02025:                       >
+02026:                         {t("calendar.passed")}
+02027:                       </span>
+02028:                     )}
+02029:                   </button>
+02030:                 );
+02031:               })}
+02032:             </div>
+02033:           </div>
+02034:         )}
+02035: 
+02036: 
+02037:         {openPanel === "date" && !isYear && (
+02038:           <div className="hero-popover hero-date-popover">
+02039:             <div className="hero-date-header">
+02040:               <h3>{t("calendar.setDate")}</h3>
+02041: 
+02042:               <button
+02043:                 type="button"
+02044:                 className="hero-popover-close"
+02045:                 onClick={handleSearch}
+02046:               >
+02047:                 <X size={22} />
+02048:               </button>
+02049:             </div>
+02050: 
+02051: 
+02052:             <div className="hero-calendar-navigation">
+02053: 
+02054:               <button
+------------------------------------------------------------
+02044:                 className="hero-popover-close"
+02045:                 onClick={handleSearch}
+02046:               >
+02047:                 <X size={22} />
+02048:               </button>
+02049:             </div>
+02050: 
+02051: 
+02052:             <div className="hero-calendar-navigation">
+02053: 
+02054:               <button
+02055:                 type="button"
+02056:                 className="hero-calendar-nav-button"
+02057:                 aria-label={t("calendar.previousMonth")}
+02058:                 disabled={!canGoPrevious}
+02059:                 onClick={() =>
+02060:                   moveCalendarMonth(-1)
+02061:                 }
+02062:               >
+02063:                 <ChevronLeft size={19} />
+02064:               </button>
+02065: 
+02066: 
+02067:               <div className="hero-calendar-selectors">
+02068: 
+02069:                 <select
+02070:                   aria-label={t("calendar.selectMonth")}
+02071:                   value={firstCalendarMonth}
+02072:                   onChange={(event) =>
+02073:                     changeCalendarMonth(
+02074:                       Number(event.target.value),
+02075:                     )
+02076:                   }
+02077:                 >
+02078:                   {monthNames.map(
+02079:                     (monthName, monthIndex) => {
+02080:                       const disabled =
+02081:                         firstCalendarYear ===
+02082:                           todayCalendarMonth.getFullYear() &&
+02083:                         monthIndex <
+02084:                           todayCalendarMonth.getMonth();
+02085: 
+02086:                       return (
+02087:                         <option
+02088:                           key={monthName}
+02089:                           value={monthIndex}
+02090:                           disabled={disabled}
+02091:                         >
+------------------------------------------------------------
+02080:                       const disabled =
+02081:                         firstCalendarYear ===
+02082:                           todayCalendarMonth.getFullYear() &&
+02083:                         monthIndex <
+02084:                           todayCalendarMonth.getMonth();
+02085: 
+02086:                       return (
+02087:                         <option
+02088:                           key={monthName}
+02089:                           value={monthIndex}
+02090:                           disabled={disabled}
+02091:                         >
+02092:                           {monthName}
+02093:                         </option>
+02094:                       );
+02095:                     },
+02096:                   )}
+02097:                 </select>
+02098: 
+02099: 
+02100:                 <select
+02101:                   aria-label={t("calendar.selectYear")}
+02102:                   value={firstCalendarYear}
+02103:                   onChange={(event) =>
+02104:                     changeCalendarYear(
+02105:                       Number(event.target.value),
+02106:                     )
+02107:                   }
+02108:                 >
+02109:                   {calendarYears.map((year) => (
+02110:                     <option
+02111:                       key={year}
+02112:                       value={year}
+02113:                     >
+02114:                       {year}
+02115:                     </option>
+02116:                   ))}
+02117:                 </select>
+02118: 
+02119:               </div>
+02120: 
+02121: 
+02122:               <button
+02123:                 type="button"
+02124:                 className="hero-calendar-nav-button"
+02125:                 aria-label={t("calendar.nextMonth")}
+02126:                 onClick={() =>
+02127:                   moveCalendarMonth(1)
+------------------------------------------------------------
+02124:                 className="hero-calendar-nav-button"
+02125:                 aria-label={t("calendar.nextMonth")}
+02126:                 onClick={() =>
+02127:                   moveCalendarMonth(1)
+02128:                 }
+02129:               >
+02130:                 <ChevronRight size={19} />
+02131:               </button>
+02132: 
+02133:             </div>
+02134: 
+02135: 
+02136:             <div className="hero-calendar-grid">
+02137:               <CalendarMonth
+02138:                 year={firstCalendarYear}
+02139:                 month={firstCalendarMonth}
+02140:                 selectedDate={selectedDate}
+02141:                 onSelect={(date) => {
+02142:                   setSelectedDate(date);
+02143:                   setOpenPanel(null);
+02144:                 }}
+02145:                 locale={locale}
+02146:               />
+02147: 
+02148:               <CalendarMonth
+02149:                 year={
+02150:                   secondCalendarDate.getFullYear()
+02151:                 }
+02152:                 month={
+02153:                   secondCalendarDate.getMonth()
+02154:                 }
+02155:                 selectedDate={selectedDate}
+02156:                 onSelect={(date) => {
+02157:                   setSelectedDate(date);
+02158:                   setOpenPanel(null);
+02159:                 }}
+02160:                 locale={locale}
+02161:               />
+02162:             </div>
+02163:           </div>
+02164:         )}
+02165:       </div>
+02166:     );
+02167:   }
+02168: 
+02169: 
+02170: 
+02171:   const searchOrigin =
+------------------------------------------------------------
+02171:   const searchOrigin =
+02172:     isSegaDeals
+02173:       ? segaOriginCity.trim()
+02174:       : origin.trim();
+02175: 
+02176:   const travelerTotal =
+02177:     adult +
+02178:     child +
+02179:     infant;
+02180: 
+02181:   const hasValidSchedule =
+02182:     isHaji
+02183:       ? hajiYear !== null &&
+02184:         !isHajiYearDisabled(hajiYear)
+02185:       : selectedDate !== null;
+02186: 
+02187:   const canSearch =
+02188:     searchOrigin.length > 0 &&
+02189:     destination.trim().length > 0 &&
+02190:     travelerTotal > 0 &&
+02191:     hasValidSchedule;
+02192: 
+02193:   function handleSearch() {
+02194:     if (!canSearch) {
+02195:       return;
+02196:     }
+02197:     
+02198: 
+02199:     const params =
+02200:       new URLSearchParams();
+02201: 
+02202:     params.set(
+02203:       "category",
+02204:       active,
+02205:     );
+02206: 
+02207:     params.set(
+02208:       "origin",
+02209:       isSegaDeals
+02210:         ? segaOriginCity
+02211:         : origin,
+02212:     );
+02213: 
+02214:     if (destination) {
+02215:       params.set(
+02216:         "destination",
+02217:         destination,
+02218:       );
+------------------------------------------------------------
+02229:     );
+02230: 
+02231:     params.set(
+02232:       "child",
+02233:       String(child),
+02234:     );
+02235: 
+02236:     params.set(
+02237:       "infant",
+02238:       String(infant),
+02239:     );
+02240: 
+02241:     if (selectedDate) {
+02242:       const year =
+02243:         selectedDate.getFullYear();
+02244: 
+02245:       const month =
+02246:         String(
+02247:           selectedDate.getMonth() + 1,
+02248:         ).padStart(2, "0");
+02249: 
+02250:       const day =
+02251:         String(
+02252:           selectedDate.getDate(),
+02253:         ).padStart(2, "0");
+02254: 
+02255:       params.set(
+02256:         "date",
+02257:         `${year}-${month}-${day}`,
+02258:       );
+02259:     }
+02260: 
+02261:     if (isHaji && hajiYear) {
+02262:       params.set(
+02263:         "year",
+02264:         String(hajiYear),
+02265:       );
+02266:     }
+02267: 
+02268:     if (budget) {
+02269:       params.set(
+02270:         "budget",
+02271:         budget,
+02272:       );
+02273:     }
+02274: 
+02275:     setOpenPanel(null);
+02276: 
+------------------------------------------------------------
+02353:                 "hero-search-card",
+02354:                 isSegaDeals
+02355:                   ? "hero-search-card-segadeals"
+02356:                   : "",
+02357:               ].join(" ")}
+02358:             >
+02359:               {isSegaDeals ? (
+02360:                 <>
+02361:                   <DestinationField />
+02362:                   <OriginField />
+02363:                   <TravelerField />
+02364:                   <BudgetField />
+02365:                   <DateYearField />
+02366:                 </>
+02367:               ) : (
+02368:                 <>
+02369:                   <OriginField />
+02370:                   <DestinationField />
+02371:                   <TravelerField />
+02372:                   <DateYearField />
+02373:                 </>
+02374:               )}
+02375: 
+02376:               <button
+02377:                 type="button"
+02378:                 className="hero-search-button"
+02379:                 onClick={handleSearch}
+02380:                disabled={!canSearch} aria-disabled={!canSearch}>
+02381:                 <Search size={19} />
+02382:                 <span>{t("hero.search")}</span>
+02383:               </button>
+02384:             </div>
+02385:           </div>
+02386:         </div>
+02387:       </section>
+02388: 
+02389: 
+02390:       {showSegaDealsInfo && (
+02391:         <div
+02392:           className="segadeals-info-overlay"
+02393:           role="presentation"
+02394:           onMouseDown={() =>
+02395:             setShowSegaDealsInfo(false)
+02396:           }
+02397:         >
+02398:           <div
+02399:             className="segadeals-info-modal"
+02400:             role="dialog"
+------------------------------------------------------------
+============================================================
+FILE: .\src\components\search\SearchEditBar.tsx
+============================================================
+00001: "use client";
+00002: 
+00003: import {
+00004:   CalendarDays,
+00005:   ChevronLeft,
+00006:   ChevronRight,
+00007:   MapPin,
+00008:   Minus,
+00009:   Plus,
+00010:   Search,
+00011:   UsersRound,
+00012:   X,
+00013: } from "lucide-react";
+00014: 
+00015: import {
+00016:   useEffect,
+00017:   useMemo,
+00018:   useRef,
+00019:   useState,
+00020: } from "react";
+00021: 
+00022: import { useRouter } from "next/navigation";
+00023: 
+00024: import {
+00025:   useMarketplacePreferences,
+00026: } from "@/components/providers/MarketplacePreferencesProvider";
+00027: 
+00028: type Props = {
+00029:   category: string;
+00030:   initialOrigin: string;
+00031:   initialDestination: string;
+00032:   initialTravelers: string;
+00033:   initialDate: string;
+00034: };
+00035: 
+00036: type Panel =
+00037:   | "origin"
+00038:   | "destination"
+00039:   | "traveler"
+------------------------------------------------------------
+00028: type Props = {
+00029:   category: string;
+00030:   initialOrigin: string;
+00031:   initialDestination: string;
+00032:   initialTravelers: string;
+00033:   initialDate: string;
+00034: };
+00035: 
+00036: type Panel =
+00037:   | "origin"
+00038:   | "destination"
+00039:   | "traveler"
+00040:   | "date"
+00041:   | null;
+00042: 
+00043: type TravelerState = {
+00044:   adult: number;
+00045:   child: number;
+00046:   infant: number;
+00047: };
+00048: 
+00049: const origins = [
+00050:   "Jakarta",
+00051:   "Makassar",
+00052:   "Surabaya",
+00053:   "Medan",
+00054:   "Yogyakarta",
+00055:   "Bandung",
+00056:   "Semarang",
+00057:   "Balikpapan",
+00058:   "Banjarmasin",
+00059:   "Palembang",
+00060:   "Pekanbaru",
+00061:   "Padang",
+00062:   "Banda Aceh",
+00063:   "Batam",
+00064:   "Denpasar",
+00065:   "Manado",
+00066:   "Lombok",
+00067: ];
+00068: 
+00069: const categoryOptions: Record<string, string[]> = {
+00070:   Umrah: [
+00071:     "Makkah",
+00072:     "Madinah",
+00073:     "Makkah & Madinah",
+00074:   ],
+00075: 
+------------------------------------------------------------
+00126:     "Haji",
+00127:     "Halal Tour",
+00128:     "Tour Domestic",
+00129:     "Tour International",
+00130:   ],
+00131: };
+00132: 
+00133: const copy = {
+00134:   ID: {
+00135:     from: "Dari",
+00136:     destination: "Tujuan",
+00137:     umrahDestination: "Tujuan Umrah",
+00138:     date: "Tanggal",
+00139:     traveler: "Traveler",
+00140:     search: "Cari",
+00141: 
+00142:     originTitle: "Pilih Kota atau Bandara",
+00143:     originPlaceholder: "Masukkan nama kota atau bandara...",
+00144:     popularDestination: "Destinasi Populer",
+00145: 
+00146:     destinationTitle: "Pilih Tujuan",
+00147:     destinationPlaceholder: "Cari negara tujuan...",
+00148:     chooseDestination: "Pilih tujuan",
+00149: 
+00150:     dateTitle: "Atur Tanggal",
+00151:     chooseDate: "Pilih tanggal",
+00152: 
+00153:     travelerTitle: "Atur Traveler",
+00154:     travelerDescription: "Tentukan jumlah traveler",
+00155: 
+00156:     adult: "Dewasa",
+00157:     adultDescription: "Usia 12 tahun ke atas",
+00158: 
+00159:     child: "Anak",
+00160:     childDescription: "Usia 2â€“11 tahun",
+00161: 
+00162:     infant: "Bayi",
+00163:     infantDescription: "Di bawah 2 tahun",
+00164: 
+00165:     person: "orang",
+00166:     done: "Selesai",
+00167: 
+00168:     weekdays: [
+00169:       "Min",
+00170:       "Sen",
+00171:       "Sel",
+00172:       "Rab",
+00173:       "Kam",
+------------------------------------------------------------
+00166:     done: "Selesai",
+00167: 
+00168:     weekdays: [
+00169:       "Min",
+00170:       "Sen",
+00171:       "Sel",
+00172:       "Rab",
+00173:       "Kam",
+00174:       "Jum",
+00175:       "Sab",
+00176:     ],
+00177: 
+00178:     months: [
+00179:       "Januari",
+00180:       "Februari",
+00181:       "Maret",
+00182:       "April",
+00183:       "Mei",
+00184:       "Juni",
+00185:       "Juli",
+00186:       "Agustus",
+00187:       "September",
+00188:       "Oktober",
+00189:       "November",
+00190:       "Desember",
+00191:     ],
+00192:   },
+00193: 
+00194:   EN: {
+00195:     from: "From",
+00196:     destination: "Destination",
+00197:     umrahDestination: "Umrah Destination",
+00198:     date: "Date",
+00199:     traveler: "Traveler",
+00200:     search: "Search",
+00201: 
+00202:     originTitle: "Choose City or Airport",
+00203:     originPlaceholder: "Enter city or airport name...",
+00204:     popularDestination: "Popular Destinations",
+00205: 
+00206:     destinationTitle: "Choose Destination",
+00207:     destinationPlaceholder: "Search destination...",
+00208:     chooseDestination: "Choose destination",
+00209: 
+00210:     dateTitle: "Set Date",
+00211:     chooseDate: "Choose date",
+00212: 
+00213:     travelerTitle: "Set Travelers",
+------------------------------------------------------------
+00205: 
+00206:     destinationTitle: "Choose Destination",
+00207:     destinationPlaceholder: "Search destination...",
+00208:     chooseDestination: "Choose destination",
+00209: 
+00210:     dateTitle: "Set Date",
+00211:     chooseDate: "Choose date",
+00212: 
+00213:     travelerTitle: "Set Travelers",
+00214:     travelerDescription: "Choose number of travelers",
+00215: 
+00216:     adult: "Adult",
+00217:     adultDescription: "12 years and above",
+00218: 
+00219:     child: "Child",
+00220:     childDescription: "2â€“11 years",
+00221: 
+00222:     infant: "Infant",
+00223:     infantDescription: "Under 2 years",
+00224: 
+00225:     person: "people",
+00226:     done: "Done",
+00227: 
+00228:     weekdays: [
+00229:       "Sun",
+00230:       "Mon",
+00231:       "Tue",
+00232:       "Wed",
+00233:       "Thu",
+00234:       "Fri",
+00235:       "Sat",
+00236:     ],
+00237: 
+00238:     months: [
+00239:       "January",
+00240:       "February",
+00241:       "March",
+00242:       "April",
+00243:       "May",
+00244:       "June",
+00245:       "July",
+00246:       "August",
+00247:       "September",
+00248:       "October",
+00249:       "November",
+00250:       "December",
+00251:     ],
+00252:   },
+------------------------------------------------------------
+00246:       "August",
+00247:       "September",
+00248:       "October",
+00249:       "November",
+00250:       "December",
+00251:     ],
+00252:   },
+00253: 
+00254:   AR: {
+00255:     from: "Ù…Ù†",
+00256:     destination: "Ø§Ù„ÙˆØ¬Ù‡Ø©",
+00257:     umrahDestination: "ÙˆØ¬Ù‡Ø© Ø§Ù„Ø¹Ù…Ø±Ø©",
+00258:     date: "Ø§Ù„ØªØ§Ø±ÙŠØ®",
+00259:     traveler: "Ø§Ù„Ù…Ø³Ø§ÙØ±ÙˆÙ†",
+00260:     search: "Ø¨Ø­Ø«",
+00261: 
+00262:     originTitle: "Ø§Ø®ØªØ± Ø§Ù„Ù…Ø¯ÙŠÙ†Ø© Ø£Ùˆ Ø§Ù„Ù…Ø·Ø§Ø±",
+00263:     originPlaceholder: "Ø£Ø¯Ø®Ù„ Ø§Ø³Ù… Ø§Ù„Ù…Ø¯ÙŠÙ†Ø© Ø£Ùˆ Ø§Ù„Ù…Ø·Ø§Ø±...",
+00264:     popularDestination: "Ø§Ù„ÙˆØ¬Ù‡Ø§Øª Ø§Ù„Ø´Ø§Ø¦Ø¹Ø©",
+00265: 
+00266:     destinationTitle: "Ø§Ø®ØªØ± Ø§Ù„ÙˆØ¬Ù‡Ø©",
+00267:     destinationPlaceholder: "Ø§Ø¨Ø­Ø« Ø¹Ù† Ø§Ù„ÙˆØ¬Ù‡Ø©...",
+00268:     chooseDestination: "Ø§Ø®ØªØ± Ø§Ù„ÙˆØ¬Ù‡Ø©",
+00269: 
+00270:     dateTitle: "Ø­Ø¯Ø¯ Ø§Ù„ØªØ§Ø±ÙŠØ®",
+00271:     chooseDate: "Ø§Ø®ØªØ± Ø§Ù„ØªØ§Ø±ÙŠØ®",
+00272: 
+00273:     travelerTitle: "Ø­Ø¯Ø¯ Ø§Ù„Ù…Ø³Ø§ÙØ±ÙŠÙ†",
+00274:     travelerDescription: "Ø­Ø¯Ø¯ Ø¹Ø¯Ø¯ Ø§Ù„Ù…Ø³Ø§ÙØ±ÙŠÙ†",
+00275: 
+00276:     adult: "Ø¨Ø§Ù„Øº",
+00277:     adultDescription: "12 Ø³Ù†Ø© ÙÙ…Ø§ ÙÙˆÙ‚",
+00278: 
+00279:     child: "Ø·ÙÙ„",
+00280:     childDescription: "Ù…Ù† 2 Ø¥Ù„Ù‰ 11 Ø³Ù†Ø©",
+00281: 
+00282:     infant: "Ø±Ø¶ÙŠØ¹",
+00283:     infantDescription: "Ø£Ù‚Ù„ Ù…Ù† Ø³Ù†ØªÙŠÙ†",
+00284: 
+00285:     person: "Ù…Ø³Ø§ÙØ±",
+00286:     done: "ØªÙ…",
+00287: 
+00288:     weekdays: [
+00289:       "Ø£Ø­Ø¯",
+00290:       "Ø§Ø«Ù†",
+00291:       "Ø«Ù„Ø§",
+00292:       "Ø£Ø±Ø¨",
+00293:       "Ø®Ù…ÙŠ",
+------------------------------------------------------------
+00286:     done: "ØªÙ…",
+00287: 
+00288:     weekdays: [
+00289:       "Ø£Ø­Ø¯",
+00290:       "Ø§Ø«Ù†",
+00291:       "Ø«Ù„Ø§",
+00292:       "Ø£Ø±Ø¨",
+00293:       "Ø®Ù…ÙŠ",
+00294:       "Ø¬Ù…Ø¹",
+00295:       "Ø³Ø¨Øª",
+00296:     ],
+00297: 
+00298:     months: [
+00299:       "ÙŠÙ†Ø§ÙŠØ±",
+00300:       "ÙØ¨Ø±Ø§ÙŠØ±",
+00301:       "Ù…Ø§Ø±Ø³",
+00302:       "Ø£Ø¨Ø±ÙŠÙ„",
+00303:       "Ù…Ø§ÙŠÙˆ",
+00304:       "ÙŠÙˆÙ†ÙŠÙˆ",
+00305:       "ÙŠÙˆÙ„ÙŠÙˆ",
+00306:       "Ø£ØºØ³Ø·Ø³",
+00307:       "Ø³Ø¨ØªÙ…Ø¨Ø±",
+00308:       "Ø£ÙƒØªÙˆØ¨Ø±",
+00309:       "Ù†ÙˆÙÙ…Ø¨Ø±",
+00310:       "Ø¯ÙŠØ³Ù…Ø¨Ø±",
+00311:     ],
+00312:   },
+00313: } as const;
+00314: 
+00315: function pad(value: number) {
+00316:   return String(value).padStart(2, "0");
+00317: }
+00318: 
+00319: function toDateValue(
+00320:   year: number,
+00321:   month: number,
+00322:   day: number,
+00323: ) {
+00324:   return `${year}-${pad(month + 1)}-${pad(day)}`;
+00325: }
+00326: 
+00327: function parseDateValue(value: string) {
+00328:   if (!value) {
+00329:     return null;
+00330:   }
+00331: 
+00332:   const parts = value
+00333:     .split("-")
+------------------------------------------------------------
+00328:   if (!value) {
+00329:     return null;
+00330:   }
+00331: 
+00332:   const parts = value
+00333:     .split("-")
+00334:     .map(Number);
+00335: 
+00336:   if (parts.length !== 3) {
+00337:     return null;
+00338:   }
+00339: 
+00340:   const [year, month, day] = parts;
+00341: 
+00342:   if (
+00343:     !year ||
+00344:     !month ||
+00345:     !day
+00346:   ) {
+00347:     return null;
+00348:   }
+00349: 
+00350:   return new Date(
+00351:     year,
+00352:     month - 1,
+00353:     day,
+00354:   );
+00355: }
+00356: 
+00357: function sameDay(
+00358:   first: Date,
+00359:   second: Date,
+00360: ) {
+00361:   return (
+00362:     first.getFullYear() === second.getFullYear() &&
+00363:     first.getMonth() === second.getMonth() &&
+00364:     first.getDate() === second.getDate()
+00365:   );
+00366: }
+00367: 
+00368: function buildMonthDays(
+00369:   year: number,
+00370:   month: number,
+00371: ) {
+00372:   const firstDay =
+00373:     new Date(
+00374:       year,
+00375:       month,
+------------------------------------------------------------
+00365:   );
+00366: }
+00367: 
+00368: function buildMonthDays(
+00369:   year: number,
+00370:   month: number,
+00371: ) {
+00372:   const firstDay =
+00373:     new Date(
+00374:       year,
+00375:       month,
+00376:       1,
+00377:     ).getDay();
+00378: 
+00379:   const totalDays =
+00380:     new Date(
+00381:       year,
+00382:       month + 1,
+00383:       0,
+00384:     ).getDate();
+00385: 
+00386:   const result: Array<number | null> = [];
+00387: 
+00388:   for (
+00389:     let index = 0;
+00390:     index < firstDay;
+00391:     index += 1
+00392:   ) {
+00393:     result.push(null);
+00394:   }
+00395: 
+00396:   for (
+00397:     let day = 1;
+00398:     day <= totalDays;
+00399:     day += 1
+00400:   ) {
+00401:     result.push(day);
+00402:   }
+00403: 
+00404:   while (
+00405:     result.length % 7 !== 0
+00406:   ) {
+00407:     result.push(null);
+00408:   }
+00409: 
+00410:   return result;
+00411: }
+00412: 
+------------------------------------------------------------
+00406:   ) {
+00407:     result.push(null);
+00408:   }
+00409: 
+00410:   return result;
+00411: }
+00412: 
+00413: export function SearchEditBar({
+00414:   category,
+00415:   initialOrigin,
+00416:   initialDestination,
+00417:   initialTravelers,
+00418:   initialDate,
+00419: }: Props) {
+00420:   const router = useRouter();
+00421: 
+00422:   const {
+00423:     language,
+00424:     locale,
+00425:     direction,
+00426:   } = useMarketplacePreferences();
+00427: 
+00428:   const t = copy[language];
+00429: 
+00430:   const rootRef =
+00431:     useRef<HTMLDivElement | null>(
+00432:       null,
+00433:     );
+00434: 
+00435:   const [panel, setPanel] =
+00436:     useState<Panel>(null);
+00437: 
+00438:   const [origin, setOrigin] =
+00439:     useState(
+00440:       initialOrigin || "Jakarta",
+00441:     );
+00442: 
+00443:   const [
+00444:     originQuery,
+00445:     setOriginQuery,
+00446:   ] = useState("");
+00447: 
+00448:   const [
+00449:     destination,
+00450:     setDestination,
+00451:   ] = useState(
+00452:     initialDestination || "",
+00453:   );
+------------------------------------------------------------
+00466:     );
+00467: 
+00468:   const [
+00469:     travelers,
+00470:     setTravelers,
+00471:   ] = useState<TravelerState>({
+00472:     adult: initialTravelerTotal,
+00473:     child: 0,
+00474:     infant: 0,
+00475:   });
+00476: 
+00477:   const [
+00478:     selectedDate,
+00479:     setSelectedDate,
+00480:   ] = useState(
+00481:     initialDate || "",
+00482:   );
+00483: 
+00484:   const parsedInitialDate =
+00485:     parseDateValue(
+00486:       initialDate,
+00487:     );
+00488: 
+00489:   const today = new Date();
+00490: 
+00491:   const [
+00492:     calendarMonth,
+00493:     setCalendarMonth,
+00494:   ] = useState(
+00495:     parsedInitialDate
+00496:       ? new Date(
+00497:           parsedInitialDate.getFullYear(),
+00498:           parsedInitialDate.getMonth(),
+00499:           1,
+00500:         )
+00501:       : new Date(
+00502:           today.getFullYear(),
+00503:           today.getMonth(),
+00504:           1,
+00505:         ),
+00506:   );
+00507: 
+00508:   useEffect(() => {
+00509:     function handlePointerDown(
+00510:       event: PointerEvent,
+00511:     ) {
+00512:       if (
+00513:         rootRef.current &&
+------------------------------------------------------------
+00611:       destinationQuery,
+00612:     ]);
+00613: 
+00614:   const travelerTotal =
+00615:     travelers.adult +
+00616:     travelers.child +
+00617:     travelers.infant;
+00618: 
+00619:   const canSearch =
+00620:     origin.trim().length > 0 &&
+00621:     destination.trim().length > 0 &&
+00622:     travelerTotal > 0 &&
+00623:     selectedDate.length > 0;
+00624: 
+00625:   function togglePanel(
+00626:     nextPanel: Exclude<
+00627:       Panel,
+00628:       null
+00629:     >,
+00630:   ) {
+00631:     setPanel(
+00632:       panel === nextPanel
+00633:         ? null
+00634:         : nextPanel,
+00635:     );
+00636:   }
+00637: 
+00638:   function updateTraveler(
+00639:     key: keyof TravelerState,
+00640:     delta: number,
+00641:   ) {
+00642:     setTravelers(
+00643:       (current) => {
+00644:         const next = {
+00645:           ...current,
+00646:           [key]: Math.max(
+00647:             0,
+00648:             current[key] + delta,
+00649:           ),
+00650:         };
+00651: 
+00652:         if (
+00653:           next.adult +
+00654:             next.child +
+00655:             next.infant ===
+00656:           0
+00657:         ) {
+00658:           return current;
+------------------------------------------------------------
+00654:             next.child +
+00655:             next.infant ===
+00656:           0
+00657:         ) {
+00658:           return current;
+00659:         }
+00660: 
+00661:         return next;
+00662:       },
+00663:     );
+00664:   }
+00665: 
+00666:   function formatSelectedDate() {
+00667:     if (!selectedDate) {
+00668:       return t.chooseDate;
+00669:     }
+00670: 
+00671:     const parsed =
+00672:       parseDateValue(
+00673:         selectedDate,
+00674:       );
+00675: 
+00676:     if (!parsed) {
+00677:       return selectedDate;
+00678:     }
+00679: 
+00680:     return new Intl.DateTimeFormat(
+00681:       locale,
+00682:       {
+00683:         day: "numeric",
+00684:         month: "short",
+00685:         year: "numeric",
+00686:       },
+00687:     ).format(parsed);
+00688:   }
+00689: 
+00690:   function submitSearch() {
+00691:     if (!canSearch) {
+00692:       return;
+00693:     }
+00694: 
+00695:     const params =
+00696:       new URLSearchParams();
+00697: 
+00698:     if (category) {
+00699:       params.set(
+00700:         "category",
+00701:         category,
+------------------------------------------------------------
+00724: 
+00725:     params.set(
+00726:       "child",
+00727:       String(travelers.child),
+00728:     );
+00729: 
+00730:     params.set(
+00731:       "infant",
+00732:       String(travelers.infant),
+00733:     );
+00734: 
+00735:     params.set(
+00736:       "date",
+00737:       selectedDate,
+00738:     );
+00739: 
+00740:     setPanel(null);
+00741: 
+00742:     router.push(
+00743:       `/search?${params.toString()}`,
+00744:     );
+00745:   }
+00746: 
+00747:   const currentYear =
+00748:     calendarMonth.getFullYear();
+00749: 
+00750:   const currentMonth =
+00751:     calendarMonth.getMonth();
+00752: 
+00753:   const nextMonth =
+00754:     new Date(
+00755:       currentYear,
+00756:       currentMonth + 1,
+00757:       1,
+00758:     );
+00759: 
+00760:   const monthOneDays =
+00761:     buildMonthDays(
+00762:       currentYear,
+00763:       currentMonth,
+00764:     );
+00765: 
+00766:   const monthTwoDays =
+00767:     buildMonthDays(
+00768:       nextMonth.getFullYear(),
+00769:       nextMonth.getMonth(),
+00770:     );
+00771: 
+------------------------------------------------------------
+00760:   const monthOneDays =
+00761:     buildMonthDays(
+00762:       currentYear,
+00763:       currentMonth,
+00764:     );
+00765: 
+00766:   const monthTwoDays =
+00767:     buildMonthDays(
+00768:       nextMonth.getFullYear(),
+00769:       nextMonth.getMonth(),
+00770:     );
+00771: 
+00772:   const selectedDateObject =
+00773:     parseDateValue(
+00774:       selectedDate,
+00775:     );
+00776: 
+00777:   function renderMonth(
+00778:     year: number,
+00779:     month: number,
+00780:     days: Array<number | null>,
+00781:   ) {
+00782:     return (
+00783:       <div className="search-unified-calendar-month">
+00784:         <strong className="search-unified-calendar-month-title">
+00785:           {t.months[month]} {year}
+00786:         </strong>
+00787: 
+00788:         <div className="search-unified-calendar-weekdays">
+00789:           {t.weekdays.map(
+00790:             (weekday, index) => (
+00791:               <span
+00792:                 key={`${weekday}-${index}`}
+00793:                 className={
+00794:                   index === 0
+00795:                     ? "is-sunday"
+00796:                     : undefined
+00797:                 }
+00798:               >
+00799:                 {weekday}
+00800:               </span>
+00801:             ),
+00802:           )}
+00803:         </div>
+00804: 
+00805:         <div className="search-unified-calendar-days">
+00806:           {days.map(
+00807:             (day, index) => {
+------------------------------------------------------------
+00796:                     : undefined
+00797:                 }
+00798:               >
+00799:                 {weekday}
+00800:               </span>
+00801:             ),
+00802:           )}
+00803:         </div>
+00804: 
+00805:         <div className="search-unified-calendar-days">
+00806:           {days.map(
+00807:             (day, index) => {
+00808:               if (!day) {
+00809:                 return (
+00810:                   <span
+00811:                     key={`blank-${index}`}
+00812:                     className="is-empty"
+00813:                   />
+00814:                 );
+00815:               }
+00816: 
+00817:               const value =
+00818:                 new Date(
+00819:                   year,
+00820:                   month,
+00821:                   day,
+00822:                 );
+00823: 
+00824:               const normalizedToday =
+00825:                 new Date(
+00826:                   today.getFullYear(),
+00827:                   today.getMonth(),
+00828:                   today.getDate(),
+00829:                 );
+00830: 
+00831:               const disabled =
+00832:                 value <
+00833:                 normalizedToday;
+00834: 
+00835:               const active =
+00836:                 selectedDateObject
+00837:                   ? sameDay(
+00838:                       value,
+00839:                       selectedDateObject,
+00840:                     )
+00841:                   : false;
+00842: 
+00843:               return (
+------------------------------------------------------------
+00833:                 normalizedToday;
+00834: 
+00835:               const active =
+00836:                 selectedDateObject
+00837:                   ? sameDay(
+00838:                       value,
+00839:                       selectedDateObject,
+00840:                     )
+00841:                   : false;
+00842: 
+00843:               return (
+00844:                 <button
+00845:                   key={day}
+00846:                   type="button"
+00847:                   disabled={disabled}
+00848:                   className={
+00849:                     active
+00850:                       ? "is-active"
+00851:                       : undefined
+00852:                   }
+00853:                   onClick={() => {
+00854:                     setSelectedDate(
+00855:                       toDateValue(
+00856:                         year,
+00857:                         month,
+00858:                         day,
+00859:                       ),
+00860:                     );
+00861: 
+00862:                     setPanel(null);
+00863:                   }}
+00864:                 >
+00865:                   {day}
+00866:                 </button>
+00867:               );
+00868:             },
+00869:           )}
+00870:         </div>
+00871:       </div>
+00872:     );
+00873:   }
+00874: 
+00875:   return (
+00876:     <div
+00877:       ref={rootRef}
+00878:       className="search-edit-bar search-unified-bar"
+00879:       dir={direction}
+00880:     >
+------------------------------------------------------------
+01070:                 ),
+01071:               )}
+01072:             </div>
+01073:           </div>
+01074:         )}
+01075:       </div>
+01076: 
+01077:       <div className="search-edit-control">
+01078:         <button
+01079:           type="button"
+01080:           className="search-edit-field"
+01081:           aria-expanded={
+01082:             panel === "date"
+01083:           }
+01084:           onClick={() =>
+01085:             togglePanel("date")
+01086:           }
+01087:         >
+01088:           <CalendarDays size={18} />
+01089: 
+01090:           <span>
+01091:             <small>
+01092:               {t.date}
+01093:             </small>
+01094: 
+01095:             <strong>
+01096:               {formatSelectedDate()}
+01097:             </strong>
+01098:           </span>
+01099:         </button>
+01100: 
+01101:         {panel === "date" && (
+01102:           <div className="search-edit-dropdown search-unified-dropdown search-unified-date">
+01103:             <div className="search-unified-dropdown-head">
+01104:               <strong>
+01105:                 {t.dateTitle}
+01106:               </strong>
+01107: 
+01108:               <button
+01109:                 type="button"
+01110:                 className="search-unified-close"
+01111:                 aria-label="Close"
+01112:                 onClick={() =>
+01113:                   setPanel(null)
+01114:                 }
+01115:               >
+01116:                 <X size={18} />
+01117:               </button>
+------------------------------------------------------------
+01108:               <button
+01109:                 type="button"
+01110:                 className="search-unified-close"
+01111:                 aria-label="Close"
+01112:                 onClick={() =>
+01113:                   setPanel(null)
+01114:                 }
+01115:               >
+01116:                 <X size={18} />
+01117:               </button>
+01118:             </div>
+01119: 
+01120:             <div className="search-unified-calendar-controls">
+01121:               <button
+01122:                 type="button"
+01123:                 aria-label="Previous month"
+01124:                 onClick={() =>
+01125:                   setCalendarMonth(
+01126:                     new Date(
+01127:                       currentYear,
+01128:                       currentMonth - 1,
+01129:                       1,
+01130:                     ),
+01131:                   )
+01132:                 }
+01133:               >
+01134:                 <ChevronLeft size={18} />
+01135:               </button>
+01136: 
+01137:               <div>
+01138:                 <select
+01139:                   value={currentMonth}
+01140:                   onChange={(event) =>
+01141:                     setCalendarMonth(
+01142:                       new Date(
+01143:                         currentYear,
+01144:                         Number(
+01145:                           event.target.value,
+01146:                         ),
+01147:                         1,
+01148:                       ),
+01149:                     )
+01150:                   }
+01151:                 >
+01152:                   {t.months.map(
+01153:                     (
+01154:                       month,
+01155:                       index,
+------------------------------------------------------------
+01146:                         ),
+01147:                         1,
+01148:                       ),
+01149:                     )
+01150:                   }
+01151:                 >
+01152:                   {t.months.map(
+01153:                     (
+01154:                       month,
+01155:                       index,
+01156:                     ) => (
+01157:                       <option
+01158:                         key={month}
+01159:                         value={index}
+01160:                       >
+01161:                         {month}
+01162:                       </option>
+01163:                     ),
+01164:                   )}
+01165:                 </select>
+01166: 
+01167:                 <select
+01168:                   value={currentYear}
+01169:                   onChange={(event) =>
+01170:                     setCalendarMonth(
+01171:                       new Date(
+01172:                         Number(
+01173:                           event.target.value,
+01174:                         ),
+01175:                         currentMonth,
+01176:                         1,
+01177:                       ),
+01178:                     )
+01179:                   }
+01180:                 >
+01181:                   {Array.from(
+01182:                     {
+01183:                       length: 4,
+01184:                     },
+01185:                     (_, index) =>
+01186:                       today.getFullYear() +
+01187:                       index,
+01188:                   ).map(
+01189:                     (year) => (
+01190:                       <option
+01191:                         key={year}
+01192:                         value={year}
+01193:                       >
+------------------------------------------------------------
+01182:                     {
+01183:                       length: 4,
+01184:                     },
+01185:                     (_, index) =>
+01186:                       today.getFullYear() +
+01187:                       index,
+01188:                   ).map(
+01189:                     (year) => (
+01190:                       <option
+01191:                         key={year}
+01192:                         value={year}
+01193:                       >
+01194:                         {year}
+01195:                       </option>
+01196:                     ),
+01197:                   )}
+01198:                 </select>
+01199:               </div>
+01200: 
+01201:               <button
+01202:                 type="button"
+01203:                 aria-label="Next month"
+01204:                 onClick={() =>
+01205:                   setCalendarMonth(
+01206:                     new Date(
+01207:                       currentYear,
+01208:                       currentMonth + 1,
+01209:                       1,
+01210:                     ),
+01211:                   )
+01212:                 }
+01213:               >
+01214:                 <ChevronRight size={18} />
+01215:               </button>
+01216:             </div>
+01217: 
+01218:             <div className="search-unified-calendar-grid">
+01219:               {renderMonth(
+01220:                 currentYear,
+01221:                 currentMonth,
+01222:                 monthOneDays,
+01223:               )}
+01224: 
+01225:               {renderMonth(
+01226:                 nextMonth.getFullYear(),
+01227:                 nextMonth.getMonth(),
+01228:                 monthTwoDays,
+01229:               )}
+------------------------------------------------------------
+01325:                     </small>
+01326:                   </div>
+01327: 
+01328:                   <div className="search-unified-counter">
+01329:                     <button
+01330:                       type="button"
+01331:                       disabled={
+01332:                         travelers[key] <=
+01333:                           0 ||
+01334:                         travelerTotal <= 1
+01335:                       }
+01336:                       onClick={() =>
+01337:                         updateTraveler(
+01338:                           key,
+01339:                           -1,
+01340:                         )
+01341:                       }
+01342:                     >
+01343:                       <Minus size={16} />
+01344:                     </button>
+01345: 
+01346:                     <strong>
+01347:                       {travelers[key]}
+01348:                     </strong>
+01349: 
+01350:                     <button
+01351:                       type="button"
+01352:                       onClick={() =>
+01353:                         updateTraveler(
+01354:                           key,
+01355:                           1,
+01356:                         )
+01357:                       }
+01358:                     >
+01359:                       <Plus size={16} />
+01360:                     </button>
+01361:                   </div>
+01362:                 </div>
+01363:               ),
+01364:             )}
+01365: 
+01366:             <button
+01367:               type="button"
+01368:               className="search-unified-done"
+01369:               onClick={() =>
+01370:                 setPanel(null)
+01371:               }
+01372:             >
+------------------------------------------------------------
+============================================================
+DATE / CALENDAR CSS
+============================================================
+04289:   border-radius: 12px;
+04290:   background: #0878f9;
+04291:   color: #ffffff;
+04292:   font-size: 13px;
+04293:   font-weight: 750;
+04294:   cursor: pointer;
+04295: }
+04296: 
+04297: .search-unified-date {
+04298:   left: 50%;
+04299:   width: 720px;
+04300:   max-width: min(720px, calc(100vw - 32px));
+04301:   transform: translateX(-50%);
+04302: }
+04303: 
+04304: [dir="rtl"] .search-unified-date {
+04305:   right: auto;
+04306:   left: 50%;
+04307: }
+04308: 
+04309: .search-unified-calendar-controls {
+04310:   display: grid;
+04311:   grid-template-columns: 40px 1fr 40px;
+04312:   align-items: center;
+04313:   gap: 14px;
+04314:   margin-bottom: 20px;
+04315: }
+04316: 
+04317: .search-unified-calendar-controls > button {
+04318:   display: inline-flex;
+04319:   width: 40px;
+04320:   height: 40px;
+04321:   align-items: center;
+04322:   justify-content: center;
+04323:   border: 1px solid #d5e1ee;
+04324:   border-radius: 11px;
+04325:   background: #ffffff;
+04326:   color: #45617f;
+04327:   cursor: pointer;
+04328: }
+04329: 
+04330: .search-unified-calendar-controls > div {
+04331:   display: flex;
+04332:   justify-content: center;
+04333:   gap: 10px;
+04334: }
+04335: 
+04336: .search-unified-calendar-controls select {
+04337:   min-width: 130px;
+04338:   height: 40px;
+04339:   padding: 0 34px 0 12px;
+04340:   border: 1px solid #d5e1ee;
+04341:   border-radius: 10px;
+04342:   outline: none;
+------------------------------------------------------------
+04341:   border-radius: 10px;
+04342:   outline: none;
+04343:   background: #ffffff;
+04344:   color: #102a4c;
+04345:   font-size: 13px;
+04346:   font-weight: 650;
+04347: }
+04348: 
+04349: .search-unified-calendar-grid {
+04350:   display: grid;
+04351:   grid-template-columns: repeat(2, minmax(0, 1fr));
+04352:   gap: 34px;
+04353: }
+04354: 
+04355: .search-unified-calendar-month-title {
+04356:   display: block;
+04357:   margin-bottom: 14px;
+04358:   text-align: center;
+04359:   color: #102a4c;
+04360:   font-size: 16px;
+04361:   font-weight: 750;
+04362: }
+04363: 
+04364: .search-unified-calendar-weekdays,
+04365: .search-unified-calendar-days {
+04366:   display: grid;
+04367:   grid-template-columns: repeat(7, minmax(0, 1fr));
+04368:   gap: 5px;
+04369: }
+04370: 
+04371: .search-unified-calendar-weekdays {
+04372:   margin-bottom: 7px;
+04373: }
+04374: 
+04375: .search-unified-calendar-weekdays span {
+04376:   display: flex;
+04377:   height: 30px;
+04378:   align-items: center;
+04379:   justify-content: center;
+04380:   color: #536c88;
+04381:   font-size: 11px;
+04382:   font-weight: 650;
+04383: }
+04384: 
+04385: .search-unified-calendar-weekdays .is-sunday {
+04386:   color: #ff4d5d;
+04387: }
+04388: 
+04389: .search-unified-calendar-days button,
+04390: .search-unified-calendar-days .is-empty {
+04391:   display: flex;
+04392:   width: 100%;
+04393:   aspect-ratio: 1.15 / 1;
+04394:   align-items: center;
+------------------------------------------------------------
+04390: .search-unified-calendar-days .is-empty {
+04391:   display: flex;
+04392:   width: 100%;
+04393:   aspect-ratio: 1.15 / 1;
+04394:   align-items: center;
+04395:   justify-content: center;
+04396: }
+04397: 
+04398: .search-unified-calendar-days button {
+04399:   border: 0;
+04400:   border-radius: 9px;
+04401:   background: transparent;
+04402:   color: #102a4c;
+04403:   font-size: 12px;
+04404:   font-weight: 650;
+04405:   cursor: pointer;
+04406: }
+04407: 
+04408: .search-unified-calendar-days button:hover:not(:disabled) {
+04409:   background: #edf6ff;
+04410:   color: #0878f9;
+04411: }
+04412: 
+04413: .search-unified-calendar-days button.is-active {
+04414:   background: #0878f9;
+04415:   color: #ffffff;
+04416: }
+04417: 
+04418: .search-unified-calendar-days button:disabled {
+04419:   color: #c5cfdb;
+04420:   cursor: not-allowed;
+04421: }
+04422: 
+04423: /* Search bar typography normalization */
+04424: 
+04425: .search-unified-bar .search-edit-field small {
+04426:   font-size: 10px;
+04427:   font-weight: 500;
+04428:   line-height: 1.2;
+04429: }
+04430: 
+04431: .search-unified-bar .search-edit-field strong {
+04432:   font-size: 13px;
+04433:   font-weight: 700;
+04434:   line-height: 1.25;
+04435: }
+04436: 
+04437: .search-unified-bar .search-edit-submit {
+04438:   font-size: 13px;
+04439:   font-weight: 750;
+04440: }
+04441: 
+04442: /* Results typography normalization */
+04443: 
+------------------------------------------------------------
+04482: 
+04483: [dir="rtl"] .search-unified-input input {
+04484:   text-align: right;
+04485: }
+04486: 
+04487: /* Tablet */
+04488: 
+04489: @media (max-width: 900px) {
+04490:   .search-unified-date {
+04491:     width: min(680px, calc(100vw - 24px));
+04492:   }
+04493: 
+04494:   .search-unified-calendar-grid {
+04495:     gap: 18px;
+04496:   }
+04497: }
+04498: 
+04499: /* Mobile */
+04500: 
+04501: @media (max-width: 700px) {
+04502:   .search-unified-dropdown {
+04503:     position: fixed;
+04504:     z-index: 3000;
+04505:     top: auto;
+04506:     right: 12px;
+04507:     bottom: 12px;
+04508:     left: 12px;
+04509:     width: auto;
+04510:     max-width: none;
+04511:     max-height: min(78vh, 640px);
+04512:     overflow-y: auto;
+04513:     padding: 18px;
+04514:     border-radius: 20px;
+04515:     transform: none;
+04516:   }
+04517: 
+04518:   [dir="rtl"] .search-unified-dropdown {
+04519:     right: 12px;
+04520:     left: 12px;
+04521:   }
+04522: 
+04523:   .search-unified-origin,
+04524:   .search-unified-destination {
+04525:     min-height: 0;
+04526:   }
+04527: 
+04528:   .search-unified-date {
+04529:     right: 12px;
+04530:     left: 12px;
+04531:     width: auto;
+04532:     transform: none;
+04533:   }
+04534: 
+04535:   [dir="rtl"] .search-unified-date {
+------------------------------------------------------------
+04532:     transform: none;
+04533:   }
+04534: 
+04535:   [dir="rtl"] .search-unified-date {
+04536:     right: 12px;
+04537:     left: 12px;
+04538:   }
+04539: 
+04540:   .search-unified-calendar-grid {
+04541:     grid-template-columns: 1fr;
+04542:   }
+04543: 
+04544:   .search-unified-calendar-grid
+04545:     .search-unified-calendar-month:nth-child(2) {
+04546:     display: none;
+04547:   }
+04548: 
+04549:   .search-unified-calendar-controls select {
+04550:     min-width: 0;
+04551:     width: 50%;
+04552:   }
+04553: 
+04554:   .search-unified-chip-grid {
+04555:     max-height: 220px;
+04556:   }
+04557: }
+04558: /* SEGALOKA SEARCH CALENDAR FIX V3 */
+04559: 
+04560: /*
+04561:  * Desktop calendar
+04562:  * Popup dibuat cukup lebar untuk dua bulan.
+04563:  */
+04564: 
+04565: .search-unified-bar .search-edit-control {
+04566:   position: relative;
+04567: }
+04568: 
+04569: .search-unified-date {
+04570:   position: absolute;
+04571: 
+04572:   top: calc(100% + 10px);
+04573: 
+04574:   /*
+04575:    * Calendar berada di bawah field Date,
+04576:    * bukan dipusatkan terhadap seluruh halaman.
+04577:    */
+04578:   left: 50%;
+04579: 
+04580:   width: 720px;
+04581:   max-width: min(720px, calc(100vw - 32px));
+04582: 
+04583:   padding: 20px;
+04584: 
+04585:   transform: translateX(-50%);
+------------------------------------------------------------
+04595:     0 24px 60px rgba(15, 42, 76, 0.16),
+04596:     0 8px 20px rgba(15, 42, 76, 0.08);
+04597: }
+04598: 
+04599: /*
+04600:  * Header
+04601:  */
+04602: 
+04603: .search-unified-date .search-unified-dropdown-head {
+04604:   display: flex;
+04605:   align-items: center;
+04606:   justify-content: space-between;
+04607: 
+04608:   gap: 16px;
+04609: 
+04610:   margin: 0 0 16px;
+04611: }
+04612: 
+04613: .search-unified-date
+04614: .search-unified-dropdown-head > strong {
+04615:   margin: 0;
+04616: 
+04617:   color: #102a4c;
+04618: 
+04619:   font-size: 18px;
+04620:   font-weight: 750;
+04621:   line-height: 1.25;
+04622: }
+04623: 
+04624: /*
+04625:  * Month / year controls
+04626:  */
+04627: 
+04628: .search-unified-calendar-controls {
+04629:   display: grid;
+04630: 
+04631:   grid-template-columns:
+04632:     40px
+04633:     minmax(0, 1fr)
+04634:     40px;
+04635: 
+04636:   align-items: center;
+04637: 
+04638:   gap: 12px;
+04639: 
+04640:   margin: 0 0 22px;
+04641: }
+04642: 
+04643: .search-unified-calendar-controls > div {
+04644:   display: flex;
+04645: 
+04646:   align-items: center;
+04647:   justify-content: center;
+04648: 
+------------------------------------------------------------
+04646:   align-items: center;
+04647:   justify-content: center;
+04648: 
+04649:   gap: 10px;
+04650: 
+04651:   min-width: 0;
+04652: }
+04653: 
+04654: .search-unified-calendar-controls > button {
+04655:   display: inline-flex;
+04656: 
+04657:   width: 40px;
+04658:   height: 40px;
+04659: 
+04660:   flex: 0 0 40px;
+04661: 
+04662:   align-items: center;
+04663:   justify-content: center;
+04664: 
+04665:   padding: 0;
+04666: 
+04667:   border: 1px solid #d5e1ee;
+04668:   border-radius: 11px;
+04669: 
+04670:   background: #ffffff;
+04671:   color: #47627f;
+04672: 
+04673:   cursor: pointer;
+04674: }
+04675: 
+04676: .search-unified-calendar-controls > button:hover {
+04677:   border-color: #9bc8ff;
+04678: 
+04679:   background: #f3f8ff;
+04680:   color: #0878f9;
+04681: }
+04682: 
+04683: .search-unified-calendar-controls select {
+04684:   width: auto;
+04685:   min-width: 145px;
+04686:   height: 40px;
+04687: 
+04688:   padding:
+04689:     0
+04690:     36px
+04691:     0
+04692:     13px;
+04693: 
+04694:   border: 1px solid #d5e1ee;
+04695:   border-radius: 10px;
+04696: 
+04697:   outline: none;
+04698: 
+04699:   background-color: #ffffff;
+------------------------------------------------------------
+04701:   color: #102a4c;
+04702: 
+04703:   font-size: 13px;
+04704:   font-weight: 650;
+04705: 
+04706:   cursor: pointer;
+04707: }
+04708: 
+04709: .search-unified-calendar-controls select:last-child {
+04710:   min-width: 130px;
+04711: }
+04712: 
+04713: /*
+04714:  * Dua bulan desktop.
+04715:  */
+04716: 
+04717: .search-unified-calendar-grid {
+04718:   display: grid;
+04719: 
+04720:   grid-template-columns:
+04721:     repeat(
+04722:       2,
+04723:       minmax(0, 1fr)
+04724:     );
+04725: 
+04726:   gap: 32px;
+04727: 
+04728:   width: 100%;
+04729: }
+04730: 
+04731: .search-unified-calendar-month {
+04732:   min-width: 0;
+04733:   width: 100%;
+04734: }
+04735: 
+04736: .search-unified-calendar-month-title {
+04737:   display: block;
+04738: 
+04739:   min-height: 24px;
+04740: 
+04741:   margin: 0 0 14px;
+04742: 
+04743:   text-align: center;
+04744: 
+04745:   color: #102a4c;
+04746: 
+04747:   font-size: 15px;
+04748:   font-weight: 750;
+04749:   line-height: 24px;
+04750: }
+04751: 
+04752: /*
+04753:  * Weekday dan tanggal HARUS memiliki
+04754:  * grid yang identik.
+------------------------------------------------------------
+04749:   line-height: 24px;
+04750: }
+04751: 
+04752: /*
+04753:  * Weekday dan tanggal HARUS memiliki
+04754:  * grid yang identik.
+04755:  */
+04756: 
+04757: .search-unified-calendar-weekdays,
+04758: .search-unified-calendar-days {
+04759:   display: grid;
+04760: 
+04761:   grid-template-columns:
+04762:     repeat(
+04763:       7,
+04764:       minmax(32px, 1fr)
+04765:     );
+04766: 
+04767:   column-gap: 4px;
+04768: 
+04769:   width: 100%;
+04770: }
+04771: 
+04772: .search-unified-calendar-weekdays {
+04773:   row-gap: 0;
+04774: 
+04775:   margin: 0 0 6px;
+04776: }
+04777: 
+04778: .search-unified-calendar-days {
+04779:   row-gap: 4px;
+04780: }
+04781: 
+04782: /*
+04783:  * Weekday
+04784:  */
+04785: 
+04786: .search-unified-calendar-weekdays span {
+04787:   display: flex;
+04788: 
+04789:   width: 100%;
+04790:   height: 30px;
+04791: 
+04792:   align-items: center;
+04793:   justify-content: center;
+04794: 
+04795:   overflow: hidden;
+04796: 
+04797:   color: #60758f;
+04798: 
+04799:   text-align: center;
+04800:   white-space: nowrap;
+04801: 
+04802:   font-size: 10px;
+------------------------------------------------------------
+04799:   text-align: center;
+04800:   white-space: nowrap;
+04801: 
+04802:   font-size: 10px;
+04803:   font-weight: 650;
+04804:   line-height: 1;
+04805: }
+04806: 
+04807: .search-unified-calendar-weekdays span.is-sunday {
+04808:   color: #ef5261;
+04809: }
+04810: 
+04811: /*
+04812:  * Day cells
+04813:  */
+04814: 
+04815: .search-unified-calendar-days button,
+04816: .search-unified-calendar-days .is-empty {
+04817:   width: 100%;
+04818:   min-width: 32px;
+04819:   height: 34px;
+04820: 
+04821:   aspect-ratio: auto;
+04822: }
+04823: 
+04824: .search-unified-calendar-days button {
+04825:   display: inline-flex;
+04826: 
+04827:   align-items: center;
+04828:   justify-content: center;
+04829: 
+04830:   padding: 0;
+04831: 
+04832:   border: 0;
+04833:   border-radius: 9px;
+04834: 
+04835:   background: transparent;
+04836: 
+04837:   color: #173353;
+04838: 
+04839:   text-align: center;
+04840: 
+04841:   font-size: 12px;
+04842:   font-weight: 650;
+04843:   line-height: 1;
+04844: 
+04845:   cursor: pointer;
+04846: 
+04847:   transition:
+04848:     background 150ms ease,
+04849:     color 150ms ease,
+04850:     box-shadow 150ms ease;
+04851: }
+04852: 
+------------------------------------------------------------
+04845:   cursor: pointer;
+04846: 
+04847:   transition:
+04848:     background 150ms ease,
+04849:     color 150ms ease,
+04850:     box-shadow 150ms ease;
+04851: }
+04852: 
+04853: .search-unified-calendar-days button:hover:not(:disabled) {
+04854:   background: #edf6ff;
+04855:   color: #0878f9;
+04856: }
+04857: 
+04858: .search-unified-calendar-days button.is-active {
+04859:   background: #0878f9;
+04860:   color: #ffffff;
+04861: 
+04862:   box-shadow:
+04863:     0 5px 12px
+04864:     rgba(8, 120, 249, 0.22);
+04865: }
+04866: 
+04867: .search-unified-calendar-days button:disabled {
+04868:   background: transparent;
+04869: 
+04870:   color: #c4cfdb;
+04871: 
+04872:   cursor: not-allowed;
+04873: }
+04874: 
+04875: /*
+04876:  * RTL
+04877:  */
+04878: 
+04879: [dir="rtl"] .search-unified-date {
+04880:   right: auto;
+04881:   left: 50%;
+04882: 
+04883:   transform: translateX(-50%);
+04884: }
+04885: 
+04886: [dir="rtl"]
+04887: .search-unified-calendar-controls select {
+04888:   padding:
+04889:     0
+04890:     13px
+04891:     0
+04892:     36px;
+04893: }
+04894: 
+04895: /*
+04896:  * Laptop kecil.
+04897:  */
+04898: 
+------------------------------------------------------------
+04893: }
+04894: 
+04895: /*
+04896:  * Laptop kecil.
+04897:  */
+04898: 
+04899: @media (max-width: 1100px) {
+04900: 
+04901:   .search-unified-date {
+04902:     width: 660px;
+04903:   }
+04904: 
+04905:   .search-unified-calendar-grid {
+04906:     gap: 20px;
+04907:   }
+04908: 
+04909:   .search-unified-calendar-weekdays,
+04910:   .search-unified-calendar-days {
+04911:     grid-template-columns:
+04912:       repeat(
+04913:         7,
+04914:         minmax(30px, 1fr)
+04915:       );
+04916:   }
+04917: }
+04918: 
+04919: /*
+04920:  * Tablet.
+04921:  *
+04922:  * Tetap dua bulan selama ruang memungkinkan.
+04923:  */
+04924: 
+04925: @media (
+04926:   min-width: 701px
+04927: ) and (
+04928:   max-width: 820px
+04929: ) {
+04930: 
+04931:   .search-unified-date {
+04932:     position: fixed;
+04933: 
+04934:     z-index: 4000;
+04935: 
+04936:     top: 96px;
+04937:     right: 16px;
+04938:     left: 16px;
+04939: 
+04940:     width: auto;
+04941:     max-width: none;
+04942: 
+04943:     transform: none;
+04944:   }
+04945: 
+04946:   [dir="rtl"] .search-unified-date {
+------------------------------------------------------------
+04954: /*
+04955:  * Mobile.
+04956:  *
+04957:  * Hanya satu bulan supaya tidak sesak.
+04958:  */
+04959: 
+04960: @media (max-width: 700px) {
+04961: 
+04962:   .search-unified-date {
+04963:     position: fixed;
+04964: 
+04965:     z-index: 4000;
+04966: 
+04967:     top: auto;
+04968:     right: 12px;
+04969:     bottom: 12px;
+04970:     left: 12px;
+04971: 
+04972:     width: auto;
+04973:     max-width: none;
+04974:     max-height: calc(100dvh - 24px);
+04975: 
+04976:     padding: 18px;
+04977: 
+04978:     overflow-y: auto;
+04979: 
+04980:     transform: none;
+04981: 
+04982:     border-radius: 20px;
+04983:   }
+04984: 
+04985:   [dir="rtl"] .search-unified-date {
+04986:     right: 12px;
+04987:     left: 12px;
+04988: 
+04989:     transform: none;
+04990:   }
+04991: 
+04992:   .search-unified-calendar-controls {
+04993:     grid-template-columns:
+04994:       38px
+04995:       minmax(0, 1fr)
+04996:       38px;
+04997: 
+04998:     gap: 8px;
+04999: 
+05000:     margin-bottom: 18px;
+05001:   }
+05002: 
+05003:   .search-unified-calendar-controls > button {
+05004:     width: 38px;
+05005:     height: 38px;
+05006: 
+05007:     flex-basis: 38px;
+------------------------------------------------------------
+05002: 
+05003:   .search-unified-calendar-controls > button {
+05004:     width: 38px;
+05005:     height: 38px;
+05006: 
+05007:     flex-basis: 38px;
+05008:   }
+05009: 
+05010:   .search-unified-calendar-controls > div {
+05011:     gap: 6px;
+05012:   }
+05013: 
+05014:   .search-unified-calendar-controls select {
+05015:     width: 55%;
+05016:     min-width: 0;
+05017: 
+05018:     padding-left: 9px;
+05019:     padding-right: 26px;
+05020: 
+05021:     font-size: 12px;
+05022:   }
+05023: 
+05024:   .search-unified-calendar-controls select:last-child {
+05025:     width: 45%;
+05026:     min-width: 0;
+05027:   }
+05028: 
+05029:   .search-unified-calendar-grid {
+05030:     grid-template-columns: 1fr;
+05031: 
+05032:     gap: 0;
+05033:   }
+05034: 
+05035:   .search-unified-calendar-grid
+05036:   .search-unified-calendar-month:nth-child(2) {
+05037:     display: none;
+05038:   }
+05039: 
+05040:   .search-unified-calendar-weekdays,
+05041:   .search-unified-calendar-days {
+05042:     grid-template-columns:
+05043:       repeat(
+05044:         7,
+05045:         minmax(34px, 1fr)
+05046:       );
+05047: 
+05048:     column-gap: 3px;
+05049:   }
+05050: 
+05051:   .search-unified-calendar-days button,
+05052:   .search-unified-calendar-days .is-empty {
+05053:     min-width: 34px;
+05054:     height: 38px;
+05055:   }
+------------------------------------------------------------
+05049:   }
+05050: 
+05051:   .search-unified-calendar-days button,
+05052:   .search-unified-calendar-days .is-empty {
+05053:     min-width: 34px;
+05054:     height: 38px;
+05055:   }
+05056: 
+05057:   .search-unified-calendar-weekdays span {
+05058:     height: 28px;
+05059: 
+05060:     font-size: 10px;
+05061:   }
+05062: 
+05063:   .search-unified-calendar-days button {
+05064:     font-size: 12px;
+05065:   }
+05066: }
+05067: 
+05068: /*
+05069:  * Mobile sangat kecil.
+05070:  */
+05071: 
+05072: @media (max-width: 390px) {
+05073: 
+05074:   .search-unified-date {
+05075:     right: 8px;
+05076:     bottom: 8px;
+05077:     left: 8px;
+05078: 
+05079:     padding: 15px;
+05080:   }
+05081: 
+05082:   [dir="rtl"] .search-unified-date {
+05083:     right: 8px;
+05084:     left: 8px;
+05085:   }
+05086: 
+05087:   .search-unified-calendar-weekdays,
+05088:   .search-unified-calendar-days {
+05089:     grid-template-columns:
+05090:       repeat(
+05091:         7,
+05092:         minmax(30px, 1fr)
+05093:       );
+05094: 
+05095:     column-gap: 2px;
+05096:   }
+05097: 
+05098:   .search-unified-calendar-days button,
+05099:   .search-unified-calendar-days .is-empty {
+05100:     min-width: 30px;
+05101:     height: 34px;
+05102:   }
+------------------------------------------------------------

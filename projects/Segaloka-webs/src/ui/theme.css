@@ -1,0 +1,25 @@
+﻿/*
+ * Segaloka theme mapping.
+ * tokens.css tetap menjadi sumber nilai utama.
+ */
+
+[data-theme="dark"] {
+  --ui-background: #0b1220;
+  --ui-surface: #111827;
+  --ui-surface-soft: #182230;
+  --ui-surface-muted: #1f2937;
+
+  --ui-text: #f8fafc;
+  --ui-text-secondary: #cbd5e1;
+  --ui-text-muted: #94a3b8;
+
+  --ui-border: #263244;
+  --ui-border-strong: #334155;
+
+  --search-background: var(--ui-surface);
+
+  --card-background: var(--ui-surface);
+  --card-border: var(--ui-border);
+
+  --modal-background: var(--ui-surface);
+}

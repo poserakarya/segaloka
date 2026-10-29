@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+
+  <title>Segaloka · Travel Dashboard</title>
+
+  <link rel="stylesheet" href="./runtime/styles.css">
+  <link rel="stylesheet" href="./travel.css">
+</head>
+
+<body data-segaloka-app="travel">
+
+  <div id="app">
+    <main class="travel-bootstrap">
+      <section class="travel-bootstrap-card">
+        <div class="travel-bootstrap-mark" aria-hidden="true">S</div>
+
+        <div>
+          <div class="travel-bootstrap-eyebrow">
+            SEGALOKA
+          </div>
+
+          <h1>
+            Travel Dashboard
+          </h1>
+
+          <p>
+            Runtime Travel sedang dipisahkan dari Control Center.
+            Tampilan dan fungsi V7 akan dipindahkan bertahap tanpa
+            mengubah sumber data bisnis kanonik.
+          </p>
+
+          <div
+            id="travel-runtime-status"
+            class="travel-bootstrap-status"
+            role="status"
+            aria-live="polite"
+          >
+            Memeriksa runtime Travel…
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="./travel-bootstrap.js"></script>
+</body>
+</html>

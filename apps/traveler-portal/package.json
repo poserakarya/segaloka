@@ -1,0 +1,10 @@
+﻿{
+    "private":  true,
+    "name":  "@segaloka/traveler-portal",
+    "version":  "0.1.0",
+    "type":  "module",
+    "scripts":  {
+                    "start":  "node server.mjs",
+                    "check":  "node --check server.mjs"
+                }
+}

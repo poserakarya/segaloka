@@ -1,0 +1,236 @@
+﻿=== Dashboard ===
+Path: C:\Users\QiblatGo\Desktop\segaloka-app\Dashboard-v7
+ROOT ITEMS:
+  .vercel [DIR]
+  apps [DIR]
+  omni [DIR]
+  pay [DIR]
+  shared [DIR]
+  supabase [DIR]
+  tests [DIR]
+  _phase-backups [DIR]
+  .env.local [FILE]
+  .gitignore [FILE]
+  boot.js [FILE]
+  build.sh [FILE]
+  control-center-leaks.txt [FILE]
+  core.js [FILE]
+  dashboard-separation-audit.txt [FILE]
+  data.js [FILE]
+  datamode.js [FILE]
+  flows.js [FILE]
+  gateway.js [FILE]
+  i18n.js [FILE]
+  local-dashboard-server.cjs [FILE]
+  main.js [FILE]
+  migration.sql [FILE]
+  notify.js [FILE]
+  omni.js [FILE]
+  pages_a.js [FILE]
+  pages_b.js [FILE]
+  pages_c.js [FILE]
+  pages_d.js [FILE]
+  pages_e.js [FILE]
+  pages_f.js [FILE]
+  pages_g.js [FILE]
+  portals.js [FILE]
+  README.md [FILE]
+  regfee.js [FILE]
+  reviews.js [FILE]
+  role-boundary-map.txt [FILE]
+  sdterms.js [FILE]
+  seed.json [FILE]
+  segadeals.js [FILE]
+  segaloka-control-center.html [FILE]
+  segaloka-control-center.phase1a.backup.html [FILE]
+  styles.css [FILE]
+  sync.js [FILE]
+  vercel.json [FILE]
+  _audit-portal-shell.txt [FILE]
+  _audit-shell.txt [FILE]
+
+DASHBOARD APP DIRECTORIES:
+  affiliate
+  agen
+  control-center
+  mitra
+  travel
+  traveler
+  vendor
+
+CONTROL CENTER REFERENCES:
+\control-center-leaks.txt:7: .\core.js       128 renderPortalSide const pws = typeof wsOf === 'function' ? wsOf() : 'admin'; if (pws !== 'admin') { renderPortalSide(pws); return; }
+\control-center-leaks.txt:8: .\core.js       128 wsOf             const pws = typeof wsOf === 'function' ? wsOf() : 'admin'; if (pws !== 'admin') { renderPortalSide(pws); return; }
+\control-center-leaks.txt:9: .\core.js       164 wsOf             <button class="wsbtn" data-act="ws" aria-haspopup="menu">${ic(wsOf() === 'admin' ? 'shieldc' : WS[wsOf()].icon, 'sm')}<span class="wsl">${esc(wsOf() === 'admin' ? 'Super Admin' : L3(WS[wsOf()].label))}</span>${ic('chevD',
+\core.js:124: renderSide(); renderTop(); renderBanners();
+\core.js:128: const pws = typeof wsOf === 'function' ? wsOf() : 'admin'; if (pws !== 'admin') { renderPortalSide(pws); return; }
+\core.js:160: function renderTop() {
+\core.js:164: <button class="wsbtn" data-act="ws" aria-haspopup="menu">${ic(wsOf() === 'admin' ? 'shieldc' : WS[wsOf()].icon, 'sm')}<span class="wsl">${esc(wsOf() === 'admin' ? 'Super Admin' : L3(WS[wsOf()].label))}</span>${ic('chevD', 'sm')}</button>
+\core.js:175: function renderBanners() {
+\core.js:205: renderSide(); renderTop(); document.getElementById('app').classList.remove('drawer-open');
+\core.js:312: renderTop(); updateSideBadges();
+\main.js:13: lang: el => { S.lang = el.dataset.v; store.set('lang', S.lang); applyLang(); closeOverlays(); renderTop(); renderBanners(); rerender(); },
+\main.js:14: theme: el => { S.theme = el.dataset.v; store.set('theme', S.theme); applyTheme(); renderTop(); const p = document.getElementById('pop'); if (p) document.querySelectorAll('#pop [data-act="theme"]').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === S.theme)); },
+\main.js:15: role: el => { S.role = el.dataset.v; store.set('role', S.role); closeOverlays(); renderTop(); renderBanners(); rerender(); toast('info', L3(['Permission dimuat ulang dari backend', 'Permissions reloaded from backend', 'أُعيد تحميل الصلاحيات']), ROLES[S.role].label + ' · ' + ROLES[S.role].perms.length + ' permission'); },
+\main.js:16: ux: el => { S.ux = el.dataset.v; closeOverlays(); renderBanners(); rerender(); },
+\main.js:21: 'notif-read': () => { (typeof myNotifs === 'function' ? myNotifs() : NOTIFS).forEach(n => n.unread = false); document.getElementById('pop').innerHTML = notifHTML(); renderTop(); },
+\main.js:22: 'notif-go': el => { const n = NOTIFS[+el.dataset.i]; n.unread = false; renderTop(); closeOverlays(); go(n.route); },
+\pages_f.js:109: A['notif-read2'] = () => { NOTIFS.forEach(n => n.unread = false); renderTop(); rerender(); };
+\pages_f.js:168: A['dict-save'] = () => { let n = 0; document.querySelectorAll('[data-dk]').forEach(inp => { const r = DICT[inp.dataset.dk]; const i = +inp.dataset.di; if (r[i] !== inp.value) { r[i] = inp.value; n++; } }); audit('Admin Pusat', 'i18n.update', 'Dictionary', 'success', { after: n + ' string' }); renderTop(); rerender(); toast('ok', n + ' ' + L3(['terjemahan diperbarui', 'translations updated', 'ترجمات']), L3(['Diterapkan langsung ke UI', 'Applied to the UI immediately', 'طُبقت فوراً'])); };
+\portals.js:33: const pNotif = (cat, tone, title, sub, route) => { NOTIFS.unshift({ id: uid('NTF'), cat, tone, title, sub, route, ts: nowTs(), unread: true }); renderTop(); };
+\portals.js:40: function renderPortalSide(ws) {
+\portals.js:49: ws: el => popAt(el, `<div class="menu" style="min-width:300px"><div class="mh">${L3(['Pindah workspace', 'Switch workspace', 'تبديل مساحة العمل'])}</div><button class="mi" role="menuitemradio" aria-checked="${wsOf() === 'admin'}" data-act="nav" data-r="/overview">${ic('shieldc', 'sm')}<span><b>Super Admin</b><br><span class="muted" style="font-size:11.5px">${t('control_center')}</span></span></button><div class="sep"></div>${Object.entries(WS).map(([k, w]) => `<button class="mi" role="menuitemradio" aria-checked="${wsOf() === k}" data-act="nav" data-r="${w.home}">${ic(w.icon, 'sm')}<span><b>${esc(L3(w.label))}</b><br><span class="muted" style="font-size:11.5px">${esc(me(k) ? me(k).name : '—')}</span></span></button>`).join('')}<div class="sep"></div><div style="padding:6px 9px;font-size:11.5px;color:var(--ink-3);max-width:300px">${L3(['Pratinjau "masuk sebagai". Di produksi setiap portal memakai login sendiri & data dibatasi per entitas di database.', 'A "sign in as" preview. In production each portal has its own login & data is scoped per entity in the database.', 'معاينة.'])}</div></div>`, 'start'),
+\role-boundary-map.txt:55: 128: const pws = typeof wsOf === 'function' ? wsOf() : 'admin'; if (pws !== 'admin') { renderPortalSide(pws); return; }
+\role-boundary-map.txt:59: 128: const pws = typeof wsOf === 'function' ? wsOf() : 'admin'; if (pws !== 'admin') { renderPortalSide(pws); return; }
+\role-boundary-map.txt:65: 164: <button class="wsbtn" data-act="ws" aria-haspopup="menu">${ic(wsOf() === 'admin' ? 'shieldc' : WS[wsOf()].icon, 'sm')}<span class="wsl">${esc(wsOf() === 'admin' ? 'Super Admin' : L3(WS[wsOf()].label))}</span>${ic('chevD', 'sm')}</button>
+\role-boundary-map.txt:69: 128: const pws = typeof wsOf === 'function' ? wsOf() : 'admin'; if (pws !== 'admin') { renderPortalSide(pws); return; }
+\role-boundary-map.txt:70: 164: <button class="wsbtn" data-act="ws" aria-haspopup="menu">${ic(wsOf() === 'admin' ? 'shieldc' : WS[wsOf()].icon, 'sm')}<span class="wsl">${esc(wsOf() === 'admin' ? 'Super Admin' : L3(WS[wsOf()].label))}</span>${ic('chevD', 'sm')}</button>
+\role-boundary-map.txt:843: 49: ws: el => popAt(el, `<div class="menu" style="min-width:300px"><div class="mh">${L3(['Pindah workspace', 'Switch workspace', 'تبديل مساحة العمل'])}</div><button class="mi" role="menuitemradio" aria-checked="${wsOf() === 'admin'}" data-act="nav" data-r="/overview">${ic('shieldc', 'sm')}<span><b>Super Admin</b><br><span class="muted" style="font-size:11.5px">${t('control_center')}</span></span></button><div class="sep"></div>${Object.entries(WS).map(([k, w]) => `<button class="mi" role="menuitemradio" aria-checked="${wsOf() === k}" data-act="nav" data-r="${w.home}">${ic(w.icon, 'sm')}<span><b>${esc(L3(w.label))}</b><br><span class="muted" style="font-size:11.5px">${esc(me(k) ? me(k).name : '—')}</span></span></button>`).join('')}<div class="sep"></div><div style="padding:6px 9px;font-size:11.5px;color:var(--ink-3);max-width:300px">${L3(['Pratinjau "masuk sebagai". Di produksi setiap portal memakai login sendiri & data dibatasi per entitas di database.', 'A "sign in as" preview. In production each portal has its own login & data is scoped per entity in the database.', 'معاينة.'])}</div></div>`, 'start'),
+\role-boundary-map.txt:856: 40: function renderPortalSide(ws) {
+\role-boundary-map.txt:857: 49: ws: el => popAt(el, `<div class="menu" style="min-width:300px"><div class="mh">${L3(['Pindah workspace', 'Switch workspace', 'تبديل مساحة العمل'])}</div><button class="mi" role="menuitemradio" aria-checked="${wsOf() === 'admin'}" data-act="nav" data-r="/overview">${ic('shieldc', 'sm')}<span><b>Super Admin</b><br><span class="muted" style="font-size:11.5px">${t('control_center')}</span></span></button><div class="sep"></div>${Object.entries(WS).map(([k, w]) => `<button class="mi" role="menuitemradio" aria-checked="${wsOf() === k}" data-act="nav" data-r="${w.home}">${ic(w.icon, 'sm')}<span><b>${esc(L3(w.label))}</b><br><span class="muted" style="font-size:11.5px">${esc(me(k) ? me(k).name : '—')}</span></span></button>`).join('')}<div class="sep"></div><div style="padding:6px 9px;font-size:11.5px;color:var(--ink-3);max-width:300px">${L3(['Pratinjau "masuk sebagai". Di produksi setiap portal memakai login sendiri & data dibatasi per entitas di database.', 'A "sign in as" preview. In production each portal has its own login & data is scoped per entity in the database.', 'معاينة.'])}</div></div>`, 'start'),
+\role-boundary-map.txt:894: 40: function renderPortalSide(ws) {
+\role-boundary-map.txt:911: 49: ws: el => popAt(el, `<div class="menu" style="min-width:300px"><div class="mh">${L3(['Pindah workspace', 'Switch workspace', 'تبديل مساحة العمل'])}</div><button class="mi" role="menuitemradio" aria-checked="${wsOf() === 'admin'}" data-act="nav" data-r="/overview">${ic('shieldc', 'sm')}<span><b>Super Admin</b><br><span class="muted" style="font-size:11.5px">${t('control_center')}</span></span></button><div class="sep"></div>${Object.entries(WS).map(([k, w]) => `<button class="mi" role="menuitemradio" aria-checked="${wsOf() === k}" data-act="nav" data-r="${w.home}">${ic(w.icon, 'sm')}<span><b>${esc(L3(w.label))}</b><br><span class="muted" style="font-size:11.5px">${esc(me(k) ? me(k).name : '—')}</span></span></button>`).join('')}<div class="sep"></div><div style="padding:6px 9px;font-size:11.5px;color:var(--ink-3);max-width:300px">${L3(['Pratinjau "masuk sebagai". Di produksi setiap portal memakai login sendiri & data dibatasi per entitas di database.', 'A "sign in as" preview. In production each portal has its own login & data is scoped per entity in the database.', 'معاينة.'])}</div></div>`, 'start'),
+\role-boundary-map.txt:1862: 158: A['sb-purge'] = () => confirmAction({ title: L3(['Cadangkan & hapus data demo', 'Back up & remove demo data', 'نسخ وحذف البيانات التجريبية']), desc: L3(['Semua Travel, booking, pembayaran, dan entitas demo lain disalin ke tabel control_center.demo_backup lalu dihapus. Konfigurasi (fee, plan, slot iklan, template) tetap. Setelah ini semua angka dihitung dari data nyata.', 'All demo Travels, bookings, payments and other entities are copied to control_center.demo_backup and then removed. Configuration (fees, plans, ad slots, templates) is kept. Afterwards every figure is computed from real data.', 'سيتم النسخ ثم الحذف.']), tone: 'danger', reason: true, label: L3(['Cadangkan & hapus', 'Back up & remove', 'نسخ وحذف']), resource: 'Supabase/' + SB.project, onOk: async () => { SB.purgeOk = true; try { await sbProductionize(); ENTITY_ARRAYS().forEach(a => { a.length = 0; }); SB.saved = {}; await sbLoad(); clearFakeStats(); SB.needPurge = false; audit('Admin Pusat', 'database.production', 'Supabase/' + SB.project + '/control_center', 'success', { source: 'Control Center', after: 'demo data -> demo_backup' }); await sbFlush(); rtEmit(1); toast('ok', L3(['Mode produksi aktif', 'Production mode on', 'وضع الإنتاج']), L3(['Data demo dipindah ke cadangan', 'Demo data moved to backup', 'نُقلت'])); renderBanners(); rerender(); } catch (e) { toast('bad', L3(['Gagal', 'Failed', 'فشل']), String(e.message || e)); } } });
+\segaloka-control-center.html:1099: renderSide(); renderTop(); renderBanners();
+\segaloka-control-center.html:1103: const pws = typeof wsOf === 'function' ? wsOf() : 'admin'; if (pws !== 'admin') { renderPortalSide(pws); return; }
+\segaloka-control-center.html:1135: function renderTop() {
+\segaloka-control-center.html:1150: function renderBanners() {
+\segaloka-control-center.html:1180: renderSide(); renderTop(); document.getElementById('app').classList.remove('drawer-open');
+\segaloka-control-center.html:1286: renderTop(); updateSideBadges();
+\segaloka-control-center.html:1824: lang: el => { S.lang = el.dataset.v; store.set('lang', S.lang); applyLang(); closeOverlays(); renderTop(); renderBanners(); rerender(); },
+\segaloka-control-center.html:1825: theme: el => { S.theme = el.dataset.v; store.set('theme', S.theme); applyTheme(); renderTop(); const p = document.getElementById('pop'); if (p) document.querySelectorAll('#pop [data-act="theme"]').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === S.theme)); },
+\segaloka-control-center.html:1826: role: el => { S.role = el.dataset.v; store.set('role', S.role); closeOverlays(); renderTop(); renderBanners(); rerender(); toast('info', L3(['Permission dimuat ulang dari backend', 'Permissions reloaded from backend', 'أُعيد تحميل الصلاحيات']), ROLES[S.role].label + ' · ' + ROLES[S.role].perms.length + ' permission'); },
+\segaloka-control-center.html:1827: ux: el => { S.ux = el.dataset.v; closeOverlays(); renderBanners(); rerender(); },
+\segaloka-control-center.html:1832: 'notif-read': () => { (typeof myNotifs === 'function' ? myNotifs() : NOTIFS).forEach(n => n.unread = false); document.getElementById('pop').innerHTML = notifHTML(); renderTop(); },
+\segaloka-control-center.html:1833: 'notif-go': el => { const n = NOTIFS[+el.dataset.i]; n.unread = false; renderTop(); closeOverlays(); go(n.route); },
+\segaloka-control-center.html:2250: A['notif-read2'] = () => { NOTIFS.forEach(n => n.unread = false); renderTop(); rerender(); };
+\segaloka-control-center.html:2309: A['dict-save'] = () => { let n = 0; document.querySelectorAll('[data-dk]').forEach(inp => { const r = DICT[inp.dataset.dk]; const i = +inp.dataset.di; if (r[i] !== inp.value) { r[i] = inp.value; n++; } }); audit('Admin Pusat', 'i18n.update', 'Dictionary', 'success', { after: n + ' string' }); renderTop(); rerender(); toast('ok', n + ' ' + L3(['terjemahan diperbarui', 'translations updated', 'ترجمات']), L3(['Diterapkan langsung ke UI', 'Applied to the UI immediately', 'طُبقت فوراً'])); };
+\segaloka-control-center.html:2401: const pNotif = (cat, tone, title, sub, route) => { NOTIFS.unshift({ id: uid('NTF'), cat, tone, title, sub, route, ts: nowTs(), unread: true }); renderTop(); };
+\segaloka-control-center.html:2408: function renderPortalSide(ws) {
+\segaloka-control-center.html:2417: ws: el => popAt(el, `<div class="menu" style="min-width:300px"><div class="mh">${L3(['Pindah workspace', 'Switch workspace', 'تبديل مساحة العمل'])}</div><button class="mi" role="menuitemradio" aria-checked="${wsOf() === 'admin'}" data-act="nav" data-r="/overview">${ic('shieldc', 'sm')}<span><b>Super Admin</b><br><span class="muted" style="font-size:11.5px">${t('control_center')}</span></span></button><div class="sep"></div>${Object.entries(WS).map(([k, w]) => `<button class="mi" role="menuitemradio" aria-checked="${wsOf() === k}" data-act="nav" data-r="${w.home}">${ic(w.icon, 'sm')}<span><b>${esc(L3(w.label))}</b><br><span class="muted" style="font-size:11.5px">${esc(me(k) ? me(k).name : '—')}</span></span></button>`).join('')}<div class="sep"></div><div style="padding:6px 9px;font-size:11.5px;color:var(--ink-3);max-width:300px">${L3(['Pratinjau "masuk sebagai". Di produksi setiap portal memakai login sendiri & data dibatasi per entitas di database.', 'A "sign in as" preview. In production each portal has its own login & data is scoped per entity in the database.', 'معاينة.'])}</div></div>`, 'start'),
+\segaloka-control-center.html:3688: if (n) { syncTpl(); announce(); if (ovl().innerHTML) SB.pendingRemote = true; else { rerender(); renderTop(); } const u = document.getElementById('sync-pill'); if (u) u.classList.add('pulse'); }
+\segaloka-control-center.html:3744: if (!mcp || DEMO) { SB.state = 'local'; paintSync(); renderBanners(); return; }
+\segaloka-control-center.html:3758: } catch (e) { SB.on = false; SB.state = 'local'; SB.err = isDenied(e) ? { code: 'denied', message: L3(['Akun Supabase yang terhubung tidak punya akses ke project ', 'The connected Supabase account has no access to project ', 'لا صلاحية للمشروع ']) + SB.project + L3([' — sambungkan ulang connector Supabase dengan akun pemilik project.', ' — reconnect the Supabase connector with the owning account.', '.']) } : e; paintSync(); renderBanners(); rerender(); }
+\segaloka-control-center.html:3785: A['sb-purge'] = () => confirmAction({ title: L3(['Cadangkan & hapus data demo', 'Back up & remove demo data', 'نسخ وحذف البيانات التجريبية']), desc: L3(['Semua Travel, booking, pembayaran, dan entitas demo lain disalin ke tabel control_center.demo_backup lalu dihapus. Konfigurasi (fee, plan, slot iklan, template) tetap. Setelah ini semua angka dihitung dari data nyata.', 'All demo Travels, bookings, payments and other entities are copied to control_center.demo_backup and then removed. Configuration (fees, plans, ad slots, templates) is kept. Afterwards every figure is computed from real data.', 'سيتم النسخ ثم الحذف.']), tone: 'danger', reason: true, label: L3(['Cadangkan & hapus', 'Back up & remove', 'نسخ وحذف']), resource: 'Supabase/' + SB.project, onOk: async () => { SB.purgeOk = true; try { await sbProductionize(); ENTITY_ARRAYS().forEach(a => { a.length = 0; }); SB.saved = {}; await sbLoad(); clearFakeStats(); SB.needPurge = false; audit('Admin Pusat', 'database.production', 'Supabase/' + SB.project + '/control_center', 'success', { source: 'Control Center', after: 'demo data -> demo_backup' }); await sbFlush(); rtEmit(1); toast('ok', L3(['Mode produksi aktif', 'Production mode on', 'وضع الإنتاج']), L3(['Data demo dipindah ke cadangan', 'Demo data moved to backup', 'نُقلت'])); renderBanners(); rerender(); } catch (e) { toast('bad', L3(['Gagal', 'Failed', 'فشل']), String(e.message || e)); } } });
+\segaloka-control-center.phase1a.backup.html:1099: renderSide(); renderTop(); renderBanners();
+\segaloka-control-center.phase1a.backup.html:1103: const pws = typeof wsOf === 'function' ? wsOf() : 'admin'; if (pws !== 'admin') { renderPortalSide(pws); return; }
+\segaloka-control-center.phase1a.backup.html:1135: function renderTop() {
+\segaloka-control-center.phase1a.backup.html:1139: <button class="wsbtn" data-act="ws" aria-haspopup="menu">${ic(wsOf() === 'admin' ? 'shieldc' : WS[wsOf()].icon, 'sm')}<span class="wsl">${esc(wsOf() === 'admin' ? 'Super Admin' : L3(WS[wsOf()].label))}</span>${ic('chevD', 'sm')}</button>
+\segaloka-control-center.phase1a.backup.html:1150: function renderBanners() {
+\segaloka-control-center.phase1a.backup.html:1180: renderSide(); renderTop(); document.getElementById('app').classList.remove('drawer-open');
+\segaloka-control-center.phase1a.backup.html:1287: renderTop(); updateSideBadges();
+\segaloka-control-center.phase1a.backup.html:1825: lang: el => { S.lang = el.dataset.v; store.set('lang', S.lang); applyLang(); closeOverlays(); renderTop(); renderBanners(); rerender(); },
+\segaloka-control-center.phase1a.backup.html:1826: theme: el => { S.theme = el.dataset.v; store.set('theme', S.theme); applyTheme(); renderTop(); const p = document.getElementById('pop'); if (p) document.querySelectorAll('#pop [data-act="theme"]').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === S.theme)); },
+\segaloka-control-center.phase1a.backup.html:1827: role: el => { S.role = el.dataset.v; store.set('role', S.role); closeOverlays(); renderTop(); renderBanners(); rerender(); toast('info', L3(['Permission dimuat ulang dari backend', 'Permissions reloaded from backend', 'أُعيد تحميل الصلاحيات']), ROLES[S.role].label + ' · ' + ROLES[S.role].perms.length + ' permission'); },
+\segaloka-control-center.phase1a.backup.html:1828: ux: el => { S.ux = el.dataset.v; closeOverlays(); renderBanners(); rerender(); },
+\segaloka-control-center.phase1a.backup.html:1833: 'notif-read': () => { (typeof myNotifs === 'function' ? myNotifs() : NOTIFS).forEach(n => n.unread = false); document.getElementById('pop').innerHTML = notifHTML(); renderTop(); },
+\segaloka-control-center.phase1a.backup.html:1834: 'notif-go': el => { const n = NOTIFS[+el.dataset.i]; n.unread = false; renderTop(); closeOverlays(); go(n.route); },
+\segaloka-control-center.phase1a.backup.html:2251: A['notif-read2'] = () => { NOTIFS.forEach(n => n.unread = false); renderTop(); rerender(); };
+\segaloka-control-center.phase1a.backup.html:2310: A['dict-save'] = () => { let n = 0; document.querySelectorAll('[data-dk]').forEach(inp => { const r = DICT[inp.dataset.dk]; const i = +inp.dataset.di; if (r[i] !== inp.value) { r[i] = inp.value; n++; } }); audit('Admin Pusat', 'i18n.update', 'Dictionary', 'success', { after: n + ' string' }); renderTop(); rerender(); toast('ok', n + ' ' + L3(['terjemahan diperbarui', 'translations updated', 'ترجمات']), L3(['Diterapkan langsung ke UI', 'Applied to the UI immediately', 'طُبقت فوراً'])); };
+\segaloka-control-center.phase1a.backup.html:2402: const pNotif = (cat, tone, title, sub, route) => { NOTIFS.unshift({ id: uid('NTF'), cat, tone, title, sub, route, ts: nowTs(), unread: true }); renderTop(); };
+\segaloka-control-center.phase1a.backup.html:2409: function renderPortalSide(ws) {
+\segaloka-control-center.phase1a.backup.html:2418: ws: el => popAt(el, `<div class="menu" style="min-width:300px"><div class="mh">${L3(['Pindah workspace', 'Switch workspace', 'تبديل مساحة العمل'])}</div><button class="mi" role="menuitemradio" aria-checked="${wsOf() === 'admin'}" data-act="nav" data-r="/overview">${ic('shieldc', 'sm')}<span><b>Super Admin</b><br><span class="muted" style="font-size:11.5px">${t('control_center')}</span></span></button><div class="sep"></div>${Object.entries(WS).map(([k, w]) => `<button class="mi" role="menuitemradio" aria-checked="${wsOf() === k}" data-act="nav" data-r="${w.home}">${ic(w.icon, 'sm')}<span><b>${esc(L3(w.label))}</b><br><span class="muted" style="font-size:11.5px">${esc(me(k) ? me(k).name : '—')}</span></span></button>`).join('')}<div class="sep"></div><div style="padding:6px 9px;font-size:11.5px;color:var(--ink-3);max-width:300px">${L3(['Pratinjau "masuk sebagai". Di produksi setiap portal memakai login sendiri & data dibatasi per entitas di database.', 'A "sign in as" preview. In production each portal has its own login & data is scoped per entity in the database.', 'معاينة.'])}</div></div>`, 'start'),
+\segaloka-control-center.phase1a.backup.html:3689: if (n) { syncTpl(); announce(); if (ovl().innerHTML) SB.pendingRemote = true; else { rerender(); renderTop(); } const u = document.getElementById('sync-pill'); if (u) u.classList.add('pulse'); }
+\segaloka-control-center.phase1a.backup.html:3745: if (!mcp || DEMO) { SB.state = 'local'; paintSync(); renderBanners(); return; }
+\segaloka-control-center.phase1a.backup.html:3759: } catch (e) { SB.on = false; SB.state = 'local'; SB.err = isDenied(e) ? { code: 'denied', message: L3(['Akun Supabase yang terhubung tidak punya akses ke project ', 'The connected Supabase account has no access to project ', 'لا صلاحية للمشروع ']) + SB.project + L3([' — sambungkan ulang connector Supabase dengan akun pemilik project.', ' — reconnect the Supabase connector with the owning account.', '.']) } : e; paintSync(); renderBanners(); rerender(); }
+\segaloka-control-center.phase1a.backup.html:3786: A['sb-purge'] = () => confirmAction({ title: L3(['Cadangkan & hapus data demo', 'Back up & remove demo data', 'نسخ وحذف البيانات التجريبية']), desc: L3(['Semua Travel, booking, pembayaran, dan entitas demo lain disalin ke tabel control_center.demo_backup lalu dihapus. Konfigurasi (fee, plan, slot iklan, template) tetap. Setelah ini semua angka dihitung dari data nyata.', 'All demo Travels, bookings, payments and other entities are copied to control_center.demo_backup and then removed. Configuration (fees, plans, ad slots, templates) is kept. Afterwards every figure is computed from real data.', 'سيتم النسخ ثم الحذف.']), tone: 'danger', reason: true, label: L3(['Cadangkan & hapus', 'Back up & remove', 'نسخ وحذف']), resource: 'Supabase/' + SB.project, onOk: async () => { SB.purgeOk = true; try { await sbProductionize(); ENTITY_ARRAYS().forEach(a => { a.length = 0; }); SB.saved = {}; await sbLoad(); clearFakeStats(); SB.needPurge = false; audit('Admin Pusat', 'database.production', 'Supabase/' + SB.project + '/control_center', 'success', { source: 'Control Center', after: 'demo data -> demo_backup' }); await sbFlush(); rtEmit(1); toast('ok', L3(['Mode produksi aktif', 'Production mode on', 'وضع الإنتاج']), L3(['Data demo dipindah ke cadangan', 'Demo data moved to backup', 'نُقلت'])); renderBanners(); rerender(); } catch (e) { toast('bad', L3(['Gagal', 'Failed', 'فشل']), String(e.message || e)); } } });
+\sync.js:61: if (n) { syncTpl(); announce(); if (ovl().innerHTML) SB.pendingRemote = true; else { rerender(); renderTop(); } const u = document.getElementById('sync-pill'); if (u) u.classList.add('pulse'); }
+\sync.js:117: if (!mcp || DEMO) { SB.state = 'local'; paintSync(); renderBanners(); return; }
+\sync.js:131: } catch (e) { SB.on = false; SB.state = 'local'; SB.err = isDenied(e) ? { code: 'denied', message: L3(['Akun Supabase yang terhubung tidak punya akses ke project ', 'The connected Supabase account has no access to project ', 'لا صلاحية للمشروع ']) + SB.project + L3([' — sambungkan ulang connector Supabase dengan akun pemilik project.', ' — reconnect the Supabase connector with the owning account.', '.']) } : e; paintSync(); renderBanners(); rerender(); }
+\sync.js:158: A['sb-purge'] = () => confirmAction({ title: L3(['Cadangkan & hapus data demo', 'Back up & remove demo data', 'نسخ وحذف البيانات التجريبية']), desc: L3(['Semua Travel, booking, pembayaran, dan entitas demo lain disalin ke tabel control_center.demo_backup lalu dihapus. Konfigurasi (fee, plan, slot iklan, template) tetap. Setelah ini semua angka dihitung dari data nyata.', 'All demo Travels, bookings, payments and other entities are copied to control_center.demo_backup and then removed. Configuration (fees, plans, ad slots, templates) is kept. Afterwards every figure is computed from real data.', 'سيتم النسخ ثم الحذف.']), tone: 'danger', reason: true, label: L3(['Cadangkan & hapus', 'Back up & remove', 'نسخ وحذف']), resource: 'Supabase/' + SB.project, onOk: async () => { SB.purgeOk = true; try { await sbProductionize(); ENTITY_ARRAYS().forEach(a => { a.length = 0; }); SB.saved = {}; await sbLoad(); clearFakeStats(); SB.needPurge = false; audit('Admin Pusat', 'database.production', 'Supabase/' + SB.project + '/control_center', 'success', { source: 'Control Center', after: 'demo data -> demo_backup' }); await sbFlush(); rtEmit(1); toast('ok', L3(['Mode produksi aktif', 'Production mode on', 'وضع الإنتاج']), L3(['Data demo dipindah ke cadangan', 'Demo data moved to backup', 'نُقلت'])); renderBanners(); rerender(); } catch (e) { toast('bad', L3(['Gagal', 'Failed', 'فشل']), String(e.message || e)); } } });
+\_audit-portal-shell.txt:33: const pNotif = (cat, tone, title, sub, route) => { NOTIFS.unshift({ id: uid('NTF'), cat, tone, title, sub, route, ts: nowTs(), unread: true }); renderTop(); };
+
+=== Website ===
+Path: C:\Users\QiblatGo\Desktop\segaloka-app\Segaloka-webs
+ROOT ITEMS:
+  .asset-migration-backup [DIR]
+  .backup [DIR]
+  .backup-affiliate-20261005-081512 [DIR]
+  .backup-affiliate-visual-20261005-082023 [DIR]
+  .backup-partner-journey-20261005-074706 [DIR]
+  .backup-segadeals-before-visual-parity-20261006-072109 [DIR]
+  .backup-segadeals-final-parity-20261006-072759 [DIR]
+  .backup-segadeals-picker-v11-20261006-074158 [DIR]
+  .backup-segadeals-picker-v9-20261006-073826 [DIR]
+  .backup-segadeals-v3-20261006-070610 [DIR]
+  .backup-segadeals-v3-implementation-20261006-070855 [DIR]
+  .backup-segadeals-visual-parity-20261006-072217 [DIR]
+  .backup-vendor-color-20261005-081044 [DIR]
+  .backup-vendor-expand-20261005-080655 [DIR]
+  .ui-migration-backup [DIR]
+  .ui-source [DIR]
+  apps [DIR]
+  public [DIR]
+  src [DIR]
+  test-results [DIR]
+  tests [DIR]
+  _backup [DIR]
+  .env.local [FILE]
+  .env.local.before-ingress.bak [FILE]
+  .gitignore [FILE]
+  AGENTS.md [FILE]
+  canonical-search-implementation.txt [FILE]
+  CLAUDE.md [FILE]
+  date-picker-consistency-source.txt [FILE]
+  eslint.config.mjs [FILE]
+  haji-year-jsx-audit.txt [FILE]
+  hero-canonical-full.txt [FILE]
+  hero-css-current-audit.txt [FILE]
+  hero-search-canonical-compact.txt [FILE]
+  hero-search-canonical.txt [FILE]
+  hero-segadeals-current.txt [FILE]
+  hero-visa-calendar-audit.txt [FILE]
+  marketplace-search-canonical-source.txt [FILE]
+  next-env.d.ts [FILE]
+  next.config.ts [FILE]
+  package.json [FILE]
+  patch-search-haji.ps1 [FILE]
+  pesanan-existing-source.txt [FILE]
+  pnpm-lock.yaml [FILE]
+  pnpm-workspace.yaml [FILE]
+  postcss.config.mjs [FILE]
+  README.md [FILE]
+  search-category-audit.txt [FILE]
+  search-category-detail.txt [FILE]
+  search-category-logic-audit.txt [FILE]
+  search-dropdown-css-audit.txt [FILE]
+  search-dropdown-language-currency.txt [FILE]
+  search-editbar-current.txt [FILE]
+  search-editbar-migration.txt [FILE]
+  search-existing-source.txt [FILE]
+  search-haji-final-patch-context.txt [FILE]
+  search-haji-implementation-audit.txt [FILE]
+  search-halal-tour-audit.txt [FILE]
+  search-implementation-source.txt [FILE]
+  search-results-full.txt [FILE]
+  segadeals-final-parity-source.txt [FILE]
+  segadeals-v3-current.txt [FILE]
+  segadeals-v3-source.txt [FILE]
+  segaloka-asset-architecture-audit.txt [FILE]
+  segaloka-backend-storage-audit.txt [FILE]
+  segaloka-missing-routes-final.txt [FILE]
+  segaloka-public-pages-ui-audit-upload.txt [FILE]
+  segaloka-public-pages-ui-audit.txt [FILE]
+  segaloka-ui-search-source.zip [FILE]
+  step1-visa-current.txt [FILE]
+  travel-daftar-layout-audit.txt [FILE]
+  travel-registration-current.txt [FILE]
+  travel-registration-source-audit.txt [FILE]
+  tsconfig.json [FILE]
+  tsconfig.json.before-backup-exclude.bak [FILE]
+  tsconfig.tsbuildinfo [FILE]
+  vendor-registration-clean-source.txt [FILE]
+  vendor-registration-current-client.txt [FILE]
+  vendor-registration-current-css.txt [FILE]
+  vendor-registration-current-i18n.txt [FILE]
+  vendor-registration-current.txt [FILE]
+  vendor-registration-style-audit.txt [FILE]
+  website-audit-latest.txt [FILE]
+  website-audit.cjs [FILE]
+  website-full-audit.json [FILE]
+  website-route-audit.csv [FILE]
+
+=== Mobile ===
+Path: C:\Users\QiblatGo\Desktop\segaloka-app\Segaloka-Aplikasi
+ROOT ITEMS:
+

@@ -1,0 +1,471 @@
+﻿===== HERO.TSX LINES 738-835 =====
+  738: function CalendarMonth({
+  739:   year,
+  740:   month,
+  741:   selectedDate,
+  742:   onSelect,
+  743:   locale,
+  744:   minDate,
+  745: }: {
+  746:   year: number;
+  747:   month: number;
+  748:   selectedDate: Date | null;
+  749:   onSelect: (date: Date) => void;
+  750:   locale: string;
+  751:   minDate?: Date | null;
+  752: }) {
+  753:   const days = getCalendarDays(year, month);
+  754:   const monthNames = getMonthNames(locale);
+  755:   const dayNames = getDayNames(locale);
+  756: 
+  757:   const today = new Date();
+  758:   today.setHours(0, 0, 0, 0);
+  759: 
+  760:   return (
+  761:     <div className="hero-calendar-month">
+  762:       <h4>
+  763:         {monthNames[month]} {year}
+  764:       </h4>
+  765: 
+  766:       <div className="hero-calendar-weekdays">
+  767:         {dayNames.map((name, index) => (
+  768:           <span
+  769:             key={name}
+  770:             className={index === 0 ? "sunday" : ""}
+  771:           >
+  772:             {name}
+  773:           </span>
+  774:         ))}
+  775:       </div>
+  776: 
+  777:       <div className="hero-calendar-days">
+  778:         {days.map((day, index) => {
+  779:           if (!day) {
+  780:             return (
+  781:               <span
+  782:                 key={`empty-${index}`}
+  783:                 className="empty"
+  784:               />
+  785:             );
+  786:           }
+  787: 
+  788:           const candidate = new Date(
+  789:             year,
+  790:             month,
+  791:             day,
+  792:           );
+  793: 
+  794:           candidate.setHours(0, 0, 0, 0);
+  795: 
+  796:           const normalizedMinDate = minDate
+  797:             ? new Date(
+  798:                 minDate.getFullYear(),
+  799:                 minDate.getMonth(),
+  800:                 minDate.getDate(),
+  801:               )
+  802:             : null;
+  803: 
+  804:           const disabled =
+  805:             candidate < today ||
+  806:             (normalizedMinDate !== null &&
+  807:               candidate < normalizedMinDate);
+  808: 
+  809:           const selected =
+  810:             selectedDate &&
+  811:             candidate.getFullYear() ===
+  812:               selectedDate.getFullYear() &&
+  813:             candidate.getMonth() ===
+  814:               selectedDate.getMonth() &&
+  815:             candidate.getDate() ===
+  816:               selectedDate.getDate();
+  817: 
+  818:           return (
+  819:             <button
+  820:               key={day}
+  821:               type="button"
+  822:               disabled={disabled}
+  823:               className={selected ? "selected" : ""}
+  824:               onClick={() => {
+  825:                 if (!disabled) {
+  826:                   onSelect(candidate);
+  827:                 }
+  828:               }}
+  829:             >
+  830:               {day}
+  831:             </button>
+  832:           );
+  833:         })}
+  834:       </div>
+  835:     </div>
+===== HERO.TSX LINES 920-970 =====
+  920:   const [destinationQuery, setDestinationQuery] =
+  921:     useState("");
+  922: 
+  923:   const [budget, setBudget] =
+  924:     useState("");
+  925: 
+  926:   const [hotelStars, setHotelStars] =
+  927:     useState<number | null>(null);
+  928: 
+  929:   const [segaOriginCountry, setSegaOriginCountry] =
+  930:     useState("Indonesia");
+  931: 
+  932:   const [segaOriginCountryQuery, setSegaOriginCountryQuery] =
+  933:     useState("");
+  934: 
+  935:   const [segaOriginCity, setSegaOriginCity] =
+  936:     useState("Jakarta");
+  937: 
+  938:   const [segaOriginCityQuery, setSegaOriginCityQuery] =
+  939:     useState("");
+  940: 
+  941:   const [selectedDate, setSelectedDate] =
+  942:     useState<Date | null>(null);
+  943: 
+  944:   const [returnDate, setReturnDate] =
+  945:     useState<Date | null>(null);
+  946: 
+  947:   const [calendarCursor, setCalendarCursor] =
+  948:     useState(() => {
+  949:       const now = new Date();
+  950: 
+  951:       return new Date(
+  952:         now.getFullYear(),
+  953:         now.getMonth(),
+  954:         1,
+  955:       );
+  956:     });
+  957: 
+  958:   const currentYear = new Date().getFullYear();
+  959: 
+  960:   const [hajiYear, setHajiYear] =
+  961:     useState<number | null>(null);
+  962: 
+  963:   const [openPanel, setOpenPanel] =
+  964:     useState<OpenPanel>(null);
+  965: 
+  966:   const [showSegaDealsInfo, setShowSegaDealsInfo] =
+  967:     useState(false);
+  968:   /* SEGADEALS_MODAL_ESCAPE_V1 */
+  969:   useEffect(() => {
+  970:     if (!showSegaDealsInfo) {
+===== HERO.TSX LINES 2107-2425 =====
+ 2107:   function DateYearField() {
+ 2108:     const isYear = isHaji;
+ 2109: 
+ 2110:     return (
+ 2111:       <div className="hero-field-wrap">
+ 2112:         <button
+ 2113:           type="button"
+ 2114:           className="hero-field"
+ 2115:           onClick={() =>
+ 2116:             setOpenPanel(
+ 2117:               isYear
+ 2118:                 ? openPanel === "year"
+ 2119:                   ? null
+ 2120:                   : "year"
+ 2121:                 : openPanel === "date"
+ 2122:                   ? null
+ 2123:                   : "date",
+ 2124:             )
+ 2125:           }
+ 2126:         >
+ 2127:           <span className="hero-field-icon">
+ 2128:             <CalendarDays size={19} />
+ 2129:           </span>
+ 2130: 
+ 2131:           <span className="hero-field-content">
+ 2132:             <small>
+ 2133:               {isYear
+ 2134:                 ? t("hero.year")
+ 2135:                 : isVisa
+ 2136:                   ? language === "ID"
+ 2137:                     ? "Tanggal Berangkat"
+ 2138:                     : language === "EN"
+ 2139:                       ? "Departure Date"
+ 2140:                       : "تاريخ المغادرة"
+ 2141:                   : t("hero.date")}
+ 2142:             </small>
+ 2143: 
+ 2144:             <strong>
+ 2145:               {isYear
+ 2146:                 ? hajiYear
+ 2147:                   ? String(hajiYear)
+ 2148:                   : t("search.selectYear")
+ 2149:                 : formatDate(selectedDate, locale, t("search.selectDate"))}
+ 2150:             </strong>
+ 2151:           </span>
+ 2152:         </button>
+ 2153: 
+ 2154: 
+ 2155:         {openPanel === "year" && isYear && (
+ 2156:           <div className="hero-popover hero-year-popover">
+ 2157:             <h3>
+ 2158:               {t("calendar.selectDepartureYear")}
+ 2159:             </h3>
+ 2160: 
+ 2161:             <div className="hero-year-options">
+ 2162:               {hajiYears.map((year) => {
+ 2163:                 const disabled =
+ 2164:                   isHajiYearDisabled(year);
+ 2165: 
+ 2166:                 return (
+ 2167:                   <button
+ 2168:                     key={year}
+ 2169:                     type="button"
+ 2170:                     disabled={disabled}
+ 2171:                     aria-disabled={disabled}
+ 2172:                     className={
+ 2173:                       [
+ 2174:                         year === hajiYear
+ 2175:                           ? "selected"
+ 2176:                           : "",
+ 2177:                         disabled
+ 2178:                           ? "disabled"
+ 2179:                           : "",
+ 2180:                       ]
+ 2181:                         .filter(Boolean)
+ 2182:                         .join(" ")
+ 2183:                     }
+ 2184:                     onClick={() => {
+ 2185:                       if (disabled) {
+ 2186:                         return;
+ 2187:                       }
+ 2188: 
+ 2189:                       setHajiYear(year);
+ 2190:                       setOpenPanel(null);
+ 2191:                     }}
+ 2192:                   >
+ 2193:                     {year}
+ 2194: 
+ 2195:                     {disabled && (
+ 2196:                       <span
+ 2197:                         className="hero-year-status"
+ 2198:                         aria-hidden="true"
+ 2199:                       >
+ 2200:                         {t("calendar.passed")}
+ 2201:                       </span>
+ 2202:                     )}
+ 2203:                   </button>
+ 2204:                 );
+ 2205:               })}
+ 2206:             </div>
+ 2207:           </div>
+ 2208:         )}
+ 2209: 
+ 2210: 
+ 2211:         {openPanel === "date" && !isYear && (
+ 2212:           <div className="hero-popover hero-date-popover">
+ 2213:             <div className="hero-date-header">
+ 2214:               <h3>{t("calendar.setDate")}</h3>
+ 2215: 
+ 2216:               <button
+ 2217:                 type="button"
+ 2218:                 className="hero-popover-close"
+ 2219:                 onClick={handleSearch}
+ 2220:               >
+ 2221:                 <X size={22} />
+ 2222:               </button>
+ 2223:             </div>
+ 2224: 
+ 2225: 
+ 2226:             <div className="hero-calendar-navigation">
+ 2227: 
+ 2228:               <button
+ 2229:                 type="button"
+ 2230:                 className="hero-calendar-nav-button"
+ 2231:                 aria-label={t("calendar.previousMonth")}
+ 2232:                 disabled={!canGoPrevious}
+ 2233:                 onClick={() =>
+ 2234:                   moveCalendarMonth(-1)
+ 2235:                 }
+ 2236:               >
+ 2237:                 <ChevronLeft size={19} />
+ 2238:               </button>
+ 2239: 
+ 2240: 
+ 2241:               <div className="hero-calendar-selectors">
+ 2242: 
+ 2243:                 <select
+ 2244:                   aria-label={t("calendar.selectMonth")}
+ 2245:                   value={firstCalendarMonth}
+ 2246:                   onChange={(event) =>
+ 2247:                     changeCalendarMonth(
+ 2248:                       Number(event.target.value),
+ 2249:                     )
+ 2250:                   }
+ 2251:                 >
+ 2252:                   {monthNames.map(
+ 2253:                     (monthName, monthIndex) => {
+ 2254:                       const disabled =
+ 2255:                         firstCalendarYear ===
+ 2256:                           todayCalendarMonth.getFullYear() &&
+ 2257:                         monthIndex <
+ 2258:                           todayCalendarMonth.getMonth();
+ 2259: 
+ 2260:                       return (
+ 2261:                         <option
+ 2262:                           key={monthName}
+ 2263:                           value={monthIndex}
+ 2264:                           disabled={disabled}
+ 2265:                         >
+ 2266:                           {monthName}
+ 2267:                         </option>
+ 2268:                       );
+ 2269:                     },
+ 2270:                   )}
+ 2271:                 </select>
+ 2272: 
+ 2273: 
+ 2274:                 <select
+ 2275:                   aria-label={t("calendar.selectYear")}
+ 2276:                   value={firstCalendarYear}
+ 2277:                   onChange={(event) =>
+ 2278:                     changeCalendarYear(
+ 2279:                       Number(event.target.value),
+ 2280:                     )
+ 2281:                   }
+ 2282:                 >
+ 2283:                   {calendarYears.map((year) => (
+ 2284:                     <option
+ 2285:                       key={year}
+ 2286:                       value={year}
+ 2287:                     >
+ 2288:                       {year}
+ 2289:                     </option>
+ 2290:                   ))}
+ 2291:                 </select>
+ 2292: 
+ 2293:               </div>
+ 2294: 
+ 2295: 
+ 2296:               <button
+ 2297:                 type="button"
+ 2298:                 className="hero-calendar-nav-button"
+ 2299:                 aria-label={t("calendar.nextMonth")}
+ 2300:                 onClick={() =>
+ 2301:                   moveCalendarMonth(1)
+ 2302:                 }
+ 2303:               >
+ 2304:                 <ChevronRight size={19} />
+ 2305:               </button>
+ 2306: 
+ 2307:             </div>
+ 2308: 
+ 2309: 
+ 2310:             <div className="hero-calendar-grid">
+ 2311:               <CalendarMonth
+ 2312:                 year={firstCalendarYear}
+ 2313:                 month={firstCalendarMonth}
+ 2314:                 selectedDate={selectedDate}
+ 2315:                 onSelect={(date) => {
+ 2316:                   setSelectedDate(date);
+ 2317: 
+ 2318:                   if (
+ 2319:                     returnDate &&
+ 2320:                     returnDate < date
+ 2321:                   ) {
+ 2322:                     setReturnDate(null);
+ 2323:                   }
+ 2324: 
+ 2325:                   setOpenPanel(null);
+ 2326:                 }}
+ 2327:                 locale={locale}
+ 2328:               />
+ 2329: 
+ 2330:               <CalendarMonth
+ 2331:                 year={
+ 2332:                   secondCalendarDate.getFullYear()
+ 2333:                 }
+ 2334:                 month={
+ 2335:                   secondCalendarDate.getMonth()
+ 2336:                 }
+ 2337:                 selectedDate={selectedDate}
+ 2338:                 onSelect={(date) => {
+ 2339:                   setSelectedDate(date);
+ 2340: 
+ 2341:                   if (
+ 2342:                     returnDate &&
+ 2343:                     returnDate < date
+ 2344:                   ) {
+ 2345:                     setReturnDate(null);
+ 2346:                   }
+ 2347: 
+ 2348:                   setOpenPanel(null);
+ 2349:                 }}
+ 2350:                 locale={locale}
+ 2351:               />
+ 2352:             </div>
+ 2353:           </div>
+ 2354:         )}
+ 2355:       </div>
+ 2356:     );
+ 2357:   }
+ 2358: 
+ 2359: 
+ 2360: 
+ 2361: 
+ 2362:   function VisaReturnDateField() {
+ 2363:     if (!isVisa) {
+ 2364:       return null;
+ 2365:     }
+ 2366: 
+ 2367:     return (
+ 2368:       <div className="hero-field-wrap">
+ 2369:         <button
+ 2370:           type="button"
+ 2371:           className="hero-field"
+ 2372:           onClick={() => {
+ 2373:             if (selectedDate) {
+ 2374:               setCalendarCursor(
+ 2375:                 new Date(
+ 2376:                   selectedDate.getFullYear(),
+ 2377:                   selectedDate.getMonth(),
+ 2378:                   1,
+ 2379:                 ),
+ 2380:               );
+ 2381:             }
+ 2382: 
+ 2383:             setOpenPanel(
+ 2384:               openPanel === "returnDate"
+ 2385:                 ? null
+ 2386:                 : "returnDate",
+ 2387:             );
+ 2388:           }}
+ 2389:         >
+ 2390:           <span className="hero-field-icon">
+ 2391:             <CalendarDays size={19} />
+ 2392:           </span>
+ 2393: 
+ 2394:           <span className="hero-field-content">
+ 2395:             <small>
+ 2396:               {language === "ID"
+ 2397:                 ? "Tanggal Pulang"
+ 2398:                 : language === "EN"
+ 2399:                   ? "Return Date"
+ 2400:                   : "تاريخ العودة"}
+ 2401:             </small>
+ 2402: 
+ 2403:             <strong>
+ 2404:               {formatDate(
+ 2405:                 returnDate,
+ 2406:                 locale,
+ 2407:                 language === "ID"
+ 2408:                   ? "Pilih tanggal"
+ 2409:                   : language === "EN"
+ 2410:                     ? "Select date"
+ 2411:                     : "اختر التاريخ",
+ 2412:               )}
+ 2413:             </strong>
+ 2414:           </span>
+ 2415:         </button>
+ 2416: 
+ 2417:         {openPanel === "returnDate" && (
+ 2418:           <div className="hero-popover hero-date-popover">
+ 2419:             <div className="hero-date-header">
+ 2420:               <h3>
+ 2421:                 {language === "ID"
+ 2422:                   ? "Pilih Tanggal Pulang"
+ 2423:                   : language === "EN"
+ 2424:                     ? "Select Return Date"
+ 2425:                     : "اختر تاريخ العودة"}

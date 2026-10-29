@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+
+  <title>Segaloka · Affiliate Dashboard</title>
+
+  <!--
+    V7 visual parity source.
+    Business/runtime modules remain reference-only.
+  -->
+  <link rel="stylesheet" href="./runtime/styles.css">
+  <link rel="stylesheet" href="./affiliate.css">
+</head>
+
+<body data-segaloka-app="affiliate">
+
+  <div id="affiliate-app" class="affiliate-app">
+
+    <aside
+      id="affiliate-sidebar"
+      class="affiliate-sidebar"
+      aria-label="Navigasi Affiliate"
+    >
+      <div class="affiliate-brand">
+        <div class="affiliate-brand-mark" aria-hidden="true">S</div>
+
+        <div class="affiliate-brand-copy">
+          <strong>Segaloka</strong>
+          <span>Affiliate Dashboard</span>
+        </div>
+
+        <button
+          id="affiliate-sidebar-close"
+          class="affiliate-icon-button affiliate-mobile-only"
+          type="button"
+          aria-label="Tutup navigasi"
+        >
+          ×
+        </button>
+      </div>
+
+      <div class="affiliate-tenant">
+        <div class="affiliate-tenant-icon" aria-hidden="true">T</div>
+
+        <div>
+          <strong>Affiliate</strong>
+          <span>Dashboard</span>
+        </div>
+      </div>
+
+      <nav
+        id="affiliate-navigation"
+        class="affiliate-navigation"
+        aria-label="Menu Affiliate"
+      ></nav>
+
+      <div class="affiliate-sidebar-footer">
+        <div class="affiliate-boundary-label">
+          Dashboard Affiliate
+        </div>
+
+        <div class="affiliate-boundary-status">
+          Independent boundary
+        </div>
+      </div>
+    </aside>
+
+    <div
+      id="affiliate-sidebar-overlay"
+      class="affiliate-sidebar-overlay"
+      hidden
+    ></div>
+
+    <div class="affiliate-main">
+
+      <header class="affiliate-topbar">
+
+        <div class="affiliate-topbar-start">
+          <button
+            id="affiliate-sidebar-open"
+            class="affiliate-icon-button affiliate-mobile-only"
+            type="button"
+            aria-label="Buka navigasi"
+          >
+            ☰
+          </button>
+
+          <div>
+            <div class="affiliate-topbar-eyebrow">
+              SEGALOKA
+            </div>
+
+            <div
+              id="affiliate-page-title"
+              class="affiliate-page-title"
+            >
+              Beranda
+            </div>
+          </div>
+        </div>
+
+        <div class="affiliate-topbar-end">
+
+          <div
+            class="affiliate-runtime-indicator"
+            title="Runtime Affiliate masih dalam tahap ekstraksi"
+          >
+            <span
+              class="affiliate-runtime-dot"
+              aria-hidden="true"
+            ></span>
+
+            <span>Affiliate</span>
+          </div>
+
+          <button
+            id="affiliate-account-button"
+            class="affiliate-account"
+            type="button"
+            disabled
+            aria-label="Akun Affiliate belum diaktifkan"
+          >
+            <span
+              class="affiliate-account-avatar"
+              aria-hidden="true"
+            >
+              T
+            </span>
+
+            <span class="affiliate-account-copy">
+              <strong>Affiliate</strong>
+              <small>Auth belum diaktifkan</small>
+            </span>
+          </button>
+
+        </div>
+      </header>
+
+      <main
+        id="affiliate-content"
+        class="affiliate-content"
+        tabindex="-1"
+      ></main>
+
+    </div>
+  </div>
+
+  <!-- Contracts are executable metadata only. -->
+  <script src="./contracts/app.contract.js"></script>
+  <script src="./contracts/auth.contract.js"></script>
+  <script src="./contracts/data.contract.js"></script>
+  <script src="./contracts/services.contract.js"></script>
+  <script src="./contracts/navigation.contract.js"></script>
+
+  <!--
+    IMPORTANT:
+    runtime/core.js
+    runtime/data.js
+    runtime/portals.js
+    runtime/gateway.js
+    runtime/notify.js
+    runtime/sync.js
+    and other V7 runtime modules are NOT loaded here.
+  -->
+  <script src="./ui/affiliate-ui.js"></script>
+<script src="./renderers/affiliate-renderers.js"></script>
+<script src="./affiliate-bootstrap.js"></script>
+</body>
+</html>

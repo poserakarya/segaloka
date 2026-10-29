@@ -1,0 +1,355 @@
+/*
+ * ============================================================
+ * SEGALOKA DESIGN TOKENS
+ * ============================================================
+ *
+ * Pusat pengaturan visual Segaloka.
+ *
+ * Ubah font, ukuran, warna, radius, shadow, spacing,
+ * Search, Package Card dan Detail Package dari sini.
+ *
+ * Jangan hardcode nilai visual baru di halaman.
+ */
+
+:root {
+  /* ========================================================
+     TYPOGRAPHY
+     ======================================================== */
+
+  --ui-font-primary:
+    "Plus Jakarta Sans",
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+
+  --ui-font-xs: 11px;
+  --ui-font-sm: 12px;
+  --ui-font-md: 14px;
+  --ui-font-lg: 16px;
+  --ui-font-xl: 20px;
+  --ui-font-2xl: 24px;
+  --ui-font-3xl: 32px;
+  --ui-font-4xl: 40px;
+
+  --ui-weight-normal: 400;
+  --ui-weight-medium: 500;
+  --ui-weight-semibold: 600;
+  --ui-weight-bold: 700;
+
+  --ui-line-tight: 1.2;
+  --ui-line-normal: 1.5;
+  --ui-line-relaxed: 1.7;
+
+  /* ========================================================
+     BRAND
+     ======================================================== */
+
+  --ui-primary: #1473e6;
+  --ui-primary-hover: #0d63cb;
+  --ui-primary-soft: #eef6ff;
+
+  /* ========================================================
+     TEXT
+     ======================================================== */
+
+  --ui-text: #172033;
+  --ui-text-secondary: #667085;
+  --ui-text-muted: #98a2b3;
+  --ui-text-inverse: #ffffff;
+
+  /* ========================================================
+     SURFACE
+     ======================================================== */
+
+  --ui-background: #ffffff;
+  --ui-surface: #ffffff;
+  --ui-surface-soft: #f8fafc;
+  --ui-surface-muted: #f2f4f7;
+
+  /* ========================================================
+     BORDER
+     ======================================================== */
+
+  --ui-border: #e4e7ec;
+  --ui-border-strong: #d0d5dd;
+
+  /* ========================================================
+     STATUS
+     ======================================================== */
+
+  --ui-success: #12b76a;
+  --ui-warning: #f79009;
+  --ui-danger: #f04438;
+  --ui-info: #2e90fa;
+
+  /* ========================================================
+     RADIUS
+     ======================================================== */
+
+  --ui-radius-xs: 6px;
+  --ui-radius-sm: 8px;
+  --ui-radius-md: 12px;
+  --ui-radius-lg: 16px;
+  --ui-radius-xl: 20px;
+  --ui-radius-2xl: 24px;
+  --ui-radius-pill: 999px;
+
+  /* ========================================================
+     SHADOW
+     ======================================================== */
+
+  --ui-shadow-sm:
+    0 1px 3px rgb(15 23 42 / 8%);
+
+  --ui-shadow-card:
+    0 4px 16px rgb(15 23 42 / 8%);
+
+  --ui-shadow-popup:
+    0 18px 50px rgb(15 23 42 / 14%);
+
+  /* ========================================================
+     SPACING
+     ======================================================== */
+
+  --ui-space-1: 4px;
+  --ui-space-2: 8px;
+  --ui-space-3: 12px;
+  --ui-space-4: 16px;
+  --ui-space-5: 20px;
+  --ui-space-6: 24px;
+  --ui-space-7: 28px;
+  --ui-space-8: 32px;
+  --ui-space-10: 40px;
+  --ui-space-12: 48px;
+
+  /* ========================================================
+     LAYOUT
+     ======================================================== */
+
+  --ui-container-max: 1200px;
+  --ui-container-padding: 16px;
+
+  /* ========================================================
+     SEARCH
+     ======================================================== */
+
+  --search-font-family: var(--ui-font-primary);
+
+  --search-height: 68px;
+  --search-gap: 6px;
+
+  --search-radius: 12px;
+  --search-container-radius: 20px;
+
+  --search-label-size: 12px;
+  --search-value-size: 14px;
+
+  --search-label-weight: var(--ui-weight-medium);
+  --search-value-weight: var(--ui-weight-semibold);
+
+  --search-label-color: var(--ui-text-secondary);
+  --search-value-color: var(--ui-text);
+
+  --search-background: var(--ui-surface);
+  --search-border: var(--ui-border);
+
+  --search-icon-size: 20px;
+  --search-icon-color: var(--ui-primary);
+  --search-icon-background: var(--ui-primary-soft);
+
+  --search-button-height: 68px;
+  --search-button-radius: 12px;
+  --search-button-font-size: 14px;
+
+  --search-dropdown-width: 360px;
+  --search-dropdown-radius: 20px;
+  --search-dropdown-background: var(--ui-surface);
+  --search-dropdown-shadow: var(--ui-shadow-popup);
+
+  --search-calendar-width: 720px;
+  --search-calendar-day-size: 38px;
+
+  /*
+   * Canonical Search field geometry.
+   * Hero dan Search Results harus mengambil nilai dari sini.
+   */
+
+  --search-field-padding-x: 14px;
+  --search-field-padding-y: 10px;
+
+  --search-field-border-width: 1px;
+
+  --search-icon-box-size: 36px;
+  --search-icon-radius: 10px;
+
+  --search-container-padding: 12px;
+
+  --search-origin-flex: 1.15;
+  --search-destination-flex: 1.15;
+  --search-travelers-flex: 0.82;
+  --search-date-flex: 0.94;
+
+  --search-button-padding-x: 22px;
+
+  --search-calendar-title-size: 20px;
+  --search-calendar-month-size: 14px;
+  --search-calendar-weekday-size: 12px;
+  --search-calendar-date-size: 13px;
+
+  --search-traveler-title-size: 14px;
+  --search-traveler-value-size: 13px;
+
+  /* ========================================================
+     GENERIC CARD
+     ======================================================== */
+
+  --card-background: var(--ui-surface);
+  --card-border: var(--ui-border);
+  --card-radius: 16px;
+  --card-shadow: var(--ui-shadow-card);
+  --card-padding: 16px;
+
+  /* ========================================================
+     PACKAGE CARD
+     ======================================================== */
+
+  --package-card-radius: 16px;
+  --package-card-image-height: 190px;
+
+  --package-card-title-size: 15px;
+  --package-card-title-weight: var(--ui-weight-bold);
+
+  --package-card-meta-size: 12px;
+
+  --package-card-price-size: 18px;
+  --package-card-price-weight: var(--ui-weight-bold);
+
+  /* ========================================================
+     PACKAGE DETAIL
+     ======================================================== */
+
+  --package-detail-title-size: 30px;
+  --package-detail-title-weight: var(--ui-weight-bold);
+
+  --package-detail-price-size: 26px;
+  --package-detail-price-weight: var(--ui-weight-bold);
+
+  --package-detail-section-title-size: 20px;
+  --package-detail-body-size: 14px;
+
+  /* ========================================================
+     BUTTON
+     ======================================================== */
+
+  --button-height-sm: 36px;
+  --button-height-md: 44px;
+  --button-height-lg: 52px;
+
+  --button-radius: 12px;
+  --button-font-size: 14px;
+  --button-font-weight: var(--ui-weight-semibold);
+
+  /* ========================================================
+     FORM
+     ======================================================== */
+
+  --form-height: 44px;
+  --form-radius: 12px;
+  --form-font-size: 14px;
+
+  /* ========================================================
+     HEADER / NAVIGATION
+     ======================================================== */
+
+  --header-height: 72px;
+  --header-font-size: 14px;
+
+  /* ========================================================
+     MODAL
+     ======================================================== */
+
+  --modal-radius: 20px;
+  --modal-background: var(--ui-surface);
+  --modal-shadow: var(--ui-shadow-popup);
+}
+
+/* ==========================================================
+   MOBILE
+   ========================================================== */
+
+@media (max-width: 767px) {
+  :root {
+    --ui-container-padding: 12px;
+
+    --search-height: 60px;
+    --search-button-height: 52px;
+
+    --search-label-size: 11px;
+    --search-value-size: 13px;
+
+    --search-calendar-width:
+      calc(100vw - 24px);
+
+    --package-card-image-height: 170px;
+
+    --package-detail-title-size: 24px;
+    --package-detail-price-size: 22px;
+  }
+}
+
+/* ==========================================================
+   SEGALOKA — SEMANTIC TYPOGRAPHY
+   Central typography contract for marketplace UI.
+   ========================================================== */
+
+:root {
+  --ui-font-primary:
+    var(--font-jakarta),
+    "Plus Jakarta Sans",
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+
+  --ui-text-page-title: 30px;
+  --ui-text-page-title-line: 1.2;
+  --ui-text-page-title-weight: 700;
+
+  --ui-text-section-title: 18px;
+  --ui-text-section-title-line: 1.35;
+  --ui-text-section-title-weight: 700;
+
+  --ui-text-card-title: 16px;
+  --ui-text-card-title-line: 1.4;
+  --ui-text-card-title-weight: 700;
+
+  --ui-text-body: 14px;
+  --ui-text-body-line: 1.6;
+  --ui-text-body-weight: 400;
+
+  --ui-text-label: 13px;
+  --ui-text-label-line: 1.45;
+  --ui-text-label-weight: 600;
+
+  --ui-text-caption: 12px;
+  --ui-text-caption-line: 1.5;
+  --ui-text-caption-weight: 500;
+
+  --ui-text-button: 14px;
+  --ui-text-button-weight: 700;
+
+  --ui-tracking-max-width: 1440px;
+}
+
+@media (max-width: 767px) {
+  :root {
+    --ui-text-page-title: 24px;
+    --ui-text-section-title: 17px;
+    --ui-text-card-title: 15px;
+    --ui-text-body: 14px;
+    --ui-text-label: 13px;
+  }
+}

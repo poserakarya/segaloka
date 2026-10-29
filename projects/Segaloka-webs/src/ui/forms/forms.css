@@ -1,0 +1,23 @@
+﻿.segaloka-input,
+.segaloka-select {
+  width: 100%;
+  min-height: var(--form-height);
+
+  padding: 0 12px;
+
+  border: 1px solid var(--ui-border);
+  border-radius: var(--form-radius);
+
+  background: var(--ui-surface);
+  color: var(--ui-text);
+
+  font-family: var(--ui-font-primary);
+  font-size: var(--form-font-size);
+
+  outline: none;
+}
+
+.segaloka-input:focus,
+.segaloka-select:focus {
+  border-color: var(--ui-primary);
+}

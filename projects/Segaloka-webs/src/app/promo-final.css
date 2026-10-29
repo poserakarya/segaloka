@@ -1,0 +1,522 @@
+﻿/* ============================================================
+   SEGALOKA — COUPON / BANNER / RUNNING PROMO
+   Reference locked
+   ============================================================ */
+
+
+/* ============================================================
+   COUPON
+   ============================================================ */
+
+.reference-coupon {
+  width: min(1440px, calc(100% - 32px));
+
+  margin-inline: auto;
+
+  padding:
+    10px
+    0
+    12px;
+
+  background: #fff;
+
+  border-left: 1px solid #e4ecf5;
+  border-right: 1px solid #e4ecf5;
+}
+
+.reference-coupon-shell {
+  width: 1260px;
+  max-width: calc(100% - 56px);
+
+  margin-inline: auto;
+
+  padding: 13px 15px;
+
+  display: grid;
+
+  grid-template-columns:
+    190px
+    minmax(0, 1fr);
+
+  gap: 14px;
+
+  align-items: center;
+
+  border-radius: 14px;
+
+  background: #eaf6ff;
+}
+
+.reference-coupon-title h2 {
+  margin: 0;
+
+  color: #0b2d5d;
+
+  font-family:
+    var(--font-jakarta),
+    "Plus Jakarta Sans",
+    sans-serif;
+
+  font-size: 17px;
+  line-height: 1.08;
+
+  letter-spacing: -.35px;
+
+  font-weight: 800;
+}
+
+.reference-coupon-title p {
+  margin: 5px 0 0;
+
+  color: #617996;
+
+  font-family:
+    var(--font-jakarta),
+    "Plus Jakarta Sans",
+    sans-serif;
+
+  font-size: 9px;
+}
+
+.reference-coupon-track {
+  display: grid;
+
+  grid-template-columns:
+    repeat(4, minmax(0, 1fr));
+
+  gap: 9px;
+}
+
+.reference-coupon-card {
+  min-width: 0;
+  min-height: 68px;
+
+  padding: 9px 10px;
+
+  display: grid;
+
+  grid-template-columns:
+    auto
+    1fr
+    auto;
+
+  align-items: center;
+
+  gap: 9px;
+
+  border: 1px solid #dce8f3;
+  border-radius: 11px;
+
+  background: #fff;
+
+  box-shadow:
+    0 3px 9px rgba(31,76,123,.035);
+}
+
+.reference-coupon-icon {
+  width: 38px;
+  height: 38px;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 10px;
+}
+
+.reference-coupon-icon.purple {
+  color: #8649ef;
+  background: #f2e8ff;
+}
+
+.reference-coupon-icon.blue {
+  color: #0878f9;
+  background: #e9f3ff;
+}
+
+.reference-coupon-icon.green {
+  color: #05a856;
+  background: #e6faee;
+}
+
+.reference-coupon-icon.pink {
+  color: #f04b75;
+  background: #ffe9ef;
+}
+
+.reference-coupon-copy {
+  min-width: 0;
+}
+
+.reference-coupon-copy small,
+.reference-coupon-copy strong,
+.reference-coupon-copy span {
+  display: block;
+}
+
+.reference-coupon-copy small {
+  color: #718198;
+
+  font-size: 8px;
+  line-height: 1.2;
+}
+
+.reference-coupon-copy strong {
+  margin-top: 2px;
+
+  color: #0877f9;
+
+  font-size: 14px;
+  line-height: 1.15;
+
+  font-weight: 800;
+}
+
+.reference-coupon-copy span {
+  margin-top: 2px;
+
+  color: #526a87;
+
+  font-size: 8px;
+}
+
+.reference-coupon-arrow {
+  color: #0877f9;
+}
+
+
+/* ============================================================
+   MAIN BANNER
+   ============================================================ */
+
+.reference-main-banner {
+  width: min(1440px, calc(100% - 32px));
+
+  margin-inline: auto;
+
+  padding:
+    2px
+    0
+    12px;
+
+  background: #fff;
+
+  border-left: 1px solid #e4ecf5;
+  border-right: 1px solid #e4ecf5;
+}
+
+.reference-main-banner-shell {
+  width: 1260px;
+  max-width: calc(100% - 56px);
+
+  margin-inline: auto;
+
+  overflow: hidden;
+
+  border-radius: 13px;
+
+  background: #e9f5ff;
+}
+
+.reference-main-banner-shell img {
+  display: block;
+
+  width: 100%;
+  height: auto;
+
+  aspect-ratio: 1600 / 300;
+
+  object-fit: cover;
+  object-position: center;
+}
+
+
+/* ============================================================
+   RUNNING PROMO
+   ============================================================ */
+
+.reference-running-promo {
+  width: min(1440px, calc(100% - 32px));
+
+  margin-inline: auto;
+
+  padding:
+    0
+    0
+    14px;
+
+  background: #fff;
+
+  border-left: 1px solid #e4ecf5;
+  border-right: 1px solid #e4ecf5;
+}
+
+.reference-running-shell {
+  width: 1260px;
+  max-width: calc(100% - 56px);
+
+  margin-inline: auto;
+}
+
+.reference-section-heading {
+  min-height: 51px;
+
+  margin-bottom: 9px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.reference-section-heading h2 {
+  margin: 0;
+
+  color: #102d58;
+
+  font-size: 18px;
+  line-height: 1.15;
+
+  letter-spacing: -.3px;
+
+  font-weight: 800;
+}
+
+.reference-section-heading p {
+  margin: 4px 0 0;
+
+  color: #687c96;
+
+  font-size: 9px;
+}
+
+.reference-section-heading a {
+  display: inline-flex;
+  align-items: center;
+
+  gap: 3px;
+
+  color: #0877f9;
+
+  font-size: 9px;
+  font-weight: 700;
+}
+
+.reference-promo-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(4, minmax(0, 1fr));
+
+  gap: 12px;
+}
+
+.reference-promo-card {
+  position: relative;
+
+  min-width: 0;
+  height: 184px;
+
+  overflow: hidden;
+
+  border-radius: 11px;
+
+  background: #e7eef5;
+}
+
+.reference-promo-card > img {
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+  object-position: center;
+}
+
+.reference-promo-overlay {
+  position: absolute;
+  inset: 0;
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(7,31,69,.72) 0%,
+      rgba(7,31,69,.34) 48%,
+      rgba(7,31,69,.04) 100%
+    );
+}
+
+.reference-promo-content {
+  position: absolute;
+
+  left: 14px;
+  right: 14px;
+  bottom: 13px;
+
+  color: #fff;
+}
+
+.reference-promo-badge {
+  display: inline-flex;
+
+  margin-bottom: 8px;
+  padding: 4px 8px;
+
+  border-radius: 999px;
+
+  font-size: 8px;
+  line-height: 1;
+
+  font-weight: 800;
+}
+
+.reference-promo-badge.red {
+  background: #ff4b6e;
+}
+
+.reference-promo-badge.green {
+  background: #40c971;
+}
+
+.reference-promo-badge.cyan {
+  background: #21a9ca;
+}
+
+.reference-promo-badge.orange {
+  background: #ff6a4d;
+}
+
+.reference-promo-content h3 {
+  max-width: 180px;
+
+  margin: 0 0 7px;
+
+  font-size: 17px;
+  line-height: 1.08;
+
+  letter-spacing: -.3px;
+
+  font-weight: 800;
+}
+
+.reference-promo-content small {
+  display: block;
+
+  font-size: 9px;
+}
+
+.reference-promo-content strong {
+  display: block;
+
+  margin-top: 1px;
+
+  font-size: 26px;
+  line-height: 1;
+
+  font-weight: 800;
+}
+
+
+/* ============================================================
+   LARGE DESKTOP
+   ============================================================ */
+
+@media (min-width: 1500px) {
+  .reference-coupon,
+  .reference-main-banner,
+  .reference-running-promo {
+    width: 1440px;
+  }
+}
+
+
+/* ============================================================
+   MOBILE
+   ============================================================ */
+
+@media (max-width: 700px) {
+  .reference-coupon,
+  .reference-main-banner,
+  .reference-running-promo {
+    width: calc(100% - 14px);
+  }
+
+  .reference-coupon-shell,
+  .reference-main-banner-shell,
+  .reference-running-shell {
+    width: calc(100% - 16px);
+    max-width: none;
+  }
+
+  .reference-coupon-shell {
+    padding: 11px;
+
+    grid-template-columns: 1fr;
+
+    gap: 10px;
+  }
+
+  .reference-coupon-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+
+  .reference-coupon-title h2 {
+    font-size: 14px;
+  }
+
+  .reference-coupon-title h2 br {
+    display: none;
+  }
+
+  .reference-coupon-title p {
+    display: none;
+  }
+
+  .reference-coupon-track {
+    display: flex;
+
+    overflow-x: auto;
+
+    gap: 8px;
+
+    scrollbar-width: none;
+  }
+
+  .reference-coupon-track::-webkit-scrollbar {
+    display: none;
+  }
+
+  .reference-coupon-card {
+    min-width: 235px;
+  }
+
+  .reference-main-banner-shell img {
+    aspect-ratio: 16 / 4.5;
+  }
+
+  .reference-section-heading h2 {
+    font-size: 15px;
+  }
+
+  .reference-section-heading p {
+    font-size: 8px;
+  }
+
+  .reference-promo-grid {
+    display: flex;
+
+    overflow-x: auto;
+
+    gap: 8px;
+
+    scrollbar-width: none;
+  }
+
+  .reference-promo-grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .reference-promo-card {
+    min-width: 70%;
+    height: 170px;
+  }
+}

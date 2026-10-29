@@ -1,0 +1,9 @@
+﻿.segaloka-header {
+  min-height: var(--header-height);
+
+  background: var(--ui-surface);
+  color: var(--ui-text);
+
+  font-family: var(--ui-font-primary);
+  font-size: var(--header-font-size);
+}

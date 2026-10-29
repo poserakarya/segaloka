@@ -1,0 +1,25 @@
+﻿.segaloka-package-detail {
+  color: var(--ui-text);
+}
+
+.segaloka-package-detail__title {
+  font-size: var(--package-detail-title-size);
+  font-weight: var(--package-detail-title-weight);
+  line-height: var(--ui-line-tight);
+}
+
+.segaloka-package-detail__price {
+  font-size: var(--package-detail-price-size);
+  font-weight: var(--package-detail-price-weight);
+}
+
+.segaloka-package-detail__section-title {
+  font-size: var(--package-detail-section-title-size);
+  font-weight: var(--ui-weight-bold);
+}
+
+.segaloka-package-detail__body {
+  font-size: var(--package-detail-body-size);
+  line-height: var(--ui-line-relaxed);
+  color: var(--ui-text-secondary);
+}

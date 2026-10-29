@@ -1,0 +1,431 @@
+/*
+ * Segaloka Travel Dashboard
+ * Phase 2H — isolated Travel UI shell.
+ *
+ * This is an extraction shell, not a redesign.
+ * V7 remains the parity source.
+ */
+
+:root {
+  --travel-sidebar-width: 264px;
+  --travel-topbar-height: 72px;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+}
+
+body[data-segaloka-app="travel"] {
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.travel-app {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: var(--travel-sidebar-width) minmax(0, 1fr);
+  background: var(--bg, #f7f8fa);
+  color: var(--ink, #111827);
+}
+
+.travel-sidebar {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid var(--line, #e5e7eb);
+  background: var(--surface, #ffffff);
+  z-index: 40;
+}
+
+.travel-brand {
+  min-height: var(--travel-topbar-height);
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--line, #e5e7eb);
+}
+
+.travel-brand-mark,
+.travel-tenant-icon,
+.travel-account-avatar {
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+}
+
+.travel-brand-mark {
+  width: 38px;
+  height: 38px;
+  border-radius: 11px;
+  background: var(--accent, #2563eb);
+  color: #fff;
+}
+
+.travel-brand-copy,
+.travel-account-copy {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.travel-brand-copy strong {
+  font-size: 15px;
+}
+
+.travel-brand-copy span {
+  margin-top: 2px;
+  font-size: 11px;
+  color: var(--muted, #6b7280);
+}
+
+.travel-tenant {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  margin: 16px 14px 8px;
+  padding: 11px;
+  border: 1px solid var(--line, #e5e7eb);
+  border-radius: 13px;
+}
+
+.travel-tenant-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: var(--soft, #eff6ff);
+  color: var(--accent, #2563eb);
+}
+
+.travel-tenant > div:last-child {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.travel-tenant strong {
+  font-size: 12px;
+}
+
+.travel-tenant span {
+  margin-top: 2px;
+  font-size: 10px;
+  color: var(--muted, #6b7280);
+}
+
+.travel-navigation {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px 10px 18px;
+}
+
+.travel-nav-item {
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  min-height: 42px;
+  margin: 2px 0;
+  padding: 9px 11px;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: 12px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.travel-nav-item:hover {
+  background: var(--soft, #f3f4f6);
+}
+
+.travel-nav-item[aria-current="page"] {
+  background: var(--soft, #eff6ff);
+  color: var(--accent, #2563eb);
+  font-weight: 700;
+}
+
+.travel-nav-icon {
+  width: 24px;
+  height: 24px;
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  border-radius: 7px;
+  background: var(--bg, #f3f4f6);
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.travel-nav-item[aria-current="page"] .travel-nav-icon {
+  background: var(--surface, #ffffff);
+}
+
+.travel-sidebar-footer {
+  padding: 14px 16px 18px;
+  border-top: 1px solid var(--line, #e5e7eb);
+}
+
+.travel-boundary-label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}
+
+.travel-boundary-status {
+  margin-top: 4px;
+  font-size: 10px;
+  color: var(--muted, #6b7280);
+}
+
+.travel-main {
+  min-width: 0;
+}
+
+.travel-topbar {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  min-height: var(--travel-topbar-height);
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 12px 22px;
+  border-bottom: 1px solid var(--line, #e5e7eb);
+  background: color-mix(
+    in srgb,
+    var(--surface, #ffffff) 94%,
+    transparent
+  );
+  backdrop-filter: blur(12px);
+}
+
+.travel-topbar-start,
+.travel-topbar-end {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.travel-topbar-eyebrow {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  color: var(--muted, #6b7280);
+}
+
+.travel-page-title {
+  margin-top: 2px;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.travel-runtime-indicator {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 10px;
+  border: 1px solid var(--line, #e5e7eb);
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.travel-runtime-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: #f59e0b;
+}
+
+.travel-account {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 5px 8px;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+}
+
+.travel-account:disabled {
+  opacity: 1;
+}
+
+.travel-account-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  background: var(--soft, #eff6ff);
+  color: var(--accent, #2563eb);
+}
+
+.travel-account-copy strong {
+  font-size: 11px;
+}
+
+.travel-account-copy small {
+  margin-top: 2px;
+  font-size: 9px;
+  color: var(--muted, #6b7280);
+}
+
+.travel-content {
+  box-sizing: border-box;
+  min-height: calc(100vh - var(--travel-topbar-height));
+  padding: 24px;
+}
+
+.travel-shell-state {
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+.travel-shell-header {
+  margin-bottom: 20px;
+}
+
+.travel-shell-eyebrow {
+  margin-bottom: 7px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  color: var(--accent, #2563eb);
+}
+
+.travel-shell-header h1 {
+  margin: 0;
+  font-size: clamp(23px, 3vw, 34px);
+  line-height: 1.2;
+}
+
+.travel-shell-header p {
+  max-width: 720px;
+  margin: 9px 0 0;
+  color: var(--muted, #6b7280);
+  font-size: 12px;
+  line-height: 1.65;
+}
+
+.travel-shell-notice {
+  padding: 16px;
+  border: 1px solid var(--line, #e5e7eb);
+  border-radius: 14px;
+  background: var(--surface, #ffffff);
+}
+
+.travel-shell-notice strong {
+  display: block;
+  margin-bottom: 5px;
+  font-size: 12px;
+}
+
+.travel-shell-notice span {
+  color: var(--muted, #6b7280);
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+.travel-icon-button {
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--line, #e5e7eb);
+  border-radius: 10px;
+  background: var(--surface, #ffffff);
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.travel-mobile-only {
+  display: none;
+}
+
+.travel-sidebar-overlay {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  .travel-app {
+    display: block;
+  }
+
+  .travel-sidebar {
+    position: fixed;
+    inset: 0 auto 0 0;
+    width: min(
+      var(--travel-sidebar-width),
+      calc(100vw - 48px)
+    );
+    transform: translateX(-105%);
+    transition: transform .18s ease;
+    box-shadow: 18px 0 40px rgba(15, 23, 42, .12);
+  }
+
+  body.travel-nav-open .travel-sidebar {
+    transform: translateX(0);
+  }
+
+  .travel-sidebar-overlay {
+    position: fixed;
+    inset: 0;
+    display: block;
+    z-index: 35;
+    background: rgba(15, 23, 42, .28);
+  }
+
+  .travel-sidebar-overlay[hidden] {
+    display: none;
+  }
+
+  .travel-mobile-only {
+    display: grid;
+  }
+
+  .travel-brand .travel-icon-button {
+    margin-left: auto;
+  }
+
+  .travel-topbar {
+    padding-inline: 14px;
+  }
+
+  .travel-content {
+    padding: 18px 14px;
+  }
+
+  .travel-runtime-indicator {
+    display: none;
+  }
+
+  .travel-account-copy {
+    display: none;
+  }
+}
+
+@media (max-width: 520px) {
+  .travel-account {
+    padding-right: 0;
+  }
+
+  .travel-content {
+    padding-top: 16px;
+  }
+}

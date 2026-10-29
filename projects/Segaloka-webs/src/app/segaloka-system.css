@@ -1,0 +1,3777 @@
+﻿/* ============================================================
+   SEGALOKA — CANONICAL DESIGN SYSTEM
+   Geometry + Typography
+   ============================================================ */
+
+:root {
+  --sg-shell: 1180px;
+  --sg-gutter: 32px;
+
+  --sg-blue: #0877f9;
+  --sg-navy: #082d67;
+  --sg-text: #102d55;
+  --sg-muted: #6c8099;
+  --sg-border: #dce7f2;
+  --sg-soft: #eef7ff;
+
+  --sg-radius-sm: 10px;
+  --sg-radius-md: 14px;
+  --sg-radius-lg: 18px;
+
+  --sg-space-1: 4px;
+  --sg-space-2: 8px;
+  --sg-space-3: 12px;
+  --sg-space-4: 16px;
+  --sg-space-5: 20px;
+  --sg-space-6: 24px;
+  --sg-space-8: 32px;
+}
+
+
+/* ============================================================
+   RESET / TYPOGRAPHY
+   ============================================================ */
+
+html,
+body {
+  width: 100%;
+  max-width: 100%;
+
+  margin: 0;
+
+  overflow-x: clip;
+
+  font-family:
+    var(--font-jakarta),
+    "Plus Jakarta Sans",
+    Arial,
+    sans-serif !important;
+
+  color: var(--sg-text);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+button,
+input,
+select,
+textarea,
+a,
+span,
+small,
+strong,
+p,
+h1,
+h2,
+h3,
+h4,
+div {
+  font-family:
+    var(--font-jakarta),
+    "Plus Jakarta Sans",
+    Arial,
+    sans-serif !important;
+}
+
+
+/* ============================================================
+   CANONICAL SHELL
+   SATU GARIS KIRI/KANAN UNTUK SEMUA
+   ============================================================ */
+
+.container,
+.hero-header-shell,
+.hero-controls,
+.ref-benefit-grid,
+.reference-coupon-shell,
+.reference-main-banner-shell,
+.reference-running-shell,
+.ref-section > .container,
+.ref-bottom-columns,
+.ref-app-banner > .container,
+.footer-grid,
+.footer-bottom {
+  width: min(
+    var(--sg-shell),
+    calc(100% - var(--sg-gutter))
+  ) !important;
+
+  max-width: none !important;
+
+  margin-left: auto !important;
+  margin-right: auto !important;
+
+  box-sizing: border-box !important;
+}
+
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+
+.hero-header {
+  width: 100% !important;
+  max-width: 100% !important;
+
+  height: 60px !important;
+
+  margin: 0 !important;
+
+  border: 0 !important;
+  border-radius: 0 !important;
+
+  background: #fff !important;
+}
+
+.hero-header-shell {
+  height: 60px !important;
+
+  padding: 0 !important;
+
+  display: grid !important;
+  grid-template-columns: 160px 1fr 205px !important;
+  align-items: center !important;
+}
+
+.hero-logo img {
+  width: 118px !important;
+  height: auto !important;
+}
+
+.hero-nav {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  gap: 28px !important;
+}
+
+.hero-nav a {
+  color: #18375e !important;
+
+  font-size: 12px !important;
+  line-height: 1 !important;
+
+  font-weight: 600 !important;
+}
+
+.hero-nav a.active {
+  color: var(--sg-blue) !important;
+}
+
+.hero-currency,
+.hero-login,
+.hero-register {
+  font-size: 11px !important;
+  font-weight: 600 !important;
+}
+
+
+/* ============================================================
+   HERO FULL WIDTH — REAL LOCAL FILE
+   ============================================================ */
+
+.hero-reference {
+  position: relative !important;
+  isolation: isolate !important;
+
+  width: 100% !important;
+  max-width: 100% !important;
+
+  height: 520px !important;
+  min-height: 520px !important;
+  max-height: 520px !important;
+
+  margin: 0 0 104px !important;
+
+  border: 0 !important;
+
+  overflow: visible !important;
+
+  background: #dceeff !important;
+}
+
+.hero-reference-media {
+  position: absolute !important;
+  inset: 0 !important;
+
+  width: 100% !important;
+  height: 100% !important;
+
+  overflow: hidden !important;
+
+  z-index: -3 !important;
+}
+
+.hero-reference-photo,
+.hero-reference-media img {
+  display: block !important;
+
+  width: 100% !important;
+  height: 100% !important;
+
+  max-width: 100% !important;
+
+  object-fit: cover !important;
+  object-position: center 57% !important;
+}
+
+.hero-reference-overlay {
+  position: absolute !important;
+  inset: 0 !important;
+
+  z-index: -2 !important;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(0,25,65,.05),
+      rgba(0,20,60,.02) 55%,
+      rgba(0,20,60,.04)
+    ) !important;
+
+  pointer-events: none !important;
+}
+
+
+/* ============================================================
+   HERO COPY
+   ============================================================ */
+
+.hero-reference-shell {
+  position: relative !important;
+
+  width: min(var(--sg-shell), calc(100% - var(--sg-gutter))) !important;
+  height: 100% !important;
+
+  margin-inline: auto !important;
+
+  padding-top: 46px !important;
+}
+
+.hero-reference-copy {
+  width: 780px !important;
+  max-width: 92% !important;
+
+  margin-inline: auto !important;
+
+  text-align: center !important;
+}
+
+.hero-reference-copy h1 {
+  margin: 0 !important;
+
+  color: #fff !important;
+
+  font-size: 54px !important;
+  line-height: 1.02 !important;
+
+  letter-spacing: -2.2px !important;
+
+  font-weight: 800 !important;
+
+  text-shadow:
+    0 2px 7px rgba(0,0,0,.22),
+    0 7px 22px rgba(0,0,0,.20) !important;
+}
+
+.hero-reference-copy p {
+  width: 680px !important;
+  max-width: 90% !important;
+
+  margin: 12px auto 0 !important;
+
+  color: #fff !important;
+
+  font-size: 14px !important;
+  line-height: 1.5 !important;
+
+  font-weight: 600 !important;
+
+  text-shadow:
+    0 2px 8px rgba(0,0,0,.28) !important;
+}
+
+
+/* ============================================================
+   HERO CONTROLS
+   ============================================================ */
+
+.hero-controls {
+  position: absolute !important;
+
+  left: 50% !important;
+  right: auto !important;
+  bottom: -88px !important;
+
+  transform: translateX(-50%) !important;
+
+  z-index: 50 !important;
+}
+
+
+/* ============================================================
+   CATEGORY TABS
+   ============================================================ */
+
+.hero-tabs {
+  width: max-content !important;
+  max-width: 100% !important;
+
+  margin: 0 auto -10px !important;
+
+  padding: 8px 10px !important;
+
+  display: flex !important;
+  align-items: center !important;
+
+  gap: 4px !important;
+
+  border: 1px solid var(--sg-border) !important;
+  border-radius: var(--sg-radius-lg) !important;
+
+  background: #fff !important;
+
+  box-shadow: 0 8px 22px rgba(25,72,115,.13) !important;
+}
+
+.hero-tabs button {
+  height: 40px !important;
+
+  padding: 0 13px !important;
+
+  gap: 6px !important;
+
+  border-radius: 10px !important;
+
+  font-size: 10px !important;
+  font-weight: 600 !important;
+}
+
+
+/* ============================================================
+   SEARCH
+   ============================================================ */
+
+.hero-search-card {
+  width: 100% !important;
+
+  margin: 0 !important;
+
+  padding:
+    28px
+    12px
+    12px !important;
+
+  display: grid !important;
+
+  grid-template-columns:
+    1fr
+    1.25fr
+    .9fr
+    .9fr
+    108px !important;
+
+  gap: 10px !important;
+
+  border: 1px solid var(--sg-border) !important;
+  border-radius: var(--sg-radius-lg) !important;
+
+  background: #fff !important;
+
+  box-shadow: 0 12px 28px rgba(27,73,119,.15) !important;
+}
+
+.hero-field {
+  height: 56px !important;
+
+  padding: 8px 10px !important;
+
+  border: 1px solid var(--sg-border) !important;
+  border-radius: 11px !important;
+}
+
+.hero-field-content small {
+  font-size: 8px !important;
+  line-height: 1.25 !important;
+
+  color: var(--sg-muted) !important;
+}
+
+.hero-field-content strong {
+  font-size: 10px !important;
+  line-height: 1.3 !important;
+
+  color: var(--sg-text) !important;
+
+  font-weight: 700 !important;
+}
+
+.hero-search-button {
+  height: 56px !important;
+
+  border-radius: 11px !important;
+
+  font-size: 11px !important;
+  font-weight: 700 !important;
+}
+
+
+/* ============================================================
+   BENEFIT
+   ============================================================ */
+
+.ref-benefit {
+  width: 100% !important;
+
+  margin: 0 !important;
+
+  padding:
+    0
+    0
+    var(--sg-space-4) !important;
+
+  background: #fff !important;
+
+  border: 0 !important;
+}
+
+.ref-benefit-grid {
+  min-height: 68px !important;
+
+  padding: 0 !important;
+
+  border: 1px solid var(--sg-border) !important;
+  border-radius: 14px !important;
+
+  overflow: hidden !important;
+}
+
+.ref-benefit-grid article {
+  min-height: 68px !important;
+
+  padding: 11px 16px !important;
+
+  margin: 0 !important;
+}
+
+.ref-benefit-grid strong {
+  font-size: 10px !important;
+  line-height: 1.3 !important;
+
+  font-weight: 700 !important;
+}
+
+.ref-benefit-grid p {
+  margin-top: 3px !important;
+
+  font-size: 8px !important;
+  line-height: 1.35 !important;
+
+  color: var(--sg-muted) !important;
+}
+
+
+/* ============================================================
+   COUPON
+   ============================================================ */
+
+.reference-coupon {
+  width: 100% !important;
+
+  margin: 0 !important;
+
+  padding:
+    0
+    0
+    var(--sg-space-4) !important;
+
+  background: #fff !important;
+}
+
+.reference-coupon-shell {
+  padding: 12px 14px !important;
+
+  display: grid !important;
+
+  grid-template-columns:
+    180px
+    1fr !important;
+
+  gap: 12px !important;
+
+  border-radius: 14px !important;
+
+  background: #eaf6ff !important;
+}
+
+.reference-coupon-title h2 {
+  margin: 0 !important;
+
+  font-size: 16px !important;
+  line-height: 1.05 !important;
+
+  letter-spacing: -.4px !important;
+
+  font-weight: 800 !important;
+}
+
+.reference-coupon-title p {
+  margin: 4px 0 0 !important;
+
+  font-size: 8px !important;
+
+  color: var(--sg-muted) !important;
+}
+
+.reference-coupon-track {
+  gap: 10px !important;
+}
+
+.reference-coupon-card {
+  min-height: 62px !important;
+
+  padding: 8px 10px !important;
+
+  border-radius: 11px !important;
+}
+
+.reference-coupon-copy small {
+  font-size: 8px !important;
+}
+
+.reference-coupon-copy strong {
+  font-size: 13px !important;
+
+  font-weight: 800 !important;
+}
+
+.reference-coupon-copy span {
+  font-size: 8px !important;
+}
+
+
+/* ============================================================
+   BANNER
+   ============================================================ */
+
+.reference-main-banner {
+  width: 100% !important;
+
+  margin: 0 !important;
+
+  padding:
+    0
+    0
+    var(--sg-space-6) !important;
+
+  background: #fff !important;
+}
+
+.reference-main-banner-shell {
+  overflow: hidden !important;
+
+  border-radius: 13px !important;
+}
+
+.reference-main-banner-shell img {
+  display: block !important;
+
+  width: 100% !important;
+  height: 145px !important;
+
+  object-fit: cover !important;
+}
+
+
+/* ============================================================
+   GENERIC SECTION
+   ============================================================ */
+
+.ref-section,
+.ref-bottom-grid,
+.ref-app-banner {
+  width: 100% !important;
+
+  margin: 0 !important;
+
+  padding:
+    var(--sg-space-6)
+    0 !important;
+}
+
+.ref-section-title {
+  width: 100% !important;
+
+  margin:
+    0
+    0
+    var(--sg-space-3) !important;
+}
+
+.ref-section-title h2,
+.ref-bottom-columns h2 {
+  margin: 0 !important;
+
+  color: var(--sg-text) !important;
+
+  font-size: 19px !important;
+  line-height: 1.15 !important;
+
+  letter-spacing: -.35px !important;
+
+  font-weight: 800 !important;
+}
+
+.ref-section-title p {
+  margin: 4px 0 0 !important;
+
+  color: var(--sg-muted) !important;
+
+  font-size: 9px !important;
+  line-height: 1.4 !important;
+}
+
+.ref-section-title a {
+  font-size: 9px !important;
+
+  font-weight: 700 !important;
+}
+
+
+/* ============================================================
+   CARD GRIDS
+   ============================================================ */
+
+.ref-package-grid,
+.ref-hotel-grid,
+.ref-attraction-grid,
+.ref-tip-grid {
+  width: 100% !important;
+
+  margin: 0 !important;
+
+  gap: 12px !important;
+}
+
+
+/* Paket */
+
+.ref-package-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+}
+
+.ref-package-body h3 {
+  font-size: 11px !important;
+  line-height: 1.3 !important;
+
+  font-weight: 700 !important;
+}
+
+.ref-meta {
+  font-size: 8px !important;
+}
+
+.ref-package-body > strong {
+  font-size: 13px !important;
+
+  font-weight: 800 !important;
+}
+
+
+/* Hotel */
+
+.ref-hotel-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+}
+
+.ref-hotel-grid h3 {
+  font-size: 11px !important;
+
+  font-weight: 700 !important;
+}
+
+.ref-hotel-grid small {
+  font-size: 8px !important;
+}
+
+.ref-hotel-grid strong {
+  font-size: 13px !important;
+
+  font-weight: 800 !important;
+}
+
+
+/* Attraction / Tips */
+
+.ref-attraction-grid h3,
+.ref-tip-grid h3 {
+  font-size: 10px !important;
+  line-height: 1.3 !important;
+
+  font-weight: 700 !important;
+}
+
+
+/* ============================================================
+   CTA
+   ============================================================ */
+
+.ref-app-banner > .container {
+  padding: 0 !important;
+}
+
+.ref-app-copy h2 {
+  font-size: 22px !important;
+  line-height: 1.1 !important;
+
+  font-weight: 800 !important;
+}
+
+.ref-app-copy p {
+  font-size: 9px !important;
+}
+
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+
+.footer {
+  width: 100% !important;
+}
+
+.footer h3 {
+  font-size: 11px !important;
+
+  font-weight: 700 !important;
+}
+
+.footer p,
+.footer a,
+.footer span {
+  font-size: 8px !important;
+  line-height: 1.5 !important;
+}
+
+
+/* ============================================================
+   TABLET
+   ============================================================ */
+
+@media (min-width: 701px) and (max-width: 1199px) {
+  :root {
+    --sg-gutter: 24px;
+  }
+
+  .hero-reference {
+    height: 430px !important;
+    min-height: 430px !important;
+    max-height: 430px !important;
+
+    margin-bottom: 96px !important;
+  }
+
+  .hero-reference-copy h1 {
+    font-size: 44px !important;
+  }
+
+  .hero-controls {
+    bottom: -80px !important;
+  }
+}
+
+
+/* ============================================================
+   MOBILE
+   ============================================================ */
+
+@media (max-width: 700px) {
+  :root {
+    --sg-gutter: 16px;
+  }
+
+  .hero-header-shell,
+  .hero-controls,
+  .ref-benefit-grid,
+  .reference-coupon-shell,
+  .reference-main-banner-shell,
+  .reference-running-shell,
+  .ref-section > .container,
+  .ref-bottom-columns,
+  .ref-app-banner > .container,
+  .footer-grid,
+  .footer-bottom {
+    width: calc(100% - 16px) !important;
+  }
+
+  .hero-reference {
+    height: auto !important;
+    min-height: 620px !important;
+    max-height: none !important;
+
+    margin-bottom: 16px !important;
+  }
+
+  .hero-reference-copy h1 {
+    font-size: 29px !important;
+  }
+
+  .hero-reference-copy p {
+    font-size: 10px !important;
+  }
+
+  .hero-controls {
+    bottom: 8px !important;
+  }
+
+  .hero-search-card {
+    grid-template-columns: 1fr !important;
+  }
+
+  .reference-coupon-shell {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* ============================================================
+   SEGALOKA — SEARCH GEOMETRY FINAL
+   Dari & Tujuan sama lebar
+   Semua shell rata kiri/kanan
+   ============================================================ */
+
+:root {
+  --sg-shell-final: 1180px;
+  --sg-shell-gutter-final: 32px;
+}
+
+
+/* ============================================================
+   SEMUA SHELL UTAMA HARUS PERSIS SAMA
+   ============================================================ */
+
+.hero-controls,
+.ref-benefit-grid,
+.reference-coupon-shell,
+.reference-main-banner-shell,
+.reference-running-shell,
+.ref-section > .container,
+.ref-bottom-columns,
+.ref-app-banner > .container {
+  width: min(
+    var(--sg-shell-final),
+    calc(100% - var(--sg-shell-gutter-final))
+  ) !important;
+
+  max-width: none !important;
+
+  margin-left: auto !important;
+  margin-right: auto !important;
+
+  box-sizing: border-box !important;
+}
+
+
+/* Hero controls absolute tetap harus center */
+.hero-controls {
+  left: 50% !important;
+  right: auto !important;
+
+  transform: translateX(-50%) !important;
+}
+
+
+/* ============================================================
+   SEARCH CARD
+   ============================================================ */
+
+.hero-search-card {
+  width: 100% !important;
+  max-width: none !important;
+
+  margin: 0 !important;
+
+  padding:
+    12px
+    12px !important;
+
+  /*
+   * Dari      = 1fr
+   * Tujuan    = 1fr
+   * Traveler  = .72fr
+   * Tanggal   = .82fr
+   * Cari      = 108px
+   */
+  grid-template-columns:
+    minmax(0, 1fr)
+    minmax(0, 1fr)
+    minmax(160px, .72fr)
+    minmax(180px, .82fr)
+    108px !important;
+
+  gap: 10px !important;
+
+  box-sizing: border-box !important;
+}
+
+
+/* ============================================================
+   FIELD
+   ============================================================ */
+
+.hero-field {
+  min-width: 0 !important;
+
+  height: 54px !important;
+
+  padding:
+    7px
+    10px !important;
+
+  border-radius: 10px !important;
+}
+
+.hero-field-icon {
+  width: 28px !important;
+  height: 28px !important;
+
+  flex: 0 0 28px !important;
+}
+
+.hero-field-content {
+  min-width: 0 !important;
+}
+
+.hero-field-content small {
+  display: block !important;
+
+  margin: 0 0 2px !important;
+
+  font-size: 8px !important;
+  line-height: 1.15 !important;
+
+  font-weight: 500 !important;
+
+  color: #71839b !important;
+}
+
+.hero-field-content strong {
+  display: block !important;
+
+  overflow: hidden !important;
+
+  font-size: 10px !important;
+  line-height: 1.2 !important;
+
+  font-weight: 700 !important;
+
+  color: #102d55 !important;
+
+  white-space: nowrap !important;
+  text-overflow: ellipsis !important;
+}
+
+
+/* Traveler dibuat lebih compact */
+
+.hero-traveler-controls {
+  gap: 6px !important;
+}
+
+.hero-traveler-controls button {
+  width: 23px !important;
+  height: 23px !important;
+}
+
+
+/* ============================================================
+   BUTTON CARI
+   ============================================================ */
+
+.hero-search-button {
+  width: 108px !important;
+  min-width: 108px !important;
+
+  height: 54px !important;
+
+  padding: 0 14px !important;
+
+  font-size: 11px !important;
+  line-height: 1 !important;
+
+  font-weight: 700 !important;
+}
+
+
+/* ============================================================
+   HILANGKAN PERBEDAAN VISUAL KIRI/KANAN
+   ============================================================ */
+
+.ref-benefit,
+.reference-coupon,
+.reference-main-banner,
+.reference-running-promo,
+.ref-section,
+.ref-bottom-grid,
+.ref-app-banner {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+.ref-benefit-grid,
+.reference-coupon-shell,
+.reference-main-banner-shell,
+.reference-running-shell {
+  box-sizing: border-box !important;
+}
+
+
+/* ============================================================
+   LAPTOP
+   ============================================================ */
+
+@media (min-width: 1000px) and (max-width: 1300px) {
+  .hero-search-card {
+    grid-template-columns:
+      minmax(0, 1fr)
+      minmax(0, 1fr)
+      minmax(145px, .72fr)
+      minmax(165px, .82fr)
+      102px !important;
+  }
+
+  .hero-search-button {
+    width: 102px !important;
+    min-width: 102px !important;
+  }
+}
+
+
+/* ============================================================
+   TABLET
+   ============================================================ */
+
+@media (min-width: 701px) and (max-width: 999px) {
+  .hero-search-card {
+    grid-template-columns:
+      1fr
+      1fr !important;
+  }
+
+  .hero-search-button {
+    width: 100% !important;
+
+    grid-column: 1 / -1;
+  }
+}
+
+
+/* ============================================================
+   MOBILE
+   ============================================================ */
+
+@media (max-width: 700px) {
+  :root {
+    --sg-shell-gutter-final: 16px;
+  }
+
+  .hero-search-card {
+    grid-template-columns: 1fr !important;
+  }
+
+  .hero-search-button {
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+}
+
+
+/* ============================================================
+   SEGALOKA — HERO / SEARCH / BENEFIT FINAL SPACING FIX
+   Fokus:
+   - benefit card naik mendekati search box
+   - rata kiri kanan dengan search / kupon / banner
+   ============================================================ */
+
+:root {
+  --sg-shell-final: 1180px;
+  --sg-shell-gutter-final: 32px;
+  --sg-stack-gap-tight: 12px;   /* jarak search ke benefit */
+  --sg-stack-gap-normal: 16px;  /* jarak benefit ke kupon */
+}
+
+
+/* ============================================================
+   SATUKAN LEBAR SEMUA BLOK UTAMA
+   ============================================================ */
+
+.hero-controls,
+.ref-benefit-grid,
+.reference-coupon-shell,
+.reference-main-banner-shell,
+.reference-running-shell,
+.ref-section > .container,
+.ref-bottom-columns,
+.ref-app-banner > .container {
+  width: min(var(--sg-shell-final), calc(100% - var(--sg-shell-gutter-final))) !important;
+  max-width: none !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  box-sizing: border-box !important;
+}
+
+
+/* ============================================================
+   HERO CONTROLS
+   ============================================================ */
+
+.hero-controls {
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  bottom: -56px !important; /* tetap turun dari hero */
+}
+
+
+/* ============================================================
+   WRAPPER BENEFIT
+   - ini yang membuat card di bawah hero naik lagi
+   ============================================================ */
+
+.ref-benefit {
+  width: 100% !important;
+  background: #ffffff !important;
+
+  /*
+   * sebelumnya terlalu jauh ke bawah.
+   * sekarang dibuat lebih rapat ke search box.
+   */
+  padding-top: 72px !important;
+  padding-bottom: 8px !important;
+
+  margin-top: 0 !important;
+  border: 0 !important;
+}
+
+
+/* grid benefit persis 1 garis dengan shell lain */
+.ref-benefit-grid {
+  display: grid !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+
+  gap: 0 !important;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+
+  border: 1px solid #dbe6f2 !important;
+  border-radius: 18px !important;
+  overflow: hidden !important;
+  background: #ffffff !important;
+}
+
+
+/* masing-masing card benefit */
+.ref-benefit-grid article {
+  min-height: 70px !important;
+  padding: 14px 18px !important;
+
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+
+  margin: 0 !important;
+  background: #ffffff !important;
+  box-sizing: border-box !important;
+}
+
+.ref-benefit-grid article + article {
+  border-left: 1px solid #dbe6f2 !important;
+}
+
+.ref-round-icon {
+  width: 40px !important;
+  height: 40px !important;
+  flex: 0 0 40px !important;
+}
+
+.ref-benefit-grid strong {
+  display: block !important;
+  margin: 0 0 2px !important;
+
+  font-size: 11px !important;
+  line-height: 1.2 !important;
+  font-weight: 700 !important;
+  color: #0f2f58 !important;
+}
+
+.ref-benefit-grid p {
+  margin: 0 !important;
+
+  font-size: 9px !important;
+  line-height: 1.35 !important;
+  font-weight: 500 !important;
+  color: #72839a !important;
+}
+
+
+/* ============================================================
+   KUPON DIATUR AGAR JARAKNYA KONSISTEN DENGAN BENEFIT
+   ============================================================ */
+
+.reference-coupon,
+.ref-coupon {
+  padding-top: var(--sg-stack-gap-normal) !important;
+  margin-top: 0 !important;
+}
+
+.reference-coupon-shell {
+  box-sizing: border-box !important;
+}
+
+
+/* Banner setelah kupon juga dirapikan */
+.reference-main-banner,
+.reference-running-promo {
+  padding-top: 14px !important;
+  margin-top: 0 !important;
+}
+
+
+/* ============================================================
+   SEARCH CARD BIAR TETAP KONSISTEN
+   ============================================================ */
+
+.hero-search-card {
+  width: 100% !important;
+  margin: 0 !important;
+
+  grid-template-columns:
+    minmax(0, 1fr)
+    minmax(0, 1fr)
+    minmax(160px, .72fr)
+    minmax(180px, .82fr)
+    108px !important;
+
+  gap: 10px !important;
+  padding: 12px !important;
+  box-sizing: border-box !important;
+}
+
+.hero-field {
+  height: 54px !important;
+  min-width: 0 !important;
+}
+
+
+/* ============================================================
+   TABLET
+   ============================================================ */
+
+@media (max-width: 999px) and (min-width: 701px) {
+  .ref-benefit {
+    padding-top: 84px !important;
+  }
+
+  .ref-benefit-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .ref-benefit-grid article:nth-child(3),
+  .ref-benefit-grid article:nth-child(4) {
+    border-top: 1px solid #dbe6f2 !important;
+  }
+
+  .ref-benefit-grid article:nth-child(3) {
+    border-left: 0 !important;
+  }
+}
+
+
+/* ============================================================
+   MOBILE
+   ============================================================ */
+
+@media (max-width: 700px) {
+  :root {
+    --sg-shell-gutter-final: 16px;
+  }
+
+  .hero-controls {
+    bottom: 8px !important;
+  }
+
+  .ref-benefit {
+    padding-top: 14px !important;
+    padding-bottom: 6px !important;
+  }
+
+  .ref-benefit-grid {
+    grid-template-columns: 1fr !important;
+    border-radius: 16px !important;
+  }
+
+  .ref-benefit-grid article + article {
+    border-left: 0 !important;
+    border-top: 1px solid #dbe6f2 !important;
+  }
+}
+
+
+/* ============================================================
+   SEGALOKA — TOP STACK SPACING FINAL
+   Tabs → Search → Benefit → Coupon
+   ============================================================ */
+
+/* ------------------------------------------------------------
+   1. TAB KATEGORI → SEARCH
+   Sebelumnya margin -10px membuat keduanya terlalu menempel.
+   ------------------------------------------------------------ */
+
+.hero-tabs {
+  margin:
+    0
+    auto
+    10px !important;
+}
+
+
+/* ------------------------------------------------------------
+   2. SEARCH POSITION
+   Tetap overlap di bawah hero.
+   ------------------------------------------------------------ */
+
+.hero-controls {
+  bottom: -88px !important;
+}
+
+
+/* ------------------------------------------------------------
+   3. HERO RESERVE SPACE
+   Search keluar 88px dari hero.
+   Reserve 104px = gap search → benefit sekitar 16px.
+   ------------------------------------------------------------ */
+
+.hero-reference {
+  margin-bottom: 104px !important;
+}
+
+
+/* ------------------------------------------------------------
+   4. BENEFIT
+   HAPUS ruang tambahan 72px yang membuat benefit terlalu jauh.
+   ------------------------------------------------------------ */
+
+.ref-benefit {
+  width: 100% !important;
+
+  margin:
+    0 !important;
+
+  padding:
+    0
+    0
+    12px !important;
+
+  background: #ffffff !important;
+}
+
+
+/* ------------------------------------------------------------
+   5. BENEFIT GRID
+   Tidak boleh punya margin tambahan.
+   ------------------------------------------------------------ */
+
+.ref-benefit-grid {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+
+/* ------------------------------------------------------------
+   6. BENEFIT → KUPON
+   ------------------------------------------------------------ */
+
+.reference-coupon {
+  margin-top: 0 !important;
+
+  padding-top: 0 !important;
+  padding-bottom: 16px !important;
+}
+
+
+/* ------------------------------------------------------------
+   TABLET
+   ------------------------------------------------------------ */
+
+@media (min-width: 701px) and (max-width: 1199px) {
+  .hero-tabs {
+    margin-bottom: 9px !important;
+  }
+
+  .hero-controls {
+    bottom: -80px !important;
+  }
+
+  .hero-reference {
+    margin-bottom: 96px !important;
+  }
+
+  .ref-benefit {
+    padding-top: 0 !important;
+  }
+}
+
+
+/* ------------------------------------------------------------
+   MOBILE
+   ------------------------------------------------------------ */
+
+@media (max-width: 700px) {
+  .hero-tabs {
+    margin-bottom: 8px !important;
+  }
+
+  .hero-reference {
+    margin-bottom: 16px !important;
+  }
+
+  .hero-controls {
+    bottom: 8px !important;
+  }
+
+  .ref-benefit {
+    padding:
+      12px
+      0
+      10px !important;
+  }
+}
+
+
+/* ============================================================
+   SEGALOKA — HERO CONTROLS INTEGRATION
+   Tabs + Search menjadi satu visual component
+   ============================================================ */
+
+
+/* ============================================================
+   1. NAIKKAN FOCAL POINT GAMBAR HERO
+   ============================================================ */
+
+.hero-reference-photo,
+.hero-reference-media img {
+  object-position: center 52% !important;
+}
+
+
+/* ============================================================
+   2. CONTROL GROUP
+   ============================================================ */
+
+.hero-controls {
+  position: absolute !important;
+
+  left: 50% !important;
+  bottom: -72px !important;
+
+  transform: translateX(-50%) !important;
+
+  width: min(
+    var(--sg-shell-final, 1180px),
+    calc(100% - 32px)
+  ) !important;
+
+  z-index: 50 !important;
+}
+
+
+/* ============================================================
+   3. CATEGORY TAB
+   Dibuat menyatu dengan panel search
+   ============================================================ */
+
+.hero-tabs {
+  position: relative !important;
+
+  z-index: 53 !important;
+
+  width: max-content !important;
+  max-width: calc(100% - 48px) !important;
+
+  /*
+   * Tabs turun masuk ke permukaan panel search.
+   */
+  margin:
+    0
+    auto
+    -17px !important;
+
+  padding:
+    8px
+    10px !important;
+
+  border:
+    1px
+    solid
+    #dce7f2 !important;
+
+  border-radius:
+    17px
+    17px
+    13px
+    13px !important;
+
+  background:
+    #ffffff !important;
+
+  box-shadow:
+    0 6px 18px rgba(35,75,118,.10) !important;
+}
+
+
+/* active category */
+
+.hero-tabs button {
+  height: 40px !important;
+
+  padding:
+    0
+    13px !important;
+
+  border-radius: 10px !important;
+
+  font-size: 10px !important;
+  font-weight: 600 !important;
+}
+
+
+/* ============================================================
+   4. SEARCH PANEL
+   Putih diperpanjang ke atas
+   ============================================================ */
+
+.hero-search-card {
+  position: relative !important;
+
+  z-index: 51 !important;
+
+  width: 100% !important;
+
+  margin: 0 !important;
+
+  /*
+   * Padding atas dibuat lebih besar karena tabs masuk ke panel.
+   */
+  padding:
+    32px
+    12px
+    12px !important;
+
+  border:
+    1px
+    solid
+    #dce7f2 !important;
+
+  border-radius:
+    20px !important;
+
+  background:
+    #ffffff !important;
+
+  box-shadow:
+    0 14px 32px rgba(30,72,115,.14) !important;
+}
+
+
+/* ============================================================
+   5. WHITE BRIDGE
+   Ini yang membuat tabs dan Search benar-benar terlihat menyatu
+   ============================================================ */
+
+.hero-search-card::before {
+  content: "";
+
+  position: absolute;
+
+  top: -23px;
+  left: 22px;
+  right: 22px;
+
+  height: 34px;
+
+  z-index: -1;
+
+  border-radius:
+    18px
+    18px
+    0
+    0;
+
+  background:
+    #ffffff;
+
+  pointer-events: none;
+}
+
+
+/* ============================================================
+   6. SEARCH FIELDS
+   ============================================================ */
+
+.hero-field {
+  height: 54px !important;
+
+  background:
+    #ffffff !important;
+}
+
+.hero-search-button {
+  height: 54px !important;
+}
+
+
+/* ============================================================
+   7. RESERVE SPACE SESUDAH HERO
+   Menyesuaikan posisi controls yang sekarang lebih naik
+   ============================================================ */
+
+.hero-reference {
+  margin-bottom: 92px !important;
+}
+
+
+/* ============================================================
+   TABLET
+   ============================================================ */
+
+@media (min-width: 701px) and (max-width: 1199px) {
+
+  .hero-reference-photo,
+  .hero-reference-media img {
+    object-position: center 51% !important;
+  }
+
+  .hero-controls {
+    bottom: -68px !important;
+  }
+
+  .hero-reference {
+    margin-bottom: 88px !important;
+  }
+
+  .hero-tabs {
+    margin-bottom: -16px !important;
+  }
+}
+
+
+/* ============================================================
+   MOBILE
+   ============================================================ */
+
+@media (max-width: 700px) {
+
+  .hero-reference-photo,
+  .hero-reference-media img {
+    object-position: center 50% !important;
+  }
+
+  .hero-controls {
+    bottom: 8px !important;
+  }
+
+  .hero-tabs {
+    margin-bottom: -13px !important;
+  }
+
+  .hero-search-card {
+    padding:
+      27px
+      8px
+      8px !important;
+  }
+
+  .hero-search-card::before {
+    top: -18px;
+    left: 8px;
+    right: 8px;
+
+    height: 27px;
+  }
+
+  .hero-reference {
+    margin-bottom: 16px !important;
+  }
+}
+
+
+/* ============================================================
+   SEGALOKA — SINGLE WHITE PANEL
+   Tabs + Search = 1 card putih
+   ============================================================ */
+
+/* Tabs tidak punya card sendiri */
+.hero-tabs {
+  background: transparent !important;
+
+  border: 0 !important;
+
+  box-shadow: none !important;
+
+  border-radius: 0 !important;
+
+  margin:
+    0
+    auto
+    8px !important;
+
+  padding:
+    0
+    8px !important;
+
+  position: relative !important;
+
+  z-index: 3 !important;
+}
+
+
+/* Search card menjadi SATU-SATUNYA panel putih */
+.hero-search-card {
+  position: relative !important;
+
+  z-index: 2 !important;
+
+  width: 100% !important;
+
+  margin: 0 !important;
+
+  padding:
+    18px
+    12px
+    12px !important;
+
+  border:
+    1px
+    solid
+    #dce7f2 !important;
+
+  border-radius: 20px !important;
+
+  background:
+    #ffffff !important;
+
+  box-shadow:
+    0 14px 32px rgba(30,72,115,.14) !important;
+}
+
+
+/* Hapus bridge putih lama */
+.hero-search-card::before {
+  content: none !important;
+  display: none !important;
+}
+
+
+/* Controls dibuat terasa sebagai satu komponen */
+.hero-controls {
+  display: flex !important;
+  flex-direction: column !important;
+
+  align-items: stretch !important;
+
+  gap: 0 !important;
+}
+
+
+/* Tabs terlihat berada di atas panel, tetapi bukan card sendiri */
+.hero-tabs button {
+  background: transparent !important;
+}
+
+
+/* Active tab tetap jelas */
+.hero-tabs button.active,
+.hero-tabs button[aria-selected="true"] {
+  background: #edf6ff !important;
+  color: #0877f9 !important;
+
+  border-radius: 10px !important;
+}
+
+
+/* Search field tetap putih */
+.hero-field {
+  background: #ffffff !important;
+}
+
+
+/* Mobile */
+@media (max-width: 700px) {
+  .hero-tabs {
+    margin-bottom: 6px !important;
+  }
+
+  .hero-search-card {
+    padding:
+      14px
+      8px
+      8px !important;
+  }
+}
+
+
+/* ============================================================
+   SEGALOKA — HERO CONTROL SINGLE PANEL + TYPOGRAPHY LOCK
+   Tabs + Search = SATU panel putih
+   ============================================================ */
+
+
+/* ============================================================
+   1. SATU PANEL PUTIH UTAMA
+   ============================================================ */
+
+.hero-controls {
+  position: absolute !important;
+
+  left: 50% !important;
+  bottom: -78px !important;
+
+  transform: translateX(-50%) !important;
+
+  width: min(
+    1180px,
+    calc(100% - 32px)
+  ) !important;
+
+  padding:
+    10px
+    12px
+    12px !important;
+
+  display: flex !important;
+  flex-direction: column !important;
+
+  gap: 10px !important;
+
+  background: #ffffff !important;
+
+  border: 1px solid #dce7f2 !important;
+  border-radius: 22px !important;
+
+  box-shadow:
+    0 14px 34px rgba(25, 71, 116, .16) !important;
+
+  z-index: 50 !important;
+
+  box-sizing: border-box !important;
+}
+
+
+/* ============================================================
+   2. TABS
+   Tidak punya card putih sendiri.
+   ============================================================ */
+
+.hero-tabs {
+  position: relative !important;
+
+  width: max-content !important;
+  max-width: 100% !important;
+
+  margin:
+    0
+    auto !important;
+
+  padding:
+    0
+    4px !important;
+
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  gap: 8px !important;
+
+  background: transparent !important;
+
+  border: 0 !important;
+  border-radius: 0 !important;
+
+  box-shadow: none !important;
+
+  overflow: visible !important;
+}
+
+
+/* Tab button */
+.hero-tabs button {
+  height: 42px !important;
+
+  padding:
+    0
+    14px !important;
+
+  display: flex !important;
+  align-items: center !important;
+
+  gap: 7px !important;
+
+  color: #18375e !important;
+
+  background: transparent !important;
+
+  border: 0 !important;
+  border-radius: 11px !important;
+
+  font-size: 12px !important;
+  line-height: 1 !important;
+
+  font-weight: 600 !important;
+
+  white-space: nowrap !important;
+}
+
+
+/* Tab aktif */
+.hero-tabs button.active,
+.hero-tabs button[aria-selected="true"] {
+  color: #0877f9 !important;
+
+  background: #eaf5ff !important;
+
+  font-weight: 700 !important;
+}
+
+
+/* Icon kategori */
+.hero-tab-icon {
+  width: 28px !important;
+  height: 28px !important;
+
+  flex: 0 0 28px !important;
+}
+
+
+/* ============================================================
+   3. SEARCH
+   Tidak lagi punya card terpisah.
+   ============================================================ */
+
+.hero-search-card {
+  position: relative !important;
+
+  width: 100% !important;
+
+  margin: 0 !important;
+
+  padding: 0 !important;
+
+  display: grid !important;
+
+  grid-template-columns:
+    minmax(0, 1fr)
+    minmax(0, 1fr)
+    minmax(160px, .72fr)
+    minmax(180px, .82fr)
+    110px !important;
+
+  gap: 10px !important;
+
+  background: transparent !important;
+
+  border: 0 !important;
+  border-radius: 0 !important;
+
+  box-shadow: none !important;
+}
+
+
+/* Hapus bridge/pseudo lama */
+.hero-search-card::before,
+.hero-search-card::after {
+  content: none !important;
+  display: none !important;
+}
+
+
+/* ============================================================
+   4. FIELD
+   ============================================================ */
+
+.hero-field {
+  height: 58px !important;
+  min-width: 0 !important;
+
+  padding:
+    8px
+    11px !important;
+
+  display: flex !important;
+  align-items: center !important;
+
+  gap: 9px !important;
+
+  background: #ffffff !important;
+
+  border: 1px solid #d4e1ee !important;
+  border-radius: 12px !important;
+
+  box-shadow: none !important;
+}
+
+
+/* Icon field */
+.hero-field-icon {
+  width: 32px !important;
+  height: 32px !important;
+
+  flex: 0 0 32px !important;
+}
+
+
+/* ============================================================
+   5. TYPOGRAPHY FIELD
+   ============================================================ */
+
+.hero-field-content {
+  min-width: 0 !important;
+}
+
+.hero-field-content small {
+  display: block !important;
+
+  margin:
+    0
+    0
+    3px !important;
+
+  color: #6d8199 !important;
+
+  font-size: 10px !important;
+  line-height: 1.1 !important;
+
+  font-weight: 500 !important;
+}
+
+.hero-field-content strong {
+  display: block !important;
+
+  color: #102d55 !important;
+
+  font-size: 12px !important;
+  line-height: 1.25 !important;
+
+  font-weight: 700 !important;
+
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+
+/* ============================================================
+   6. TRAVELER
+   ============================================================ */
+
+.hero-traveler-controls {
+  display: flex !important;
+  align-items: center !important;
+
+  gap: 7px !important;
+}
+
+.hero-traveler-controls button {
+  width: 25px !important;
+  height: 25px !important;
+
+  flex: 0 0 25px !important;
+}
+
+.hero-traveler-controls strong,
+.hero-traveler-controls span {
+  font-size: 12px !important;
+
+  font-weight: 700 !important;
+}
+
+
+/* ============================================================
+   7. BUTTON CARI
+   ============================================================ */
+
+.hero-search-button {
+  width: 110px !important;
+  min-width: 110px !important;
+
+  height: 58px !important;
+
+  padding:
+    0
+    15px !important;
+
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  gap: 8px !important;
+
+  color: #ffffff !important;
+
+  background: #0877f9 !important;
+
+  border: 0 !important;
+  border-radius: 12px !important;
+
+  font-size: 12px !important;
+  line-height: 1 !important;
+
+  font-weight: 700 !important;
+}
+
+
+/* ============================================================
+   8. HERO RESERVE SPACE
+   ============================================================ */
+
+.hero-reference {
+  margin-bottom: 100px !important;
+}
+
+
+/* ============================================================
+   TABLET
+   ============================================================ */
+
+@media (min-width: 701px) and (max-width: 1100px) {
+
+  .hero-controls {
+    width: calc(100% - 24px) !important;
+
+    bottom: -76px !important;
+  }
+
+  .hero-tabs {
+    justify-content: flex-start !important;
+
+    overflow-x: auto !important;
+  }
+
+  .hero-tabs button {
+    font-size: 11px !important;
+
+    padding-inline: 11px !important;
+  }
+
+  .hero-search-card {
+    grid-template-columns:
+      1fr
+      1fr
+      .8fr
+      .85fr
+      100px !important;
+  }
+
+  .hero-search-button {
+    width: 100px !important;
+    min-width: 100px !important;
+  }
+
+  .hero-reference {
+    margin-bottom: 98px !important;
+  }
+}
+
+
+/* ============================================================
+   MOBILE
+   ============================================================ */
+
+@media (max-width: 700px) {
+
+  .hero-controls {
+    width: calc(100% - 16px) !important;
+
+    bottom: 8px !important;
+
+    padding:
+      8px !important;
+
+    gap: 8px !important;
+
+    border-radius: 18px !important;
+  }
+
+  .hero-tabs {
+    width: 100% !important;
+
+    justify-content: flex-start !important;
+
+    overflow-x: auto !important;
+  }
+
+  .hero-tabs button {
+    min-width: 67px !important;
+
+    height: 48px !important;
+
+    padding:
+      3px
+      5px !important;
+
+    flex-direction: column !important;
+    justify-content: center !important;
+
+    gap: 3px !important;
+
+    font-size: 9px !important;
+  }
+
+  .hero-tab-icon {
+    width: 25px !important;
+    height: 25px !important;
+  }
+
+  .hero-search-card {
+    grid-template-columns: 1fr !important;
+
+    gap: 8px !important;
+  }
+
+  .hero-field {
+    height: 55px !important;
+  }
+
+  .hero-field-content small {
+    font-size: 9px !important;
+  }
+
+  .hero-field-content strong {
+    font-size: 12px !important;
+  }
+
+  .hero-search-button {
+    width: 100% !important;
+    min-width: 0 !important;
+
+    height: 50px !important;
+  }
+
+  .hero-reference {
+    margin-bottom: 16px !important;
+  }
+}
+
+
+/* ============================================================
+   SEGALOKA — FLOATING CATEGORY PILL OVER SEARCH PANEL
+   Sesuai referensi yang dikirim
+   ============================================================ */
+
+/* Wrapper utama hanya untuk positioning */
+.hero-controls {
+  position: absolute !important;
+
+  left: 50% !important;
+  bottom: -72px !important;
+
+  transform: translateX(-50%) !important;
+
+  width: min(1180px, calc(100% - 32px)) !important;
+
+  padding: 0 !important;
+
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+
+  z-index: 50 !important;
+}
+
+
+/* ============================================================
+   TAB KATEGORI = FLOATING PILL PUTIH
+   ============================================================ */
+
+.hero-tabs {
+  position: absolute !important;
+
+  left: 50% !important;
+  top: -28px !important;
+
+  transform: translateX(-50%) !important;
+
+  z-index: 52 !important;
+
+  width: max-content !important;
+  max-width: calc(100% - 80px) !important;
+
+  margin: 0 !important;
+
+  padding:
+    8px
+    12px !important;
+
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  gap: 8px !important;
+
+  background: #ffffff !important;
+
+  border: 1px solid #e0e9f3 !important;
+  border-radius: 999px !important;
+
+  box-shadow:
+    0 10px 24px rgba(33,72,115,.13) !important;
+}
+
+
+/* tab item */
+.hero-tabs button {
+  height: 42px !important;
+
+  padding:
+    0
+    12px !important;
+
+  display: flex !important;
+  align-items: center !important;
+
+  gap: 7px !important;
+
+  color: #294465 !important;
+
+  background: transparent !important;
+
+  border: 0 !important;
+  border-radius: 999px !important;
+
+  font-size: 12px !important;
+  line-height: 1 !important;
+
+  font-weight: 600 !important;
+
+  white-space: nowrap !important;
+}
+
+
+/* active tab */
+.hero-tabs button.active,
+.hero-tabs button[aria-selected="true"] {
+  color: #0877f9 !important;
+
+  background: #eaf5ff !important;
+
+  font-weight: 700 !important;
+}
+
+
+/* icon bulat seperti referensi */
+.hero-tab-icon {
+  width: 30px !important;
+  height: 30px !important;
+
+  flex: 0 0 30px !important;
+
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  border-radius: 999px !important;
+
+  background: #eef6ff !important;
+}
+
+.hero-tabs button.active .hero-tab-icon,
+.hero-tabs button[aria-selected="true"] .hero-tab-icon {
+  background: #dceeff !important;
+}
+
+
+/* ============================================================
+   SEARCH = SATU PANEL PUTIH BESAR
+   ============================================================ */
+
+.hero-search-card {
+  position: relative !important;
+
+  z-index: 51 !important;
+
+  width: 100% !important;
+
+  margin: 0 !important;
+
+  padding:
+    28px
+    14px
+    14px !important;
+
+  display: grid !important;
+
+  grid-template-columns:
+    minmax(0, 1fr)
+    minmax(0, 1fr)
+    minmax(160px, .72fr)
+    minmax(180px, .82fr)
+    110px !important;
+
+  gap: 10px !important;
+
+  background: #ffffff !important;
+
+  border: 1px solid #dce7f2 !important;
+  border-radius: 22px !important;
+
+  box-shadow:
+    0 14px 34px rgba(31,72,115,.14) !important;
+}
+
+
+/* field */
+.hero-field {
+  height: 58px !important;
+
+  padding:
+    8px
+    11px !important;
+
+  background: #ffffff !important;
+
+  border: 1px solid #d6e2ee !important;
+  border-radius: 12px !important;
+}
+
+
+/* typography */
+.hero-field-content small {
+  font-size: 10px !important;
+  line-height: 1.1 !important;
+
+  color: #71839a !important;
+}
+
+.hero-field-content strong {
+  font-size: 12px !important;
+  line-height: 1.25 !important;
+
+  font-weight: 700 !important;
+
+  color: #102d55 !important;
+}
+
+
+/* cari */
+.hero-search-button {
+  height: 58px !important;
+
+  width: 110px !important;
+  min-width: 110px !important;
+
+  border-radius: 12px !important;
+
+  font-size: 12px !important;
+  font-weight: 700 !important;
+}
+
+
+/* ============================================================
+   HERO SPACING
+   ============================================================ */
+
+.hero-reference {
+  margin-bottom: 96px !important;
+}
+
+
+/* ============================================================
+   TABLET
+   ============================================================ */
+
+@media (min-width: 701px) and (max-width: 1100px) {
+  .hero-tabs {
+    max-width: calc(100% - 40px) !important;
+
+    overflow-x: auto !important;
+  }
+
+  .hero-search-card {
+    grid-template-columns:
+      1fr
+      1fr
+      .8fr
+      .85fr
+      100px !important;
+  }
+
+  .hero-search-button {
+    width: 100px !important;
+    min-width: 100px !important;
+  }
+}
+
+
+/* ============================================================
+   MOBILE
+   ============================================================ */
+
+@media (max-width: 700px) {
+  .hero-controls {
+    width: calc(100% - 16px) !important;
+
+    bottom: 8px !important;
+  }
+
+  .hero-tabs {
+    top: -24px !important;
+
+    width: calc(100% - 18px) !important;
+    max-width: none !important;
+
+    justify-content: flex-start !important;
+
+    overflow-x: auto !important;
+
+    padding:
+      6px
+      8px !important;
+  }
+
+  .hero-tabs button {
+    min-width: 65px !important;
+
+    height: 46px !important;
+
+    padding:
+      3px
+      6px !important;
+
+    flex-direction: column !important;
+    justify-content: center !important;
+
+    gap: 2px !important;
+
+    font-size: 9px !important;
+  }
+
+  .hero-tab-icon {
+    width: 26px !important;
+    height: 26px !important;
+  }
+
+  .hero-search-card {
+    grid-template-columns: 1fr !important;
+
+    padding:
+      30px
+      8px
+      8px !important;
+  }
+
+  .hero-search-button {
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+}
+
+
+/* ============================================================
+   SEGALOKA — FIX TAB / SEARCH OVERLAP
+   ============================================================ */
+
+/* Pill kategori dinaikkan sedikit */
+.hero-tabs {
+  top: -38px !important;
+}
+
+/* Panel search diturunkan sedikit supaya ada ruang */
+.hero-search-card {
+  margin-top: 14px !important;
+}
+
+/* Wrapper diberi ruang aman */
+.hero-controls {
+  padding-top: 8px !important;
+}
+
+/* Pastikan shadow tidak membuat visual seolah numpuk */
+.hero-tabs {
+  box-shadow:
+    0 8px 20px rgba(33,72,115,.12) !important;
+}
+
+.hero-search-card {
+  box-shadow:
+    0 14px 30px rgba(31,72,115,.13) !important;
+}
+
+/* Tablet */
+@media (min-width: 701px) and (max-width: 1100px) {
+  .hero-tabs {
+    top: -34px !important;
+  }
+
+  .hero-search-card {
+    margin-top: 12px !important;
+  }
+}
+
+/* Mobile */
+@media (max-width: 700px) {
+  .hero-tabs {
+    top: -28px !important;
+  }
+
+  .hero-search-card {
+    margin-top: 10px !important;
+  }
+}
+
+
+/* ============================================================
+   SEGALOKA — TIGHTEN TAB / SEARCH GAP
+   ============================================================ */
+
+.hero-tabs {
+  top: -30px !important;
+}
+
+.hero-search-card {
+  margin-top: 4px !important;
+}
+
+.hero-controls {
+  padding-top: 4px !important;
+}
+
+
+/* Tablet */
+@media (min-width: 701px) and (max-width: 1100px) {
+  .hero-tabs {
+    top: -28px !important;
+  }
+
+  .hero-search-card {
+    margin-top: 4px !important;
+  }
+}
+
+
+/* Mobile */
+@media (max-width: 700px) {
+  .hero-tabs {
+    top: -24px !important;
+  }
+
+  .hero-search-card {
+    margin-top: 4px !important;
+  }
+}
+
+
+/* SEGALOKA TYPOGRAPHY LOCK START */
+
+/* ============================================================
+   SEGALOKA — CANONICAL TYPOGRAPHY SCALE
+   ============================================================ */
+
+:root {
+  --sg-font-xs: 10px;
+  --sg-font-sm: 11px;
+  --sg-font-base: 12px;
+  --sg-font-md: 13px;
+  --sg-font-lg: 15px;
+  --sg-font-xl: 17px;
+  --sg-font-2xl: 22px;
+  --sg-font-hero: 52px;
+
+  --sg-line-tight: 1.15;
+  --sg-line-normal: 1.45;
+
+  --sg-weight-medium: 500;
+  --sg-weight-semibold: 600;
+  --sg-weight-bold: 700;
+  --sg-weight-extrabold: 800;
+}
+
+
+/* ============================================================
+   GLOBAL
+   ============================================================ */
+
+html,
+body {
+  font-family:
+    var(--font-jakarta),
+    "Plus Jakarta Sans",
+    Arial,
+    sans-serif !important;
+
+  font-size: var(--sg-font-base) !important;
+
+  color: #102d55 !important;
+}
+
+button,
+input,
+select,
+textarea,
+a,
+p,
+span,
+small,
+strong,
+h1,
+h2,
+h3,
+h4 {
+  font-family:
+    var(--font-jakarta),
+    "Plus Jakarta Sans",
+    Arial,
+    sans-serif !important;
+}
+
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+
+.hero-nav a {
+  font-size: 13px !important;
+  line-height: 1.2 !important;
+  font-weight: var(--sg-weight-semibold) !important;
+}
+
+.hero-currency,
+.hero-login,
+.hero-register {
+  font-size: 12px !important;
+  font-weight: var(--sg-weight-semibold) !important;
+}
+
+
+/* ============================================================
+   HERO COPY
+   ============================================================ */
+
+.hero-reference-copy h1 {
+  font-size: var(--sg-font-hero) !important;
+  line-height: 1.02 !important;
+  letter-spacing: -2px !important;
+  font-weight: var(--sg-weight-extrabold) !important;
+}
+
+.hero-reference-copy p {
+  font-size: 15px !important;
+  line-height: 1.5 !important;
+  font-weight: var(--sg-weight-semibold) !important;
+}
+
+
+/* ============================================================
+   CATEGORY TABS
+   ============================================================ */
+
+.hero-tabs button {
+  font-size: 12px !important;
+  line-height: 1 !important;
+  font-weight: var(--sg-weight-semibold) !important;
+}
+
+.hero-tabs button.active,
+.hero-tabs button[aria-selected="true"] {
+  font-weight: var(--sg-weight-bold) !important;
+}
+
+
+/* ============================================================
+   SEARCH
+   ============================================================ */
+
+.hero-field-content small {
+  font-size: 10px !important;
+  line-height: 1.2 !important;
+  font-weight: var(--sg-weight-medium) !important;
+}
+
+.hero-field-content strong {
+  font-size: 13px !important;
+  line-height: 1.25 !important;
+  font-weight: var(--sg-weight-bold) !important;
+}
+
+.hero-traveler-controls strong,
+.hero-traveler-controls span {
+  font-size: 13px !important;
+  font-weight: var(--sg-weight-bold) !important;
+}
+
+.hero-search-button {
+  font-size: 13px !important;
+  font-weight: var(--sg-weight-bold) !important;
+}
+
+
+/* ============================================================
+   BENEFIT
+   ============================================================ */
+
+.ref-benefit-grid strong {
+  font-size: 12px !important;
+  line-height: 1.25 !important;
+  font-weight: var(--sg-weight-bold) !important;
+}
+
+.ref-benefit-grid p {
+  font-size: 10px !important;
+  line-height: 1.4 !important;
+  font-weight: var(--sg-weight-medium) !important;
+}
+
+
+/* ============================================================
+   COUPON
+   ============================================================ */
+
+.reference-coupon-title h2 {
+  font-size: 18px !important;
+  line-height: 1.05 !important;
+  letter-spacing: -.35px !important;
+  font-weight: var(--sg-weight-extrabold) !important;
+}
+
+.reference-coupon-title p {
+  font-size: 10px !important;
+  line-height: 1.4 !important;
+}
+
+.reference-coupon-copy small {
+  font-size: 10px !important;
+}
+
+.reference-coupon-copy strong {
+  font-size: 15px !important;
+  line-height: 1.15 !important;
+  font-weight: var(--sg-weight-extrabold) !important;
+}
+
+.reference-coupon-copy span {
+  font-size: 10px !important;
+}
+
+
+/* ============================================================
+   SECTION HEADING
+   ============================================================ */
+
+/* label kecil seperti REKOMENDASI / AKOMODASI / EKSPLORASI */
+.ref-section-title > span,
+.ref-section-title > small,
+.ref-eyebrow {
+  font-size: 10px !important;
+  line-height: 1.2 !important;
+  letter-spacing: .4px !important;
+  font-weight: var(--sg-weight-bold) !important;
+}
+
+/* judul section */
+.ref-section-title h2,
+.ref-bottom-columns h2 {
+  font-size: 22px !important;
+  line-height: 1.18 !important;
+  letter-spacing: -.45px !important;
+  font-weight: var(--sg-weight-extrabold) !important;
+}
+
+/* deskripsi section */
+.ref-section-title p {
+  font-size: 11px !important;
+  line-height: 1.45 !important;
+  font-weight: var(--sg-weight-medium) !important;
+}
+
+/* lihat semua */
+.ref-section-title a,
+.ref-view-all {
+  font-size: 10px !important;
+  line-height: 1.2 !important;
+  font-weight: var(--sg-weight-bold) !important;
+}
+
+
+/* ============================================================
+   PACKAGE CARDS
+   ============================================================ */
+
+.ref-package-body h3 {
+  font-size: 13px !important;
+  line-height: 1.3 !important;
+  font-weight: var(--sg-weight-bold) !important;
+}
+
+.ref-package-body p,
+.ref-package-body span {
+  font-size: 10px !important;
+  line-height: 1.35 !important;
+}
+
+.ref-meta {
+  font-size: 10px !important;
+  line-height: 1.35 !important;
+}
+
+.ref-package-body > strong,
+.ref-package-price {
+  font-size: 15px !important;
+  line-height: 1.2 !important;
+  font-weight: var(--sg-weight-extrabold) !important;
+}
+
+
+/* ============================================================
+   HOTEL / ACCOMMODATION
+   ============================================================ */
+
+.ref-hotel-grid h3 {
+  font-size: 13px !important;
+  line-height: 1.3 !important;
+  font-weight: var(--sg-weight-bold) !important;
+}
+
+.ref-hotel-grid small,
+.ref-hotel-grid p,
+.ref-hotel-grid span {
+  font-size: 10px !important;
+  line-height: 1.35 !important;
+}
+
+.ref-hotel-grid strong {
+  font-size: 15px !important;
+  line-height: 1.2 !important;
+  font-weight: var(--sg-weight-extrabold) !important;
+}
+
+
+/* ============================================================
+   DESTINATION / ATTRACTION / INSPIRATION
+   ============================================================ */
+
+.ref-attraction-grid h3,
+.ref-tip-grid h3 {
+  font-size: 12px !important;
+  line-height: 1.3 !important;
+  font-weight: var(--sg-weight-bold) !important;
+}
+
+.ref-attraction-grid p,
+.ref-attraction-grid span,
+.ref-tip-grid p,
+.ref-tip-grid span {
+  font-size: 10px !important;
+  line-height: 1.4 !important;
+}
+
+.ref-tip-grid a {
+  font-size: 10px !important;
+  font-weight: var(--sg-weight-bold) !important;
+}
+
+
+/* ============================================================
+   APP CTA
+   ============================================================ */
+
+.ref-app-copy > span,
+.ref-app-copy > small {
+  font-size: 10px !important;
+  font-weight: var(--sg-weight-bold) !important;
+  letter-spacing: .4px !important;
+}
+
+.ref-app-copy h2 {
+  font-size: 24px !important;
+  line-height: 1.1 !important;
+  letter-spacing: -.5px !important;
+  font-weight: var(--sg-weight-extrabold) !important;
+}
+
+.ref-app-copy p {
+  font-size: 11px !important;
+  line-height: 1.45 !important;
+}
+
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+
+.footer-logo,
+.footer-brand {
+  font-size: 14px !important;
+}
+
+.footer h3 {
+  font-size: 12px !important;
+  line-height: 1.25 !important;
+  font-weight: var(--sg-weight-bold) !important;
+}
+
+.footer p,
+.footer a,
+.footer span,
+.contact-row {
+  font-size: 10px !important;
+  line-height: 1.55 !important;
+}
+
+
+/* ============================================================
+   RESPONSIVE — TABLET
+   ============================================================ */
+
+@media (min-width: 701px) and (max-width: 1100px) {
+  .hero-reference-copy h1 {
+    font-size: 44px !important;
+  }
+
+  .hero-reference-copy p {
+    font-size: 13px !important;
+  }
+
+  .ref-section-title h2,
+  .ref-bottom-columns h2 {
+    font-size: 20px !important;
+  }
+}
+
+
+/* ============================================================
+   RESPONSIVE — MOBILE
+   ============================================================ */
+
+@media (max-width: 700px) {
+  .hero-reference-copy h1 {
+    font-size: 29px !important;
+    letter-spacing: -1px !important;
+  }
+
+  .hero-reference-copy p {
+    font-size: 11px !important;
+  }
+
+  .hero-tabs button {
+    font-size: 9px !important;
+  }
+
+  .hero-field-content small {
+    font-size: 10px !important;
+  }
+
+  .hero-field-content strong {
+    font-size: 13px !important;
+  }
+
+  .hero-search-button {
+    font-size: 13px !important;
+  }
+
+  .ref-benefit-grid strong {
+    font-size: 12px !important;
+  }
+
+  .ref-benefit-grid p {
+    font-size: 10px !important;
+  }
+
+  .reference-coupon-title h2 {
+    font-size: 17px !important;
+  }
+
+  .reference-coupon-copy strong {
+    font-size: 14px !important;
+  }
+
+  .ref-section-title h2,
+  .ref-bottom-columns h2 {
+    font-size: 19px !important;
+  }
+
+  .ref-section-title p {
+    font-size: 11px !important;
+  }
+
+  .ref-package-body h3,
+  .ref-hotel-grid h3 {
+    font-size: 13px !important;
+  }
+
+  .ref-app-copy h2 {
+    font-size: 21px !important;
+  }
+
+  .footer h3 {
+    font-size: 12px !important;
+  }
+
+  .footer p,
+  .footer a,
+  .footer span {
+    font-size: 10px !important;
+  }
+}
+
+/* SEGALOKA TYPOGRAPHY LOCK END */
+
+/* ============================================================
+   FINAL ACTIVE LAYOUT CONTRACT
+   This is the single source of truth for the reference areas.
+   ============================================================ */
+
+:root {
+  --sg-shell-width: 1280px;
+  --sg-shell-gutter: clamp(16px, 3vw, 40px);
+  --sg-blue: #0867ed;
+  --sg-ink: #10275f;
+}
+
+html,
+body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  font-family: var(--font-jakarta), sans-serif;
+  color: var(--sg-ink);
+}
+
+.container,
+.hero-controls,
+.ref-benefit-grid,
+.reference-coupon-shell,
+.reference-main-banner-shell,
+.reference-running-shell,
+.ref-section > .container,
+.ref-app-banner > .container,
+.footer > .container {
+  width: min(var(--sg-shell-width), calc(100% - (var(--sg-shell-gutter) * 2)));
+  max-width: var(--sg-shell-width);
+  margin-inline: auto;
+}
+
+.hero-reference {
+  width: 100%;
+  min-height: 630px;
+  overflow: hidden;
+}
+
+.hero-reference-media,
+.hero-reference-overlay {
+  width: 100%;
+}
+
+.hero-reference-photo {
+  width: 100%;
+  object-fit: cover;
+  object-position: center top;
+}
+
+.hero-reference-shell {
+  width: min(var(--sg-shell-width), calc(100% - (var(--sg-shell-gutter) * 2)));
+  margin-inline: auto;
+}
+
+.hero-reference-copy h1 {
+  font-size: clamp(34px, 4vw, 60px) !important;
+  line-height: 1.06 !important;
+  letter-spacing: -1.8px !important;
+}
+
+.hero-reference-copy p {
+  font-size: clamp(13px, 1.2vw, 17px) !important;
+  line-height: 1.45 !important;
+}
+
+.hero-controls {
+  position: absolute;
+  left: 50%;
+  bottom: 24px;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 8px;
+  transform: translateX(-50%);
+}
+
+.hero-tabs {
+  align-self: center;
+  width: fit-content;
+  max-width: 100%;
+  margin: 0;
+  padding: 7px;
+  border: 1px solid #e7eef8;
+  border-radius: 999px;
+  background: #fff;
+  box-shadow: 0 8px 22px rgb(16 39 95 / 12%);
+}
+
+.hero-tabs button {
+  min-height: 42px;
+  padding: 7px 16px;
+  font-size: 12px !important;
+  white-space: nowrap;
+}
+
+.hero-search-card {
+  width: 100%;
+  margin: 0;
+  padding: 10px;
+  display: grid;
+  grid-template-columns: minmax(150px, 1.2fr) minmax(180px, 1.5fr) minmax(150px, .95fr) minmax(150px, 1.05fr) 118px;
+  gap: 8px;
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: 0 12px 30px rgb(16 39 95 / 14%);
+}
+
+.hero-field {
+  min-width: 0;
+}
+
+.hero-field-content small {
+  font-size: 11px !important;
+}
+
+.hero-field-content strong {
+  font-size: 14px !important;
+}
+
+.hero-search-button {
+  min-width: 0;
+  font-size: 14px !important;
+}
+
+.ref-benefit,
+.reference-coupon,
+.reference-main-banner {
+  width: 100%;
+}
+
+.ref-benefit-grid,
+.benefit-grid,
+.reference-coupon-shell,
+.reference-main-banner-shell {
+  box-sizing: border-box;
+}
+
+.ref-benefit-grid strong,
+.benefit-item h3 {
+  font-size: 14px !important;
+}
+
+.ref-benefit-grid p,
+.benefit-item p {
+  font-size: 12px !important;
+}
+
+.reference-coupon-copy strong {
+  font-size: 17px !important;
+}
+
+.reference-main-banner-shell img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+@media (max-width: 900px) {
+  .hero-reference {
+    min-height: 690px;
+  }
+
+  .hero-controls {
+    bottom: 16px;
+  }
+
+  .hero-tabs {
+    width: 100%;
+    overflow-x: auto;
+    justify-content: flex-start;
+  }
+
+  .hero-search-card {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .hero-search-button {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 600px) {
+  :root {
+    --sg-shell-gutter: 12px;
+  }
+
+  .hero-reference {
+    min-height: 735px;
+  }
+
+  .hero-reference-copy h1 {
+    font-size: 30px !important;
+  }
+
+  .hero-reference-copy p {
+    font-size: 12px !important;
+  }
+
+  .hero-controls {
+    bottom: 12px;
+    gap: 8px;
+  }
+
+  .hero-tabs {
+    padding: 5px;
+  }
+
+  .hero-tabs button {
+    min-width: 76px;
+    min-height: 48px;
+    padding-inline: 8px;
+    font-size: 10px !important;
+  }
+
+  .hero-search-card {
+    grid-template-columns: 1fr;
+    padding: 9px;
+  }
+
+  .hero-search-button {
+    grid-column: auto;
+  }
+}
+
+/* Header preferences: compact stateful language/currency control. */
+.hero-header {
+  position: relative;
+  z-index: 10;
+  overflow: visible;
+}
+
+.hero-header-actions {
+  position: relative;
+  min-width: max-content;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 14px;
+  white-space: nowrap;
+}
+
+.hero-header-shell {
+  grid-template-columns: 150px minmax(0, 1fr) max-content !important;
+}
+
+.hero-currency {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-height: 32px;
+  min-width: 78px;
+  padding: 5px 8px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  color: var(--sg-ink);
+  background: transparent;
+  cursor: pointer;
+  font-size: 12px !important;
+  font-weight: 700;
+  line-height: 1 !important;
+  white-space: nowrap;
+}
+
+.hero-controls {
+  width: min(var(--sg-shell-width), calc(100% - (var(--sg-shell-gutter) * 2))) !important;
+  bottom: 24px !important;
+  gap: 8px !important;
+}
+
+.hero-tabs {
+  padding: 7px !important;
+}
+
+.hero-tabs button {
+  min-height: 42px;
+  padding: 7px 16px;
+}
+
+.hero-currency:hover,
+.hero-currency[aria-expanded="true"] {
+  border-color: #dce8f7;
+  background: #f4f8fd;
+}
+
+.hero-preferences-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 128px;
+  width: 230px;
+  padding: 10px;
+  border: 1px solid #e3ebf5;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 14px 34px rgb(16 39 95 / 16%);
+}
+
+/* Package cards: compact itinerary card matching the reference layout. */
+.reference-package-card {
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid #dce6f0;
+  border-radius: 18px;
+  box-shadow: 0 8px 22px rgb(16 39 95 / 5%);
+}
+
+.reference-package-visual {
+  position: relative;
+  height: 132px;
+  overflow: hidden;
+  background: linear-gradient(135deg, #e4f3ff, #ecf9f3);
+}
+
+.reference-package-visual .product-image {
+  opacity: 1;
+  object-fit: cover;
+  filter: brightness(1.08) saturate(1.06);
+}
+
+.reference-package-visual-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgb(255 255 255 / 4%), rgb(8 29 54 / 10%));
+}
+
+.reference-package-category,
+.reference-package-rating,
+.reference-package-icon {
+  position: absolute;
+  z-index: 1;
+}
+
+.reference-package-category {
+  top: 14px;
+  left: 14px;
+  padding: 5px 11px;
+  border-radius: 999px;
+  color: #143763;
+  background: #fff;
+  font-size: 11px !important;
+  font-weight: 700;
+}
+
+.reference-package-icon {
+  top: 14px;
+  right: 14px;
+  display: grid;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  border-radius: 50%;
+  color: #102237;
+  background: #fff;
+}
+
+.reference-package-rating {
+  bottom: 12px;
+  left: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 9px;
+  border-radius: 999px;
+  color: #fff;
+  background: #203c62;
+  font-size: 11px !important;
+  font-weight: 700;
+}
+
+.reference-package-body {
+  padding: 14px !important;
+}
+
+.reference-package-body .product-location {
+  color: #557092;
+  font-size: 11px !important;
+  font-weight: 600;
+}
+
+.reference-package-body h3 {
+  min-height: 0;
+  margin: 7px 0 28px;
+  color: #071b36;
+  font-size: 14px !important;
+  line-height: 1.3;
+}
+
+.reference-package-meta,
+.reference-package-availability {
+  color: #71849c;
+  font-size: 11px !important;
+}
+
+.reference-package-availability {
+  margin-top: 8px;
+  padding-bottom: 9px;
+  border-bottom: 1px solid #e2eaf2;
+}
+
+.reference-package-availability span {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  margin-right: 4px;
+  border-radius: 50%;
+  background: #17a768;
+}
+
+.reference-package-body .product-price {
+  position: relative;
+  margin-top: 10px;
+}
+
+.reference-package-body .product-price small {
+  display: block;
+  color: #71849c;
+  font-size: 11px !important;
+  font-weight: 600;
+  letter-spacing: .06em;
+}
+
+.reference-package-body .product-price strong {
+  display: block;
+  margin-top: 3px;
+  color: var(--sg-blue);
+  font-size: 20px !important;
+  line-height: 1.1;
+}
+
+.reference-package-arrow {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  display: grid;
+  width: 34px;
+  height: 34px;
+  place-items: center;
+  border-radius: 50%;
+  color: var(--sg-blue);
+  background: #edf5ff;
+}
+
+.sponsored-package-grid {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  grid-template-rows: repeat(2, auto);
+  grid-auto-flow: row;
+  gap: 12px;
+}
+
+.sponsored-package-grid > :nth-child(n + 9) {
+  display: none !important;
+}
+
+.section-heading > a {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 3px;
+  white-space: nowrap;
+  font-size: 12px !important;
+  line-height: 1.25 !important;
+  font-weight: 700 !important;
+}
+
+/* Consistent readable type scale for active package/section UI. */
+.section-heading h2 {
+  font-size: 24px !important;
+  line-height: 1.2 !important;
+  letter-spacing: -.5px !important;
+}
+
+.reference-package-category,
+.reference-package-rating {
+  font-size: 11px !important;
+  line-height: 1.2 !important;
+}
+
+.reference-package-body .product-location,
+.reference-package-meta,
+.reference-package-availability {
+  font-size: 12px !important;
+  line-height: 1.35 !important;
+}
+
+.reference-package-body h3 {
+  font-size: 15px !important;
+  line-height: 1.3 !important;
+}
+
+.reference-package-body .product-price small {
+  font-size: 11px !important;
+  line-height: 1.2 !important;
+}
+
+.reference-package-body .product-price strong {
+  font-size: 20px !important;
+  line-height: 1.15 !important;
+}
+
+.sponsored-package-card {
+  position: relative;
+}
+
+.sponsored-package-card .image-card-copy span {
+  display: inline-block;
+  margin-bottom: 5px;
+  color: #cfe4ff;
+  font-size: 10px !important;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.sponsored-package-card .image-card-copy p {
+  font-size: 10px !important;
+}
+
+.sponsored-package-arrow {
+  position: absolute;
+  right: 14px;
+  bottom: 14px;
+  display: grid;
+  width: 30px;
+  height: 30px;
+  place-items: center;
+  border-radius: 50%;
+  color: var(--sg-blue);
+  background: #fff;
+}
+
+@media (max-width: 700px) {
+  .sponsored-package-grid {
+    display: flex;
+    overflow-x: auto;
+    grid-template-columns: none;
+  }
+
+  .reference-package-card {
+    min-width: 82%;
+  }
+}
+
+.hero-preferences-group + .hero-preferences-group {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid #edf2f8;
+}
+
+.hero-preferences-label {
+  display: block;
+  margin: 0 8px 5px;
+  color: #71829a;
+  font-size: 10px !important;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+}
+
+.hero-preferences-group button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px;
+  border: 0;
+  border-radius: 8px;
+  color: var(--sg-ink);
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+  font-size: 12px !important;
+  font-weight: 700;
+}
+
+.hero-preferences-group button small {
+  color: #71829a;
+  font-size: 11px !important;
+  font-weight: 500;
+}
+
+.hero-preferences-group button:hover,
+.hero-preferences-group button.selected {
+  color: var(--sg-blue);
+  background: #eef6ff;
+}
+
+.hero-mobile-preferences {
+  display: none;
+}
+
+@media (max-width: 1100px) and (min-width: 701px) {
+  .hero-header-shell {
+    grid-template-columns: 130px 1fr auto !important;
+  }
+
+  .hero-nav {
+    gap: 14px !important;
+  }
+
+  .hero-nav a {
+    font-size: 11px !important;
+  }
+
+  .hero-login,
+  .hero-register {
+    display: none;
+  }
+}
+
+@media (max-width: 700px) {
+  .hero-header-actions {
+    gap: 6px;
+  }
+
+  .hero-header-actions .hero-currency,
+  .hero-header-actions .hero-login,
+  .hero-header-actions .hero-register {
+    display: none;
+  }
+
+  .hero-mobile-preferences {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    width: 100%;
+    margin-bottom: 6px;
+    padding: 9px 6px;
+    border: 0;
+    border-bottom: 1px solid #edf2f8;
+    color: var(--sg-ink);
+    background: transparent;
+    font-size: 12px !important;
+    font-weight: 700;
+  }
+
+  .hero-preferences-menu {
+    position: fixed;
+    top: 58px;
+    right: 12px;
+    z-index: 20;
+  }
+}
+

@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+
+  <title>Segaloka · Vendor Dashboard</title>
+
+  <!--
+    V7 visual parity source.
+    Business/runtime modules remain reference-only.
+  -->
+  <link rel="stylesheet" href="./runtime/styles.css">
+  <link rel="stylesheet" href="./vendor.css">
+  <link rel="stylesheet" href="/shared/v7-presentational.css">
+</head>
+
+<body data-segaloka-app="vendor">
+
+  <div id="vendor-app" class="app vendor-app">
+
+    <aside
+      id="vendor-sidebar"
+      class="side vendor-sidebar"
+      aria-label="Navigasi Vendor"
+    >
+      <div class="vendor-brand">
+        <div class="vendor-brand-mark" aria-hidden="true">S</div>
+
+        <div class="vendor-brand-copy">
+          <strong>Segaloka</strong>
+          <span>Vendor Dashboard</span>
+        </div>
+
+        <button
+          id="vendor-sidebar-close"
+          class="vendor-icon-button vendor-mobile-only"
+          type="button"
+          aria-label="Tutup navigasi"
+        >
+          ×
+        </button>
+      </div>
+
+      <div class="vendor-tenant">
+        <div class="vendor-tenant-icon" aria-hidden="true">T</div>
+
+        <div>
+          <strong>Vendor</strong>
+          <span>Dashboard</span>
+        </div>
+      </div>
+
+      <nav
+        id="vendor-navigation"
+        class="vendor-navigation"
+        aria-label="Menu Vendor"
+      ></nav>
+
+      <div class="vendor-sidebar-footer">
+        <div class="vendor-boundary-label">
+          Dashboard Vendor
+        </div>
+
+        <div class="vendor-boundary-status">
+          Independent boundary
+        </div>
+      </div>
+    </aside>
+
+    <div
+      id="vendor-sidebar-overlay"
+      class="vendor-sidebar-overlay"
+      hidden
+    ></div>
+
+    <div class="main vendor-main">
+
+      <header class="top vendor-topbar">
+
+        <div class="vendor-topbar-start">
+          <button
+            id="vendor-sidebar-open"
+            class="vendor-icon-button vendor-mobile-only"
+            type="button"
+            aria-label="Buka navigasi"
+          >
+            ☰
+          </button>
+
+          <div>
+            <div class="vendor-topbar-eyebrow">
+              SEGALOKA
+            </div>
+
+            <div
+              id="vendor-page-title"
+              class="vendor-page-title"
+            >
+              Beranda
+            </div>
+          </div>
+        </div>
+
+        <div class="vendor-topbar-end">
+
+          <div
+            class="vendor-runtime-indicator"
+            title="Runtime Vendor masih dalam tahap ekstraksi"
+          >
+            <span
+              class="vendor-runtime-dot"
+              aria-hidden="true"
+            ></span>
+
+            <span>Vendor</span>
+          </div>
+
+          <button
+            id="vendor-account-button"
+            class="vendor-account"
+            type="button"
+            disabled
+            aria-label="Akun Vendor belum diaktifkan"
+          >
+            <span
+              class="vendor-account-avatar"
+              aria-hidden="true"
+            >
+              T
+            </span>
+
+            <span class="vendor-account-copy">
+              <strong>Vendor</strong>
+              <small>Auth belum diaktifkan</small>
+            </span>
+          </button>
+
+        </div>
+      </header>
+
+      <main
+        id="vendor-content"
+        class="work vendor-content"
+        tabindex="-1"
+      ></main>
+
+    </div>
+  </div>
+
+  <!-- Contracts are executable metadata only. -->
+  <script src="./contracts/app.contract.js"></script>
+  <script src="./contracts/auth.contract.js"></script>
+  <script src="./contracts/data.contract.js"></script>
+  <script src="./contracts/services.contract.js"></script>
+  <script src="./contracts/navigation.contract.js"></script>
+
+  <!--
+    IMPORTANT:
+    runtime/core.js
+    runtime/data.js
+    runtime/portals.js
+    runtime/gateway.js
+    runtime/notify.js
+    runtime/sync.js
+    and other V7 runtime modules are NOT loaded here.
+  -->
+  <script src="./ui/vendor-ui.js"></script>
+  <script src="./runtime/vendor-runtime.js"></script>
+<script src="./renderers/vendor-renderers.js"></script>
+<script src="./vendor-bootstrap.js"></script>
+</body>
+</html>

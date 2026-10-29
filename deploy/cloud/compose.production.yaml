@@ -1,0 +1,79 @@
+name: segaloka-production
+
+services:
+  postgres:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    env_file:
+      - ./production.env
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:?POSTGRES_DB is required}
+      POSTGRES_USER: ${POSTGRES_USER:?POSTGRES_USER is required}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - segaloka-postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U \"$${POSTGRES_USER}\" -d \"$${POSTGRES_DB}\""]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+      start_period: 30s
+    networks:
+      - backend
+
+  api:
+    build:
+      context: ../..
+      dockerfile: deploy/cloud/Dockerfile.api
+    restart: unless-stopped
+    env_file:
+      - ./production.env
+    environment:
+      NODE_ENV: production
+      API_HOST: 0.0.0.0
+      API_PORT: 4192
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: ${POSTGRES_DB:?POSTGRES_DB is required}
+      DB_USER: ${POSTGRES_USER:?POSTGRES_USER is required}
+      DB_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}
+    expose:
+      - "4192"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:4192/health').then(r => { if (!r.ok) process.exit(1) }).catch(() => process.exit(1))"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    networks:
+      - backend
+      - edge
+
+  nginx:
+    image: nginx:1.27-alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.production.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./tls:/etc/nginx/tls:ro
+    depends_on:
+      api:
+        condition: service_healthy
+    networks:
+      - edge
+
+volumes:
+  segaloka-postgres:
+    name: segaloka-production-postgres
+
+networks:
+  backend:
+    internal: true
+  edge:
+    driver: bridge

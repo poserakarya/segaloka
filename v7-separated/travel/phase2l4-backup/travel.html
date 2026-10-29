@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+
+  <title>Segaloka · Travel Dashboard</title>
+
+  <!--
+    V7 visual parity source.
+    Business/runtime modules remain reference-only.
+  -->
+  <link rel="stylesheet" href="./runtime/styles.css">
+  <link rel="stylesheet" href="./travel.css">
+</head>
+
+<body data-segaloka-app="travel">
+
+  <div id="travel-app" class="travel-app">
+
+    <aside
+      id="travel-sidebar"
+      class="travel-sidebar"
+      aria-label="Navigasi Travel"
+    >
+      <div class="travel-brand">
+        <div class="travel-brand-mark" aria-hidden="true">S</div>
+
+        <div class="travel-brand-copy">
+          <strong>Segaloka</strong>
+          <span>Travel Dashboard</span>
+        </div>
+
+        <button
+          id="travel-sidebar-close"
+          class="travel-icon-button travel-mobile-only"
+          type="button"
+          aria-label="Tutup navigasi"
+        >
+          ×
+        </button>
+      </div>
+
+      <div class="travel-tenant">
+        <div class="travel-tenant-icon" aria-hidden="true">T</div>
+
+        <div>
+          <strong>Travel</strong>
+          <span>Workspace</span>
+        </div>
+      </div>
+
+      <nav
+        id="travel-navigation"
+        class="travel-navigation"
+        aria-label="Menu Travel"
+      ></nav>
+
+      <div class="travel-sidebar-footer">
+        <div class="travel-boundary-label">
+          Travel Workspace
+        </div>
+
+        <div class="travel-boundary-status">
+          Independent boundary
+        </div>
+      </div>
+    </aside>
+
+    <div
+      id="travel-sidebar-overlay"
+      class="travel-sidebar-overlay"
+      hidden
+    ></div>
+
+    <div class="travel-main">
+
+      <header class="travel-topbar">
+
+        <div class="travel-topbar-start">
+          <button
+            id="travel-sidebar-open"
+            class="travel-icon-button travel-mobile-only"
+            type="button"
+            aria-label="Buka navigasi"
+          >
+            ☰
+          </button>
+
+          <div>
+            <div class="travel-topbar-eyebrow">
+              SEGALOKA
+            </div>
+
+            <div
+              id="travel-page-title"
+              class="travel-page-title"
+            >
+              Beranda
+            </div>
+          </div>
+        </div>
+
+        <div class="travel-topbar-end">
+
+          <div
+            class="travel-runtime-indicator"
+            title="Runtime Travel masih dalam tahap ekstraksi"
+          >
+            <span
+              class="travel-runtime-dot"
+              aria-hidden="true"
+            ></span>
+
+            <span>Travel</span>
+          </div>
+
+          <button
+            id="travel-account-button"
+            class="travel-account"
+            type="button"
+            disabled
+            aria-label="Akun Travel belum diaktifkan"
+          >
+            <span
+              class="travel-account-avatar"
+              aria-hidden="true"
+            >
+              T
+            </span>
+
+            <span class="travel-account-copy">
+              <strong>Travel</strong>
+              <small>Auth belum diaktifkan</small>
+            </span>
+          </button>
+
+        </div>
+      </header>
+
+      <main
+        id="travel-content"
+        class="travel-content"
+        tabindex="-1"
+      ></main>
+
+    </div>
+  </div>
+
+  <!-- Contracts are executable metadata only. -->
+  <script src="./contracts/app.contract.js"></script>
+  <script src="./contracts/auth.contract.js"></script>
+  <script src="./contracts/data.contract.js"></script>
+  <script src="./contracts/services.contract.js"></script>
+  <script src="./contracts/navigation.contract.js"></script>
+
+  <!--
+    IMPORTANT:
+    runtime/core.js
+    runtime/data.js
+    runtime/portals.js
+    runtime/gateway.js
+    runtime/notify.js
+    runtime/sync.js
+    and other V7 runtime modules are NOT loaded here.
+  -->
+  <script src="./travel-bootstrap.js"></script>
+</body>
+</html>

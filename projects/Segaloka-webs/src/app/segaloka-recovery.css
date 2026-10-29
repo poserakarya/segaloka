@@ -1,0 +1,646 @@
+/* sg-recovery-reference-v1 */
+/* Hanya berlaku untuk modal pemulihan akun Segaloka */
+
+.sg-recovery-modal-active .sg-auth-modal {
+  width: min(616px, calc(100vw - 32px));
+  max-width: 616px;
+  border-radius: 22px;
+  padding: 34px 42px 38px;
+  background: #fff;
+  font-family: "Plus Jakarta Sans", sans-serif;
+}
+
+.sg-recovery-modal-active .sg-auth-login-flow {
+  width: 100%;
+}
+
+.sg-recovery-modal-active .sg-auth-login-form,
+.sg-recovery-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+.sg-recovery-modal-active h2,
+.sg-recovery-content h2 {
+  color: #09244c;
+  font-size: clamp(26px, 3vw, 36px);
+  font-weight: 800;
+  line-height: 1.25;
+  text-align: center;
+}
+
+.sg-recovery-description {
+  color: #70809a;
+  text-align: center;
+  font-size: 17px;
+  line-height: 1.65;
+  margin: 0 0 20px;
+}
+
+.sg-recovery-content label,
+.sg-recovery-modal-active .sg-auth-login-form label {
+  color: #10274a;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.sg-recovery-modal-active input,
+.sg-recovery-phone-field {
+  min-height: 62px;
+  border: 1.5px solid #cbd6e5;
+  border-radius: 13px;
+  background: #fff;
+  font-size: 16px;
+}
+
+.sg-recovery-phone-field {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 0 20px;
+}
+
+.sg-recovery-phone-field input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  outline: none;
+}
+
+.sg-recovery-primary,
+.sg-recovery-modal-active .sg-auth-login-form button[type="submit"] {
+  width: 100%;
+  min-height: 66px;
+  border: none;
+  border-radius: 12px;
+  background: #10478d;
+  color: white;
+  font-size: 17px;
+  font-weight: 750;
+  cursor: pointer;
+}
+
+.sg-recovery-primary:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.sg-recovery-security {
+  background: #edf4ff;
+  border-radius: 14px;
+  padding: 22px;
+  color: #123568;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.sg-recovery-security p {
+  margin: 7px 0 0;
+}
+
+.sg-recovery-back {
+  align-self: center;
+  border: 0;
+  background: transparent;
+  color: #0875f9;
+  font-size: 17px;
+  font-weight: 700;
+  margin-top: 18px;
+  cursor: pointer;
+}
+
+@media (max-width: 640px) {
+  .sg-recovery-modal-active .sg-auth-modal {
+    width: calc(100vw - 24px);
+    padding: 26px 22px;
+    border-radius: 20px;
+    max-height: calc(100dvh - 32px);
+    overflow-y: auto;
+  }
+
+  .sg-recovery-description {
+    font-size: 14px;
+  }
+
+  .sg-recovery-modal-active input,
+  .sg-recovery-phone-field {
+    min-height: 54px;
+  }
+
+  .sg-recovery-primary,
+  .sg-recovery-modal-active .sg-auth-login-form button[type="submit"] {
+    min-height: 56px;
+  }
+}
+
+
+/* sg-recovery-consistent-v4 */
+
+.sg-auth-modal-backdrop.sg-recovery-modal-active > .sg-auth-modal {
+  box-sizing: border-box;
+  width: min(400px, calc(100vw - 28px)) !important;
+  max-width: 400px !important;
+  max-height: calc(100dvh - 32px);
+  overflow-y: auto;
+  padding: 28px 28px 30px !important;
+  border-radius: 16px;
+}
+
+.sg-recovery-modal-active .sg-auth-modal-brand img {
+  width: 110px !important;
+  max-width: 100%;
+  height: auto;
+}
+
+.sg-recovery-modal-active .sg-auth-modal-head h2 {
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: 20px !important;
+  line-height: 1.35;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+}
+
+.sg-recovery-modal-active .sg-auth-modal-head p {
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: 12px !important;
+  line-height: 1.55;
+  font-weight: 400;
+}
+
+.sg-recovery-modal-active .sg-auth-login-form label,
+.sg-recovery-modal-active .sg-recovery-content label {
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: 12px !important;
+  font-weight: 700;
+}
+
+.sg-recovery-modal-active .sg-auth-login-form input,
+.sg-recovery-modal-active .sg-recovery-phone-field {
+  min-height: 44px !important;
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: 12px !important;
+  border-radius: 8px;
+}
+
+.sg-recovery-modal-active .sg-auth-login-form button[type="submit"],
+.sg-recovery-modal-active .sg-recovery-primary {
+  min-height: 44px !important;
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: 12px !important;
+  font-weight: 700;
+  border-radius: 8px;
+}
+
+.sg-recovery-modal-active .sg-recovery-back {
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: 12px !important;
+  font-weight: 700;
+}
+
+.sg-recovery-modal-active .sg-recovery-bottom {
+  margin-top: 20px;
+}
+
+@media (max-width: 480px) {
+  .sg-auth-modal-backdrop.sg-recovery-modal-active > .sg-auth-modal {
+    width: calc(100vw - 24px) !important;
+    padding: 24px 22px !important;
+  }
+}
+
+/* sg-recovery-clean-v5 */
+
+/* Hilangkan header pendaftaran pada mode pemulihan */
+.sg-recovery-modal-active .sg-auth-modal-head {
+  display: none !important;
+}
+
+/* Hilangkan tombol kembali lama di bagian atas */
+.sg-recovery-modal-active .sg-auth-login-back {
+  display: none !important;
+}
+
+/* Hilangkan footer persetujuan khusus pemulihan */
+.sg-recovery-modal-active .sg-auth-terms,
+.sg-recovery-modal-active .sg-auth-consent,
+.sg-recovery-modal-active .sg-auth-modal-terms {
+  display: none !important;
+}
+
+/* Konsistensi tipografi */
+.sg-recovery-modal-active,
+.sg-recovery-modal-active button,
+.sg-recovery-modal-active input,
+.sg-recovery-modal-active label,
+.sg-recovery-modal-active p,
+.sg-recovery-modal-active h2,
+.sg-recovery-modal-active h3 {
+  font-family: "Plus Jakarta Sans", sans-serif !important;
+}
+
+/* Judul pemulihan */
+.sg-recovery-modal-active .sg-recovery-content h2,
+.sg-recovery-modal-active .sg-recovery-content h3 {
+  font-size: 20px !important;
+  line-height: 1.35 !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.3px;
+  color: #09244c;
+}
+
+/* Deskripsi pemulihan */
+.sg-recovery-modal-active .sg-recovery-content > p {
+  font-size: 12px !important;
+  line-height: 1.6 !important;
+  font-weight: 400 !important;
+  color: #70819e;
+}
+
+/* Label dan field */
+.sg-recovery-modal-active .sg-recovery-content label {
+  font-size: 12px !important;
+  font-weight: 700 !important;
+}
+
+.sg-recovery-modal-active .sg-recovery-content input {
+  font-size: 12px !important;
+  min-height: 44px !important;
+}
+
+/* Tombol utama */
+.sg-recovery-modal-active .sg-recovery-primary {
+  font-size: 12px !important;
+  min-height: 44px !important;
+  font-weight: 700 !important;
+}
+
+/* Navigasi kembali di bawah */
+.sg-recovery-modal-active .sg-recovery-back {
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  text-align: center;
+}
+
+
+/* sg-recovery-hidden-guard */
+
+/* Hanya berlaku pada modal pemulihan */
+.sg-recovery-modal-active .sg-auth-modal-head[hidden],
+.sg-recovery-modal-active .sg-auth-login-back[hidden],
+.sg-recovery-modal-active .sg-auth-legal[hidden] {
+    display: none !important;
+}
+
+/* sg-recovery-existing-country-picker-v1 */
+
+.sg-recovery-modal-active .sg-recovery-phone-with-country {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    min-width: 0;
+}
+
+.sg-recovery-modal-active .sg-recovery-phone-with-country > div {
+    flex: 0 0 36%;
+    width: 36%;
+    min-width: 0;
+}
+
+.sg-recovery-modal-active .sg-recovery-phone-with-country > input {
+    flex: 1 1 auto;
+    width: 0;
+    min-width: 0;
+}
+
+/* sg-recovery-phone-unified-v2 */
+
+/* Satu bingkai untuk kode negara dan nomor WhatsApp */
+.sg-recovery-modal-active .sg-recovery-phone-with-country {
+    display: flex !important;
+    align-items: center !important;
+    gap: 0 !important;
+    width: 100% !important;
+    height: 46px !important;
+    min-height: 46px !important;
+    padding: 0 10px !important;
+    border: 1px solid #cbd8ea !important;
+    border-radius: 9px !important;
+    background: #fff !important;
+    box-sizing: border-box !important;
+    overflow: visible !important;
+}
+
+/* Area pemilih negara */
+.sg-recovery-modal-active .sg-recovery-phone-with-country > div {
+    flex: 0 0 auto !important;
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: 46% !important;
+    margin: 0 !important;
+}
+
+/* Hilangkan bingkai dalam tombol kode negara */
+.sg-recovery-modal-active .sg-recovery-phone-with-country > div > button {
+    width: auto !important;
+    min-width: 0 !important;
+    height: 44px !important;
+    padding: 0 10px 0 0 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    color: #17365d !important;
+    font-family: "Plus Jakarta Sans", sans-serif !important;
+    font-size: 14px !important;
+    font-weight: 500 !important;
+}
+
+/* Samakan font kode negara */
+.sg-recovery-modal-active .sg-recovery-phone-with-country > div > button span {
+    font-family: "Plus Jakarta Sans", sans-serif !important;
+    font-size: 14px !important;
+    font-weight: 500 !important;
+}
+
+/* Area input nomor telepon */
+.sg-recovery-modal-active .sg-recovery-phone-with-country > input {
+    flex: 1 1 auto !important;
+    width: 0 !important;
+    min-width: 0 !important;
+    height: 28px !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 0 0 12px !important;
+    border: 0 !important;
+    border-left: 1px solid #d6e0ed !important;
+    border-radius: 0 !important;
+    outline: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    color: #17365d !important;
+    font-family: "Plus Jakarta Sans", sans-serif !important;
+    font-size: 14px !important;
+    font-weight: 500 !important;
+    line-height: 28px !important;
+}
+
+/* Placeholder konsisten */
+.sg-recovery-modal-active .sg-recovery-phone-with-country > input::placeholder {
+    color: #91a1b8 !important;
+    font-size: 14px !important;
+    font-weight: 400 !important;
+}
+
+/* Fokus keyboard terlihat pada bingkai utama */
+.sg-recovery-modal-active .sg-recovery-phone-with-country:focus-within {
+    border-color: #3987ed !important;
+    box-shadow: 0 0 0 3px rgba(57,135,237,.12) !important;
+}
+
+/* Dropdown tetap dapat tampil di atas konten */
+.sg-recovery-modal-active .sg-recovery-phone-with-country > div > div {
+    z-index: 200 !important;
+}
+
+
+/* sg-otp-six-boxes-v1: khusus OTP pemulihan kata sandi */
+.sg-recovery-content .sg-otp-six-boxes {
+  display: grid !important;
+  grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
+  gap: 6px !important;
+  width: 100%;
+  direction: ltr;
+}
+
+.sg-recovery-content .sg-otp-six-boxes input {
+  display: block !important;
+  box-sizing: border-box;
+  width: 100% !important;
+  min-width: 0 !important;
+  height: 54px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 1px solid #d5e0ee !important;
+  border-radius: 11px !important;
+  background: #fff !important;
+  color: #092e67 !important;
+  font-size: 22px !important;
+  font-weight: 600 !important;
+  text-align: center !important;
+  outline: none;
+}
+
+.sg-recovery-content .sg-otp-six-boxes input:focus {
+  border-color: #0875ff !important;
+  box-shadow: 0 0 0 2px rgba(8, 117, 255, 0.12) !important;
+}
+
+@media (max-width: 480px) {
+  .sg-recovery-content .sg-otp-six-boxes {
+    gap: 5px !important;
+  }
+
+  .sg-recovery-content .sg-otp-six-boxes input {
+    height: 48px !important;
+    font-size: 20px !important;
+  }
+}
+
+/* sg-recovery-visual-v2 */
+/* Perbaikan khusus pemulihan kata sandi Segaloka */
+
+.sg-recovery-reference-v1 {
+  font-family: "Plus Jakarta Sans", sans-serif !important;
+  color: #092e67;
+  width: 100%;
+}
+
+.sg-recovery-reference-v1 h3 {
+  font-family: inherit !important;
+  font-size: 25px !important;
+  line-height: 1.3 !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.6px;
+  color: #092e67 !important;
+  margin: 0 0 9px !important;
+}
+
+.sg-recovery-reference-v1 p {
+  font-family: inherit !important;
+  font-size: 14px !important;
+  line-height: 1.65 !important;
+  font-weight: 400 !important;
+  color: #647895 !important;
+  margin: 0 0 20px !important;
+}
+
+.sg-recovery-reference-v1 label {
+  font-family: inherit !important;
+  font-size: 15px !important;
+  line-height: 1.5 !important;
+  font-weight: 700 !important;
+  color: #092e67 !important;
+  margin-bottom: 12px !important;
+}
+
+.sg-recovery-reference-v1 .sg-otp-six-boxes {
+  display: grid !important;
+  grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
+  gap: 7px !important;
+  width: 100% !important;
+  margin-bottom: 22px !important;
+}
+
+.sg-recovery-reference-v1 .sg-otp-six-boxes input {
+  font-family: inherit !important;
+  font-size: 21px !important;
+  font-weight: 600 !important;
+  height: 54px !important;
+  border: 1px solid #d3dfef !important;
+  border-radius: 11px !important;
+  background: #fff !important;
+  text-align: center !important;
+}
+
+.sg-recovery-reference-v1 .sg-otp-six-boxes input:focus {
+  border-color: #0875ff !important;
+  background: #f5f9ff !important;
+  box-shadow: 0 0 0 2px rgba(8, 117, 255, .12) !important;
+}
+
+.sg-recovery-reference-v1 button[type="submit"] {
+  font-family: inherit !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  min-height: 50px !important;
+  border-radius: 11px !important;
+  background: #073779 !important;
+  color: #fff !important;
+}
+
+.sg-recovery-reference-v1 button[type="submit"]:disabled {
+  opacity: .65;
+  cursor: not-allowed;
+}
+
+.sg-recovery-reference-v1 .sg-recovery-back {
+  font-family: inherit !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  color: #0875ff !important;
+}
+
+@media (max-width: 480px) {
+  .sg-recovery-reference-v1 h3 {
+    font-size: 23px !important;
+  }
+
+  .sg-recovery-reference-v1 .sg-otp-six-boxes {
+    gap: 5px !important;
+  }
+
+  .sg-recovery-reference-v1 .sg-otp-six-boxes input {
+    height: 49px !important;
+    font-size: 19px !important;
+  }
+}
+
+
+/* sg-recovery-complete-v3 */
+.sg-recovery-complete-v3 {
+  font-family: "Plus Jakarta Sans", sans-serif !important;
+}
+
+.sg-recovery-complete-v3 .sg-recovery-email-card-v3 {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  padding: 12px 14px;
+  margin: 0 0 20px;
+  border-radius: 12px;
+  background: #f1f6fd;
+}
+
+.sg-recovery-complete-v3 .sg-recovery-mail-icon {
+  font-size: 22px;
+  color: #073779;
+}
+
+.sg-recovery-complete-v3 .sg-recovery-email-address {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #092e67;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.sg-recovery-complete-v3 .sg-recovery-change-email {
+  flex: none;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #0875ff;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.sg-recovery-complete-v3 .sg-recovery-resend-v3 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 20px;
+  color: #647895;
+  font-size: 12px;
+}
+
+.sg-recovery-complete-v3 .sg-recovery-resend-v3 button {
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: #0875ff;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.sg-recovery-complete-v3 .sg-recovery-resend-v3 button:disabled {
+  opacity: .5;
+  cursor: not-allowed;
+}
+
+.sg-recovery-complete-v3 .sg-recovery-countdown {
+  color: #647895;
+}
+
+.sg-recovery-complete-v3 .sg-recovery-footer-v3 {
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px solid #e4eaf2;
+}
+
+.sg-recovery-complete-v3 .sg-recovery-footer-v3 .sg-recovery-back {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 12px;
+  padding: 0;
+  background: transparent;
+  color: #0875ff;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.sg-recovery-complete-v3 .sg-recovery-footer-v3 .sg-recovery-back span {
+  font-size: 23px;
+  font-weight: 400;
+}

@@ -1,0 +1,162 @@
+=== FONT SIZE ===
+37: font-size: var(--ui-font-sm);
+126: font-size: var(--ui-font-sm);
+134: font-size: clamp(35px, 3.4vw, 50px);
+144: font-size: var(--ui-font-md);
+176: font-size: var(--ui-font-md);
+184: font-size: var(--ui-font-sm);
+202: font-size: var(--ui-font-sm);
+258: font-size: var(--ui-font-sm);
+264: font-size: var(--ui-font-sm);
+307: font-size: var(--ui-font-sm);
+316: font-size: 25px;
+325: font-size: var(--ui-font-sm);
+360: font-size: var(--ui-font-md);
+368: font-size: var(--ui-font-sm);
+386: font-size: var(--ui-font-sm);
+408: font-size: var(--ui-font-sm);
+486: font-size: var(--ui-font-sm);
+500: font-size: var(--ui-font-sm);
+521: font-size: var(--ui-font-sm);
+561: font-size: var(--ui-font-sm);
+568: font-size: var(--ui-font-sm);
+631: font-size: var(--ui-font-sm);
+638: font-size: var(--ui-font-sm);
+646: font-size: var(--ui-font-sm);
+671: font-size: var(--ui-font-sm);
+707: font-size: var(--ui-font-sm);
+714: font-size: var(--ui-font-sm);
+723: font-size: var(--ui-font-sm);
+753: font-size: var(--ui-font-sm);
+760: font-size: var(--ui-font-sm);
+782: font-size: var(--ui-font-sm);
+788: font-size: var(--ui-font-sm);
+820: font-size: var(--ui-font-sm);
+874: font-size: var(--ui-font-sm);
+920: font-size: 37px;
+950: font-size: 31px;
+1006: font-size: 22px;
+1089: font-size: 28px;
+1104: font-size: var(--ui-font-md);
+1111: font-size: var(--ui-font-md);
+1115: font-size: var(--ui-font-sm);
+1120: font-size: var(--ui-font-sm);
+1124: font-size: var(--ui-font-2xl);
+1129: font-size: var(--ui-font-md);
+1133: font-size: var(--ui-font-lg);
+1138: font-size: var(--ui-font-sm);
+1142: font-size: var(--ui-font-sm);
+1146: font-size: var(--ui-font-md);
+1150: font-size: var(--ui-font-sm);
+1155: font-size: var(--ui-font-md);
+1160: font-size: var(--ui-font-sm);
+1164: font-size: var(--ui-font-md);
+1175: font-size: var(--ui-font-sm);
+1180: font-size: var(--ui-font-md);
+
+=== FONT FAMILY ===
+registration.css | 16: font-family: var(--font-jakarta), "Plus Jakarta Sans", sans-serif;
+registration.css | 37: font-size: var(--ui-font-sm);
+registration.css | 126: font-size: var(--ui-font-sm);
+registration.css | 144: font-size: var(--ui-font-md);
+registration.css | 176: font-size: var(--ui-font-md);
+registration.css | 184: font-size: var(--ui-font-sm);
+registration.css | 202: font-size: var(--ui-font-sm);
+registration.css | 242: font-family: inherit;
+registration.css | 258: font-size: var(--ui-font-sm);
+registration.css | 264: font-size: var(--ui-font-sm);
+registration.css | 307: font-size: var(--ui-font-sm);
+registration.css | 325: font-size: var(--ui-font-sm);
+registration.css | 360: font-size: var(--ui-font-md);
+registration.css | 368: font-size: var(--ui-font-sm);
+registration.css | 386: font-size: var(--ui-font-sm);
+registration.css | 407: font-family: inherit;
+registration.css | 408: font-size: var(--ui-font-sm);
+registration.css | 485: font-family: inherit;
+registration.css | 486: font-size: var(--ui-font-sm);
+registration.css | 500: font-size: var(--ui-font-sm);
+registration.css | 521: font-size: var(--ui-font-sm);
+registration.css | 561: font-size: var(--ui-font-sm);
+registration.css | 568: font-size: var(--ui-font-sm);
+registration.css | 631: font-size: var(--ui-font-sm);
+registration.css | 638: font-size: var(--ui-font-sm);
+registration.css | 646: font-size: var(--ui-font-sm);
+registration.css | 671: font-size: var(--ui-font-sm);
+registration.css | 707: font-size: var(--ui-font-sm);
+registration.css | 714: font-size: var(--ui-font-sm);
+registration.css | 723: font-size: var(--ui-font-sm);
+registration.css | 753: font-size: var(--ui-font-sm);
+registration.css | 760: font-size: var(--ui-font-sm);
+registration.css | 782: font-size: var(--ui-font-sm);
+registration.css | 788: font-size: var(--ui-font-sm);
+registration.css | 819: font-family: inherit;
+registration.css | 820: font-size: var(--ui-font-sm);
+registration.css | 874: font-size: var(--ui-font-sm);
+registration.css | 1103: font-family: var(--ui-font-primary);
+registration.css | 1104: font-size: var(--ui-font-md);
+registration.css | 1110: font-family: var(--ui-font-primary);
+registration.css | 1111: font-size: var(--ui-font-md);
+registration.css | 1115: font-size: var(--ui-font-sm);
+registration.css | 1120: font-size: var(--ui-font-sm);
+registration.css | 1124: font-size: var(--ui-font-2xl);
+registration.css | 1129: font-size: var(--ui-font-md);
+registration.css | 1133: font-size: var(--ui-font-lg);
+registration.css | 1138: font-size: var(--ui-font-sm);
+registration.css | 1142: font-size: var(--ui-font-sm);
+registration.css | 1146: font-size: var(--ui-font-md);
+registration.css | 1150: font-size: var(--ui-font-sm);
+registration.css | 1155: font-size: var(--ui-font-md);
+registration.css | 1160: font-size: var(--ui-font-sm);
+registration.css | 1164: font-size: var(--ui-font-md);
+registration.css | 1175: font-size: var(--ui-font-sm);
+registration.css | 1180: font-size: var(--ui-font-md);
+registration.css | 1190: font-family:
+registration.css | 1202: font-family: inherit;
+tokens.css | 19: --ui-font-primary:
+tokens.css | 27: --ui-font-xs: 11px;
+tokens.css | 28: --ui-font-sm: 12px;
+tokens.css | 29: --ui-font-md: 14px;
+tokens.css | 30: --ui-font-lg: 16px;
+tokens.css | 31: --ui-font-xl: 20px;
+tokens.css | 32: --ui-font-2xl: 24px;
+tokens.css | 33: --ui-font-3xl: 32px;
+tokens.css | 34: --ui-font-4xl: 40px;
+tokens.css | 138: --search-font-family: var(--ui-font-primary);
+
+=== TYPOGRAPHY TOKENS ===
+19: --ui-font-primary:
+27: --ui-font-xs: 11px;
+28: --ui-font-sm: 12px;
+29: --ui-font-md: 14px;
+30: --ui-font-lg: 16px;
+31: --ui-font-xl: 20px;
+32: --ui-font-2xl: 24px;
+33: --ui-font-3xl: 32px;
+34: --ui-font-4xl: 40px;
+36: --ui-weight-normal: 400;
+37: --ui-weight-medium: 500;
+38: --ui-weight-semibold: 600;
+39: --ui-weight-bold: 700;
+138: --search-font-family: var(--ui-font-primary);
+149: --search-label-weight: var(--ui-weight-medium);
+150: --search-value-weight: var(--ui-weight-semibold);
+222: --package-card-title-weight: var(--ui-weight-bold);
+227: --package-card-price-weight: var(--ui-weight-bold);
+234: --package-detail-title-weight: var(--ui-weight-bold);
+237: --package-detail-price-weight: var(--ui-weight-bold);
+252: --button-font-weight: var(--ui-weight-semibold);
+
+=== EXISTING OVERRIDES ===
+1098: SEGALOKA GLOBAL TYPOGRAPHY OVERRIDE
+1184: SEGALOKA VENDOR ARABIC TYPOGRAPHY
+1187: .vendor-reg-page[dir="rtl"] {
+1198: .vendor-reg-page[dir="rtl"] input,
+1199: .vendor-reg-page[dir="rtl"] select,
+1200: .vendor-reg-page[dir="rtl"] textarea,
+1201: .vendor-reg-page[dir="rtl"] button {
+1205: .vendor-reg-page[dir="rtl"] .vendor-reg-back svg,
+1206: .vendor-reg-page[dir="rtl"] .vendor-reg-button svg {
+1210: .vendor-reg-page[dir="rtl"] .vendor-reg-step button {
+1214: .vendor-reg-page[dir="rtl"] .vendor-reg-input-icon > svg {
+1219: .vendor-reg-page[dir="rtl"] .vendor-reg-input-icon input {
+1224: .vendor-reg-page[dir="rtl"] .vendor-reg-review-documents strong {

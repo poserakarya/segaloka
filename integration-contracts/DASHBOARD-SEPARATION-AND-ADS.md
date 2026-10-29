@@ -1,0 +1,261 @@
+# Dashboard Separation and Ads Integration
+
+## Existing Dashboard Applications
+- affiliate
+- agen
+- control-center
+- mitra
+- travel
+- traveler
+- vendor
+
+## Control Center Runtime
+
+### core.js
+- Line 124: renderSide(); renderTop(); renderBanners();
+- Line 128: const pws = typeof wsOf === 'function' ? wsOf() : 'admin'; if (pws !== 'admin') { renderPortalSide(pws); return; }
+- Line 160: function renderTop() {
+- Line 164: <button class="wsbtn" data-act="ws" aria-haspopup="menu">${ic(wsOf() === 'admin' ? 'shieldc' : WS[wsOf()].icon, 'sm')}<span class="wsl">${esc(wsOf() === 'admin' ? 'Super Admin' : L3(WS[wsOf()].label))}</span>${ic('chevD'
+- Line 175: function renderBanners() {
+- Line 200: else if (path.startsWith('/p/') && typeof portalEmpty === 'function' && WS[wsOf(path)] && !me(wsOf(path))) { const res = portalEmpty(wsOf(path)); html = res.html; mount = res.mount; }
+- Line 205: renderSide(); renderTop(); document.getElementById('app').classList.remove('drawer-open');
+- Line 206: document.title = (path.startsWith('/p/') ? wsLabel(wsOf()) : (nav ? t(navId) + ' · ' : '') + BRAND.name + ' ' + t('control_center'));
+- Line 312: renderTop(); updateSideBadges();
+
+### main.js
+- Line 13: lang: el => { S.lang = el.dataset.v; store.set('lang', S.lang); applyLang(); closeOverlays(); renderTop(); renderBanners(); rerender(); },
+- Line 14: theme: el => { S.theme = el.dataset.v; store.set('theme', S.theme); applyTheme(); renderTop(); const p = document.getElementById('pop'); if (p) document.querySelectorAll('#pop [data-act="theme"]').forEach(b => b.setAttri
+- Line 15: role: el => { S.role = el.dataset.v; store.set('role', S.role); closeOverlays(); renderTop(); renderBanners(); rerender(); toast('info', L3(['Permission dimuat ulang dari backend', 'Permissions reloaded from backend', 'أ
+- Line 16: ux: el => { S.ux = el.dataset.v; closeOverlays(); renderBanners(); rerender(); },
+- Line 21: 'notif-read': () => { (typeof myNotifs === 'function' ? myNotifs() : NOTIFS).forEach(n => n.unread = false); document.getElementById('pop').innerHTML = notifHTML(); renderTop(); },
+- Line 22: 'notif-go': el => { const n = NOTIFS[+el.dataset.i]; n.unread = false; renderTop(); closeOverlays(); go(n.route); },
+
+### portals.js
+- Line 33: const pNotif = (cat, tone, title, sub, route) => { NOTIFS.unshift({ id: uid('NTF'), cat, tone, title, sub, route, ts: nowTs(), unread: true }); renderTop(); };
+- Line 40: function renderPortalSide(ws) {
+- Line 49: ws: el => popAt(el, `<div class="menu" style="min-width:300px"><div class="mh">${L3(['Pindah workspace', 'Switch workspace', 'تبديل مساحة العمل'])}</div><button class="mi" role="menuitemradio" aria-checked="${wsOf() === 
+
+### sync.js
+- Line 61: if (n) { syncTpl(); announce(); if (ovl().innerHTML) SB.pendingRemote = true; else { rerender(); renderTop(); } const u = document.getElementById('sync-pill'); if (u) u.classList.add('pulse'); }
+- Line 117: if (!mcp || DEMO) { SB.state = 'local'; paintSync(); renderBanners(); return; }
+- Line 131: } catch (e) { SB.on = false; SB.state = 'local'; SB.err = isDenied(e) ? { code: 'denied', message: L3(['Akun Supabase yang terhubung tidak punya akses ke project ', 'The connected Supabase account has no access to projec
+- Line 137: if (c.name === 'bookings' && !b) msgs.push(['info', L3(['Booking baru', 'New booking', 'حجز جديد']), a.id + ' · ' + trvName(a.traveler) + ' · ' + a.source, (wsOf() === 'admin' ? '/booking/' : '/p/travel/bookings/') + a.i
+- Line 140: else if (c.name === 'conversations' && (a.messages || []).length > ((b && b.messages) || []).length) { const m = a.messages[a.messages.length - 1]; msgs.push(['info', (m.dir === 'in' ? a.contact : (m.by || 'Travel')), m.
+- Line 142: else if (c.name === 'sd_requests' && !b) msgs.push(['info', L3(['Permintaan SegaDeals baru', 'New SegaDeals request', 'طلب SegaDeals جديد']), sdTitle(a) + ' · ' + a.pax + ' pax', wsOf() === 'travel' ? '/p/travel/segadeal
+- Line 143: else if (c.name === 'sd_offers' && !b) msgs.push(['info', L3(['Penawaran SegaDeals baru', 'New SegaDeals offer', 'عرض جديد']), ((travelById(a.travel) || {}).name || '') + ' · ' + money(a.price) + '/pax', wsOf() === 'trav
+- Line 144: else if (c.name === 'sd_offers' && b && b.state !== a.state && a.state === 'accepted') msgs.push(['ok', L3(['Penawaran Anda dipilih pengguna', 'Your offer was chosen', 'تم اختيار عرضك']), a.request + ' · ' + money(a.pric
+- Line 158: A['sb-purge'] = () => confirmAction({ title: L3(['Cadangkan & hapus data demo', 'Back up & remove demo data', 'نسخ وحذف البيانات التجريبية']), desc: L3(['Semua Travel, booking, pembayaran, dan entitas demo lain disalin k
+
+## Advertising References
+- core.js:11
+- core.js:12
+- core.js:32
+- core.js:84
+- core.js:96
+- core.js:102
+- core.js:263
+- core.js:274
+- core.js:283
+- core.js:285
+- core.js:294
+- core.js:308
+- core.js:309
+- data.js:50
+- data.js:90
+- data.js:101
+- data.js:104
+- data.js:105
+- data.js:110
+- data.js:111
+- data.js:112
+- data.js:115
+- data.js:119
+- data.js:120
+- data.js:121
+- data.js:141
+- data.js:144
+- data.js:145
+- datamode.js:7
+- datamode.js:28
+- datamode.js:33
+- datamode.js:48
+- datamode.js:49
+- datamode.js:50
+- datamode.js:57
+- datamode.js:61
+- datamode.js:62
+- datamode.js:78
+- datamode.js:80
+- datamode.js:82
+- flows.js:3
+- flows.js:8
+- flows.js:10
+- flows.js:27
+- flows.js:50
+- flows.js:58
+- flows.js:61
+- flows.js:70
+- flows.js:85
+- flows.js:87
+- flows.js:94
+- flows.js:102
+- flows.js:107
+- flows.js:139
+- flows.js:142
+- gateway.js:30
+- i18n.js:5
+- i18n.js:10
+- i18n.js:20
+- i18n.js:26
+- i18n.js:30
+- i18n.js:44
+- i18n.js:63
+- i18n.js:65
+- i18n.js:66
+- i18n.js:80
+- i18n.js:81
+- i18n.js:82
+- i18n.js:90
+- main.js:43
+- main.js:44
+- main.js:45
+- main.js:46
+- main.js:51
+- main.js:71
+- main.js:77
+- main.js:78
+- main.js:81
+- omni.js:135
+- pages_a.js:5
+- pages_a.js:13
+- pages_a.js:18
+- pages_a.js:21
+- pages_a.js:28
+- pages_a.js:34
+- pages_a.js:41
+- pages_a.js:46
+- pages_a.js:50
+- pages_a.js:59
+- pages_a.js:60
+- pages_a.js:67
+- pages_a.js:75
+- pages_a.js:78
+- pages_a.js:79
+- pages_b.js:10
+- pages_b.js:25
+- pages_b.js:33
+- pages_b.js:34
+- pages_b.js:37
+- pages_b.js:58
+- pages_b.js:60
+- pages_b.js:61
+- pages_b.js:62
+- pages_b.js:63
+- pages_b.js:64
+- pages_b.js:65
+- pages_b.js:67
+- pages_b.js:68
+- pages_b.js:69
+- pages_c.js:22
+- pages_c.js:29
+- pages_c.js:46
+- pages_c.js:47
+- pages_c.js:50
+- pages_c.js:54
+- pages_c.js:57
+- pages_c.js:63
+- pages_c.js:64
+- pages_c.js:70
+- pages_c.js:80
+- pages_c.js:81
+- pages_c.js:86
+- pages_c.js:88
+- pages_c.js:90
+- pages_d.js:68
+- pages_d.js:91
+- pages_d.js:92
+- pages_d.js:94
+- pages_e.js:12
+- pages_e.js:22
+- pages_e.js:28
+- pages_e.js:29
+- pages_e.js:30
+- pages_e.js:33
+- pages_e.js:34
+- pages_e.js:36
+- pages_e.js:38
+- pages_e.js:41
+- pages_e.js:46
+- pages_e.js:58
+- pages_e.js:59
+- pages_e.js:60
+- pages_e.js:61
+- pages_f.js:83
+- pages_f.js:84
+- pages_f.js:85
+- pages_f.js:86
+- pages_f.js:87
+- pages_f.js:89
+- pages_f.js:97
+- pages_f.js:101
+- pages_f.js:113
+- pages_f.js:115
+- pages_f.js:119
+- pages_f.js:120
+- pages_f.js:123
+- pages_f.js:143
+- pages_f.js:149
+- pages_g.js:6
+- pages_g.js:12
+- pages_g.js:13
+- pages_g.js:14
+- portals.js:34
+- portals.js:76
+- portals.js:102
+- portals.js:106
+- portals.js:108
+- portals.js:111
+- portals.js:112
+- portals.js:138
+- portals.js:140
+- portals.js:143
+- portals.js:147
+- portals.js:150
+- portals.js:151
+- portals.js:152
+- portals.js:157
+- reviews.js:88
+- reviews.js:89
+- reviews.js:90
+- reviews.js:92
+- reviews.js:93
+- reviews.js:94
+- reviews.js:96
+- reviews.js:99
+- sdterms.js:44
+- sdterms.js:56
+- sdterms.js:78
+- sync.js:8
+- sync.js:9
+- sync.js:73
+- sync.js:74
+- sync.js:75
+- sync.js:76
+- sync.js:77
+- sync.js:78
+- sync.js:80
+- sync.js:82
+- sync.js:83
+- sync.js:85
+- sync.js:94
+- sync.js:95
+- sync.js:126
+
+## Required Boundaries
+- Control Center has no workspace switching.
+- Each role dashboard has its own navigation.
+- Server validates role and organization.
+- Vendor campaigns require central approval.
+- Approved campaigns are eligible for publication.
+- Travel and Marketplace read authorized campaign data.
+- No demo data is considered production data.

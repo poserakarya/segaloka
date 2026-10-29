@@ -1,0 +1,9 @@
+﻿.segaloka-modal,
+.segaloka-popover,
+.segaloka-drawer {
+  background: var(--modal-background);
+  border: 1px solid var(--ui-border);
+  border-radius: var(--modal-radius);
+  box-shadow: var(--modal-shadow);
+  color: var(--ui-text);
+}

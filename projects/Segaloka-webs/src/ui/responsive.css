@@ -1,0 +1,19 @@
+﻿/*
+ * Responsive overrides lintas komponen.
+ *
+ * Gunakan hanya untuk aturan global.
+ * Responsive spesifik komponen tetap berada
+ * di file CSS komponen tersebut.
+ */
+
+@media (max-width: 767px) {
+  .segaloka-desktop-only {
+    display: none !important;
+  }
+}
+
+@media (min-width: 768px) {
+  .segaloka-mobile-only {
+    display: none !important;
+  }
+}

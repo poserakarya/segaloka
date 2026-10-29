@@ -1,0 +1,905 @@
+============================================================
+SOURCE LINES 1-89
+============================================================
+00001: "use client";
+00002: 
+00003: import {
+00004:   CalendarDays,
+00005:   ChevronLeft,
+00006:   ChevronRight,
+00007:   MapPin,
+00008:   Minus,
+00009:   Plus,
+00010:   Search,
+00011:   UsersRound,
+00012:   X,
+00013: } from "lucide-react";
+00014: 
+00015: import {
+00016:   useEffect,
+00017:   useMemo,
+00018:   useRef,
+00019:   useState,
+00020: } from "react";
+00021: 
+00022: import { useRouter } from "next/navigation";
+00023: 
+00024: import {
+00025:   useMarketplacePreferences,
+00026: } from "@/components/providers/MarketplacePreferencesProvider";
+00027: 
+00028: type Props = {
+00029:   category: string;
+00030:   initialOrigin: string;
+00031:   initialDestination: string;
+00032:   initialTravelers: string;
+00033:   initialDate: string;
+00034: };
+00035: 
+00036: type Panel =
+00037:   | "origin"
+00038:   | "destination"
+00039:   | "traveler"
+00040:   | "date"
+00041:   | null;
+00042: 
+00043: type TravelerState = {
+00044:   adult: number;
+00045:   child: number;
+00046:   infant: number;
+00047: };
+00048: 
+00049: const origins = [
+00050:   "Jakarta",
+00051:   "Makassar",
+00052:   "Surabaya",
+00053:   "Medan",
+00054:   "Yogyakarta",
+00055:   "Bandung",
+00056:   "Semarang",
+00057:   "Balikpapan",
+00058:   "Banjarmasin",
+00059:   "Palembang",
+00060:   "Pekanbaru",
+00061:   "Padang",
+00062:   "Banda Aceh",
+00063:   "Batam",
+00064:   "Denpasar",
+00065:   "Manado",
+00066:   "Lombok",
+00067: ];
+00068: 
+00069: const categoryOptions: Record<string, string[]> = {
+00070:   Umrah: [
+00071:     "Makkah",
+00072:     "Madinah",
+00073:     "Makkah & Madinah",
+00074:   ],
+00075: 
+00076:   Haji: [
+00077:     "Makkah",
+00078:     "Madinah",
+00079:     "Makkah & Madinah",
+00080:   ],
+00081: 
+00082:   "Halal Tour": [
+00083:     "Turkiye",
+00084:     "Malaysia",
+00085:     "Singapura",
+00086:     "Jepang",
+00087:     "Korea Selatan",
+00088:     "Uni Emirat Arab",
+00089:     "Mesir",
+
+============================================================
+SOURCE LINES 411-564
+============================================================
+00411: }
+00412: 
+00413: export function SearchEditBar({
+00414:   category,
+00415:   initialOrigin,
+00416:   initialDestination,
+00417:   initialTravelers,
+00418:   initialDate,
+00419: }: Props) {
+00420:   const router = useRouter();
+00421: 
+00422:   const {
+00423:     language,
+00424:     locale,
+00425:     direction,
+00426:   } = useMarketplacePreferences();
+00427: 
+00428:   const t = copy[language];
+00429: 
+00430:   const rootRef =
+00431:     useRef<HTMLDivElement | null>(
+00432:       null,
+00433:     );
+00434: 
+00435:   const [panel, setPanel] =
+00436:     useState<Panel>(null);
+00437: 
+00438:   const [origin, setOrigin] =
+00439:     useState(
+00440:       initialOrigin || "Jakarta",
+00441:     );
+00442: 
+00443:   const [
+00444:     originQuery,
+00445:     setOriginQuery,
+00446:   ] = useState("");
+00447: 
+00448:   const [
+00449:     destination,
+00450:     setDestination,
+00451:   ] = useState(
+00452:     initialDestination || "",
+00453:   );
+00454: 
+00455:   const [
+00456:     destinationQuery,
+00457:     setDestinationQuery,
+00458:   ] = useState("");
+00459: 
+00460:   const initialTravelerTotal =
+00461:     Math.max(
+00462:       1,
+00463:       Number(
+00464:         initialTravelers || 2,
+00465:       ),
+00466:     );
+00467: 
+00468:   const [
+00469:     travelers,
+00470:     setTravelers,
+00471:   ] = useState<TravelerState>({
+00472:     adult: initialTravelerTotal,
+00473:     child: 0,
+00474:     infant: 0,
+00475:   });
+00476: 
+00477:   const [
+00478:     selectedDate,
+00479:     setSelectedDate,
+00480:   ] = useState(
+00481:     initialDate || "",
+00482:   );
+00483: 
+00484:   const parsedInitialDate =
+00485:     parseDateValue(
+00486:       initialDate,
+00487:     );
+00488: 
+00489:   const today = new Date();
+00490: 
+00491:   const [
+00492:     calendarMonth,
+00493:     setCalendarMonth,
+00494:   ] = useState(
+00495:     parsedInitialDate
+00496:       ? new Date(
+00497:           parsedInitialDate.getFullYear(),
+00498:           parsedInitialDate.getMonth(),
+00499:           1,
+00500:         )
+00501:       : new Date(
+00502:           today.getFullYear(),
+00503:           today.getMonth(),
+00504:           1,
+00505:         ),
+00506:   );
+00507: 
+00508:   useEffect(() => {
+00509:     function handlePointerDown(
+00510:       event: PointerEvent,
+00511:     ) {
+00512:       if (
+00513:         rootRef.current &&
+00514:         !rootRef.current.contains(
+00515:           event.target as Node,
+00516:         )
+00517:       ) {
+00518:         setPanel(null);
+00519:       }
+00520:     }
+00521: 
+00522:     function handleKeyDown(
+00523:       event: KeyboardEvent,
+00524:     ) {
+00525:       if (
+00526:         event.key === "Escape"
+00527:       ) {
+00528:         setPanel(null);
+00529:       }
+00530:     }
+00531: 
+00532:     document.addEventListener(
+00533:       "pointerdown",
+00534:       handlePointerDown,
+00535:     );
+00536: 
+00537:     document.addEventListener(
+00538:       "keydown",
+00539:       handleKeyDown,
+00540:     );
+00541: 
+00542:     return () => {
+00543:       document.removeEventListener(
+00544:         "pointerdown",
+00545:         handlePointerDown,
+00546:       );
+00547: 
+00548:       document.removeEventListener(
+00549:         "keydown",
+00550:         handleKeyDown,
+00551:       );
+00552:     };
+00553:   }, []);
+00554: 
+00555:   useEffect(() => {
+00556:     setDestination(
+00557:       initialDestination || "",
+00558:     );
+00559:   }, [
+00560:     category,
+00561:     initialDestination,
+00562:   ]);
+00563: 
+00564:   const destinationOptions =
+
+============================================================
+SOURCE LINES 598-924
+============================================================
+00598: 
+00599:       if (!query) {
+00600:         return destinationOptions;
+00601:       }
+00602: 
+00603:       return destinationOptions.filter(
+00604:         (value) =>
+00605:           value
+00606:             .toLowerCase()
+00607:             .includes(query),
+00608:       );
+00609:     }, [
+00610:       destinationOptions,
+00611:       destinationQuery,
+00612:     ]);
+00613: 
+00614:   const travelerTotal =
+00615:     travelers.adult +
+00616:     travelers.child +
+00617:     travelers.infant;
+00618: 
+00619:   const canSearch =
+00620:     origin.trim().length > 0 &&
+00621:     destination.trim().length > 0 &&
+00622:     travelerTotal > 0 &&
+00623:     selectedDate.length > 0;
+00624: 
+00625:   function togglePanel(
+00626:     nextPanel: Exclude<
+00627:       Panel,
+00628:       null
+00629:     >,
+00630:   ) {
+00631:     setPanel(
+00632:       panel === nextPanel
+00633:         ? null
+00634:         : nextPanel,
+00635:     );
+00636:   }
+00637: 
+00638:   function updateTraveler(
+00639:     key: keyof TravelerState,
+00640:     delta: number,
+00641:   ) {
+00642:     setTravelers(
+00643:       (current) => {
+00644:         const next = {
+00645:           ...current,
+00646:           [key]: Math.max(
+00647:             0,
+00648:             current[key] + delta,
+00649:           ),
+00650:         };
+00651: 
+00652:         if (
+00653:           next.adult +
+00654:             next.child +
+00655:             next.infant ===
+00656:           0
+00657:         ) {
+00658:           return current;
+00659:         }
+00660: 
+00661:         return next;
+00662:       },
+00663:     );
+00664:   }
+00665: 
+00666:   function formatSelectedDate() {
+00667:     if (!selectedDate) {
+00668:       return t.chooseDate;
+00669:     }
+00670: 
+00671:     const parsed =
+00672:       parseDateValue(
+00673:         selectedDate,
+00674:       );
+00675: 
+00676:     if (!parsed) {
+00677:       return selectedDate;
+00678:     }
+00679: 
+00680:     return new Intl.DateTimeFormat(
+00681:       locale,
+00682:       {
+00683:         day: "numeric",
+00684:         month: "short",
+00685:         year: "numeric",
+00686:       },
+00687:     ).format(parsed);
+00688:   }
+00689: 
+00690:   function submitSearch() {
+00691:     if (!canSearch) {
+00692:       return;
+00693:     }
+00694: 
+00695:     const params =
+00696:       new URLSearchParams();
+00697: 
+00698:     if (category) {
+00699:       params.set(
+00700:         "category",
+00701:         category,
+00702:       );
+00703:     }
+00704: 
+00705:     params.set(
+00706:       "origin",
+00707:       origin,
+00708:     );
+00709: 
+00710:     params.set(
+00711:       "destination",
+00712:       destination,
+00713:     );
+00714: 
+00715:     params.set(
+00716:       "travelers",
+00717:       String(travelerTotal),
+00718:     );
+00719: 
+00720:     params.set(
+00721:       "adult",
+00722:       String(travelers.adult),
+00723:     );
+00724: 
+00725:     params.set(
+00726:       "child",
+00727:       String(travelers.child),
+00728:     );
+00729: 
+00730:     params.set(
+00731:       "infant",
+00732:       String(travelers.infant),
+00733:     );
+00734: 
+00735:     params.set(
+00736:       "date",
+00737:       selectedDate,
+00738:     );
+00739: 
+00740:     setPanel(null);
+00741: 
+00742:     router.push(
+00743:       `/search?${params.toString()}`,
+00744:     );
+00745:   }
+00746: 
+00747:   const currentYear =
+00748:     calendarMonth.getFullYear();
+00749: 
+00750:   const currentMonth =
+00751:     calendarMonth.getMonth();
+00752: 
+00753:   const nextMonth =
+00754:     new Date(
+00755:       currentYear,
+00756:       currentMonth + 1,
+00757:       1,
+00758:     );
+00759: 
+00760:   const monthOneDays =
+00761:     buildMonthDays(
+00762:       currentYear,
+00763:       currentMonth,
+00764:     );
+00765: 
+00766:   const monthTwoDays =
+00767:     buildMonthDays(
+00768:       nextMonth.getFullYear(),
+00769:       nextMonth.getMonth(),
+00770:     );
+00771: 
+00772:   const selectedDateObject =
+00773:     parseDateValue(
+00774:       selectedDate,
+00775:     );
+00776: 
+00777:   function renderMonth(
+00778:     year: number,
+00779:     month: number,
+00780:     days: Array<number | null>,
+00781:   ) {
+00782:     return (
+00783:       <div className="search-unified-calendar-month">
+00784:         <strong className="search-unified-calendar-month-title">
+00785:           {t.months[month]} {year}
+00786:         </strong>
+00787: 
+00788:         <div className="search-unified-calendar-weekdays">
+00789:           {t.weekdays.map(
+00790:             (weekday, index) => (
+00791:               <span
+00792:                 key={`${weekday}-${index}`}
+00793:                 className={
+00794:                   index === 0
+00795:                     ? "is-sunday"
+00796:                     : undefined
+00797:                 }
+00798:               >
+00799:                 {weekday}
+00800:               </span>
+00801:             ),
+00802:           )}
+00803:         </div>
+00804: 
+00805:         <div className="search-unified-calendar-days">
+00806:           {days.map(
+00807:             (day, index) => {
+00808:               if (!day) {
+00809:                 return (
+00810:                   <span
+00811:                     key={`blank-${index}`}
+00812:                     className="is-empty"
+00813:                   />
+00814:                 );
+00815:               }
+00816: 
+00817:               const value =
+00818:                 new Date(
+00819:                   year,
+00820:                   month,
+00821:                   day,
+00822:                 );
+00823: 
+00824:               const normalizedToday =
+00825:                 new Date(
+00826:                   today.getFullYear(),
+00827:                   today.getMonth(),
+00828:                   today.getDate(),
+00829:                 );
+00830: 
+00831:               const disabled =
+00832:                 value <
+00833:                 normalizedToday;
+00834: 
+00835:               const active =
+00836:                 selectedDateObject
+00837:                   ? sameDay(
+00838:                       value,
+00839:                       selectedDateObject,
+00840:                     )
+00841:                   : false;
+00842: 
+00843:               return (
+00844:                 <button
+00845:                   key={day}
+00846:                   type="button"
+00847:                   disabled={disabled}
+00848:                   className={
+00849:                     active
+00850:                       ? "is-active"
+00851:                       : undefined
+00852:                   }
+00853:                   onClick={() => {
+00854:                     setSelectedDate(
+00855:                       toDateValue(
+00856:                         year,
+00857:                         month,
+00858:                         day,
+00859:                       ),
+00860:                     );
+00861: 
+00862:                     setPanel(null);
+00863:                   }}
+00864:                 >
+00865:                   {day}
+00866:                 </button>
+00867:               );
+00868:             },
+00869:           )}
+00870:         </div>
+00871:       </div>
+00872:     );
+00873:   }
+00874: 
+00875:   return (
+00876:     <div
+00877:       ref={rootRef}
+00878:       className="search-edit-bar search-unified-bar"
+00879:       dir={direction}
+00880:     >
+00881:       <div className="search-edit-control">
+00882:         <button
+00883:           type="button"
+00884:           className="search-edit-field"
+00885:           aria-expanded={
+00886:             panel === "origin"
+00887:           }
+00888:           onClick={() =>
+00889:             togglePanel("origin")
+00890:           }
+00891:         >
+00892:           <MapPin size={18} />
+00893: 
+00894:           <span>
+00895:             <small>
+00896:               {t.from}
+00897:             </small>
+00898: 
+00899:             <strong>
+00900:               {origin}
+00901:             </strong>
+00902:           </span>
+00903:         </button>
+00904: 
+00905:         {panel === "origin" && (
+00906:           <div className="search-edit-dropdown search-unified-dropdown search-unified-origin">
+00907:             <div className="search-unified-dropdown-head">
+00908:               <strong>
+00909:                 {t.originTitle}
+00910:               </strong>
+00911: 
+00912:               <button
+00913:                 type="button"
+00914:                 className="search-unified-close"
+00915:                 aria-label="Close"
+00916:                 onClick={() =>
+00917:                   setPanel(null)
+00918:                 }
+00919:               >
+00920:                 <X size={18} />
+00921:               </button>
+00922:             </div>
+00923: 
+00924:             <label className="search-unified-input">
+
+============================================================
+SOURCE LINES 1071-1390
+============================================================
+01071:               )}
+01072:             </div>
+01073:           </div>
+01074:         )}
+01075:       </div>
+01076: 
+01077:       <div className="search-edit-control">
+01078:         <button
+01079:           type="button"
+01080:           className="search-edit-field"
+01081:           aria-expanded={
+01082:             panel === "date"
+01083:           }
+01084:           onClick={() =>
+01085:             togglePanel("date")
+01086:           }
+01087:         >
+01088:           <CalendarDays size={18} />
+01089: 
+01090:           <span>
+01091:             <small>
+01092:               {t.date}
+01093:             </small>
+01094: 
+01095:             <strong>
+01096:               {formatSelectedDate()}
+01097:             </strong>
+01098:           </span>
+01099:         </button>
+01100: 
+01101:         {panel === "date" && (
+01102:           <div className="search-edit-dropdown search-unified-dropdown search-unified-date">
+01103:             <div className="search-unified-dropdown-head">
+01104:               <strong>
+01105:                 {t.dateTitle}
+01106:               </strong>
+01107: 
+01108:               <button
+01109:                 type="button"
+01110:                 className="search-unified-close"
+01111:                 aria-label="Close"
+01112:                 onClick={() =>
+01113:                   setPanel(null)
+01114:                 }
+01115:               >
+01116:                 <X size={18} />
+01117:               </button>
+01118:             </div>
+01119: 
+01120:             <div className="search-unified-calendar-controls">
+01121:               <button
+01122:                 type="button"
+01123:                 aria-label="Previous month"
+01124:                 onClick={() =>
+01125:                   setCalendarMonth(
+01126:                     new Date(
+01127:                       currentYear,
+01128:                       currentMonth - 1,
+01129:                       1,
+01130:                     ),
+01131:                   )
+01132:                 }
+01133:               >
+01134:                 <ChevronLeft size={18} />
+01135:               </button>
+01136: 
+01137:               <div>
+01138:                 <select
+01139:                   value={currentMonth}
+01140:                   onChange={(event) =>
+01141:                     setCalendarMonth(
+01142:                       new Date(
+01143:                         currentYear,
+01144:                         Number(
+01145:                           event.target.value,
+01146:                         ),
+01147:                         1,
+01148:                       ),
+01149:                     )
+01150:                   }
+01151:                 >
+01152:                   {t.months.map(
+01153:                     (
+01154:                       month,
+01155:                       index,
+01156:                     ) => (
+01157:                       <option
+01158:                         key={month}
+01159:                         value={index}
+01160:                       >
+01161:                         {month}
+01162:                       </option>
+01163:                     ),
+01164:                   )}
+01165:                 </select>
+01166: 
+01167:                 <select
+01168:                   value={currentYear}
+01169:                   onChange={(event) =>
+01170:                     setCalendarMonth(
+01171:                       new Date(
+01172:                         Number(
+01173:                           event.target.value,
+01174:                         ),
+01175:                         currentMonth,
+01176:                         1,
+01177:                       ),
+01178:                     )
+01179:                   }
+01180:                 >
+01181:                   {Array.from(
+01182:                     {
+01183:                       length: 4,
+01184:                     },
+01185:                     (_, index) =>
+01186:                       today.getFullYear() +
+01187:                       index,
+01188:                   ).map(
+01189:                     (year) => (
+01190:                       <option
+01191:                         key={year}
+01192:                         value={year}
+01193:                       >
+01194:                         {year}
+01195:                       </option>
+01196:                     ),
+01197:                   )}
+01198:                 </select>
+01199:               </div>
+01200: 
+01201:               <button
+01202:                 type="button"
+01203:                 aria-label="Next month"
+01204:                 onClick={() =>
+01205:                   setCalendarMonth(
+01206:                     new Date(
+01207:                       currentYear,
+01208:                       currentMonth + 1,
+01209:                       1,
+01210:                     ),
+01211:                   )
+01212:                 }
+01213:               >
+01214:                 <ChevronRight size={18} />
+01215:               </button>
+01216:             </div>
+01217: 
+01218:             <div className="search-unified-calendar-grid">
+01219:               {renderMonth(
+01220:                 currentYear,
+01221:                 currentMonth,
+01222:                 monthOneDays,
+01223:               )}
+01224: 
+01225:               {renderMonth(
+01226:                 nextMonth.getFullYear(),
+01227:                 nextMonth.getMonth(),
+01228:                 monthTwoDays,
+01229:               )}
+01230:             </div>
+01231:           </div>
+01232:         )}
+01233:       </div>
+01234: 
+01235:       <div className="search-edit-control">
+01236:         <button
+01237:           type="button"
+01238:           className="search-edit-field"
+01239:           aria-expanded={
+01240:             panel === "traveler"
+01241:           }
+01242:           onClick={() =>
+01243:             togglePanel(
+01244:               "traveler",
+01245:             )
+01246:           }
+01247:         >
+01248:           <UsersRound size={18} />
+01249: 
+01250:           <span>
+01251:             <small>
+01252:               {t.traveler}
+01253:             </small>
+01254: 
+01255:             <strong>
+01256:               {travelerTotal}{" "}
+01257:               {t.person}
+01258:             </strong>
+01259:           </span>
+01260:         </button>
+01261: 
+01262:         {panel ===
+01263:           "traveler" && (
+01264:           <div className="search-edit-dropdown search-unified-dropdown search-unified-traveler">
+01265:             <div className="search-unified-dropdown-head">
+01266:               <div>
+01267:                 <strong>
+01268:                   {t.travelerTitle}
+01269:                 </strong>
+01270: 
+01271:                 <small>
+01272:                   {
+01273:                     t.travelerDescription
+01274:                   }
+01275:                 </small>
+01276:               </div>
+01277: 
+01278:               <button
+01279:                 type="button"
+01280:                 className="search-unified-close"
+01281:                 aria-label="Close"
+01282:                 onClick={() =>
+01283:                   setPanel(null)
+01284:                 }
+01285:               >
+01286:                 <X size={18} />
+01287:               </button>
+01288:             </div>
+01289: 
+01290:             {(
+01291:               [
+01292:                 [
+01293:                   "adult",
+01294:                   t.adult,
+01295:                   t.adultDescription,
+01296:                 ],
+01297:                 [
+01298:                   "child",
+01299:                   t.child,
+01300:                   t.childDescription,
+01301:                 ],
+01302:                 [
+01303:                   "infant",
+01304:                   t.infant,
+01305:                   t.infantDescription,
+01306:                 ],
+01307:               ] as const
+01308:             ).map(
+01309:               ([
+01310:                 key,
+01311:                 title,
+01312:                 description,
+01313:               ]) => (
+01314:                 <div
+01315:                   className="search-unified-traveler-row"
+01316:                   key={key}
+01317:                 >
+01318:                   <div>
+01319:                     <strong>
+01320:                       {title}
+01321:                     </strong>
+01322: 
+01323:                     <small>
+01324:                       {description}
+01325:                     </small>
+01326:                   </div>
+01327: 
+01328:                   <div className="search-unified-counter">
+01329:                     <button
+01330:                       type="button"
+01331:                       disabled={
+01332:                         travelers[key] <=
+01333:                           0 ||
+01334:                         travelerTotal <= 1
+01335:                       }
+01336:                       onClick={() =>
+01337:                         updateTraveler(
+01338:                           key,
+01339:                           -1,
+01340:                         )
+01341:                       }
+01342:                     >
+01343:                       <Minus size={16} />
+01344:                     </button>
+01345: 
+01346:                     <strong>
+01347:                       {travelers[key]}
+01348:                     </strong>
+01349: 
+01350:                     <button
+01351:                       type="button"
+01352:                       onClick={() =>
+01353:                         updateTraveler(
+01354:                           key,
+01355:                           1,
+01356:                         )
+01357:                       }
+01358:                     >
+01359:                       <Plus size={16} />
+01360:                     </button>
+01361:                   </div>
+01362:                 </div>
+01363:               ),
+01364:             )}
+01365: 
+01366:             <button
+01367:               type="button"
+01368:               className="search-unified-done"
+01369:               onClick={() =>
+01370:                 setPanel(null)
+01371:               }
+01372:             >
+01373:               {t.done}
+01374:             </button>
+01375:           </div>
+01376:         )}
+01377:       </div>
+01378: 
+01379:       <button
+01380:         type="button"
+01381:         className="search-edit-submit"
+01382:         disabled={!canSearch}
+01383:         onClick={submitSearch}
+01384:       >
+01385:         <Search size={18} />
+01386:         {t.search}
+01387:       </button>
+01388:     </div>
+01389:   );
+01390: }

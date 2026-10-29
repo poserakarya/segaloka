@@ -1,0 +1,2158 @@
+/* SEGALOKA CAREER — V1 */
+
+.career-page {
+  --career-blue: #087cf0;
+  --career-navy: #0b2d5c;
+  --career-text: #102a4c;
+  --career-muted: #64748b;
+  --career-line: #e4edf7;
+  --career-soft: #f4f9ff;
+
+  background: #fff;
+  color: var(--career-text);
+
+  /*
+   * Do not declare a separate font here.
+   * Career inherits Segaloka global typography.
+   */
+  font-family: inherit;
+}
+
+.career-shell {
+  width: min(1180px, calc(100% - 40px));
+  margin-inline: auto;
+}
+
+.career-hero {
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 78% 20%, rgba(41, 155, 255, .26), transparent 30%),
+    linear-gradient(110deg, #092b58 0%, #0b477f 55%, #0c70b8 100%);
+  color: #fff;
+}
+
+.career-hero-inner {
+  min-height: 440px;
+  display: grid;
+  grid-template-columns: .92fr 1.08fr;
+  align-items: center;
+  gap: 70px;
+}
+
+.career-hero-copy {
+  max-width: 570px;
+  padding-block: 70px;
+}
+
+.career-kicker {
+  display: block;
+  margin-bottom: 12px;
+  color: #1586ef;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .16em;
+}
+
+.career-kicker-light {
+  color: #bde5ff;
+}
+
+.career-hero .career-kicker {
+  color: #80d2ff;
+}
+
+.career-page h1,
+.career-page h2,
+.career-page h3,
+.career-page p {
+  margin-top: 0;
+}
+
+.career-hero h1 {
+  max-width: 540px;
+  margin-bottom: 18px;
+  font-size: clamp(40px, 4.6vw, 64px);
+  line-height: .98;
+  letter-spacing: -.045em;
+}
+
+.career-hero p {
+  max-width: 520px;
+  margin-bottom: 28px;
+  color: rgba(255,255,255,.88);
+  font-size: 17px;
+  line-height: 1.65;
+}
+
+.career-primary-button,
+.career-outline-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 44px;
+  padding: 0 20px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.career-primary-button {
+  border: 0;
+  background: #1595f5;
+  color: #fff;
+  cursor: pointer;
+}
+
+.career-outline-button {
+  border: 1px solid #1595f5;
+  color: #087cf0;
+}
+
+.career-hero-visual {
+  position: relative;
+  min-height: 390px;
+}
+
+.career-visual-orb {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255,255,255,.1);
+}
+
+.career-orb-one {
+  width: 320px;
+  height: 320px;
+  inset: 30px 20px auto auto;
+}
+
+.career-orb-two {
+  width: 180px;
+  height: 180px;
+  inset: auto auto 20px 20px;
+}
+
+.career-visual-card {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  border: 1px solid rgba(255,255,255,.25);
+  background: rgba(255,255,255,.12);
+  box-shadow: 0 24px 70px rgba(0,0,0,.18);
+  backdrop-filter: blur(12px);
+}
+
+.career-visual-main {
+  width: min(420px, 80%);
+  height: 260px;
+  inset: 50px 20px auto auto;
+  padding: 32px;
+  border-radius: 28px;
+}
+
+.career-visual-main strong {
+  margin-top: 18px;
+  font-size: 27px;
+}
+
+.career-visual-main span {
+  margin-top: 5px;
+  color: rgba(255,255,255,.8);
+}
+
+.career-visual-small {
+  width: 105px;
+  height: 105px;
+  inset: auto auto 25px 15px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 24px;
+}
+
+.career-section {
+  padding: 76px 0;
+}
+
+.career-about {
+  display: grid;
+  grid-template-columns: .72fr 1.28fr;
+  gap: 58px;
+  align-items: start;
+}
+
+.career-about-copy h2,
+.career-heading-row h2,
+.career-journey h2,
+.career-team h2,
+.career-join h2,
+.career-values h2 {
+  margin-bottom: 12px;
+  color: var(--career-navy);
+  font-size: clamp(28px, 3vw, 42px);
+  line-height: 1.12;
+  letter-spacing: -.035em;
+}
+
+.career-about-copy p,
+.career-heading-row p,
+.career-journey p,
+.career-join p {
+  color: var(--career-muted);
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+.career-about-copy .career-outline-button {
+  margin-top: 12px;
+}
+
+.career-about-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+
+.career-value-card {
+  min-height: 230px;
+  padding: 24px;
+  border: 1px solid var(--career-line);
+  border-radius: 18px;
+  background: linear-gradient(180deg, #fff, #f8fbff);
+}
+
+.career-icon {
+  width: 46px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+  margin-bottom: 30px;
+  border-radius: 50%;
+  background: #e6f4ff;
+  color: #087cf0;
+}
+
+.career-value-card h3 {
+  margin-bottom: 9px;
+  font-size: 16px;
+}
+
+.career-value-card p {
+  color: var(--career-muted);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.career-journey {
+  padding: 62px 0;
+  background: linear-gradient(100deg, #f3f9ff, #fff);
+}
+
+.career-journey-grid {
+  display: grid;
+  grid-template-columns: .9fr 1.1fr;
+  gap: 70px;
+  align-items: center;
+}
+
+.career-facts {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+
+.career-facts article {
+  min-height: 165px;
+  padding: 22px;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 8px 35px rgba(31, 80, 126, .07);
+}
+
+.career-facts svg {
+  margin-bottom: 22px;
+  color: #087cf0;
+}
+
+.career-facts strong,
+.career-facts span {
+  display: block;
+}
+
+.career-facts strong {
+  margin-bottom: 7px;
+  font-size: 15px;
+}
+
+.career-facts span {
+  color: var(--career-muted);
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+.career-heading-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 40px;
+}
+
+.career-heading-row > div {
+  max-width: 700px;
+}
+
+.career-location-card {
+  min-height: 250px;
+  margin-top: 28px;
+  padding: 28px;
+  display: flex;
+  align-items: flex-end;
+  gap: 15px;
+  overflow: hidden;
+  border-radius: 22px;
+  color: #fff;
+  background:
+    radial-gradient(circle at 80% 10%, rgba(255,255,255,.24), transparent 30%),
+    linear-gradient(120deg, #0b4b86, #0d8de8);
+}
+
+.career-location-card strong,
+.career-location-card span {
+  display: block;
+}
+
+.career-location-card strong {
+  font-size: 21px;
+}
+
+.career-location-card span {
+  margin-top: 3px;
+  color: rgba(255,255,255,.82);
+}
+
+.career-team {
+  padding: 65px 0;
+  color: #fff;
+  background: linear-gradient(105deg, #0b75cc, #13a6f5);
+}
+
+.career-team h2 {
+  color: #fff;
+}
+
+.career-team-heading {
+  max-width: 680px;
+}
+
+.career-team-heading p {
+  color: rgba(255,255,255,.82);
+  line-height: 1.7;
+}
+
+.career-team-grid {
+  margin-top: 28px;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+}
+
+.career-team-grid article {
+  min-height: 130px;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 15px;
+  border: 1px solid rgba(255,255,255,.22);
+  border-radius: 16px;
+  background: rgba(0,45,99,.18);
+}
+
+.career-join-card {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 40px;
+  align-items: center;
+  padding: 42px;
+  border: 1px solid var(--career-line);
+  border-radius: 22px;
+  background:
+    radial-gradient(circle at 80% 30%, #e0f3ff, transparent 28%),
+    #f8fbff;
+}
+
+.career-join-card > div {
+  max-width: 720px;
+}
+
+.career-values {
+  margin-top: 55px;
+}
+
+.career-values > div {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  margin-top: 24px;
+  border-block: 1px solid var(--career-line);
+}
+
+.career-values span {
+  min-height: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 11px;
+  font-weight: 800;
+  text-align: center;
+}
+
+.career-values span + span {
+  border-inline-start: 1px solid var(--career-line);
+}
+
+.career-values svg {
+  color: #087cf0;
+}
+
+[dir="rtl"] .career-primary-button svg,
+[dir="rtl"] .career-outline-button svg {
+  transform: rotate(180deg);
+}
+
+@media (max-width: 900px) {
+  .career-hero-inner,
+  .career-about,
+  .career-journey-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .career-hero-inner {
+    gap: 0;
+  }
+
+  .career-hero-visual {
+    min-height: 300px;
+  }
+
+  .career-about-grid,
+  .career-facts {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .career-team-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .career-shell {
+    width: min(100% - 28px, 1180px);
+  }
+
+  .career-hero-copy {
+    padding: 54px 0 15px;
+  }
+
+  .career-hero h1 {
+    font-size: 42px;
+  }
+
+  .career-hero-visual {
+    min-height: 270px;
+  }
+
+  .career-visual-main {
+    width: 90%;
+    height: 210px;
+  }
+
+  .career-section {
+    padding: 54px 0;
+  }
+
+  .career-about-grid,
+  .career-facts,
+  .career-team-grid,
+  .career-values > div {
+    grid-template-columns: 1fr;
+  }
+
+  .career-value-card {
+    min-height: auto;
+  }
+
+  .career-join-card {
+    grid-template-columns: 1fr;
+    padding: 28px 22px;
+  }
+
+  .career-join-card .career-primary-button {
+    width: 100%;
+  }
+
+  .career-values span + span {
+    border-inline-start: 0;
+    border-top: 1px solid var(--career-line);
+  }
+}
+
+/* SEGALOKA CAREER TYPOGRAPHY V2
+   ------------------------------------------------------------
+   Satu font family:
+   mengikuti typography global Segaloka.
+
+   Desktop hierarchy:
+   Hero H1      48 / 50
+   Section H2   32 / 37
+   Card H3      16 / 22
+   Body         15 / 25
+   Card body    13 / 21
+   Kicker       11 / 16
+   ------------------------------------------------------------ */
+
+.career-page {
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.65;
+  letter-spacing: 0;
+}
+
+/* Jangan biarkan heading mengambil font/browser style lain. */
+.career-page h1,
+.career-page h2,
+.career-page h3,
+.career-page h4,
+.career-page h5,
+.career-page h6,
+.career-page p,
+.career-page a,
+.career-page button,
+.career-page span,
+.career-page strong {
+  font-family: inherit;
+}
+
+/* ------------------------------------------------------------
+   HERO
+   ------------------------------------------------------------ */
+
+.career-hero h1 {
+  max-width: 560px;
+  margin: 0 0 18px;
+  font-size: 48px;
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.035em;
+}
+
+.career-hero p {
+  max-width: 540px;
+  margin: 0 0 28px;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.65;
+  letter-spacing: 0;
+}
+
+/* ------------------------------------------------------------
+   KICKER / EYEBROW
+   ------------------------------------------------------------ */
+
+.career-kicker {
+  margin-bottom: 10px;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.45;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* ------------------------------------------------------------
+   SECTION HEADINGS
+   ------------------------------------------------------------ */
+
+.career-about-copy h2,
+.career-heading-row h2,
+.career-journey h2,
+.career-team h2,
+.career-join h2,
+.career-values h2 {
+  margin: 0 0 12px;
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.025em;
+}
+
+/* ------------------------------------------------------------
+   SECTION BODY
+   ------------------------------------------------------------ */
+
+.career-about-copy p,
+.career-heading-row p,
+.career-journey p,
+.career-team-heading p,
+.career-join p {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.65;
+  letter-spacing: 0;
+}
+
+/* ------------------------------------------------------------
+   VALUE CARDS
+   ------------------------------------------------------------ */
+
+.career-value-card h3 {
+  margin: 0 0 8px;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+}
+
+.career-value-card p {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.6;
+  letter-spacing: 0;
+}
+
+/* ------------------------------------------------------------
+   JOURNEY FACT CARDS
+   ------------------------------------------------------------ */
+
+.career-facts strong {
+  margin-bottom: 7px;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+}
+
+.career-facts span {
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.55;
+  letter-spacing: 0;
+}
+
+/* ------------------------------------------------------------
+   LOCATION
+   ------------------------------------------------------------ */
+
+.career-location-card strong {
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.career-location-card span {
+  margin-top: 3px;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.45;
+}
+
+/* ------------------------------------------------------------
+   TEAM
+   ------------------------------------------------------------ */
+
+.career-team-grid strong {
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+/* ------------------------------------------------------------
+   BUTTONS
+   ------------------------------------------------------------ */
+
+.career-primary-button,
+.career-outline-button {
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0;
+}
+
+/* ------------------------------------------------------------
+   VISUAL PLACEHOLDER
+   ------------------------------------------------------------ */
+
+.career-visual-main strong {
+  margin-top: 18px;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+.career-visual-main span {
+  margin-top: 5px;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.45;
+}
+
+/* ------------------------------------------------------------
+   VALUES
+   ------------------------------------------------------------ */
+
+.career-values > div > span {
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+/* ------------------------------------------------------------
+   ARABIC
+   Pertahankan font global; hanya normalisasi spacing karena
+   Arabic tidak cocok dengan tracking Latin.
+   ------------------------------------------------------------ */
+
+.career-page[dir="rtl"] {
+  letter-spacing: 0;
+}
+
+.career-page[dir="rtl"] .career-kicker {
+  letter-spacing: 0;
+}
+
+.career-page[dir="rtl"] h1,
+.career-page[dir="rtl"] h2,
+.career-page[dir="rtl"] h3,
+.career-page[dir="rtl"] p,
+.career-page[dir="rtl"] span,
+.career-page[dir="rtl"] strong {
+  letter-spacing: 0;
+}
+
+/* ------------------------------------------------------------
+   TABLET
+   ------------------------------------------------------------ */
+
+@media (max-width: 900px) {
+  .career-hero h1 {
+    font-size: 42px;
+    line-height: 1.08;
+  }
+
+  .career-about-copy h2,
+  .career-heading-row h2,
+  .career-journey h2,
+  .career-team h2,
+  .career-join h2,
+  .career-values h2 {
+    font-size: 29px;
+  }
+}
+
+/* ------------------------------------------------------------
+   MOBILE
+   ------------------------------------------------------------ */
+
+@media (max-width: 640px) {
+  .career-page {
+    font-size: 14px;
+  }
+
+  .career-hero h1 {
+    font-size: 36px;
+    line-height: 1.08;
+    letter-spacing: -0.03em;
+  }
+
+  .career-hero p {
+    font-size: 14px;
+    line-height: 1.65;
+  }
+
+  .career-about-copy h2,
+  .career-heading-row h2,
+  .career-journey h2,
+  .career-team h2,
+  .career-join h2,
+  .career-values h2 {
+    font-size: 26px;
+    line-height: 1.18;
+  }
+
+  .career-about-copy p,
+  .career-heading-row p,
+  .career-journey p,
+  .career-team-heading p,
+  .career-join p {
+    font-size: 14px;
+  }
+
+  .career-value-card h3 {
+    font-size: 15px;
+  }
+
+  .career-value-card p,
+  .career-facts span {
+    font-size: 13px;
+  }
+
+  .career-kicker {
+    font-size: 10px;
+  }
+}
+
+/* SEGALOKA CAREER PHOTO SYSTEM V1 */
+
+.career-hero {
+  position: relative;
+  isolation: isolate;
+}
+
+.career-hero-photo {
+  z-index: -3;
+  object-fit: cover;
+  object-position: center;
+}
+
+.career-hero-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(5, 35, 72, .94) 0%,
+      rgba(5, 45, 86, .82) 42%,
+      rgba(5, 45, 86, .28) 72%,
+      rgba(5, 45, 86, .12) 100%
+    );
+}
+
+.career-hero-inner {
+  position: relative;
+  z-index: 1;
+}
+
+.career-photo-collage {
+  display: grid;
+  grid-template-columns: 1.15fr .85fr;
+  grid-template-rows: 145px 145px;
+  gap: 12px;
+}
+
+.career-photo {
+  position: relative;
+  overflow: hidden;
+  border-radius: 16px;
+  background: #eaf4ff;
+}
+
+.career-photo img {
+  object-fit: cover;
+  transition: transform .35s ease;
+}
+
+.career-photo:hover img {
+  transform: scale(1.025);
+}
+
+.career-about-photo-1 {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.career-about-photo-2 {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.career-about-photo-3 {
+  grid-column: 1;
+  grid-row: 2;
+}
+
+.career-about-photo-4 {
+  grid-column: 2;
+  grid-row: 2;
+}
+
+.career-about-values {
+  margin-top: 24px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+
+.career-location-card {
+  position: relative;
+  isolation: isolate;
+}
+
+.career-location-photo {
+  z-index: -3;
+  object-fit: cover;
+}
+
+.career-location-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(0, 30, 67, .05),
+      rgba(0, 30, 67, .66)
+    );
+}
+
+.career-location-label {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 13px;
+}
+
+.career-team-grid article {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  min-height: 190px;
+  padding: 18px;
+}
+
+.career-team-grid article > img {
+  z-index: -3;
+  object-fit: cover;
+  transition: transform .35s ease;
+}
+
+.career-team-grid article:hover > img {
+  transform: scale(1.035);
+}
+
+.career-team-card-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(2, 34, 72, .04) 25%,
+      rgba(2, 34, 72, .82) 100%
+    );
+}
+
+.career-team-card-label {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 10px;
+  height: 100%;
+}
+
+.career-team-card-label strong {
+  color: #fff;
+}
+
+.career-join-card {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.career-join-photo {
+  z-index: -3;
+  object-fit: cover;
+  object-position: center;
+}
+
+.career-join-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(247, 251, 255, .98) 0%,
+      rgba(247, 251, 255, .92) 45%,
+      rgba(247, 251, 255, .48) 70%,
+      rgba(247, 251, 255, .12) 100%
+    );
+}
+
+.career-join-copy,
+.career-join-action {
+  position: relative;
+  z-index: 2;
+}
+
+[dir="rtl"] .career-hero-overlay {
+  background:
+    linear-gradient(
+      270deg,
+      rgba(5, 35, 72, .94) 0%,
+      rgba(5, 45, 86, .82) 42%,
+      rgba(5, 45, 86, .28) 72%,
+      rgba(5, 45, 86, .12) 100%
+    );
+}
+
+[dir="rtl"] .career-join-overlay {
+  background:
+    linear-gradient(
+      270deg,
+      rgba(247, 251, 255, .98) 0%,
+      rgba(247, 251, 255, .92) 45%,
+      rgba(247, 251, 255, .48) 70%,
+      rgba(247, 251, 255, .12) 100%
+    );
+}
+
+@media (max-width: 900px) {
+  .career-photo-collage {
+    grid-template-rows: 180px 180px;
+  }
+
+  .career-about-values {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .career-team-grid article {
+    min-height: 210px;
+  }
+}
+
+@media (max-width: 640px) {
+  .career-hero-photo {
+    object-position: 62% center;
+  }
+
+  .career-hero-overlay {
+    background:
+      linear-gradient(
+        90deg,
+        rgba(5, 35, 72, .94),
+        rgba(5, 45, 86, .72)
+      );
+  }
+
+  .career-photo-collage {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 130px 130px;
+    gap: 8px;
+  }
+
+  .career-about-values {
+    grid-template-columns: 1fr;
+  }
+
+  .career-team-grid article {
+    min-height: 220px;
+  }
+
+  .career-join-card {
+    min-height: 310px;
+  }
+
+  .career-join-overlay {
+    background:
+      linear-gradient(
+        180deg,
+        rgba(247, 251, 255, .97) 0%,
+        rgba(247, 251, 255, .90) 65%,
+        rgba(247, 251, 255, .58) 100%
+      );
+  }
+}
+
+/* SEGALOKA CAREER PHOTO STACKING FIX V3 */
+
+/* ------------------------------------------------------------
+   HERO PHOTO STACK
+   ------------------------------------------------------------ */
+
+.career-hero {
+  position: relative;
+  isolation: isolate;
+}
+
+.career-hero-photo {
+  z-index: 0 !important;
+  object-fit: cover;
+  object-position: center;
+}
+
+.career-hero-overlay {
+  z-index: 1 !important;
+}
+
+.career-hero-inner {
+  position: relative;
+  z-index: 2 !important;
+}
+
+
+/* ------------------------------------------------------------
+   LOCATION PHOTO STACK
+   ------------------------------------------------------------ */
+
+.career-location-card {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.career-location-photo {
+  z-index: 0 !important;
+  object-fit: cover;
+}
+
+.career-location-overlay {
+  z-index: 1 !important;
+}
+
+.career-location-label {
+  position: relative;
+  z-index: 2 !important;
+}
+
+
+/* ------------------------------------------------------------
+   TEAM PHOTO STACK
+   ------------------------------------------------------------ */
+
+.career-team-grid article {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.career-team-grid article > img {
+  z-index: 0 !important;
+  object-fit: cover;
+}
+
+.career-team-card-overlay {
+  z-index: 1 !important;
+}
+
+.career-team-card-label {
+  position: relative;
+  z-index: 2 !important;
+}
+
+
+/* ------------------------------------------------------------
+   JOIN PHOTO STACK
+   ------------------------------------------------------------ */
+
+.career-join-card {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.career-join-photo {
+  z-index: 0 !important;
+  object-fit: cover;
+  object-position: center;
+}
+
+.career-join-overlay {
+  z-index: 1 !important;
+}
+
+.career-join-copy,
+.career-join-action {
+  position: relative;
+  z-index: 2 !important;
+}
+
+/* SEGALOKA CAREER HERO PHOTO FINAL V4 */
+
+/* ============================================================
+   HERO PHOTO — FINAL STACK
+   ============================================================ */
+
+.career-page .career-hero {
+  position: relative !important;
+  isolation: isolate !important;
+  overflow: hidden !important;
+
+  /*
+   * Background gradient lama dimatikan.
+   * Foto hero menjadi background visual utama.
+   */
+  background: #092b58 !important;
+}
+
+/* Next/Image fill */
+.career-page .career-hero > .career-hero-photo {
+  position: absolute !important;
+  inset: 0 !important;
+
+  width: 100% !important;
+  height: 100% !important;
+
+  object-fit: cover !important;
+  object-position: center center !important;
+
+  z-index: 0 !important;
+
+  display: block !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+
+  pointer-events: none;
+}
+
+/* Overlay gelap agar teks tetap terbaca */
+.career-page .career-hero > .career-hero-overlay {
+  position: absolute !important;
+  inset: 0 !important;
+
+  z-index: 1 !important;
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(5, 35, 72, .94) 0%,
+      rgba(5, 35, 72, .82) 35%,
+      rgba(5, 35, 72, .46) 62%,
+      rgba(5, 35, 72, .18) 100%
+    ) !important;
+
+  pointer-events: none;
+}
+
+/* Konten hero */
+.career-page .career-hero > .career-hero-inner {
+  position: relative !important;
+  z-index: 2 !important;
+}
+
+/* ============================================================
+   RTL
+   ============================================================ */
+
+[dir="rtl"] .career-page .career-hero > .career-hero-overlay {
+  background:
+    linear-gradient(
+      270deg,
+      rgba(5, 35, 72, .94) 0%,
+      rgba(5, 35, 72, .82) 35%,
+      rgba(5, 35, 72, .46) 62%,
+      rgba(5, 35, 72, .18) 100%
+    ) !important;
+}
+
+/* ============================================================
+   MOBILE
+   ============================================================ */
+
+@media (max-width: 640px) {
+
+  .career-page .career-hero > .career-hero-photo {
+    object-position: 62% center !important;
+  }
+
+  .career-page .career-hero > .career-hero-overlay {
+    background:
+      linear-gradient(
+        90deg,
+        rgba(5, 35, 72, .94) 0%,
+        rgba(5, 35, 72, .78) 58%,
+        rgba(5, 35, 72, .42) 100%
+      ) !important;
+  }
+
+  [dir="rtl"] .career-page .career-hero > .career-hero-overlay {
+    background:
+      linear-gradient(
+        270deg,
+        rgba(5, 35, 72, .94) 0%,
+        rgba(5, 35, 72, .78) 58%,
+        rgba(5, 35, 72, .42) 100%
+      ) !important;
+  }
+}
+
+/* SEGALOKA CAREER PHOTO BRIGHTNESS V8 */
+
+/* ============================================================
+   HERO
+   Tetap cukup gelap di sisi teks agar headline putih terbaca,
+   tetapi area foto di kanan dibuat jauh lebih terang.
+   ============================================================ */
+
+.career-hero-overlay {
+  background:
+    linear-gradient(
+      90deg,
+      rgba(4, 31, 65, .86) 0%,
+      rgba(4, 39, 76, .70) 31%,
+      rgba(4, 48, 88, .36) 53%,
+      rgba(4, 48, 88, .08) 76%,
+      rgba(4, 48, 88, 0) 100%
+    ) !important;
+}
+
+
+/* ============================================================
+   ABOUT COLLAGE
+   Jangan redupkan foto.
+   ============================================================ */
+
+.career-photo-collage img {
+  filter: brightness(1.06) saturate(1.03);
+}
+
+
+/* ============================================================
+   LOCATION
+   Foto dibuat terang/natural.
+   Hanya sedikit shading di bawah untuk label Indonesia.
+   ============================================================ */
+
+.career-location-card::after {
+  background:
+    linear-gradient(
+      180deg,
+      rgba(2, 34, 72, 0) 45%,
+      rgba(2, 34, 72, .08) 68%,
+      rgba(2, 34, 72, .38) 100%
+    ) !important;
+}
+
+.career-location-card img {
+  filter: brightness(1.06) saturate(1.04);
+}
+
+
+/* ============================================================
+   TEAM
+   Sebelumnya bagian bawah mencapai sekitar 82% navy.
+   Sekarang maksimum sekitar 48% dan hanya di bagian bawah.
+   ============================================================ */
+
+.career-team-grid article > img {
+  filter: brightness(1.08) saturate(1.04);
+}
+
+.career-team-card-overlay {
+  background:
+    linear-gradient(
+      180deg,
+      rgba(2, 34, 72, 0) 0%,
+      rgba(2, 34, 72, 0) 48%,
+      rgba(2, 34, 72, .12) 66%,
+      rgba(2, 34, 72, .48) 100%
+    ) !important;
+}
+
+
+/* ============================================================
+   JOIN
+   Foto kanan harus tetap terlihat jelas.
+   Area kiri tetap putih/transparan agar copy terbaca.
+   ============================================================ */
+
+.career-join-photo {
+  filter: brightness(1.08) saturate(1.04);
+}
+
+.career-join-overlay {
+  background:
+    linear-gradient(
+      90deg,
+      rgba(247, 251, 255, .98) 0%,
+      rgba(247, 251, 255, .94) 32%,
+      rgba(247, 251, 255, .68) 49%,
+      rgba(247, 251, 255, .22) 66%,
+      rgba(247, 251, 255, .03) 100%
+    ) !important;
+}
+
+
+/* ============================================================
+   RTL
+   Balik arah gradient ketika Bahasa Arab aktif.
+   ============================================================ */
+
+.career-page[dir="rtl"] .career-hero-overlay {
+  background:
+    linear-gradient(
+      270deg,
+      rgba(4, 31, 65, .86) 0%,
+      rgba(4, 39, 76, .70) 31%,
+      rgba(4, 48, 88, .36) 53%,
+      rgba(4, 48, 88, .08) 76%,
+      rgba(4, 48, 88, 0) 100%
+    ) !important;
+}
+
+.career-page[dir="rtl"] .career-join-overlay {
+  background:
+    linear-gradient(
+      270deg,
+      rgba(247, 251, 255, .98) 0%,
+      rgba(247, 251, 255, .94) 32%,
+      rgba(247, 251, 255, .68) 49%,
+      rgba(247, 251, 255, .22) 66%,
+      rgba(247, 251, 255, .03) 100%
+    ) !important;
+}
+
+
+/* ============================================================
+   MOBILE
+   Mobile membutuhkan sedikit overlay tambahan karena teks
+   berada lebih dekat dengan area foto.
+   ============================================================ */
+
+@media (max-width: 640px) {
+
+  .career-hero-overlay {
+    background:
+      linear-gradient(
+        90deg,
+        rgba(4, 31, 65, .88) 0%,
+        rgba(4, 39, 76, .70) 48%,
+        rgba(4, 48, 88, .25) 100%
+      ) !important;
+  }
+
+  .career-page[dir="rtl"] .career-hero-overlay {
+    background:
+      linear-gradient(
+        270deg,
+        rgba(4, 31, 65, .88) 0%,
+        rgba(4, 39, 76, .70) 48%,
+        rgba(4, 48, 88, .25) 100%
+      ) !important;
+  }
+
+  .career-team-card-overlay {
+    background:
+      linear-gradient(
+        180deg,
+        rgba(2, 34, 72, 0) 38%,
+        rgba(2, 34, 72, .10) 58%,
+        rgba(2, 34, 72, .50) 100%
+      ) !important;
+  }
+
+  .career-join-overlay {
+    background:
+      linear-gradient(
+        180deg,
+        rgba(247, 251, 255, .94) 0%,
+        rgba(247, 251, 255, .72) 52%,
+        rgba(247, 251, 255, .14) 100%
+      ) !important;
+  }
+
+  .career-page[dir="rtl"] .career-join-overlay {
+    background:
+      linear-gradient(
+        180deg,
+        rgba(247, 251, 255, .94) 0%,
+        rgba(247, 251, 255, .72) 52%,
+        rgba(247, 251, 255, .14) 100%
+      ) !important;
+  }
+}
+
+/* SEGALOKA CAREER PHOTO FINAL V9 */
+
+/* =========================================================
+   HERO
+   Foto kanan tetap terang.
+   Gelap hanya dipertahankan di area copy sebelah kiri.
+   ========================================================= */
+
+.career-hero img {
+  filter: brightness(1.08) saturate(1.04) contrast(1.01);
+}
+
+.career-hero-overlay {
+  background:
+    linear-gradient(
+      90deg,
+      rgba(3, 29, 61, .82) 0%,
+      rgba(3, 34, 68, .69) 24%,
+      rgba(3, 40, 75, .43) 39%,
+      rgba(3, 45, 80, .16) 55%,
+      rgba(3, 45, 80, .03) 69%,
+      rgba(3, 45, 80, 0) 100%
+    ) !important;
+}
+
+
+/* =========================================================
+   SIAPA KAMI — 4 FOTO
+   Tidak diberi lapisan biru/gelap.
+   ========================================================= */
+
+.career-photo-collage {
+  isolation: isolate;
+}
+
+.career-photo-collage img {
+  filter:
+    brightness(1.10)
+    saturate(1.05)
+    contrast(1.01) !important;
+
+  opacity: 1 !important;
+}
+
+.career-photo-collage::before,
+.career-photo-collage::after {
+  pointer-events: none;
+}
+
+
+/* =========================================================
+   LOCATION
+   Foto destinasi harus menjadi elemen utama.
+   Shading hanya untuk menjaga label Indonesia terbaca.
+   ========================================================= */
+
+.career-location-card img {
+  filter:
+    brightness(1.10)
+    saturate(1.05)
+    contrast(1.01) !important;
+
+  opacity: 1 !important;
+}
+
+.career-location-card::after {
+  background:
+    linear-gradient(
+      180deg,
+      rgba(1, 29, 59, 0) 0%,
+      rgba(1, 29, 59, 0) 55%,
+      rgba(1, 29, 59, .08) 72%,
+      rgba(1, 29, 59, .32) 100%
+    ) !important;
+}
+
+
+/* =========================================================
+   TIM
+   Foto terang hampir seluruh kartu.
+   Gradient hanya pada bagian bawah tempat label berada.
+   ========================================================= */
+
+.career-team-grid article {
+  isolation: isolate;
+  background: transparent;
+}
+
+.career-team-grid article > img {
+  filter:
+    brightness(1.11)
+    saturate(1.05)
+    contrast(1.01) !important;
+
+  opacity: 1 !important;
+}
+
+.career-team-card-overlay {
+  background:
+    linear-gradient(
+      180deg,
+      rgba(2, 30, 62, 0) 0%,
+      rgba(2, 30, 62, 0) 58%,
+      rgba(2, 30, 62, .06) 70%,
+      rgba(2, 30, 62, .22) 84%,
+      rgba(2, 30, 62, .52) 100%
+    ) !important;
+}
+
+
+/* =========================================================
+   JOIN
+   Foto dibuat terang.
+   White fade hanya di sisi copy.
+   ========================================================= */
+
+.career-join-photo {
+  filter:
+    brightness(1.10)
+    saturate(1.06)
+    contrast(1.01) !important;
+
+  opacity: 1 !important;
+}
+
+.career-join-overlay {
+  background:
+    linear-gradient(
+      90deg,
+      rgba(248, 252, 255, .98) 0%,
+      rgba(248, 252, 255, .94) 25%,
+      rgba(248, 252, 255, .72) 39%,
+      rgba(248, 252, 255, .30) 52%,
+      rgba(248, 252, 255, .06) 65%,
+      rgba(248, 252, 255, 0) 100%
+    ) !important;
+}
+
+
+/* =========================================================
+   ARABIC / RTL
+   Hanya arah gradient horizontal yang dibalik.
+   ========================================================= */
+
+.career-page[dir="rtl"] .career-hero-overlay {
+  background:
+    linear-gradient(
+      270deg,
+      rgba(3, 29, 61, .82) 0%,
+      rgba(3, 34, 68, .69) 24%,
+      rgba(3, 40, 75, .43) 39%,
+      rgba(3, 45, 80, .16) 55%,
+      rgba(3, 45, 80, .03) 69%,
+      rgba(3, 45, 80, 0) 100%
+    ) !important;
+}
+
+.career-page[dir="rtl"] .career-join-overlay {
+  background:
+    linear-gradient(
+      270deg,
+      rgba(248, 252, 255, .98) 0%,
+      rgba(248, 252, 255, .94) 25%,
+      rgba(248, 252, 255, .72) 39%,
+      rgba(248, 252, 255, .30) 52%,
+      rgba(248, 252, 255, .06) 65%,
+      rgba(248, 252, 255, 0) 100%
+    ) !important;
+}
+
+
+/* =========================================================
+   MOBILE
+   Foto tetap terang, tetapi area teks Hero membutuhkan
+   sedikit kontras tambahan.
+   ========================================================= */
+
+@media (max-width: 640px) {
+
+  .career-hero img {
+    filter:
+      brightness(1.07)
+      saturate(1.04)
+      contrast(1.01);
+  }
+
+  .career-hero-overlay {
+    background:
+      linear-gradient(
+        90deg,
+        rgba(3, 29, 61, .85) 0%,
+        rgba(3, 34, 68, .68) 45%,
+        rgba(3, 40, 75, .24) 76%,
+        rgba(3, 40, 75, .08) 100%
+      ) !important;
+  }
+
+  .career-page[dir="rtl"] .career-hero-overlay {
+    background:
+      linear-gradient(
+        270deg,
+        rgba(3, 29, 61, .85) 0%,
+        rgba(3, 34, 68, .68) 45%,
+        rgba(3, 40, 75, .24) 76%,
+        rgba(3, 40, 75, .08) 100%
+      ) !important;
+  }
+
+  .career-photo-collage img,
+  .career-location-card img,
+  .career-team-grid article > img,
+  .career-join-photo {
+    filter:
+      brightness(1.08)
+      saturate(1.04)
+      contrast(1.01) !important;
+  }
+
+  .career-team-card-overlay {
+    background:
+      linear-gradient(
+        180deg,
+        rgba(2, 30, 62, 0) 0%,
+        rgba(2, 30, 62, 0) 55%,
+        rgba(2, 30, 62, .08) 72%,
+        rgba(2, 30, 62, .52) 100%
+      ) !important;
+  }
+
+  .career-join-overlay,
+  .career-page[dir="rtl"] .career-join-overlay {
+    background:
+      linear-gradient(
+        180deg,
+        rgba(248, 252, 255, .92) 0%,
+        rgba(248, 252, 255, .65) 42%,
+        rgba(248, 252, 255, .18) 72%,
+        rgba(248, 252, 255, 0) 100%
+      ) !important;
+  }
+}
+
+/* SEGALOKA CAREER HERO JOIN BRIGHT V10 */
+
+/* =========================================================
+   HERO
+   Foto asli dibuat terang.
+   Overlay global hampir dihilangkan.
+   ========================================================= */
+
+.career-hero img {
+  filter:
+    brightness(1.18)
+    saturate(1.06)
+    contrast(1.01) !important;
+
+  opacity: 1 !important;
+}
+
+.career-hero-overlay {
+  background:
+    linear-gradient(
+      90deg,
+      rgba(2, 25, 53, .58) 0%,
+      rgba(2, 25, 53, .48) 20%,
+      rgba(2, 25, 53, .25) 34%,
+      rgba(2, 25, 53, .08) 45%,
+      rgba(2, 25, 53, 0) 56%,
+      rgba(2, 25, 53, 0) 100%
+    ) !important;
+}
+
+
+/* =========================================================
+   JOIN
+   Foto tidak lagi diputihkan/digelapkan seluruh banner.
+   ========================================================= */
+
+.career-join-photo {
+  filter:
+    brightness(1.18)
+    saturate(1.08)
+    contrast(1.01) !important;
+
+  opacity: 1 !important;
+}
+
+.career-join-overlay {
+  background:
+    linear-gradient(
+      90deg,
+      rgba(255, 255, 255, .88) 0%,
+      rgba(255, 255, 255, .74) 18%,
+      rgba(255, 255, 255, .42) 31%,
+      rgba(255, 255, 255, .12) 43%,
+      rgba(255, 255, 255, 0) 52%,
+      rgba(255, 255, 255, 0) 100%
+    ) !important;
+}
+
+
+/* =========================================================
+   RTL
+   ========================================================= */
+
+.career-page[dir="rtl"] .career-hero-overlay {
+  background:
+    linear-gradient(
+      270deg,
+      rgba(2, 25, 53, .58) 0%,
+      rgba(2, 25, 53, .48) 20%,
+      rgba(2, 25, 53, .25) 34%,
+      rgba(2, 25, 53, .08) 45%,
+      rgba(2, 25, 53, 0) 56%,
+      rgba(2, 25, 53, 0) 100%
+    ) !important;
+}
+
+.career-page[dir="rtl"] .career-join-overlay {
+  background:
+    linear-gradient(
+      270deg,
+      rgba(255, 255, 255, .88) 0%,
+      rgba(255, 255, 255, .74) 18%,
+      rgba(255, 255, 255, .42) 31%,
+      rgba(255, 255, 255, .12) 43%,
+      rgba(255, 255, 255, 0) 52%,
+      rgba(255, 255, 255, 0) 100%
+    ) !important;
+}
+
+
+/* =========================================================
+   MOBILE
+   Sedikit tambahan kontras hanya di area copy.
+   ========================================================= */
+
+@media (max-width: 640px) {
+
+  .career-hero img {
+    filter:
+      brightness(1.14)
+      saturate(1.05)
+      contrast(1.01) !important;
+  }
+
+  .career-hero-overlay {
+    background:
+      linear-gradient(
+        90deg,
+        rgba(2, 25, 53, .67) 0%,
+        rgba(2, 25, 53, .52) 35%,
+        rgba(2, 25, 53, .22) 62%,
+        rgba(2, 25, 53, .05) 82%,
+        rgba(2, 25, 53, 0) 100%
+      ) !important;
+  }
+
+  .career-page[dir="rtl"] .career-hero-overlay {
+    background:
+      linear-gradient(
+        270deg,
+        rgba(2, 25, 53, .67) 0%,
+        rgba(2, 25, 53, .52) 35%,
+        rgba(2, 25, 53, .22) 62%,
+        rgba(2, 25, 53, .05) 82%,
+        rgba(2, 25, 53, 0) 100%
+      ) !important;
+  }
+
+  .career-join-photo {
+    filter:
+      brightness(1.14)
+      saturate(1.06)
+      contrast(1.01) !important;
+  }
+
+  .career-join-overlay,
+  .career-page[dir="rtl"] .career-join-overlay {
+    background:
+      linear-gradient(
+        180deg,
+        rgba(255, 255, 255, .78) 0%,
+        rgba(255, 255, 255, .42) 36%,
+        rgba(255, 255, 255, .08) 63%,
+        rgba(255, 255, 255, 0) 82%
+      ) !important;
+  }
+}
+
+/* SEGALOKA CAREER MAX PHOTO BRIGHT V11 */
+
+/* =========================================================
+   HERO
+   Foto dibuat terang.
+   Gelap hanya berada di sisi teks.
+   ========================================================= */
+
+.career-hero img {
+  filter:
+    brightness(1.32)
+    saturate(1.08)
+    contrast(.98) !important;
+
+  opacity: 1 !important;
+}
+
+.career-hero-overlay {
+  background:
+    linear-gradient(
+      90deg,
+      rgba(2, 24, 50, .46) 0%,
+      rgba(2, 24, 50, .38) 16%,
+      rgba(2, 24, 50, .25) 27%,
+      rgba(2, 24, 50, .10) 38%,
+      rgba(2, 24, 50, .025) 47%,
+      rgba(2, 24, 50, 0) 54%,
+      rgba(2, 24, 50, 0) 100%
+    ) !important;
+}
+
+
+/* =========================================================
+   JOIN
+   Foto hampir sepenuhnya terbuka.
+   White fade hanya di belakang tulisan.
+   ========================================================= */
+
+.career-join-photo {
+  filter:
+    brightness(1.28)
+    saturate(1.08)
+    contrast(.99) !important;
+
+  opacity: 1 !important;
+}
+
+.career-join-overlay {
+  background:
+    linear-gradient(
+      90deg,
+      rgba(255, 255, 255, .72) 0%,
+      rgba(255, 255, 255, .60) 14%,
+      rgba(255, 255, 255, .38) 25%,
+      rgba(255, 255, 255, .16) 34%,
+      rgba(255, 255, 255, .03) 43%,
+      rgba(255, 255, 255, 0) 50%,
+      rgba(255, 255, 255, 0) 100%
+    ) !important;
+}
+
+
+/* =========================================================
+   RTL
+   ========================================================= */
+
+.career-page[dir="rtl"] .career-hero-overlay {
+  background:
+    linear-gradient(
+      270deg,
+      rgba(2, 24, 50, .46) 0%,
+      rgba(2, 24, 50, .38) 16%,
+      rgba(2, 24, 50, .25) 27%,
+      rgba(2, 24, 50, .10) 38%,
+      rgba(2, 24, 50, .025) 47%,
+      rgba(2, 24, 50, 0) 54%,
+      rgba(2, 24, 50, 0) 100%
+    ) !important;
+}
+
+.career-page[dir="rtl"] .career-join-overlay {
+  background:
+    linear-gradient(
+      270deg,
+      rgba(255, 255, 255, .72) 0%,
+      rgba(255, 255, 255, .60) 14%,
+      rgba(255, 255, 255, .38) 25%,
+      rgba(255, 255, 255, .16) 34%,
+      rgba(255, 255, 255, .03) 43%,
+      rgba(255, 255, 255, 0) 50%,
+      rgba(255, 255, 255, 0) 100%
+    ) !important;
+}
+
+
+/* =========================================================
+   MOBILE
+   Tetap terang tetapi tulisan Hero masih terbaca.
+   ========================================================= */
+
+@media (max-width: 640px) {
+
+  .career-hero img {
+    filter:
+      brightness(1.25)
+      saturate(1.06)
+      contrast(.99) !important;
+  }
+
+  .career-hero-overlay {
+    background:
+      linear-gradient(
+        90deg,
+        rgba(2, 24, 50, .54) 0%,
+        rgba(2, 24, 50, .43) 30%,
+        rgba(2, 24, 50, .24) 52%,
+        rgba(2, 24, 50, .08) 70%,
+        rgba(2, 24, 50, 0) 88%
+      ) !important;
+  }
+
+  .career-page[dir="rtl"] .career-hero-overlay {
+    background:
+      linear-gradient(
+        270deg,
+        rgba(2, 24, 50, .54) 0%,
+        rgba(2, 24, 50, .43) 30%,
+        rgba(2, 24, 50, .24) 52%,
+        rgba(2, 24, 50, .08) 70%,
+        rgba(2, 24, 50, 0) 88%
+      ) !important;
+  }
+
+  .career-join-photo {
+    filter:
+      brightness(1.22)
+      saturate(1.06)
+      contrast(.99) !important;
+  }
+
+  .career-join-overlay,
+  .career-page[dir="rtl"] .career-join-overlay {
+    background:
+      linear-gradient(
+        180deg,
+        rgba(255, 255, 255, .64) 0%,
+        rgba(255, 255, 255, .42) 30%,
+        rgba(255, 255, 255, .12) 53%,
+        rgba(255, 255, 255, 0) 70%
+      ) !important;
+  }
+}
+
+/* SEGALOKA CAREER RAW PHOTO V12 */
+
+/* =========================================================
+   FOTO KARIER = RAW / SESUAI FILE ASLI
+
+   Tidak ada:
+   - dark overlay
+   - white overlay
+   - brightness
+   - contrast
+   - saturation
+   - opacity manipulation
+
+   Pengolahan visual dilakukan langsung pada file PNG.
+   ========================================================= */
+
+
+/* HERO PHOTO */
+
+.career-hero img {
+  filter: none !important;
+  opacity: 1 !important;
+}
+
+
+/* HERO OVERLAY DIMATIKAN TOTAL */
+
+.career-hero-overlay {
+  background: none !important;
+  background-image: none !important;
+  opacity: 0 !important;
+  display: none !important;
+}
+
+
+/* JOIN PHOTO */
+
+.career-join-photo {
+  filter: none !important;
+  opacity: 1 !important;
+}
+
+
+/* JOIN OVERLAY DIMATIKAN TOTAL */
+
+.career-join-overlay {
+  background: none !important;
+  background-image: none !important;
+  opacity: 0 !important;
+  display: none !important;
+}
+
+
+/* ABOUT PHOTOS */
+
+.career-about-photo img,
+.career-about-collage img,
+.career-about-media img {
+  filter: none !important;
+  opacity: 1 !important;
+}
+
+
+/* LOCATION PHOTO */
+
+.career-location img,
+.career-location-photo,
+.career-location-photo img {
+  filter: none !important;
+  opacity: 1 !important;
+}
+
+
+/* TEAM PHOTOS */
+
+.career-team-card img,
+.career-team-photo,
+.career-team-photo img {
+  filter: none !important;
+  opacity: 1 !important;
+}
+
+
+/* =========================================================
+   MATIKAN OVERLAY FOTO GENERIK DI AREA KARIER
+   TANPA MENGUBAH KOMPONEN / LAYOUT
+   ========================================================= */
+
+.career-photo-overlay,
+.career-image-overlay,
+.career-media-overlay {
+  background: none !important;
+  background-image: none !important;
+  opacity: 0 !important;
+  display: none !important;
+}
+
+
+/* =========================================================
+   RTL
+   Tidak ada gradient khusus karena overlay sudah dihapus.
+   ========================================================= */
+
+.career-page[dir="rtl"] .career-hero-overlay,
+.career-page[dir="rtl"] .career-join-overlay {
+  background: none !important;
+  background-image: none !important;
+  opacity: 0 !important;
+  display: none !important;
+}
+
+
+/* =========================================================
+   MOBILE
+   Tetap menggunakan foto RAW.
+   ========================================================= */
+
+@media (max-width: 640px) {
+
+  .career-hero img,
+  .career-join-photo,
+  .career-about-photo img,
+  .career-about-collage img,
+  .career-about-media img,
+  .career-location img,
+  .career-location-photo,
+  .career-location-photo img,
+  .career-team-card img,
+  .career-team-photo,
+  .career-team-photo img {
+    filter: none !important;
+    opacity: 1 !important;
+  }
+
+  .career-hero-overlay,
+  .career-join-overlay,
+  .career-photo-overlay,
+  .career-image-overlay,
+  .career-media-overlay {
+    background: none !important;
+    background-image: none !important;
+    opacity: 0 !important;
+    display: none !important;
+  }
+}

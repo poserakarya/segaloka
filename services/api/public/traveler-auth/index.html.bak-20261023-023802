@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Masuk atau Daftar | Segaloka</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary:#075cbb;
+  --dark:#13243b;
+  --muted:#65748a;
+  --border:#e2e8f0;
+  --background:#f5f8fc;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Plus Jakarta Sans",Arial,sans-serif;background:var(--background);color:var(--dark)}
+.layout{min-height:100vh;display:grid;grid-template-columns:1fr 1fr}
+.visual{background:linear-gradient(145deg,#064ba0,#0b75d1);color:white;padding:65px;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden}
+.visual:after{content:"";position:absolute;width:480px;height:480px;border:80px solid #ffffff12;border-radius:50%;right:-230px;bottom:-180px}
+.brand{font-size:30px;font-weight:800;letter-spacing:-1.2px}
+.visual h1{font-size:clamp(34px,4vw,58px);line-height:1.16;letter-spacing:-2px;max-width:570px;margin:0 0 24px}
+.visual p{font-size:17px;line-height:1.8;color:#e0efff;max-width:470px}
+.visual small{color:#c6e2ff}
+.right{padding:32px;display:flex;align-items:center;justify-content:center}
+.container{width:100%;max-width:460px}
+.top{display:flex;justify-content:flex-end;margin-bottom:26px}
+select{border:1px solid var(--border);border-radius:10px;padding:10px 14px;background:white;font:inherit;color:var(--dark)}
+h2{font-size:30px;letter-spacing:-1px;margin:0 0 10px}
+.subtitle{color:var(--muted);font-size:14px;line-height:1.8;margin:0 0 27px}
+.tabs{display:flex;background:#edf3f9;border-radius:12px;padding:5px;margin-bottom:26px}
+.tabs button{flex:1;border:0;border-radius:9px;padding:13px;background:transparent;color:var(--muted);font:inherit;font-weight:700;cursor:pointer}
+.tabs button.active{background:white;color:var(--primary);box-shadow:0 2px 8px #14253b13}
+.field{margin-bottom:17px}
+label{display:block;font-size:13px;font-weight:700;margin-bottom:9px}
+input{width:100%;padding:14px 15px;border:1px solid var(--border);border-radius:11px;font:inherit;font-size:14px;outline:none;background:white}
+input:focus{border-color:var(--primary);box-shadow:0 0 0 3px #075cbb14}
+.password{position:relative}
+.password input{padding-right:74px}
+.show{position:absolute;right:10px;top:8px;border:0;background:none;color:var(--primary);cursor:pointer;padding:8px;font-weight:700}
+.options{display:flex;justify-content:space-between;gap:12px;align-items:center;margin:8px 0 22px;font-size:12px}
+.check{display:flex;gap:8px;align-items:flex-start;font-size:12px;line-height:1.6;font-weight:500}
+.check input{width:auto;margin-top:3px}
+a{color:var(--primary);text-decoration:none;font-weight:700}
+.primary{width:100%;border:0;border-radius:11px;padding:15px;background:var(--primary);color:white;font:inherit;font-size:14px;font-weight:800;cursor:pointer}
+.primary:disabled{opacity:.6;cursor:wait}
+.separator{display:flex;align-items:center;gap:14px;color:#91a0b3;font-size:12px;margin:22px 0}
+.separator:before,.separator:after{content:"";height:1px;background:var(--border);flex:1}
+.google{width:100%;background:white;border:1px solid var(--border);padding:13px;border-radius:11px;font:inherit;font-weight:700;cursor:pointer}
+.note{font-size:12px;color:var(--muted);line-height:1.7;text-align:center;margin-top:25px}
+.status{padding:12px;border-radius:9px;font-size:12px;line-height:1.7;margin-bottom:17px;background:#eef5ff;color:#174b8c}
+.status.error{background:#fff0f0;color:#a22525}
+.otp-input{font-size:25px;text-align:center;letter-spacing:12px;font-weight:800}
+.hidden{display:none!important}
+@media(max-width:850px){.layout{grid-template-columns:1fr}.visual{display:none}.right{min-height:100vh;padding:24px}.container{max-width:480px}}
+@media(max-width:420px){h2{font-size:26px}.right{padding:20px}}
+[dir="rtl"] .show{right:auto;left:10px}
+[dir="rtl"] .password input{padding-right:15px;padding-left:74px}
+</style>
+</head>
+<body>
+<main class="layout">
+  <aside class="visual">
+    <div class="brand">Segaloka<span style="color:#9fd5ff">.</span></div>
+    <div>
+      <h1 id="heroTitle">Jelajahi dunia dengan lebih mudah.</h1>
+      <p id="heroDesc">Temukan perjalanan domestik, internasional, dan wisata halal dalam satu platform.</p>
+    </div>
+    <small>© 2026 Segaloka</small>
+  </aside>
+
+  <section class="right">
+    <div class="container">
+      <div class="top">
+        <select id="language" aria-label="Language">
+          <option value="id">Bahasa Indonesia</option>
+          <option value="en">English</option>
+          <option value="ar">العربية</option>
+        </select>
+      </div>
+
+      <h2 id="heading">Selamat datang!</h2>
+      <p class="subtitle" id="subtitle">Masuk atau buat akun Traveler untuk memulai perjalanan Anda.</p>
+
+      <div id="message" class="status hidden" role="status" aria-live="polite"></div>
+
+      <div id="authArea">
+        <div class="tabs">
+          <button id="loginTab" type="button" class="active">Masuk</button>
+          <button id="registerTab" type="button">Daftar</button>
+        </div>
+
+        <form id="loginForm">
+          <div class="field">
+            <label for="loginEmail" data-i18n="email">Alamat Email</label>
+            <input id="loginEmail" type="email" autocomplete="username" required placeholder="nama@email.com">
+          </div>
+          <div class="field">
+            <label for="loginPassword" data-i18n="password">Password</label>
+            <div class="password">
+              <input id="loginPassword" type="password" autocomplete="current-password" required>
+              <button class="show" type="button" data-toggle="loginPassword">Lihat</button>
+            </div>
+          </div>
+          <div class="options">
+            <label class="check"><input type="checkbox" id="remember"> <span data-i18n="remember">Ingat saya</span></label>
+            <a href="#" id="forgotLink">Lupa password?</a>
+          </div>
+          <button class="primary" type="submit" id="loginSubmit">Masuk</button>
+          <div class="separator" data-i18n="or">atau</div>
+          <button class="google" type="button" id="googleButton">G &nbsp; Lanjutkan dengan Google</button>
+        </form>
+
+        <form id="registerForm" class="hidden">
+          <div class="field">
+            <label for="fullName" data-i18n="fullName">Nama Lengkap</label>
+            <input id="fullName" autocomplete="name" required maxlength="150">
+          </div>
+          <div class="field">
+            <label for="registerEmail" data-i18n="email">Alamat Email</label>
+            <input id="registerEmail" type="email" autocomplete="email" required>
+          </div>
+          <div class="field">
+            <label for="phone" data-i18n="phone">Nomor Telepon</label>
+            <input id="phone" type="tel" autocomplete="tel" required>
+          </div>
+          <div class="field">
+            <label for="registerPassword" data-i18n="password">Password</label>
+            <input id="registerPassword" type="password" autocomplete="new-password" required minlength="8">
+          </div>
+          <div class="field">
+            <label for="confirmPassword" data-i18n="confirm">Konfirmasi Password</label>
+            <input id="confirmPassword" type="password" autocomplete="new-password" required minlength="8">
+          </div>
+          <div class="field">
+            <label class="check">
+              <input type="checkbox" id="terms" required>
+              <span id="termsLabel">Saya menyetujui Syarat & Ketentuan serta Kebijakan Privasi Segaloka.</span>
+            </label>
+          </div>
+          <button class="primary" type="submit" id="registerSubmit">Daftar Traveler</button>
+        </form>
+      </div>
+
+      <form id="otpForm" class="hidden">
+        <h2 id="otpTitle">Verifikasi Email</h2>
+        <p class="subtitle" id="otpDesc">Masukkan kode 6 digit yang dikirim ke email Anda.</p>
+        <div class="field">
+          <label for="otpCode" data-i18n="otpLabel">Kode OTP</label>
+          <input class="otp-input" id="otpCode" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{6}" maxlength="6" required>
+        </div>
+        <button class="primary" type="submit" id="otpSubmit">Verifikasi dan Masuk</button>
+        <p class="note" id="otpTimer">Kode berlaku 5 menit.</p>
+        <button class="google" type="button" id="backButton">Kembali ke Login</button>
+      </form>
+
+      <p class="note" id="footerNote">Akun Anda dilindungi dengan verifikasi keamanan Segaloka.</p>
+    </div>
+  </section>
+</main>
+<script src="./app.js"></script>
+</body>
+</html>

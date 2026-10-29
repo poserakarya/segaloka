@@ -1,0 +1,1146 @@
+.page {
+  min-height: 100vh;
+  background: #f5f8fc;
+  padding: 28px 0 70px;
+  color: #102e55;
+}
+
+.shell {
+  width: min(1180px, calc(100% - 40px));
+  margin: 0 auto;
+}
+
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-bottom: 17px;
+  font-size: 11px;
+  color: #71849a;
+}
+
+.breadcrumb a {
+  color: #0878f9;
+  text-decoration: none;
+}
+
+.heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 22px;
+}
+
+.heading h1 {
+  margin: 7px 0 6px;
+  font-size: 27px;
+  line-height: 1.16;
+  color: #102e55;
+}
+
+.heading p {
+  margin: 0;
+  max-width: 650px;
+  font-size: 13px;
+  line-height: 1.55;
+  color: #667b92;
+}
+
+.packageBadge {
+  display: inline-flex;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: #eaf4ff;
+  color: #0878f9;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.secureBadge {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: 12px 15px;
+  border: 1px solid #dbe5ef;
+  border-radius: 14px;
+  background: #fff;
+}
+
+.secureBadge svg {
+  color: #0878f9;
+}
+
+.secureBadge span {
+  display: grid;
+  gap: 2px;
+}
+
+.secureBadge strong {
+  font-size: 11px;
+}
+
+.secureBadge small {
+  font-size: 9px;
+  color: #7b8da0;
+}
+
+.stepper {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  margin-bottom: 20px;
+  overflow: hidden;
+  border: 1px solid #dbe5ef;
+  border-radius: 16px;
+  background: #fff;
+}
+
+.step {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  min-height: 58px;
+  color: #7b8da0;
+}
+
+.step:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  width: 1px;
+  height: 26px;
+  background: #e0e7ef;
+}
+
+.step > span {
+  width: 25px;
+  height: 25px;
+  display: grid;
+  place-items: center;
+  border: 1px solid #cdd9e5;
+  border-radius: 50%;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.step strong {
+  font-size: 11px;
+}
+
+.stepActive {
+  color: #0878f9;
+}
+
+.stepActive > span {
+  border-color: #0878f9;
+  background: #0878f9;
+  color: #fff;
+}
+
+.stepDone {
+  color: #173753;
+}
+
+.stepDone > span {
+  border-color: #19a866;
+  background: #19a866;
+  color: #fff;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 18px;
+  align-items: start;
+}
+
+.content {
+  display: grid;
+  gap: 14px;
+}
+
+.card {
+  border: 1px solid #dbe5ef;
+  border-radius: 17px;
+  background: #fff;
+  padding: 20px;
+}
+
+.card > h2 {
+  margin: 0 0 14px;
+  font-size: 15px;
+}
+
+.cardHeading {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  margin-bottom: 18px;
+}
+
+.cardHeading > svg {
+  flex: 0 0 auto;
+  margin-top: 2px;
+  color: #0878f9;
+}
+
+.cardHeading h2 {
+  margin: 0 0 4px;
+  font-size: 16px;
+}
+
+.cardHeading p {
+  margin: 0;
+  font-size: 11px;
+  line-height: 1.5;
+  color: #77899e;
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
+
+.formGrid label {
+  display: grid;
+  gap: 6px;
+}
+
+.formGrid label > span {
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.full {
+  grid-column: 1 / -1;
+}
+
+.formGrid input,
+.formGrid select {
+  width: 100%;
+  min-height: 43px;
+  padding: 0 12px;
+  border: 1px solid #d2deea;
+  border-radius: 10px;
+  outline: 0;
+  background: #fff;
+  font-size: 11px;
+  color: #102e55;
+}
+
+.formGrid input:focus,
+.formGrid select:focus {
+  border-color: #0878f9;
+  box-shadow: 0 0 0 3px rgba(8, 120, 249, .08);
+}
+
+.counterRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 58px;
+  border-top: 1px solid #edf1f5;
+}
+
+.counterRow > div:first-child {
+  display: grid;
+  gap: 2px;
+}
+
+.counterRow strong {
+  font-size: 11px;
+}
+
+.counterRow span {
+  font-size: 9px;
+  color: #8091a5;
+}
+
+.counter {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.counter button {
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border: 1px solid #cfdbe7;
+  border-radius: 8px;
+  background: #fff;
+  color: #0878f9;
+}
+
+.counter button:disabled {
+  color: #aab6c1;
+}
+
+.counter strong {
+  width: 18px;
+  text-align: center;
+}
+
+.optionList {
+  display: grid;
+  gap: 10px;
+}
+
+.optionCard {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 25px minmax(0, 1fr);
+  align-items: flex-start;
+  gap: 11px;
+  padding: 14px;
+  text-align: left;
+  border: 1px solid #d7e2ec;
+  border-radius: 13px;
+  background: #fff;
+  cursor: pointer;
+}
+
+.optionCardActive {
+  border-color: #0878f9;
+  background: #f5faff;
+}
+
+.optionRadio {
+  width: 22px;
+  height: 22px;
+  display: grid;
+  place-items: center;
+  border: 1px solid #c8d5e1;
+  border-radius: 50%;
+  color: #fff;
+}
+
+.optionCardActive .optionRadio {
+  background: #0878f9;
+  border-color: #0878f9;
+}
+
+.optionCard > span:last-child {
+  display: grid;
+  gap: 3px;
+}
+
+.optionCard strong {
+  font-size: 11px;
+  color: #173753;
+}
+
+.optionCard small {
+  font-size: 9px;
+  line-height: 1.45;
+  color: #7b8da0;
+}
+
+.subForm {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #e5ebf1;
+}
+
+.subForm h3 {
+  margin: 0 0 14px;
+  font-size: 13px;
+}
+
+.notice,
+.privacyNote {
+  display: flex;
+  gap: 11px;
+  align-items: flex-start;
+  padding: 14px;
+  border: 1px solid #cfe3f6;
+  border-radius: 13px;
+  background: #f3f9ff;
+}
+
+.notice svg,
+.privacyNote svg {
+  flex: 0 0 auto;
+  color: #0878f9;
+}
+
+.notice strong {
+  font-size: 11px;
+}
+
+.notice p,
+.privacyNote p {
+  margin: 3px 0 0;
+  font-size: 9px;
+  line-height: 1.5;
+  color: #667b92;
+}
+
+.serviceGrid {
+  display: grid;
+  gap: 10px;
+}
+
+.serviceCard {
+  display: grid;
+  grid-template-columns: 26px minmax(0, 1fr) 20px;
+  gap: 12px;
+  align-items: center;
+  width: 100%;
+  padding: 14px;
+  border: 1px solid #d8e2eb;
+  border-radius: 13px;
+  background: #fff;
+  text-align: left;
+  color: #173753;
+  cursor: pointer;
+}
+
+.serviceCard > svg:first-child {
+  color: #0878f9;
+}
+
+.serviceCard > svg:last-child {
+  color: #c3cfda;
+}
+
+.serviceCard span {
+  display: grid;
+  gap: 3px;
+}
+
+.serviceCard strong {
+  font-size: 11px;
+}
+
+.serviceCard small {
+  font-size: 9px;
+  line-height: 1.45;
+  color: #7b8da0;
+}
+
+.serviceActive {
+  border-color: #0878f9;
+  background: #f5faff;
+}
+
+.serviceActive > svg:last-child {
+  color: #19a866;
+}
+
+.reviewList {
+  display: grid;
+  gap: 0;
+}
+
+.reviewList > div {
+  min-height: 46px;
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  align-items: center;
+  border-top: 1px solid #edf1f5;
+}
+
+.reviewList span {
+  font-size: 10px;
+  color: #74869b;
+}
+
+.reviewList strong {
+  font-size: 11px;
+  text-align: right;
+}
+
+.checkList {
+  display: grid;
+  gap: 9px;
+  margin-bottom: 18px;
+}
+
+.checkList span {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 10px;
+}
+
+.checkList svg {
+  color: #19a866;
+}
+
+.checkList small {
+  font-size: 10px;
+  color: #7b8da0;
+}
+
+.agreement {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  padding-top: 15px;
+  border-top: 1px solid #e5ebf1;
+}
+
+.agreement input {
+  margin-top: 2px;
+}
+
+.agreement span {
+  font-size: 9px;
+  line-height: 1.5;
+  color: #61758c;
+}
+
+.navigation {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 2px;
+}
+
+.backButton,
+.nextButton {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 0 18px;
+  border-radius: 11px;
+  font-size: 11px;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.backButton {
+  border: 1px solid #cdd9e4;
+  background: #fff;
+  color: #173753;
+}
+
+.nextButton {
+  border: 1px solid #0878f9;
+  background: #0878f9;
+  color: #fff;
+}
+
+.nextButton:disabled {
+  opacity: .45;
+  cursor: default;
+}
+
+.summary {
+  position: sticky;
+  top: 88px;
+  display: grid;
+  gap: 12px;
+}
+
+.summaryCard,
+.helpCard {
+  border: 1px solid #dbe5ef;
+  border-radius: 17px;
+  background: #fff;
+}
+
+.summaryCard {
+  padding: 18px;
+}
+
+.summaryEyebrow {
+  font-size: 9px;
+  font-weight: 700;
+  color: #0878f9;
+}
+
+.summaryCard h2 {
+  margin: 6px 0 14px;
+  font-size: 17px;
+  line-height: 1.3;
+}
+
+.summaryMeta {
+  display: grid;
+  gap: 8px;
+}
+
+.summaryMeta span {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 9px;
+  color: #677b92;
+}
+
+.summaryCard hr {
+  border: 0;
+  border-top: 1px solid #e6edf3;
+  margin: 16px 0;
+}
+
+.summaryTravelers {
+  display: grid;
+  gap: 9px;
+}
+
+.summaryTravelers span {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+}
+
+.summaryTravelers strong {
+  font-size: 10px;
+}
+
+.deadlineBox {
+  display: flex;
+  gap: 10px;
+  margin-top: 16px;
+  padding: 12px;
+  border-radius: 12px;
+  background: #f4f8fd;
+}
+
+.deadlineBox svg {
+  flex: 0 0 auto;
+  color: #0878f9;
+}
+
+.deadlineBox strong {
+  font-size: 10px;
+}
+
+.deadlineBox p {
+  margin: 3px 0 0;
+  font-size: 8px;
+  line-height: 1.5;
+  color: #70849a;
+}
+
+.helpCard {
+  display: flex;
+  gap: 10px;
+  padding: 14px;
+}
+
+.helpCard svg {
+  flex: 0 0 auto;
+  color: #19a866;
+}
+
+.helpCard strong {
+  font-size: 10px;
+}
+
+.helpCard p {
+  margin: 3px 0 0;
+  font-size: 8px;
+  line-height: 1.5;
+  color: #71849a;
+}
+
+
+@media (max-width: 900px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+
+  .summary {
+    position: static;
+  }
+}
+
+
+@media (max-width: 640px) {
+  .page {
+    padding-top: 16px;
+  }
+
+  .shell {
+    width: min(100% - 24px, 1180px);
+  }
+
+  .heading {
+    display: block;
+  }
+
+  .secureBadge {
+    margin-top: 12px;
+    width: max-content;
+  }
+
+  .stepper {
+    grid-template-columns: repeat(5, minmax(92px, 1fr));
+    overflow-x: auto;
+  }
+
+  .step {
+    padding: 0 8px;
+  }
+
+  .step strong {
+    font-size: 9px;
+  }
+
+  .formGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .full {
+    grid-column: auto;
+  }
+
+  .card {
+    padding: 16px;
+  }
+
+  .navigation {
+    position: sticky;
+    bottom: 0;
+    z-index: 20;
+    padding: 10px 0;
+    background: #f5f8fc;
+  }
+
+  .backButton,
+  .nextButton {
+    flex: 1;
+  }
+}
+
+
+/* SEGALOKA PAYMENT UI START */
+
+.paymentPlans {
+  display: grid;
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.paymentPlan {
+  display: grid;
+  gap: 7px;
+  min-height: 132px;
+  padding: 14px;
+  border: 1px solid #d8e2eb;
+  border-radius: 13px;
+  background: #fff;
+  text-align: left;
+  color: #173753;
+  cursor: pointer;
+}
+
+.paymentPlan strong {
+  font-size: 12px;
+}
+
+.paymentPlan span {
+  min-height: 36px;
+  font-size: 9px;
+  line-height: 1.45;
+  color: #73869b;
+}
+
+.paymentPlan b {
+  margin-top: auto;
+  color: #0878f9;
+  font-size: 13px;
+}
+
+.paymentPlanActive {
+  border-color: #0878f9;
+  background: #f3f8ff;
+  box-shadow:
+    0 0 0 2px
+    rgba(8, 120, 249, .08);
+}
+
+.paymentMethods {
+  display: grid;
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.paymentMethod {
+  display: grid;
+  grid-template-columns:
+    24px minmax(0, 1fr);
+  gap: 10px;
+  align-items: flex-start;
+  padding: 14px;
+  border: 1px solid #d8e2eb;
+  border-radius: 12px;
+  background: #fff;
+  text-align: left;
+  cursor: pointer;
+}
+
+.paymentMethod > span:last-child {
+  display: grid;
+  gap: 3px;
+}
+
+.paymentMethod strong {
+  font-size: 11px;
+  color: #173753;
+}
+
+.paymentMethod small {
+  font-size: 9px;
+  line-height: 1.45;
+  color: #77899e;
+}
+
+.paymentMethodActive {
+  border-color: #0878f9;
+  background: #f5faff;
+}
+
+.paymentMethodActive
+.optionRadio {
+  border-color: #0878f9;
+  background: #0878f9;
+  color: #fff;
+}
+
+.paymentSummary {
+  display: grid;
+  gap: 0;
+  padding: 18px 20px;
+  border: 1px solid #dbe5ef;
+  border-radius: 17px;
+  background: #fff;
+}
+
+.paymentSummary > div {
+  min-height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  border-bottom: 1px solid #edf1f5;
+}
+
+.paymentSummary span {
+  font-size: 10px;
+  color: #71849a;
+}
+
+.paymentSummary strong {
+  font-size: 11px;
+  color: #173753;
+}
+
+.paymentGrandTotal {
+  color: #0878f9 !important;
+  font-size: 16px !important;
+}
+
+.paymentSummary p {
+  margin: 14px 0 0;
+  font-size: 9px;
+  line-height: 1.5;
+  color: #7a8ca0;
+}
+
+
+@media (max-width: 720px) {
+
+  .paymentPlans {
+    grid-template-columns: 1fr;
+  }
+
+  .paymentMethods {
+    grid-template-columns: 1fr;
+  }
+
+}
+
+/* SEGALOKA PAYMENT UI END */
+
+/* SEGALOKA BOOKING TYPOGRAPHY CANONICAL START */
+
+/*
+ * Canonical typography untuk seluruh flow:
+ * Pemesan -> Traveler -> Layanan & Dokumen
+ * -> Review -> Pembayaran.
+ *
+ * Ukuran normal tidak boleh turun di bawah 13px.
+ */
+
+.root,
+.root *,
+.page,
+.page * {
+  font-family:
+    "Plus Jakarta Sans",
+    "Jakarta Sans",
+    Arial,
+    sans-serif !important;
+}
+
+
+/* ==========================================================
+   BODY / NORMAL TEXT
+   ========================================================== */
+
+.root,
+.page,
+.root p,
+.page p,
+.root span,
+.page span,
+.root label,
+.page label,
+.root input,
+.page input,
+.root select,
+.page select,
+.root textarea,
+.page textarea,
+.root button,
+.page button,
+.root small,
+.page small,
+.root li,
+.page li,
+.root td,
+.page td,
+.root th,
+.page th {
+  font-size: 13px !important;
+  line-height: 1.5;
+}
+
+
+/* ==========================================================
+   FORM
+   ========================================================== */
+
+.root input,
+.page input,
+.root select,
+.page select,
+.root textarea,
+.page textarea {
+  font-size: 13px !important;
+}
+
+.root input::placeholder,
+.page input::placeholder,
+.root textarea::placeholder,
+.page textarea::placeholder {
+  font-family:
+    "Plus Jakarta Sans",
+    "Jakarta Sans",
+    Arial,
+    sans-serif !important;
+
+  font-size: 13px !important;
+}
+
+
+/* ==========================================================
+   BUTTON
+   ========================================================== */
+
+.root button,
+.page button,
+.root button span,
+.page button span,
+.root button strong,
+.page button strong {
+  font-family:
+    "Plus Jakarta Sans",
+    "Jakarta Sans",
+    Arial,
+    sans-serif !important;
+
+  font-size: 13px !important;
+}
+
+
+/* ==========================================================
+   SMALL / HELPER / DESCRIPTION
+   ========================================================== */
+
+.root small,
+.page small,
+.helper,
+.helperText,
+.description,
+.optionDescription,
+.paymentPlan span,
+.paymentMethod small,
+.paymentSummary span,
+.paymentSummary p {
+  font-size: 13px !important;
+  line-height: 1.5 !important;
+}
+
+
+/* ==========================================================
+   CARD HEADING
+   ========================================================== */
+
+.card h2,
+.cardHeading h2,
+.paymentSummary h2 {
+  font-size: 16px !important;
+  line-height: 1.35 !important;
+  font-weight: 700 !important;
+}
+
+
+/* ==========================================================
+   PAGE TITLE
+   ========================================================== */
+
+.root h1,
+.page h1 {
+  font-size: 22px !important;
+  line-height: 1.25 !important;
+  font-weight: 700 !important;
+}
+
+
+/* ==========================================================
+   SUBHEADING
+   ========================================================== */
+
+.root h3,
+.page h3 {
+  font-size: 14px !important;
+  line-height: 1.4 !important;
+  font-weight: 700 !important;
+}
+
+
+/* ==========================================================
+   STEPPER
+   ========================================================== */
+
+.step,
+.step *,
+.stepItem,
+.stepItem *,
+.steps,
+.steps * {
+  font-family:
+    "Plus Jakarta Sans",
+    "Jakarta Sans",
+    Arial,
+    sans-serif !important;
+
+  font-size: 13px !important;
+}
+
+
+/* ==========================================================
+   PAYMENT
+   ========================================================== */
+
+.paymentPlan strong,
+.paymentMethod strong,
+.paymentSummary strong {
+  font-size: 13px !important;
+  line-height: 1.4 !important;
+}
+
+.paymentPlan b {
+  font-size: 13px !important;
+  line-height: 1.4 !important;
+}
+
+.paymentGrandTotal {
+  font-size: 18px !important;
+  line-height: 1.3 !important;
+  font-weight: 700 !important;
+}
+
+
+/* ==========================================================
+   MOBILE
+   Jangan mengecilkan typography.
+   ========================================================== */
+
+@media (max-width: 720px) {
+
+  .root,
+  .root *,
+  .page,
+  .page *,
+  .root p,
+  .page p,
+  .root span,
+  .page span,
+  .root label,
+  .page label,
+  .root input,
+  .page input,
+  .root select,
+  .page select,
+  .root textarea,
+  .page textarea,
+  .root button,
+  .page button,
+  .root small,
+  .page small {
+    font-family:
+      "Plus Jakarta Sans",
+      "Jakarta Sans",
+      Arial,
+      sans-serif !important;
+  }
+
+  .root p,
+  .page p,
+  .root span,
+  .page span,
+  .root label,
+  .page label,
+  .root input,
+  .page input,
+  .root select,
+  .page select,
+  .root textarea,
+  .page textarea,
+  .root button,
+  .page button,
+  .root small,
+  .page small {
+    font-size: 13px !important;
+  }
+
+  .root h1,
+  .page h1 {
+    font-size: 22px !important;
+  }
+
+  .card h2,
+  .cardHeading h2,
+  .paymentSummary h2 {
+    font-size: 16px !important;
+  }
+
+  .root h3,
+  .page h3 {
+    font-size: 14px !important;
+  }
+
+  .paymentGrandTotal {
+    font-size: 18px !important;
+  }
+}
+
+/* SEGALOKA BOOKING TYPOGRAPHY CANONICAL END */

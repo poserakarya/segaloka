@@ -1,0 +1,1261 @@
+﻿
+========== src\components\home\Hero.tsx [1-180] ==========
+    1: "use client";
+    2: 
+    3: import {
+    4:   Banknote,
+    5:   Building2,
+    6:   CalendarDays,
+    7:   ChevronLeft,
+    8:   ChevronRight,
+    9:   CircleMinus,
+   10:   CirclePlus,
+   11:   Globe2,
+   12: 
+   13:   FileBadge,
+   14:   Info,
+   15:   MapPin,
+   16:   Search,
+   17:   Sparkles,
+   18:   Ticket,
+   19:   UsersRound,
+   20:   X,
+   21: } from "lucide-react";
+   22: 
+   23: import Image from "next/image";
+   24: import { useRouter } from "next/navigation";
+   25: import {
+   26:   useEffect,
+   27:   useMemo,
+   28:   useRef,
+   29:   useState,
+   30: } from "react";
+   31: import { useMarketplacePreferences } from "@/components/providers/MarketplacePreferencesProvider";
+   32: import { marketplaceTranslate } from "@/lib/marketplace-i18n";
+   33: import { Search as SegalokaSearch } from "@/ui/search";
+   34: 
+   35: 
+   36: const categories = [
+   37:   {
+   38:     value: "Umrah",
+   39:     labelKey: "category.umrah" as const,
+   40:     icon: Building2,
+   41:   },
+   42:   {
+   43:     value: "Haji",
+   44:     labelKey: "category.hajj" as const,
+   45:     icon: Sparkles,
+   46:   },
+   47:   {
+   48:     value: "Halal Tour",
+   49:     labelKey: "category.halalTour" as const,
+   50:     icon: Globe2,
+   51:   },
+   52:   {
+   53:     value: "Tour Domestic",
+   54:     labelKey: "category.domesticTour" as const,
+   55:     icon: MapPin,
+   56:   },
+   57:   {
+   58:     value: "Tour International",
+   59:     labelKey: "category.internationalTour" as const,
+   60:     icon: Globe2,
+   61:   },
+   62:   {
+   63:     value: "SegaDeals",
+   64:     labelKey: "category.segaDeals" as const,
+   65:     icon: Ticket,
+   66:   },
+   67:   {
+   68:     value: "Visa",
+   69:     labelKey: "category.visa" as const,
+   70:     icon: FileBadge,
+   71:   },
+   72: 
+   73: ] as const;
+   74: 
+   75: 
+   76: const indonesiaCities = [
+   77:   "Jakarta",
+   78:   "Makassar",
+   79:   "Surabaya",
+   80:   "Medan",
+   81:   "Yogyakarta",
+   82:   "Bandung",
+   83:   "Semarang",
+   84:   "Balikpapan",
+   85:   "Banjarmasin",
+   86:   "Palembang",
+   87:   "Pekanbaru",
+   88:   "Padang",
+   89:   "Banda Aceh",
+   90:   "Batam",
+   91:   "Denpasar",
+   92:   "Manado",
+   93:   "Lombok",
+   94: ];
+   95: 
+   96: 
+   97: const umrahDestinations = [
+   98:   "Makkah",
+   99:   "Madinah",
+  100:   "Makkah & Madinah",
+  101: ];
+  102: 
+  103: 
+  104: const hajiDestinations = [
+  105:   "Makkah",
+  106:   "Madinah",
+  107: ];
+  108: 
+  109: 
+  110: const halalTourCountries = [
+  111:   "Indonesia",
+  112:   "Malaysia",
+  113:   "Singapura",
+  114:   "Jepang",
+  115:   "Korea Selatan",
+  116:   "Turki",
+  117:   "Uni Emirat Arab",
+  118:   "Thailand",
+  119:   "Vietnam",
+  120:   "Brunei Darussalam",
+  121:   "Mesir",
+  122:   "Maroko",
+  123:   "Uzbekistan",
+  124:   "Kazakhstan",
+  125:   "Qatar",
+  126:   "Oman",
+  127:   "Yordania",
+  128:   "Inggris",
+  129:   "Prancis",
+  130:   "Italia",
+  131:   "Spanyol",
+  132:   "Swiss",
+  133:   "Jerman",
+  134:   "Belanda",
+  135:   "Austria",
+  136:   "Bosnia & Herzegovina",
+  137:   "Albania",
+  138: ];
+  139: 
+  140: 
+  141: const halalTourPopularCountries = [
+  142:   "Indonesia",
+  143:   "Malaysia",
+  144:   "Singapura",
+  145:   "Jepang",
+  146:   "Korea Selatan",
+  147:   "Turki",
+  148:   "Uni Emirat Arab",
+  149: ];
+  150: 
+  151: 
+  152: const domesticCities = [
+  153:   "Jakarta",
+  154:   "Bandung",
+  155:   "Bogor",
+  156:   "Bekasi",
+  157:   "Depok",
+  158:   "Tangerang",
+  159:   "Serang",
+  160:   "Cirebon",
+  161:   "Tasikmalaya",
+  162:   "Sukabumi",
+  163:   "Yogyakarta",
+  164:   "Solo",
+  165:   "Semarang",
+  166:   "Magelang",
+  167:   "Purwokerto",
+  168:   "Surabaya",
+  169:   "Malang",
+  170:   "Batu",
+  171:   "Kediri",
+  172:   "Madiun",
+  173:   "Jember",
+  174:   "Banyuwangi",
+  175:   "Denpasar",
+  176:   "Ubud",
+  177:   "Kuta",
+  178:   "Nusa Dua",
+  179:   "Mataram",
+  180:   "Lombok",
+
+========== src\components\home\Hero.tsx [2550-2750] ==========
+ 2550:               >
+ 2551:                 <ChevronRight size={19} />
+ 2552:               </button>
+ 2553:             </div>
+ 2554: 
+ 2555:             <div className="hero-calendar-grid">
+ 2556:               <CalendarMonth
+ 2557:                 year={firstCalendarYear}
+ 2558:                 month={firstCalendarMonth}
+ 2559:                 selectedDate={selectedDate}
+ 2560:                 returnDate={returnDate}
+ 2561:                 minDate={selectedDate}
+ 2562:                 onSelect={(date) => {
+ 2563:                   setReturnDate(date); setVisaPickingReturn(false); setOpenPanel(null);
+ 2564:                 }}
+ 2565:                 locale={locale}
+ 2566:               />
+ 2567: 
+ 2568:               <CalendarMonth
+ 2569:                 year={secondCalendarDate.getFullYear()}
+ 2570:                 month={secondCalendarDate.getMonth()}
+ 2571:                 selectedDate={selectedDate}
+ 2572:                 returnDate={returnDate}
+ 2573:                 minDate={selectedDate}
+ 2574:                 onSelect={(date) => {
+ 2575:                   setReturnDate(date); setVisaPickingReturn(false); setOpenPanel(null);
+ 2576:                 }}
+ 2577:                 locale={locale}
+ 2578:               />
+ 2579:             </div>
+ 2580:           </div>
+ 2581:         )}
+ 2582:       </div>
+ 2583:     );
+ 2584:   }
+ 2585:   const searchOrigin =
+ 2586:     isSegaDeals
+ 2587:       ? segaOriginCity.trim()
+ 2588:       : origin.trim();
+ 2589: 
+ 2590:   const travelerTotal =
+ 2591:     adult +
+ 2592:     child +
+ 2593:     infant;
+ 2594: 
+ 2595:   const hasValidSchedule =
+ 2596:     isHaji
+ 2597:       ? hajiYear !== null &&
+ 2598:         !isHajiYearDisabled(hajiYear)
+ 2599:       : isVisa
+ 2600:         ? selectedDate !== null &&
+ 2601:           returnDate !== null &&
+ 2602:           returnDate >= selectedDate
+ 2603:         : selectedDate !== null;
+ 2604: 
+ 2605:   const canSearch =
+ 2606:     (isVisa || searchOrigin.length > 0) &&
+ 2607:     destination.trim().length > 0 &&
+ 2608:     travelerTotal > 0 &&
+ 2609:     hasValidSchedule;
+ 2610: 
+ 2611:   function handleSearch() {
+ 2612:     if (!canSearch) {
+ 2613:       return;
+ 2614:     }
+ 2615:     
+ 2616: 
+ 2617:     const params =
+ 2618:       new URLSearchParams();
+ 2619: 
+ 2620:     params.set(
+ 2621:       "category",
+ 2622:       active,
+ 2623:     );
+ 2624: 
+ 2625:     params.set(
+ 2626:       "origin",
+ 2627:       isSegaDeals
+ 2628:         ? segaOriginCity
+ 2629:         : origin,
+ 2630:     );
+ 2631: 
+ 2632:     if (destination) {
+ 2633:       params.set(
+ 2634:         "destination",
+ 2635:         destination,
+ 2636:       );
+ 2637:     }
+ 2638: 
+ 2639:     params.set(
+ 2640:       "travelers",
+ 2641:       String(travelerTotal),
+ 2642:     );
+ 2643: 
+ 2644:     params.set(
+ 2645:       "adult",
+ 2646:       String(adult),
+ 2647:     );
+ 2648: 
+ 2649:     params.set(
+ 2650:       "child",
+ 2651:       String(child),
+ 2652:     );
+ 2653: 
+ 2654:     params.set(
+ 2655:       "infant",
+ 2656:       String(infant),
+ 2657:     );
+ 2658: 
+ 2659:     if (selectedDate) {
+ 2660:       const year =
+ 2661:         selectedDate.getFullYear();
+ 2662: 
+ 2663:       const month =
+ 2664:         String(
+ 2665:           selectedDate.getMonth() + 1,
+ 2666:         ).padStart(2, "0");
+ 2667: 
+ 2668:       const day =
+ 2669:         String(
+ 2670:           selectedDate.getDate(),
+ 2671:         ).padStart(2, "0");
+ 2672: 
+ 2673:       const formattedDate =
+ 2674:         `${year}-${month}-${day}`;
+ 2675: 
+ 2676:       params.set(
+ 2677:         "date",
+ 2678:         formattedDate,
+ 2679:       );
+ 2680: 
+ 2681:       if (isVisa) {
+ 2682:         params.set(
+ 2683:           "departureDate",
+ 2684:           formattedDate,
+ 2685:         );
+ 2686:       }
+ 2687:     }
+ 2688: 
+ 2689: 
+ 2690:     if (isVisa && returnDate) {
+ 2691:       const returnYear =
+ 2692:         returnDate.getFullYear();
+ 2693: 
+ 2694:       const returnMonth =
+ 2695:         String(
+ 2696:           returnDate.getMonth() + 1,
+ 2697:         ).padStart(2, "0");
+ 2698: 
+ 2699:       const returnDay =
+ 2700:         String(
+ 2701:           returnDate.getDate(),
+ 2702:         ).padStart(2, "0");
+ 2703: 
+ 2704:       params.set(
+ 2705:         "returnDate",
+ 2706:         `${returnYear}-${returnMonth}-${returnDay}`,
+ 2707:       );
+ 2708:     }
+ 2709: 
+ 2710:     if (isVisa && returnDate) {
+ 2711:       const returnYear =
+ 2712:         returnDate.getFullYear();
+ 2713: 
+ 2714:       const returnMonth =
+ 2715:         String(
+ 2716:           returnDate.getMonth() + 1,
+ 2717:         ).padStart(2, "0");
+ 2718: 
+ 2719:       const returnDay =
+ 2720:         String(
+ 2721:           returnDate.getDate(),
+ 2722:         ).padStart(2, "0");
+ 2723: 
+ 2724:       params.set(
+ 2725:         "returnDate",
+ 2726:         `${returnYear}-${returnMonth}-${returnDay}`,
+ 2727:       );
+ 2728:     }
+ 2729:     if (isHaji && hajiYear) {
+ 2730:       params.set(
+ 2731:         "year",
+ 2732:         String(hajiYear),
+ 2733:       );
+ 2734:     }
+ 2735: 
+ 2736:     if (budget) {
+ 2737:       params.set(
+ 2738:         "budget",
+ 2739:         budget,
+ 2740:       );
+ 2741:     }
+ 2742: 
+ 2743:     setOpenPanel(null);
+ 2744: 
+ 2745:     router.push(
+ 2746:       `/search?${params.toString()}`,
+ 2747:     );
+ 2748:   }
+ 2749:   return (
+ 2750:     <>
+
+========== src\components\search\SearchEditBar.tsx [1-240] ==========
+    1: "use client";
+    2: 
+    3: import {
+    4:   CalendarDays,
+    5:   ChevronLeft,
+    6:   ChevronRight,
+    7:   MapPin,
+    8:   Minus,
+    9:   Plus,
+   10:   Search,
+   11:   UsersRound,
+   12:   X,
+   13: } from "lucide-react";
+   14: 
+   15: import {
+   16:   useEffect,
+   17:   useMemo,
+   18:   useRef,
+   19:   useState,
+   20: } from "react";
+   21: 
+   22: import { useRouter } from "next/navigation";
+   23: 
+   24: import {
+   25:   useMarketplacePreferences,
+   26: } from "@/components/providers/MarketplacePreferencesProvider";
+   27: 
+   28: type Props = {
+   29:   category: string;
+   30:   initialOrigin: string;
+   31:   initialDestination: string;
+   32:   initialTravelers: string;
+   33:   initialDate: string;
+   34:   initialYear: string;
+   35: };
+   36: 
+   37: type Panel =
+   38:   | "origin"
+   39:   | "destination"
+   40:   | "traveler"
+   41:   | "date"
+   42:   | null;
+   43: 
+   44: type TravelerState = {
+   45:   adult: number;
+   46:   child: number;
+   47:   infant: number;
+   48: };
+   49: 
+   50: const origins = [
+   51:   "Jakarta",
+   52:   "Makassar",
+   53:   "Surabaya",
+   54:   "Medan",
+   55:   "Yogyakarta",
+   56:   "Bandung",
+   57:   "Semarang",
+   58:   "Balikpapan",
+   59:   "Banjarmasin",
+   60:   "Palembang",
+   61:   "Pekanbaru",
+   62:   "Padang",
+   63:   "Banda Aceh",
+   64:   "Batam",
+   65:   "Denpasar",
+   66:   "Manado",
+   67:   "Lombok",
+   68: ];
+   69: 
+   70: const categoryOptions: Record<string, string[]> = {
+   71:   Umrah: [
+   72:     "Makkah",
+   73:     "Madinah",
+   74:     "Makkah & Madinah",
+   75:   ],
+   76: 
+   77:   Haji: [
+   78:     "Makkah",
+   79:     "Madinah",
+   80:     "Makkah & Madinah",
+   81:   ],
+   82: 
+   83:   "Halal Tour": [
+   84:     "Turkiye",
+   85:     "Malaysia",
+   86:     "Singapura",
+   87:     "Jepang",
+   88:     "Korea Selatan",
+   89:     "Uni Emirat Arab",
+   90:     "Mesir",
+   91:     "Maroko",
+   92:     "Uzbekistan",
+   93:     "Yordania",
+   94:     "Eropa",
+   95:   ],
+   96: 
+   97:   "Tour Domestic": [
+   98:     "Bali",
+   99:     "Yogyakarta",
+  100:     "Bandung",
+  101:     "Lombok",
+  102:     "Labuan Bajo",
+  103:     "Raja Ampat",
+  104:     "Bromo",
+  105:     "Malang",
+  106:     "Makassar",
+  107:     "Toraja",
+  108:   ],
+  109: 
+  110:   "Tour International": [
+  111:     "Malaysia",
+  112:     "Singapura",
+  113:     "Thailand",
+  114:     "Vietnam",
+  115:     "Jepang",
+  116:     "Korea Selatan",
+  117:     "Tiongkok",
+  118:     "Hong Kong",
+  119:     "Turkiye",
+  120:     "Uni Emirat Arab",
+  121:     "Australia",
+  122:     "Eropa",
+  123:   ],
+  124: 
+  125:   SegaDeals: [
+  126:     "Umrah",
+  127:     "Haji",
+  128:     "Halal Tour",
+  129:     "Tour Domestic",
+  130:     "Tour International",
+  131:   ],
+  132: };
+  133: 
+  134: const copy = {
+  135:   ID: {
+  136:     from: "Dari",
+  137:     destination: "Tujuan",
+  138:     umrahDestination: "Tujuan Umrah",
+  139:     date: "Tanggal",
+  140:     traveler: "Traveler",
+  141:     search: "Cari",
+  142: 
+  143:     originTitle: "Pilih Kota atau Bandara",
+  144:     originPlaceholder: "Masukkan nama kota atau bandara...",
+  145:     popularDestination: "Destinasi Populer",
+  146: 
+  147:     destinationTitle: "Pilih Tujuan",
+  148:     destinationPlaceholder: "Cari negara tujuan...",
+  149:     chooseDestination: "Pilih tujuan",
+  150: 
+  151:     dateTitle: "Atur Tanggal",
+  152:     chooseDate: "Pilih tanggal",
+  153: 
+  154:     travelerTitle: "Atur Traveler",
+  155:     travelerDescription: "Tentukan jumlah traveler",
+  156: 
+  157:     adult: "Dewasa",
+  158:     adultDescription: "Usia 12 tahun ke atas",
+  159: 
+  160:     child: "Anak",
+  161:     childDescription: "Usia 2â€“11 tahun",
+  162: 
+  163:     infant: "Bayi",
+  164:     infantDescription: "Di bawah 2 tahun",
+  165: 
+  166:     person: "orang",
+  167:     done: "Selesai",
+  168: 
+  169:     weekdays: [
+  170:       "Min",
+  171:       "Sen",
+  172:       "Sel",
+  173:       "Rab",
+  174:       "Kam",
+  175:       "Jum",
+  176:       "Sab",
+  177:     ],
+  178: 
+  179:     months: [
+  180:       "Januari",
+  181:       "Februari",
+  182:       "Maret",
+  183:       "April",
+  184:       "Mei",
+  185:       "Juni",
+  186:       "Juli",
+  187:       "Agustus",
+  188:       "September",
+  189:       "Oktober",
+  190:       "November",
+  191:       "Desember",
+  192:     ],
+  193:   },
+  194: 
+  195:   EN: {
+  196:     from: "From",
+  197:     destination: "Destination",
+  198:     umrahDestination: "Umrah Destination",
+  199:     date: "Date",
+  200:     traveler: "Traveler",
+  201:     search: "Search",
+  202: 
+  203:     originTitle: "Choose City or Airport",
+  204:     originPlaceholder: "Enter city or airport name...",
+  205:     popularDestination: "Popular Destinations",
+  206: 
+  207:     destinationTitle: "Choose Destination",
+  208:     destinationPlaceholder: "Search destination...",
+  209:     chooseDestination: "Choose destination",
+  210: 
+  211:     dateTitle: "Set Date",
+  212:     chooseDate: "Choose date",
+  213: 
+  214:     travelerTitle: "Set Travelers",
+  215:     travelerDescription: "Choose number of travelers",
+  216: 
+  217:     adult: "Adult",
+  218:     adultDescription: "12 years and above",
+  219: 
+  220:     child: "Child",
+  221:     childDescription: "2â€“11 years",
+  222: 
+  223:     infant: "Infant",
+  224:     infantDescription: "Under 2 years",
+  225: 
+  226:     person: "people",
+  227:     done: "Done",
+  228: 
+  229:     weekdays: [
+  230:       "Sun",
+  231:       "Mon",
+  232:       "Tue",
+  233:       "Wed",
+  234:       "Thu",
+  235:       "Fri",
+  236:       "Sat",
+  237:     ],
+  238: 
+  239:     months: [
+  240:       "January",
+
+========== src\components\search\SearchEditBar.tsx [400-745] ==========
+  400:     day += 1
+  401:   ) {
+  402:     result.push(day);
+  403:   }
+  404: 
+  405:   while (
+  406:     result.length % 7 !== 0
+  407:   ) {
+  408:     result.push(null);
+  409:   }
+  410: 
+  411:   return result;
+  412: }
+  413: 
+  414: export function SearchEditBar({
+  415:   category,
+  416:   initialOrigin,
+  417:   initialDestination,
+  418:   initialTravelers,
+  419:   initialDate,
+  420:   initialYear,
+  421: }: Props) {
+  422:   const router = useRouter();
+  423: 
+  424:   const {
+  425:     language,
+  426:     locale,
+  427:     direction,
+  428:   } = useMarketplacePreferences();
+  429: 
+  430:   const t = copy[language];
+  431:   // SEGALOKA_HAJI_YEAR_UI_V1
+  432:   const isHaji = category.trim().toLowerCase() === "haji";
+  433:   const hajiYearLabel = language === "EN" ? "Hajj Year" : language === "AR" ? "Ã˜Â³Ã™â€ Ã˜Â© Ã˜Â§Ã™â€žÃ˜Â­Ã˜Â¬" : "Tahun Haji";
+  434:   const hajiYearTitle = language === "EN" ? "Choose Hajj Year" : language === "AR" ? "Ã˜Â§Ã˜Â®Ã˜ÂªÃ˜Â± Ã˜Â³Ã™â€ Ã˜Â© Ã˜Â§Ã™â€žÃ˜Â­Ã˜Â¬" : "Pilih Tahun Haji";
+  435:   const hajiYearPassed = language === "EN" ? "Passed" : language === "AR" ? "Ã˜Â§Ã™â€ Ã˜ÂªÃ™â€¡Ã™â€°" : "Lewat";
+  436: 
+  437:   const rootRef =
+  438:     useRef<HTMLDivElement | null>(
+  439:       null,
+  440:     );
+  441: 
+  442:   const [panel, setPanel] =
+  443:     useState<Panel>(null);
+  444: 
+  445:   const [origin, setOrigin] =
+  446:     useState(
+  447:       initialOrigin || "Jakarta",
+  448:     );
+  449: 
+  450:   const [
+  451:     originQuery,
+  452:     setOriginQuery,
+  453:   ] = useState("");
+  454: 
+  455:   const [
+  456:     destination,
+  457:     setDestination,
+  458:   ] = useState(
+  459:     initialDestination || "",
+  460:   );
+  461: 
+  462:   const [
+  463:     destinationQuery,
+  464:     setDestinationQuery,
+  465:   ] = useState("");
+  466: 
+  467:   const initialTravelerTotal =
+  468:     Math.max(
+  469:       1,
+  470:       Number(
+  471:         initialTravelers || 2,
+  472:       ),
+  473:     );
+  474: 
+  475:   const [
+  476:     travelers,
+  477:     setTravelers,
+  478:   ] = useState<TravelerState>({
+  479:     adult: initialTravelerTotal,
+  480:     child: 0,
+  481:     infant: 0,
+  482:   });
+  483: 
+  484:   const [
+  485:     selectedDate,
+  486:     setSelectedDate,
+  487:   ] = useState(
+  488:     initialDate || "",
+  489:   );
+  490: 
+  491:   const [selectedHajiYear, setSelectedHajiYear] = useState<number | null>(() => {
+  492:     const parsed = Number(initialYear);
+  493:     return /^\d{4}$/.test(initialYear) && Number.isInteger(parsed) ? parsed : null;
+  494:   });
+  495: 
+  496:   useEffect(() => {
+  497:     const parsed = Number(initialYear);
+  498:     setSelectedHajiYear(/^\d{4}$/.test(initialYear) && Number.isInteger(parsed) ? parsed : null);
+  499:   }, [initialYear]);
+  500: 
+  501:   const currentHajiYear = new Date().getFullYear();
+  502:   const hajiYears = Array.from({ length: 6 }, (_, index) => currentHajiYear + index);
+  503:   const isValidHajiYear = (value: number | null) =>
+  504:     value !== null && hajiYears.includes(value) && value !== 2026;
+  505: 
+  506:   const parsedInitialDate =
+  507:     parseDateValue(
+  508:       initialDate,
+  509:     );
+  510: 
+  511:   const today = new Date();
+  512: 
+  513:   const [
+  514:     calendarMonth,
+  515:     setCalendarMonth,
+  516:   ] = useState(
+  517:     parsedInitialDate
+  518:       ? new Date(
+  519:           parsedInitialDate.getFullYear(),
+  520:           parsedInitialDate.getMonth(),
+  521:           1,
+  522:         )
+  523:       : new Date(
+  524:           today.getFullYear(),
+  525:           today.getMonth(),
+  526:           1,
+  527:         ),
+  528:   );
+  529: 
+  530:   useEffect(() => {
+  531:     function handlePointerDown(
+  532:       event: PointerEvent,
+  533:     ) {
+  534:       if (
+  535:         rootRef.current &&
+  536:         !rootRef.current.contains(
+  537:           event.target as Node,
+  538:         )
+  539:       ) {
+  540:         setPanel(null);
+  541:       }
+  542:     }
+  543: 
+  544:     function handleKeyDown(
+  545:       event: KeyboardEvent,
+  546:     ) {
+  547:       if (
+  548:         event.key === "Escape"
+  549:       ) {
+  550:         setPanel(null);
+  551:       }
+  552:     }
+  553: 
+  554:     document.addEventListener(
+  555:       "pointerdown",
+  556:       handlePointerDown,
+  557:     );
+  558: 
+  559:     document.addEventListener(
+  560:       "keydown",
+  561:       handleKeyDown,
+  562:     );
+  563: 
+  564:     return () => {
+  565:       document.removeEventListener(
+  566:         "pointerdown",
+  567:         handlePointerDown,
+  568:       );
+  569: 
+  570:       document.removeEventListener(
+  571:         "keydown",
+  572:         handleKeyDown,
+  573:       );
+  574:     };
+  575:   }, []);
+  576: 
+  577:   useEffect(() => {
+  578:     setDestination(
+  579:       initialDestination || "",
+  580:     );
+  581:   }, [
+  582:     category,
+  583:     initialDestination,
+  584:   ]);
+  585: 
+  586:   const destinationOptions =
+  587:     useMemo(
+  588:       () =>
+  589:         categoryOptions[
+  590:           category
+  591:         ] || [],
+  592:       [category],
+  593:     );
+  594: 
+  595:   const filteredOrigins =
+  596:     useMemo(() => {
+  597:       const query =
+  598:         originQuery
+  599:           .trim()
+  600:           .toLowerCase();
+  601: 
+  602:       if (!query) {
+  603:         return origins;
+  604:       }
+  605: 
+  606:       return origins.filter(
+  607:         (value) =>
+  608:           value
+  609:             .toLowerCase()
+  610:             .includes(query),
+  611:       );
+  612:     }, [originQuery]);
+  613: 
+  614:   const filteredDestinations =
+  615:     useMemo(() => {
+  616:       const query =
+  617:         destinationQuery
+  618:           .trim()
+  619:           .toLowerCase();
+  620: 
+  621:       if (!query) {
+  622:         return destinationOptions;
+  623:       }
+  624: 
+  625:       return destinationOptions.filter(
+  626:         (value) =>
+  627:           value
+  628:             .toLowerCase()
+  629:             .includes(query),
+  630:       );
+  631:     }, [
+  632:       destinationOptions,
+  633:       destinationQuery,
+  634:     ]);
+  635: 
+  636:   const travelerTotal =
+  637:     travelers.adult +
+  638:     travelers.child +
+  639:     travelers.infant;
+  640: 
+  641:   const canSearch =
+  642:     origin.trim().length > 0 &&
+  643:     destination.trim().length > 0 &&
+  644:     travelerTotal > 0 &&
+  645:     (isHaji ? isValidHajiYear(selectedHajiYear) : selectedDate.length > 0);
+  646: 
+  647:   function togglePanel(
+  648:     nextPanel: Exclude<
+  649:       Panel,
+  650:       null
+  651:     >,
+  652:   ) {
+  653:     setPanel(
+  654:       panel === nextPanel
+  655:         ? null
+  656:         : nextPanel,
+  657:     );
+  658:   }
+  659: 
+  660:   function updateTraveler(
+  661:     key: keyof TravelerState,
+  662:     delta: number,
+  663:   ) {
+  664:     setTravelers(
+  665:       (current) => {
+  666:         const next = {
+  667:           ...current,
+  668:           [key]: Math.max(
+  669:             0,
+  670:             current[key] + delta,
+  671:           ),
+  672:         };
+  673: 
+  674:         if (
+  675:           next.adult +
+  676:             next.child +
+  677:             next.infant ===
+  678:           0
+  679:         ) {
+  680:           return current;
+  681:         }
+  682: 
+  683:         return next;
+  684:       },
+  685:     );
+  686:   }
+  687: 
+  688:   function formatSelectedDate() {
+  689:     if (!selectedDate) {
+  690:       return t.chooseDate;
+  691:     }
+  692: 
+  693:     const parsed =
+  694:       parseDateValue(
+  695:         selectedDate,
+  696:       );
+  697: 
+  698:     if (!parsed) {
+  699:       return selectedDate;
+  700:     }
+  701: 
+  702:     return new Intl.DateTimeFormat(
+  703:       locale,
+  704:       {
+  705:         day: "numeric",
+  706:         month: "short",
+  707:         year: "numeric",
+  708:       },
+  709:     ).format(parsed);
+  710:   }
+  711: 
+  712:   function submitSearch() {
+  713:     if (!canSearch) {
+  714:       return;
+  715:     }
+  716: 
+  717:     const params =
+  718:       new URLSearchParams();
+  719: 
+  720:     if (category) {
+  721:       params.set(
+  722:         "category",
+  723:         category,
+  724:       );
+  725:     }
+  726: 
+  727:     params.set(
+  728:       "origin",
+  729:       origin,
+  730:     );
+  731: 
+  732:     params.set(
+  733:       "destination",
+  734:       destination,
+  735:     );
+  736: 
+  737:     params.set(
+  738:       "travelers",
+  739:       String(travelerTotal),
+  740:     );
+  741: 
+  742:     params.set(
+  743:       "adult",
+  744:       String(travelers.adult),
+  745:     );
+
+========== src\components\search\SearchResultsClient.tsx [120-340] ==========
+  120:       "/paket/umrah-premium-12d",
+  121:   },
+  122:   {
+  123:     id: "sponsored-alhanan-umrah",
+  124:     travel: "Alhanan Berkah Wisata",
+  125:     category: "Umrah",
+  126:     title: "Umrah Reguler 9 Hari",
+  127:     location: "Makkah Â· Madinah",
+  128:     duration: "9 Hari",
+  129:     rating: 4.8,
+  130:     reviews: 96,
+  131:     price: 30500000,
+  132:     badge: "Sponsored",
+  133:     promo: "Promo keberangkatan pilihan",
+  134:     image:
+  135:       "/images/packages/umrah-reguler.jpg",
+  136:     target:
+  137:       "/paket/umrah-reguler-9d",
+  138:   },
+  139:   {
+  140:     id: "sponsored-amanah-umrah",
+  141:     travel: "Amanah Travel",
+  142:     category: "Umrah",
+  143:     title: "Umrah Plus Turkiye",
+  144:     location: "Istanbul Â· Makkah Â· Madinah",
+  145:     duration: "13 Hari",
+  146:     rating: 4.8,
+  147:     reviews: 84,
+  148:     price: 38900000,
+  149:     badge: "Sponsored",
+  150:     promo: "Paket Umrah Plus pilihan",
+  151:     image:
+  152:       "/images/packages/umrah-turkiye.jpg",
+  153:     target:
+  154:       "/paket/umrah-plus-turkiye",
+  155:   },
+  156: ];
+  157: const packageMeta: Record<string, PackageMeta> = {
+  158:   "umrah-premium-12d": {
+  159:     airline: "Garuda Indonesia",
+  160:     departure: "2026-12-10",
+  161:   },
+  162: 
+  163:   "umrah-plus-turkiye": {
+  164:     airline: "Turkish Airlines",
+  165:     departure: "2026-12-15",
+  166:   },
+  167: 
+  168:   "halal-tour-japan": {
+  169:     airline: "Japan Airlines",
+  170:     departure: "2026-12-18",
+  171:   },
+  172: 
+  173:   "halal-tour-korea": {
+  174:     airline: "Korean Air",
+  175:     departure: "2026-12-22",
+  176:   },
+  177: };
+  178: 
+  179: 
+  180: function categoryFor(
+  181:   item: TravelProduct,
+  182: ) {
+  183:   switch (item.category) {
+  184:     case "Haji":
+  185:       return {
+  186:         label: item.category,
+  187:         Icon: Map,
+  188:       };
+  189: 
+  190:     case "Halal Tour":
+  191:     case "Tour International":
+  192:       return {
+  193:         label: item.category,
+  194:         Icon: Globe2,
+  195:       };
+  196: 
+  197:     case "Tour Domestic":
+  198:       return {
+  199:         label: item.category,
+  200:         Icon: Map,
+  201:       };
+  202: 
+  203:     case "Umrah":
+  204:       return {
+  205:         label: item.category,
+  206:         Icon: Building2,
+  207:       };
+  208:   }
+  209: }
+  210: 
+  211: 
+  212: function normalizeCategory(
+  213:   value: string,
+  214: ) {
+  215:   return value
+  216:     .trim()
+  217:     .toLowerCase();
+  218: }
+  219: 
+  220: 
+  221: function packageUmrahType(
+  222:   item: Pick<TravelProduct, "title">,
+  223: ) {
+  224:   const title =
+  225:     item.title.toLowerCase();
+  226: 
+  227:   if (
+  228:     title.includes("plus")
+  229:   ) {
+  230:     return "Plus";
+  231:   }
+  232: 
+  233:   if (
+  234:     title.includes("first")
+  235:   ) {
+  236:     return "First";
+  237:   }
+  238: 
+  239:   if (
+  240:     title.includes("regular") ||
+  241:     title.includes("reguler") ||
+  242:     title.includes("premium")
+  243:   ) {
+  244:     return "Regular";
+  245:   }
+  246: 
+  247:   return "Hemat";
+  248: }
+  249: 
+  250: function numericDuration(
+  251:   value?: string,
+  252: ) {
+  253:   if (!value) {
+  254:     return 0;
+  255:   }
+  256: 
+  257:   const result =
+  258:     Number(
+  259:       value.match(/\d+/)?.[0] || 0,
+  260:     );
+  261: 
+  262:   return result;
+  263: }
+  264: 
+  265: 
+  266: function legacyFormatCurrency(
+  267:   value: number,
+  268: ) {
+  269:   return new Intl.NumberFormat(
+  270:     "id-ID",
+  271:     {
+  272:       style: "currency",
+  273:       currency: "IDR",
+  274:       maximumFractionDigits: 0,
+  275:     },
+  276:   )
+  277:     .format(value)
+  278:     .replace("Rp", "Rp ");
+  279: }
+  280: 
+  281: 
+  282: function legacyDisplayDate(
+  283:   value: string,
+  284: ) {
+  285:   if (!value) {
+  286:     return "Pilih tanggal";
+  287:   }
+  288: 
+  289:   const parsed =
+  290:     new Date(`${value}T00:00:00`);
+  291: 
+  292:   if (
+  293:     Number.isNaN(
+  294:       parsed.getTime(),
+  295:     )
+  296:   ) {
+  297:     return value;
+  298:   }
+  299: 
+  300:   return new Intl.DateTimeFormat(
+  301:     "id-ID",
+  302:     {
+  303:       day: "numeric",
+  304:       month: "short",
+  305:       year: "numeric",
+  306:     },
+  307:   ).format(parsed);
+  308: }
+  309: 
+  310: 
+  311: function formatSearchDate(
+  312:   value: string,
+  313:   locale: string,
+  314: ) {
+  315:   if (!value) {
+  316:     return "";
+  317:   }
+  318: 
+  319:   const parsed =
+  320:     new Date(
+  321:       `${value}T00:00:00`,
+  322:     );
+  323: 
+  324:   if (
+  325:     Number.isNaN(
+  326:       parsed.getTime(),
+  327:     )
+  328:   ) {
+  329:     return value;
+  330:   }
+  331: 
+  332:   return new Intl.DateTimeFormat(
+  333:     locale,
+  334:     {
+  335:       day: "numeric",
+  336:       month: "short",
+  337:       year: "numeric",
+  338:     },
+  339:   ).format(parsed);
+  340: }
+
+========== src\components\search\SearchResultsClient.tsx [1040-1100] ==========
+ 1040:               </span>
+ 1041: 
+ 1042:             </label>
+ 1043:           ),
+ 1044:         )}
+ 1045: 
+ 1046:       </div>
+ 1047: 
+ 1048:     </>
+ 1049:   );
+ 1050: 
+ 1051: 
+ 1052:   return (
+ 1053:     <main className="search-results-page" dir={direction}>
+ 1054: 
+ 1055:       <section className="search-results-hero">
+ 1056: 
+ 1057:         <div className="search-results-hero-overlay" />
+ 1058: 
+ 1059:         <div className="search-results-shell search-results-hero-content">
+ 1060: 
+ 1061:           <span>
+ 1062:             {category}
+ 1063:           </span>
+ 1064: 
+ 1065:           <h1>
+ 1066:             Temukan Paket {category}
+ 1067:             <br />
+ 1068:             Impian Anda
+ 1069:           </h1>
+ 1070: 
+ 1071:           <p>
+ 1072:             Pilih perjalanan terbaik
+ 1073:             sesuai kebutuhan Anda.
+ 1074:           </p>
+ 1075: 
+ 1076:         </div>
+ 1077: 
+ 1078:       </section>
+ 1079:       <section className="search-results-search-shell">
+ 1080: 
+ 1081:         <SearchEditBar
+ 1082:           category={category}
+ 1083:           initialOrigin={origin}
+ 1084:           initialDestination={destination}
+ 1085:           initialTravelers={travelers}
+ 1086:           initialDate={date}
+ 1087:           initialYear={year}
+ 1088:         />
+ 1089: 
+ 1090:       </section>
+ 1091: 
+ 1092: 
+ 1093:       <div className="search-results-shell search-results-main">
+ 1094: 
+ 1095: 
+ 1096:         <aside className="search-filter">
+ 1097: 
+ 1098:           <FilterContent />
+ 1099: 
+ 1100:         </aside>

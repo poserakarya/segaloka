@@ -1,0 +1,17 @@
+﻿.segaloka-container {
+  width: min(
+    calc(100% - (var(--ui-container-padding) * 2)),
+    var(--ui-container-max)
+  );
+
+  margin-inline: auto;
+}
+
+.segaloka-section {
+  width: 100%;
+}
+
+.segaloka-grid {
+  display: grid;
+  gap: var(--ui-space-4);
+}

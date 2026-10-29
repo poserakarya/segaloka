@@ -1,0 +1,25 @@
+{
+  "name": "@segaloka/api",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "check": "node --check src/server.js && node --check src/sync-routes.js && node --check src/security/session-auth.js && node --check src/travel/departure-routes.js"
+  },
+  "dependencies": {
+    "@fastify/cors": "^11.3.0",
+    "@fastify/helmet": "^13.1.1",
+    "argon2": "^0.45.1",
+    "dotenv": "^18.0.6",
+    "fastify": "^5.12.5",
+    "pdfkit": "^0.20.2",
+    "pg": "^8.23.1",
+    "qrcode": "^1.5.4",
+    "resend": "^6.32.1"
+  }
+}

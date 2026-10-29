@@ -1,0 +1,59 @@
+import {
+  notFound,
+} from "next/navigation";
+
+import {
+  featuredPackages,
+} from "@/data/home";
+
+import {
+  PackageDetailClient,
+} from "@/components/package/PackageDetailClient";
+
+
+type Props = {
+  params: Promise<{
+    slug: string;
+  }>;
+};
+
+
+export default async function PackageDetailPage({
+  params,
+}: Props) {
+  const {
+    slug,
+  } = await params;
+
+  const item =
+    featuredPackages.find(
+      (packageItem) =>
+        packageItem.id ===
+        slug,
+    );
+
+  if (!item) {
+    notFound();
+  }
+
+  const recommendations =
+    featuredPackages
+      .filter(
+        (packageItem) =>
+          packageItem.id !==
+          item.id,
+      )
+      .slice(
+        0,
+        4,
+      );
+
+  return (
+    <PackageDetailClient
+      item={item}
+      recommendations={
+        recommendations
+      }
+    />
+  );
+}

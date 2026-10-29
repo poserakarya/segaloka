@@ -1,0 +1,3004 @@
+============================================================
+FILE: src\app\daftar-vendor\page.tsx
+============================================================
+import type { Metadata } from "next";
+import { VendorPartnerClient } from "./VendorPartnerClient";
+import "./vendor-partner.css";
+
+export const metadata: Metadata = {
+  title: "Daftarkan Vendor | Segaloka",
+  description:
+    "Bergabung sebagai Vendor Segaloka dan perluas distribusi produk serta layanan perjalanan Anda.",
+};
+
+export default function VendorPartnerPage() {
+  return <VendorPartnerClient />;
+}
+
+
+============================================================
+FILE: src\app\daftar-vendor\vendor-partner.css
+============================================================
+.vendor-partner-page {
+  --vendor-blue: #0b63f6;
+  --vendor-blue-dark: #074fc8;
+  --vendor-navy: #10233f;
+  --vendor-text: #1d2b3f;
+  --vendor-muted: #64748b;
+  --vendor-border: #e6edf5;
+  --vendor-soft: #f6f9fd;
+  background: #fff;
+  color: var(--vendor-text);
+  font-family: var(--font-jakarta), "Plus Jakarta Sans", sans-serif;
+}
+
+.vendor-partner-page * {
+  box-sizing: border-box;
+}
+
+.vendor-shell {
+  width: min(1180px, calc(100% - 48px));
+  margin-inline: auto;
+}
+
+.vendor-hero {
+  position: relative;
+  overflow: hidden;
+  min-height: 570px;
+  display: flex;
+  align-items: center;
+  background:
+    radial-gradient(circle at 78% 18%, rgba(66, 153, 255, 0.16), transparent 28%),
+    linear-gradient(135deg, #f7fbff 0%, #eef7ff 50%, #f9fcff 100%);
+  border-bottom: 1px solid #e8f0f8;
+}
+
+.vendor-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(14, 96, 230, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(14, 96, 230, 0.035) 1px, transparent 1px);
+  background-size: 42px 42px;
+  mask-image: linear-gradient(to bottom, rgba(0,0,0,.7), transparent 95%);
+  pointer-events: none;
+}
+
+.vendor-hero-glow {
+  position: absolute;
+  border-radius: 999px;
+  filter: blur(1px);
+  pointer-events: none;
+}
+
+.vendor-hero-glow-one {
+  width: 360px;
+  height: 360px;
+  right: -100px;
+  top: -120px;
+  background: rgba(33, 124, 255, 0.09);
+}
+
+.vendor-hero-glow-two {
+  width: 260px;
+  height: 260px;
+  left: -100px;
+  bottom: -130px;
+  background: rgba(37, 99, 235, 0.06);
+}
+
+.vendor-hero-grid {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: minmax(0, 1.04fr) minmax(420px, .96fr);
+  gap: 72px;
+  align-items: center;
+  padding-block: 70px;
+}
+
+.vendor-hero-copy {
+  max-width: 660px;
+}
+
+.vendor-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 32px;
+  padding: 7px 12px;
+  border-radius: 999px;
+  background: #e7f1ff;
+  color: var(--vendor-blue);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .02em;
+}
+
+.vendor-hero-copy h1 {
+  max-width: 650px;
+  margin: 18px 0 16px;
+  color: #10213a;
+  font-size: clamp(36px, 4vw, 54px);
+  line-height: 1.08;
+  letter-spacing: -.045em;
+  font-weight: 800;
+}
+
+.vendor-hero-copy > p {
+  max-width: 640px;
+  margin: 0;
+  color: #5b6c82;
+  font-size: 16px;
+  line-height: 1.8;
+}
+
+.vendor-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 28px;
+}
+
+.vendor-button {
+  display: inline-flex;
+  min-height: 46px;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  padding: 0 20px;
+  border-radius: 10px;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 800;
+  transition:
+    transform .18s ease,
+    box-shadow .18s ease,
+    background .18s ease;
+}
+
+.vendor-button:hover {
+  transform: translateY(-1px);
+}
+
+.vendor-button-primary {
+  background: var(--vendor-blue);
+  color: #fff;
+  box-shadow: 0 10px 24px rgba(11, 99, 246, .19);
+}
+
+.vendor-button-primary:hover {
+  background: var(--vendor-blue-dark);
+}
+
+.vendor-button-secondary {
+  border: 1px solid #cbd9e9;
+  background: rgba(255,255,255,.86);
+  color: #1f3a5f;
+}
+
+.vendor-hero-points {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px 22px;
+  margin-top: 24px;
+  color: #52667e;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.vendor-hero-points span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.vendor-hero-points svg {
+  color: #13a66a;
+}
+
+.vendor-hero-visual {
+  position: relative;
+  min-height: 410px;
+  display: grid;
+  place-items: center;
+}
+
+.vendor-main-visual {
+  position: relative;
+  z-index: 4;
+  width: 238px;
+  height: 238px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255,255,255,.8);
+  border-radius: 50%;
+  background:
+    linear-gradient(145deg, rgba(255,255,255,.97), rgba(240,247,255,.94));
+  box-shadow:
+    0 30px 80px rgba(38, 90, 154, .17),
+    inset 0 0 0 10px rgba(236,245,255,.68);
+}
+
+.vendor-main-icon {
+  width: 82px;
+  height: 82px;
+  display: grid;
+  place-items: center;
+  margin-bottom: 16px;
+  border-radius: 25px;
+  background: linear-gradient(145deg, #1671f8, #0759df);
+  color: #fff;
+  box-shadow: 0 16px 34px rgba(11,99,246,.25);
+}
+
+.vendor-main-visual strong {
+  color: #142943;
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.vendor-main-visual span {
+  margin-top: 5px;
+  color: #728399;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.vendor-visual-orbit {
+  position: absolute;
+  border: 1px dashed rgba(30, 112, 232, .2);
+  border-radius: 50%;
+}
+
+.vendor-orbit-one {
+  width: 335px;
+  height: 335px;
+}
+
+.vendor-orbit-two {
+  width: 420px;
+  height: 420px;
+  border-color: rgba(30,112,232,.1);
+}
+
+.vendor-floating-card {
+  position: absolute;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 42px;
+  padding: 9px 13px;
+  border: 1px solid rgba(218,230,243,.9);
+  border-radius: 12px;
+  background: rgba(255,255,255,.95);
+  box-shadow: 0 14px 35px rgba(45,79,119,.12);
+  color: #27415f;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.vendor-floating-card svg {
+  color: var(--vendor-blue);
+}
+
+.vendor-floating-hotel {
+  left: 18px;
+  top: 72px;
+}
+
+.vendor-floating-bus {
+  right: 4px;
+  top: 112px;
+}
+
+.vendor-floating-visa {
+  left: 26px;
+  bottom: 70px;
+}
+
+.vendor-floating-la {
+  right: -4px;
+  bottom: 46px;
+}
+
+.vendor-section {
+  padding: 78px 0;
+}
+
+.vendor-section-heading {
+  max-width: 690px;
+  margin: 0 auto 38px;
+  text-align: center;
+}
+
+.vendor-section-heading > span,
+.vendor-faq-heading > span {
+  color: var(--vendor-blue);
+  font-size: 11px;
+  line-height: 1.4;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.vendor-section-heading h2,
+.vendor-faq-heading h2 {
+  margin: 8px 0 10px;
+  color: #132640;
+  font-size: clamp(27px, 3vw, 36px);
+  line-height: 1.2;
+  letter-spacing: -.035em;
+  font-weight: 800;
+}
+
+.vendor-section-heading p,
+.vendor-faq-heading > p {
+  margin: 0;
+  color: var(--vendor-muted);
+  font-size: 14px;
+  line-height: 1.75;
+}
+
+.vendor-category-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0,1fr));
+  gap: 18px;
+}
+
+.vendor-category-card {
+  min-height: 206px;
+  padding: 25px;
+  border: 1px solid var(--vendor-border);
+  border-radius: 18px;
+  background: #fff;
+  transition:
+    transform .2s ease,
+    box-shadow .2s ease,
+    border-color .2s ease;
+}
+
+.vendor-category-card:hover {
+  transform: translateY(-3px);
+  border-color: #cfdef0;
+  box-shadow: 0 18px 45px rgba(37,66,103,.09);
+}
+
+.vendor-category-icon,
+.vendor-benefit-icon {
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  border-radius: 14px;
+}
+
+.vendor-category-card.is-blue .vendor-category-icon {
+  background: #eaf3ff;
+  color: #1268e8;
+}
+
+.vendor-category-card.is-green .vendor-category-icon {
+  background: #eafaf3;
+  color: #0c9c64;
+}
+
+.vendor-category-card.is-orange .vendor-category-icon {
+  background: #fff3e5;
+  color: #e17a16;
+}
+
+.vendor-category-card.is-purple .vendor-category-icon {
+  background: #f2edff;
+  color: #7751dc;
+}
+
+.vendor-category-card.is-cyan .vendor-category-icon {
+  background: #e8f9fc;
+  color: #138aa5;
+}
+
+.vendor-category-card.is-indigo .vendor-category-icon {
+  background: #edf0ff;
+  color: #4d61d8;
+}
+
+.vendor-category-card h3,
+.vendor-benefit-card h3,
+.vendor-step-card h3 {
+  margin: 18px 0 8px;
+  color: #18304d;
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.vendor-category-card p,
+.vendor-benefit-card p,
+.vendor-step-card p {
+  margin: 0;
+  color: #697b91;
+  font-size: 12px;
+  line-height: 1.75;
+}
+
+.vendor-benefits-section {
+  background: #f7faff;
+}
+
+.vendor-benefit-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0,1fr));
+  gap: 18px;
+}
+
+.vendor-benefit-card {
+  min-height: 220px;
+  padding: 26px 23px;
+  border: 1px solid #e3ebf5;
+  border-radius: 17px;
+  background: #fff;
+}
+
+.vendor-benefit-icon {
+  background: #eaf3ff;
+  color: var(--vendor-blue);
+}
+
+.vendor-step-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0,1fr));
+}
+
+.vendor-step-card {
+  position: relative;
+  padding: 0 26px 0 0;
+}
+
+.vendor-step-card:last-child {
+  padding-right: 0;
+}
+
+.vendor-step-top {
+  display: flex;
+  align-items: center;
+}
+
+.vendor-step-top > span {
+  flex: 0 0 48px;
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #eaf3ff;
+  color: var(--vendor-blue);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.vendor-step-line {
+  width: calc(100% - 48px);
+  height: 1px;
+  background: #dce7f3;
+}
+
+.vendor-step-card h3 {
+  margin-top: 17px;
+}
+
+.vendor-cta-wrap {
+  padding: 0 0 78px;
+}
+
+.vendor-cta {
+  position: relative;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: minmax(0,1fr) auto;
+  gap: 42px;
+  align-items: center;
+  padding: 42px 48px;
+  border-radius: 22px;
+  background:
+    radial-gradient(circle at 88% 30%, rgba(255,255,255,.16), transparent 26%),
+    linear-gradient(135deg, #0864ed, #0755d4);
+  color: #fff;
+}
+
+.vendor-cta::after {
+  content: "";
+  position: absolute;
+  width: 220px;
+  height: 220px;
+  right: -80px;
+  bottom: -120px;
+  border: 1px solid rgba(255,255,255,.16);
+  border-radius: 50%;
+}
+
+.vendor-cta > div {
+  position: relative;
+  z-index: 2;
+  max-width: 680px;
+}
+
+.vendor-cta > div > span {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  opacity: .82;
+}
+
+.vendor-cta h2 {
+  margin: 8px 0 8px;
+  font-size: 29px;
+  line-height: 1.22;
+  letter-spacing: -.03em;
+  font-weight: 800;
+}
+
+.vendor-cta p {
+  margin: 0;
+  color: rgba(255,255,255,.82);
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.vendor-button-white {
+  position: relative;
+  z-index: 3;
+  min-width: 190px;
+  background: #fff;
+  color: #075bdc;
+  box-shadow: 0 12px 30px rgba(0,0,0,.11);
+}
+
+.vendor-faq-section {
+  border-top: 1px solid #edf2f7;
+  background: #fff;
+}
+
+.vendor-faq-layout {
+  display: grid;
+  grid-template-columns: 340px minmax(0,1fr);
+  gap: 72px;
+  align-items: start;
+}
+
+.vendor-faq-heading {
+  position: sticky;
+  top: 96px;
+}
+
+.vendor-help-card {
+  display: flex;
+  gap: 12px;
+  margin-top: 25px;
+  padding: 17px;
+  border: 1px solid #e2ebf5;
+  border-radius: 14px;
+  background: #f8fbff;
+  color: var(--vendor-blue);
+}
+
+.vendor-help-card div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.vendor-help-card strong {
+  color: #1b3554;
+  font-size: 12px;
+}
+
+.vendor-help-card span {
+  color: #708196;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.vendor-faq-list {
+  border-top: 1px solid #e4ebf3;
+}
+
+.vendor-faq-item {
+  border-bottom: 1px solid #e4ebf3;
+}
+
+.vendor-faq-item button {
+  width: 100%;
+  min-height: 67px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #203650;
+  text-align: start;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.vendor-faq-item button svg {
+  flex: 0 0 auto;
+  color: #7d8ca0;
+  transition: transform .2s ease;
+}
+
+.vendor-faq-item.is-open button svg {
+  transform: rotate(180deg);
+}
+
+.vendor-faq-item > p {
+  max-width: 760px;
+  margin: -3px 0 20px;
+  color: #687b91;
+  font-size: 12px;
+  line-height: 1.8;
+}
+
+html[dir="rtl"] .vendor-partner-page {
+  direction: rtl;
+}
+
+html[dir="rtl"] .vendor-faq-item button {
+  text-align: right;
+}
+
+@media (max-width: 1024px) {
+  .vendor-hero-grid {
+    grid-template-columns: 1fr 390px;
+    gap: 34px;
+  }
+
+  .vendor-category-grid {
+    grid-template-columns: repeat(2, minmax(0,1fr));
+  }
+
+  .vendor-benefit-grid {
+    grid-template-columns: repeat(2, minmax(0,1fr));
+  }
+
+  .vendor-faq-layout {
+    grid-template-columns: 290px minmax(0,1fr);
+    gap: 42px;
+  }
+}
+
+@media (max-width: 820px) {
+  .vendor-shell {
+    width: min(100% - 30px, 680px);
+  }
+
+  .vendor-hero {
+    min-height: auto;
+  }
+
+  .vendor-hero-grid {
+    grid-template-columns: 1fr;
+    padding-block: 50px 56px;
+  }
+
+  .vendor-hero-copy {
+    max-width: none;
+  }
+
+  .vendor-hero-visual {
+    min-height: 360px;
+  }
+
+  .vendor-benefit-grid,
+  .vendor-step-grid {
+    grid-template-columns: repeat(2, minmax(0,1fr));
+    gap: 18px;
+  }
+
+  .vendor-step-card {
+    padding: 20px;
+    border: 1px solid #e4ebf4;
+    border-radius: 16px;
+  }
+
+  .vendor-step-line {
+    display: none;
+  }
+
+  .vendor-cta {
+    grid-template-columns: 1fr;
+    padding: 34px;
+  }
+
+  .vendor-button-white {
+    width: fit-content;
+  }
+
+  .vendor-faq-layout {
+    grid-template-columns: 1fr;
+    gap: 34px;
+  }
+
+  .vendor-faq-heading {
+    position: static;
+  }
+}
+
+@media (max-width: 560px) {
+  .vendor-shell {
+    width: calc(100% - 24px);
+  }
+
+  .vendor-hero-grid {
+    padding-block: 38px 42px;
+  }
+
+  .vendor-hero-copy h1 {
+    margin-top: 15px;
+    font-size: 33px;
+    line-height: 1.12;
+  }
+
+  .vendor-hero-copy > p {
+    font-size: 14px;
+    line-height: 1.7;
+  }
+
+  .vendor-hero-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .vendor-button {
+    width: 100%;
+  }
+
+  .vendor-hero-points {
+    gap: 10px 16px;
+  }
+
+  .vendor-hero-visual {
+    min-height: 310px;
+    transform: scale(.88);
+    margin: -12px -20px;
+  }
+
+  .vendor-main-visual {
+    width: 200px;
+    height: 200px;
+  }
+
+  .vendor-orbit-one {
+    width: 275px;
+    height: 275px;
+  }
+
+  .vendor-orbit-two {
+    width: 330px;
+    height: 330px;
+  }
+
+  .vendor-floating-hotel {
+    left: 4px;
+    top: 52px;
+  }
+
+  .vendor-floating-bus {
+    right: 0;
+    top: 80px;
+  }
+
+  .vendor-floating-visa {
+    left: 5px;
+    bottom: 48px;
+  }
+
+  .vendor-floating-la {
+    right: -4px;
+    bottom: 25px;
+  }
+
+  .vendor-section {
+    padding: 58px 0;
+  }
+
+  .vendor-section-heading {
+    margin-bottom: 27px;
+  }
+
+  .vendor-section-heading h2,
+  .vendor-faq-heading h2 {
+    font-size: 25px;
+  }
+
+  .vendor-category-grid,
+  .vendor-benefit-grid,
+  .vendor-step-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .vendor-category-card,
+  .vendor-benefit-card {
+    min-height: auto;
+  }
+
+  .vendor-cta-wrap {
+    padding-bottom: 58px;
+  }
+
+  .vendor-cta {
+    padding: 28px 22px;
+    border-radius: 18px;
+  }
+
+  .vendor-cta h2 {
+    font-size: 24px;
+  }
+
+  .vendor-button-white {
+    width: 100%;
+  }
+
+  .vendor-faq-item button {
+    min-height: 62px;
+    font-size: 12px;
+  }
+}
+
+/* SEGALOKA VENDOR EXPANDED MODEL V2 */
+
+/* Hero memang tanpa CTA */
+.vendor-partner-page .vendor-hero-actions {
+  display: none !important;
+}
+
+.vendor-filter-tabs {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: -10px 0 30px;
+}
+
+.vendor-filter-tabs button {
+  min-height: 36px;
+  padding: 0 16px;
+  border: 1px solid #dce6f1;
+  border-radius: 999px;
+  background: #fff;
+  color: #60758d;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 800;
+  cursor: pointer;
+  transition:
+    background .18s ease,
+    border-color .18s ease,
+    color .18s ease,
+    box-shadow .18s ease;
+}
+
+.vendor-filter-tabs button:hover {
+  border-color: #a9c9f7;
+  color: #0b63f6;
+}
+
+.vendor-filter-tabs button.is-active {
+  border-color: #0b63f6;
+  background: #0b63f6;
+  color: #fff;
+  box-shadow: 0 7px 18px rgba(11,99,246,.17);
+}
+
+.vendor-category-card {
+  min-height: 184px;
+}
+
+.vendor-category-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.vendor-category-type {
+  padding: 5px 8px;
+  border-radius: 999px;
+  background: #f1f5f9;
+  color: #6a7c91;
+  font-size: 9px;
+  line-height: 1;
+  font-weight: 800;
+}
+
+.vendor-type-product .vendor-category-icon {
+  background: #eaf3ff !important;
+  color: #1268e8 !important;
+}
+
+.vendor-type-service .vendor-category-icon {
+  background: #e9faf4 !important;
+  color: #0b9c69 !important;
+}
+
+.vendor-type-composite .vendor-category-icon {
+  background: #f2edff !important;
+  color: #7654db !important;
+}
+
+.vendor-type-product .vendor-category-type {
+  background: #edf5ff;
+  color: #1268e8;
+}
+
+.vendor-type-service .vendor-category-type {
+  background: #ecfaf5;
+  color: #0b9565;
+}
+
+.vendor-type-composite .vendor-category-type {
+  background: #f3efff;
+  color: #7353d4;
+}
+
+/* Portal & Tools */
+
+.vendor-tools-section {
+  background:
+    linear-gradient(180deg, #ffffff 0%, #f7faff 100%);
+}
+
+.vendor-tools-layout {
+  display: grid;
+  grid-template-columns: minmax(0, .82fr) minmax(470px, 1.18fr);
+  gap: 54px;
+  align-items: center;
+}
+
+.vendor-section-heading-left {
+  max-width: 580px;
+  margin: 0 0 26px;
+  text-align: left;
+}
+
+.vendor-tool-list {
+  overflow: hidden;
+  border: 1px solid #e1e9f3;
+  border-radius: 15px;
+  background: #fff;
+}
+
+.vendor-tool-row {
+  min-height: 68px;
+  display: grid;
+  grid-template-columns: 37px minmax(0,1fr) 18px;
+  gap: 12px;
+  align-items: center;
+  padding: 10px 15px;
+  border-bottom: 1px solid #e8eef5;
+}
+
+.vendor-tool-row:last-child {
+  border-bottom: 0;
+}
+
+.vendor-tool-icon {
+  width: 35px;
+  height: 35px;
+  display: grid;
+  place-items: center;
+  border-radius: 10px;
+  background: #edf5ff;
+  color: #0b63f6;
+}
+
+.vendor-tool-row > div {
+  min-width: 0;
+}
+
+.vendor-tool-row strong {
+  display: block;
+  color: #203650;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.vendor-tool-row p {
+  margin: 3px 0 0;
+  color: #75869a;
+  font-size: 10px;
+  line-height: 1.45;
+}
+
+.vendor-tool-row > svg {
+  color: #0b63f6;
+}
+
+/* dashboard preview */
+
+.vendor-dashboard-preview {
+  overflow: hidden;
+  border: 8px solid #e8f3ff;
+  border-radius: 20px;
+  background: #fff;
+  box-shadow: 0 24px 60px rgba(34,77,127,.12);
+}
+
+.vendor-dashboard-topbar {
+  min-height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 15px;
+  border-bottom: 1px solid #e8eef5;
+}
+
+.vendor-dashboard-topbar > div {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.vendor-dashboard-logo {
+  width: 25px;
+  height: 25px;
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+  background: #0b63f6;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 900;
+}
+
+.vendor-dashboard-topbar strong {
+  color: #183250;
+  font-size: 11px;
+}
+
+.vendor-dashboard-topbar > span {
+  color: #8090a2;
+  font-size: 9px;
+  font-weight: 700;
+}
+
+.vendor-dashboard-body {
+  min-height: 390px;
+  display: grid;
+  grid-template-columns: 118px minmax(0,1fr);
+}
+
+.vendor-dashboard-body aside {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 15px 10px;
+  border-right: 1px solid #e8eef5;
+  background: #fbfdff;
+}
+
+.vendor-dashboard-body aside span {
+  padding: 9px 9px;
+  border-radius: 7px;
+  color: #77899d;
+  font-size: 8px;
+  font-weight: 700;
+}
+
+.vendor-dashboard-body aside span.active {
+  background: #0b63f6;
+  color: #fff;
+}
+
+.vendor-dashboard-content {
+  min-width: 0;
+  padding: 18px;
+  background: #f8fbff;
+}
+
+.vendor-dashboard-welcome {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  margin-bottom: 14px;
+}
+
+.vendor-dashboard-welcome span {
+  color: #8797aa;
+  font-size: 8px;
+}
+
+.vendor-dashboard-welcome strong {
+  color: #1d3654;
+  font-size: 14px;
+}
+
+.vendor-dashboard-metrics {
+  display: grid;
+  grid-template-columns: repeat(3,minmax(0,1fr));
+  gap: 8px;
+}
+
+.vendor-dashboard-metrics article {
+  min-height: 69px;
+  padding: 11px;
+  border: 1px solid #e4ebf3;
+  border-radius: 9px;
+  background: #fff;
+}
+
+.vendor-dashboard-metrics span {
+  display: block;
+  color: #7d8da0;
+  font-size: 8px;
+}
+
+.vendor-dashboard-metrics strong {
+  display: block;
+  margin-top: 7px;
+  color: #203a59;
+  font-size: 15px;
+}
+
+.vendor-dashboard-chart,
+.vendor-dashboard-orders {
+  margin-top: 10px;
+  padding: 12px;
+  border: 1px solid #e4ebf3;
+  border-radius: 9px;
+  background: #fff;
+}
+
+.vendor-chart-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.vendor-chart-head strong,
+.vendor-dashboard-orders > strong {
+  color: #29425f;
+  font-size: 9px;
+}
+
+.vendor-chart-head span {
+  color: #91a0b0;
+  font-size: 7px;
+}
+
+.vendor-chart-bars {
+  height: 88px;
+  display: flex;
+  align-items: end;
+  gap: 8px;
+  margin-top: 12px;
+  padding: 0 5px;
+  border-bottom: 1px solid #e6edf5;
+}
+
+.vendor-chart-bars i {
+  flex: 1;
+  min-width: 7px;
+  border-radius: 4px 4px 0 0;
+  background: linear-gradient(180deg,#4ca1ff,#0b63f6);
+}
+
+.vendor-chart-bars i:nth-child(1) { height: 24%; }
+.vendor-chart-bars i:nth-child(2) { height: 38%; }
+.vendor-chart-bars i:nth-child(3) { height: 31%; }
+.vendor-chart-bars i:nth-child(4) { height: 52%; }
+.vendor-chart-bars i:nth-child(5) { height: 47%; }
+.vendor-chart-bars i:nth-child(6) { height: 69%; }
+.vendor-chart-bars i:nth-child(7) { height: 61%; }
+.vendor-chart-bars i:nth-child(8) { height: 82%; }
+
+.vendor-dashboard-orders > div {
+  display: grid;
+  grid-template-columns: 28px minmax(0,1fr) auto;
+  gap: 8px;
+  align-items: center;
+  padding-top: 9px;
+}
+
+.vendor-order-icon {
+  width: 27px;
+  height: 27px;
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+  background: #edf5ff;
+  color: #0b63f6;
+}
+
+.vendor-dashboard-orders p {
+  min-width: 0;
+  margin: 0;
+}
+
+.vendor-dashboard-orders p strong,
+.vendor-dashboard-orders p span {
+  display: block;
+}
+
+.vendor-dashboard-orders p strong {
+  color: #40566f;
+  font-size: 8px;
+}
+
+.vendor-dashboard-orders p span {
+  margin-top: 2px;
+  color: #95a2b1;
+  font-size: 7px;
+}
+
+.vendor-dashboard-orders em {
+  color: #7f8fa1;
+  font-size: 9px;
+  font-style: normal;
+}
+
+@media (max-width: 900px) {
+  .vendor-tools-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .vendor-section-heading-left {
+    margin-inline: auto;
+    text-align: center;
+  }
+
+  .vendor-dashboard-preview {
+    width: min(680px,100%);
+    margin-inline: auto;
+  }
+}
+
+@media (max-width: 560px) {
+  .vendor-filter-tabs {
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    margin-inline: -12px;
+    padding: 0 12px 7px;
+    scrollbar-width: none;
+  }
+
+  .vendor-filter-tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .vendor-filter-tabs button {
+    flex: 0 0 auto;
+  }
+
+  .vendor-dashboard-preview {
+    border-width: 5px;
+    border-radius: 15px;
+  }
+
+  .vendor-dashboard-body {
+    grid-template-columns: 82px minmax(0,1fr);
+  }
+
+  .vendor-dashboard-body aside {
+    padding-inline: 6px;
+  }
+
+  .vendor-dashboard-body aside span {
+    padding-inline: 5px;
+    font-size: 7px;
+  }
+
+  .vendor-dashboard-content {
+    padding: 10px;
+  }
+
+  .vendor-dashboard-metrics {
+    grid-template-columns: 1fr;
+  }
+
+  .vendor-dashboard-metrics article {
+    min-height: 52px;
+  }
+
+  .vendor-chart-bars {
+    height: 65px;
+  }
+}
+
+/* SEGALOKA VENDOR COLOR ENHANCEMENT V3 */
+
+/* ---------------------------------------------------------
+   HERO
+--------------------------------------------------------- */
+
+.vendor-partner-page .vendor-hero {
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 79% 24%, rgba(31, 128, 255, .14), transparent 26%),
+    radial-gradient(circle at 9% 91%, rgba(70, 180, 255, .10), transparent 25%),
+    linear-gradient(135deg, #f4faff 0%, #edf7ff 48%, #e7f3ff 100%);
+}
+
+.vendor-partner-page .vendor-hero::before {
+  content: "";
+  position: absolute;
+  width: 360px;
+  height: 360px;
+  right: -130px;
+  top: -180px;
+  border-radius: 50%;
+  background: rgba(26, 116, 255, .055);
+  pointer-events: none;
+}
+
+.vendor-partner-page .vendor-hero::after {
+  content: "";
+  position: absolute;
+  width: 240px;
+  height: 240px;
+  left: -125px;
+  bottom: -135px;
+  border-radius: 50%;
+  background: rgba(47, 171, 255, .07);
+  pointer-events: none;
+}
+
+/* ---------------------------------------------------------
+   KATEGORI VENDOR
+--------------------------------------------------------- */
+
+.vendor-partner-page .vendor-categories {
+  background:
+    radial-gradient(circle at 10% 10%, rgba(15, 112, 255, .035), transparent 20%),
+    #ffffff;
+}
+
+.vendor-partner-page .vendor-category-card {
+  position: relative;
+  overflow: hidden;
+  transition:
+    transform .2s ease,
+    box-shadow .2s ease,
+    border-color .2s ease;
+}
+
+.vendor-partner-page .vendor-category-card::after {
+  content: "";
+  position: absolute;
+  width: 72px;
+  height: 72px;
+  right: -30px;
+  bottom: -34px;
+  border-radius: 50%;
+  opacity: .55;
+  pointer-events: none;
+}
+
+.vendor-partner-page .vendor-category-card:hover {
+  transform: translateY(-3px);
+}
+
+/* Produk = blue/cyan */
+
+.vendor-partner-page .vendor-type-product {
+  border-color: #d9e9ff;
+  background:
+    linear-gradient(145deg, #ffffff 55%, #f2f8ff 100%);
+}
+
+.vendor-partner-page .vendor-type-product::after {
+  background: #dcecff;
+}
+
+.vendor-partner-page .vendor-type-product:hover {
+  border-color: #b7d6ff;
+  box-shadow: 0 14px 30px rgba(37, 113, 216, .10);
+}
+
+/* Layanan = emerald */
+
+.vendor-partner-page .vendor-type-service {
+  border-color: #d8f0e8;
+  background:
+    linear-gradient(145deg, #ffffff 55%, #f1fbf7 100%);
+}
+
+.vendor-partner-page .vendor-type-service::after {
+  background: #d9f4e9;
+}
+
+.vendor-partner-page .vendor-type-service:hover {
+  border-color: #b9e6d6;
+  box-shadow: 0 14px 30px rgba(17, 145, 101, .09);
+}
+
+/* Paket & operasional = violet */
+
+.vendor-partner-page .vendor-type-composite {
+  border-color: #e5ddff;
+  background:
+    linear-gradient(145deg, #ffffff 55%, #f7f4ff 100%);
+}
+
+.vendor-partner-page .vendor-type-composite::after {
+  background: #e9e1ff;
+}
+
+.vendor-partner-page .vendor-type-composite:hover {
+  border-color: #d0c2ff;
+  box-shadow: 0 14px 30px rgba(112, 78, 206, .09);
+}
+
+/* ---------------------------------------------------------
+   WHY SEGALOKA
+--------------------------------------------------------- */
+
+.vendor-partner-page .vendor-benefits-section {
+  position: relative;
+  background:
+    radial-gradient(circle at 14% 15%, rgba(35, 135, 255, .07), transparent 26%),
+    radial-gradient(circle at 88% 85%, rgba(43, 187, 157, .055), transparent 24%),
+    linear-gradient(180deg, #f4f9ff 0%, #edf6ff 100%);
+}
+
+.vendor-partner-page .vendor-benefit-card {
+  border-color: rgba(208, 224, 242, .95);
+  background: rgba(255,255,255,.92);
+  box-shadow: 0 9px 28px rgba(38, 79, 125, .055);
+  transition:
+    transform .2s ease,
+    box-shadow .2s ease;
+}
+
+.vendor-partner-page .vendor-benefit-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 15px 32px rgba(38, 79, 125, .09);
+}
+
+.vendor-partner-page .vendor-benefit-card:nth-child(1) .vendor-benefit-icon {
+  background: #e8f3ff;
+  color: #0869ef;
+}
+
+.vendor-partner-page .vendor-benefit-card:nth-child(2) .vendor-benefit-icon {
+  background: #e9faf4;
+  color: #07946a;
+}
+
+.vendor-partner-page .vendor-benefit-card:nth-child(3) .vendor-benefit-icon {
+  background: #f1edff;
+  color: #7654dc;
+}
+
+.vendor-partner-page .vendor-benefit-card:nth-child(4) .vendor-benefit-icon {
+  background: #fff4dd;
+  color: #d78900;
+}
+
+/* ---------------------------------------------------------
+   VENDOR PORTAL & TOOLS
+--------------------------------------------------------- */
+
+.vendor-partner-page .vendor-tools-section {
+  position: relative;
+  background:
+    radial-gradient(circle at 78% 42%, rgba(17, 112, 255, .10), transparent 29%),
+    linear-gradient(120deg, #ffffff 0%, #f8fbff 46%, #eef6ff 100%);
+}
+
+.vendor-partner-page .vendor-tool-list {
+  box-shadow: 0 15px 40px rgba(34, 75, 122, .07);
+}
+
+.vendor-partner-page .vendor-tool-row {
+  transition:
+    background .18s ease,
+    padding-left .18s ease;
+}
+
+.vendor-partner-page .vendor-tool-row:hover {
+  background: #f5f9ff;
+  padding-left: 19px;
+}
+
+.vendor-partner-page .vendor-tool-row:nth-child(4n + 1) .vendor-tool-icon {
+  background: #e8f3ff;
+  color: #0969ee;
+}
+
+.vendor-partner-page .vendor-tool-row:nth-child(4n + 2) .vendor-tool-icon {
+  background: #e9faf4;
+  color: #07946a;
+}
+
+.vendor-partner-page .vendor-tool-row:nth-child(4n + 3) .vendor-tool-icon {
+  background: #f1edff;
+  color: #7654dc;
+}
+
+.vendor-partner-page .vendor-tool-row:nth-child(4n + 4) .vendor-tool-icon {
+  background: #fff3df;
+  color: #d88600;
+}
+
+.vendor-partner-page .vendor-dashboard-preview {
+  border-color: #dbeeff;
+  box-shadow:
+    0 30px 70px rgba(27, 88, 156, .14),
+    0 0 0 1px rgba(15, 111, 235, .04);
+}
+
+/* ---------------------------------------------------------
+   STEPS
+--------------------------------------------------------- */
+
+.vendor-partner-page .vendor-steps-section {
+  background:
+    linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
+}
+
+.vendor-partner-page .vendor-step-card:nth-child(1) .vendor-step-top > span {
+  background: #e7f2ff;
+  color: #0769ee;
+}
+
+.vendor-partner-page .vendor-step-card:nth-child(2) .vendor-step-top > span {
+  background: #e7faf3;
+  color: #078f66;
+}
+
+.vendor-partner-page .vendor-step-card:nth-child(3) .vendor-step-top > span {
+  background: #f0ebff;
+  color: #7451dc;
+}
+
+.vendor-partner-page .vendor-step-card:nth-child(4) .vendor-step-top > span {
+  background: #fff1db;
+  color: #d77d00;
+}
+
+/* ---------------------------------------------------------
+   CTA
+--------------------------------------------------------- */
+
+.vendor-partner-page .vendor-cta {
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 82% 25%, rgba(90, 184, 255, .30), transparent 28%),
+    linear-gradient(115deg, #075bd8 0%, #0b6cf2 53%, #1686f7 100%);
+  box-shadow: 0 20px 42px rgba(9, 99, 225, .18);
+}
+
+.vendor-partner-page .vendor-cta::before {
+  content: "";
+  position: absolute;
+  width: 190px;
+  height: 190px;
+  right: 70px;
+  bottom: -135px;
+  border: 1px solid rgba(255,255,255,.16);
+  border-radius: 50%;
+}
+
+.vendor-partner-page .vendor-cta::after {
+  content: "";
+  position: absolute;
+  width: 280px;
+  height: 280px;
+  right: -120px;
+  top: -180px;
+  border: 1px solid rgba(255,255,255,.13);
+  border-radius: 50%;
+}
+
+/* ---------------------------------------------------------
+   FAQ
+--------------------------------------------------------- */
+
+.vendor-partner-page .vendor-faq-section {
+  background:
+    linear-gradient(180deg, #ffffff 0%, #f9fbfe 100%);
+}
+
+.vendor-partner-page .vendor-help-card-link {
+  position: relative;
+  grid-template-columns: 42px minmax(0,1fr) 20px;
+  text-decoration: none;
+  cursor: pointer;
+  border-color: #d5e7fb;
+  background:
+    linear-gradient(135deg, #f7fbff 0%, #edf6ff 100%);
+  transition:
+    transform .18s ease,
+    border-color .18s ease,
+    box-shadow .18s ease;
+}
+
+.vendor-partner-page .vendor-help-card-link:hover {
+  transform: translateY(-2px);
+  border-color: #a8cffb;
+  box-shadow: 0 12px 27px rgba(20, 103, 203, .10);
+}
+
+.vendor-partner-page .vendor-help-icon {
+  width: 39px;
+  height: 39px;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  background: #e2f0ff;
+  color: #0769ef;
+}
+
+.vendor-partner-page .vendor-help-card-link > div {
+  min-width: 0;
+}
+
+.vendor-partner-page .vendor-help-card-link strong {
+  color: #163452;
+}
+
+.vendor-partner-page .vendor-help-card-link span {
+  color: #0b63e7;
+  font-weight: 800;
+}
+
+.vendor-partner-page .vendor-help-card-link small {
+  display: block;
+  margin-top: 3px;
+  color: #8292a4;
+  font-size: 9px;
+  line-height: 1.45;
+}
+
+.vendor-partner-page .vendor-help-arrow {
+  color: #0b63f6;
+  transition: transform .18s ease;
+}
+
+.vendor-partner-page .vendor-help-card-link:hover .vendor-help-arrow {
+  transform: translateX(3px);
+}
+
+.vendor-partner-page .vendor-faq-item {
+  transition:
+    background .18s ease,
+    border-color .18s ease;
+}
+
+.vendor-partner-page .vendor-faq-item.is-open {
+  background: #f8fbff;
+  border-color: #d6e7fb;
+}
+
+/* ---------------------------------------------------------
+   RTL
+--------------------------------------------------------- */
+
+html[dir="rtl"] .vendor-partner-page .vendor-tool-row:hover {
+  padding-left: 15px;
+  padding-right: 19px;
+}
+
+html[dir="rtl"] .vendor-partner-page .vendor-help-card-link:hover .vendor-help-arrow {
+  transform: translateX(-3px);
+}
+
+/* ---------------------------------------------------------
+   MOBILE
+--------------------------------------------------------- */
+
+@media (max-width: 560px) {
+  .vendor-partner-page .vendor-category-card {
+    min-height: 164px;
+  }
+
+  .vendor-partner-page .vendor-tools-section,
+  .vendor-partner-page .vendor-benefits-section {
+    background:
+      linear-gradient(180deg, #f5faff 0%, #eef7ff 100%);
+  }
+
+  .vendor-partner-page .vendor-help-card-link {
+    grid-template-columns: 38px minmax(0,1fr) 18px;
+  }
+}
+
+
+============================================================
+FILE: src\app\daftar-vendor\VendorPartnerClient.tsx
+============================================================
+"use client";
+
+import Link from "next/link";
+import {
+  ArrowRight,
+  BarChart3,
+  BedDouble,
+  Boxes,
+  BusFront,
+  ChevronDown,
+  ClipboardCheck,
+  CreditCard,
+  Globe2,
+  Handshake,
+  Headphones,
+  Hotel,
+  MapPinned,
+  PackageCheck,
+  Plane,
+  ReceiptText,
+  ShieldCheck,
+  ShoppingBag,
+  Sparkles,
+  Store,
+  Tag,
+  TicketCheck,
+  UtensilsCrossed,
+  WalletCards,
+  Wifi,
+} from "lucide-react";
+import { useMemo, useState } from "react";
+
+import { useMarketplacePreferences } from "@/components/providers/MarketplacePreferencesProvider";
+import type { LanguageCode } from "@/data/preferences";
+
+type VendorType = "all" | "product" | "service" | "composite";
+
+type VendorItem = {
+  type: Exclude<VendorType, "all">;
+  title: string;
+  description: string;
+  icon: typeof Hotel;
+};
+
+const copy = {
+  ID: {
+    heroBadge: "Segaloka Vendor Partner",
+    heroTitle: "Kembangkan Bisnis Vendor Anda Bersama Segaloka",
+    heroDescription:
+      "Hubungkan produk dan layanan Anda dengan ekosistem Travel Segaloka. Mulai dari akomodasi, transportasi, tiket, visa, layanan operasional hingga berbagai produk pendukung perjalanan.",
+
+    floatingProduct: "Produk",
+    floatingService: "Layanan",
+    floatingInventory: "Inventory",
+    floatingComposite: "Paket & Operasional",
+
+    vendorLabel: "Kategori Vendor",
+    vendorTitle: "Produk & Layanan Vendor di Segaloka",
+    vendorDescription:
+      "Vendor Segaloka tidak dibatasi hanya pada satu jenis usaha. Penyedia dapat menawarkan produk, layanan, maupun kombinasi layanan perjalanan sesuai bisnis dan kewenangannya.",
+
+    tabs: {
+      all: "Semua",
+      product: "Produk",
+      service: "Layanan",
+      composite: "Paket & Operasional",
+    },
+
+    benefitLabel: "Mengapa Segaloka",
+    benefitTitle: "Lebih Mudah Menjangkau Travel dan Mengelola Penjualan",
+    benefitDescription:
+      "Perluas distribusi produk dan layanan Anda melalui alur transaksi dan operasional yang lebih terstruktur.",
+
+    portalLabel: "Vendor Portal & Tools",
+    portalTitle: "Kelola Bisnis Vendor dari Satu Workspace",
+    portalDescription:
+      "Produk, layanan, inventori, pesanan, operasional, pembayaran, dan laporan dapat dikelola melalui Vendor Portal Segaloka.",
+
+    stepsLabel: "Cara Bergabung",
+    stepsTitle: "Mulai Menjadi Vendor Segaloka",
+    stepsDescription:
+      "Proses kemitraan dibuat sederhana agar bisnis Anda dapat mulai menawarkan produk dan layanan secara terstruktur.",
+
+    ctaLabel: "Segaloka Vendor",
+    ctaTitle: "Siap Memperluas Jaringan Bisnis Anda?",
+    ctaDescription:
+      "Daftarkan bisnis Vendor Anda dan siapkan produk maupun layanan terbaik untuk ekosistem Travel Segaloka.",
+    ctaButton: "Mulai Pendaftaran Vendor",
+
+    faqLabel: "FAQ",
+    faqTitle: "Frequently Asked Questions",
+    faqDescription:
+      "Informasi dasar mengenai kemitraan Vendor di Segaloka.",
+
+    vendorItems: [
+      {
+        type: "product",
+        title: "Hotel & Akomodasi",
+        description:
+          "Hotel, resort, villa, penginapan, room allotment, dan produk akomodasi lainnya.",
+        icon: Hotel,
+      },
+      {
+        type: "product",
+        title: "Tiket Pesawat",
+        description:
+          "Produk tiket penerbangan dan kebutuhan perjalanan udara sesuai kewenangan Vendor.",
+        icon: Plane,
+      },
+      {
+        type: "product",
+        title: "Tiket Transportasi",
+        description:
+          "Tiket kereta, bus, ferry, dan produk transportasi lain yang dapat didistribusikan.",
+        icon: TicketCheck,
+      },
+      {
+        type: "product",
+        title: "Aktivitas & Atraksi",
+        description:
+          "Tiket atraksi, aktivitas wisata, tur lokal, dan produk pengalaman perjalanan.",
+        icon: Tag,
+      },
+      {
+        type: "product",
+        title: "SIM & eSIM",
+        description:
+          "Produk konektivitas perjalanan seperti SIM card, eSIM, dan paket data.",
+        icon: Wifi,
+      },
+      {
+        type: "product",
+        title: "Produk Perjalanan",
+        description:
+          "Perlengkapan travel, merchandise, oleh-oleh, dan produk pendukung perjalanan lainnya.",
+        icon: ShoppingBag,
+      },
+
+      {
+        type: "service",
+        title: "Transportasi Darat",
+        description:
+          "Bus, kendaraan, shuttle, transfer bandara, city transfer, dan transportasi operasional.",
+        icon: BusFront,
+      },
+      {
+        type: "service",
+        title: "Visa & Dokumen",
+        description:
+          "Pengurusan visa dan layanan dokumen perjalanan sesuai cakupan layanan Vendor.",
+        icon: ShieldCheck,
+      },
+      {
+        type: "service",
+        title: "Handling & Meet Assist",
+        description:
+          "Airport handling, meet & assist, porter, bagasi, dan dukungan kedatangan maupun keberangkatan.",
+        icon: Handshake,
+      },
+      {
+        type: "service",
+        title: "Catering & Konsumsi",
+        description:
+          "Makanan, konsumsi grup, meal box, catering perjalanan, dan kebutuhan konsumsi lainnya.",
+        icon: UtensilsCrossed,
+      },
+      {
+        type: "service",
+        title: "Guide & Pendamping",
+        description:
+          "Tour guide, local guide, muthowif, pendamping perjalanan, dan tenaga operasional terkait.",
+        icon: Globe2,
+      },
+      {
+        type: "service",
+        title: "Layanan Pendukung",
+        description:
+          "Dokumentasi, layanan operasional, insurance service, dan jasa pendukung perjalanan lainnya.",
+        icon: ClipboardCheck,
+      },
+
+      {
+        type: "composite",
+        title: "Land Arrangement",
+        description:
+          "Gabungkan hotel, transportasi, visa, handling, konsumsi, dan layanan darat menjadi satu paket LA.",
+        icon: MapPinned,
+      },
+      {
+        type: "composite",
+        title: "Ground Handling",
+        description:
+          "Rangkaian layanan darat dan operasional untuk kebutuhan perjalanan grup maupun individual.",
+        icon: PackageCheck,
+      },
+      {
+        type: "composite",
+        title: "Custom Travel Services",
+        description:
+          "Kombinasi produk dan layanan Vendor yang disusun sesuai kebutuhan Travel.",
+        icon: Boxes,
+      },
+    ] satisfies VendorItem[],
+
+    benefits: [
+      {
+        title: "Jangkauan Pasar Lebih Luas",
+        description:
+          "Produk dan layanan Vendor dapat ditemukan oleh Travel yang membutuhkan kebutuhan operasional perjalanan.",
+        icon: Globe2,
+      },
+      {
+        title: "Permintaan dari Travel",
+        description:
+          "Terima kebutuhan dan pesanan dari Travel yang aktif di ekosistem Segaloka.",
+        icon: Store,
+      },
+      {
+        title: "Sistem Terintegrasi",
+        description:
+          "Kelola produk, layanan, inventori, pesanan, dan operasional dalam satu platform.",
+        icon: Boxes,
+      },
+      {
+        title: "Dukungan Ekosistem",
+        description:
+          "Bangun hubungan bisnis jangka panjang dengan Travel melalui Segaloka.",
+        icon: Headphones,
+      },
+    ],
+
+    tools: [
+      {
+        title: "Produk & Layanan",
+        description: "Kelola katalog produk dan layanan yang Anda tawarkan.",
+        icon: PackageCheck,
+      },
+      {
+        title: "Harga & Kuota",
+        description: "Atur harga, periode, kapasitas, kuota, dan ketentuan penjualan.",
+        icon: Tag,
+      },
+      {
+        title: "Inventory & Ketersediaan",
+        description: "Pantau ketersediaan produk atau layanan sesuai periode.",
+        icon: Boxes,
+      },
+      {
+        title: "Pesanan",
+        description: "Terima dan kelola transaksi dari Travel.",
+        icon: ReceiptText,
+      },
+      {
+        title: "Operasional",
+        description: "Kelola detail pelaksanaan layanan dan pembaruan operasional.",
+        icon: ClipboardCheck,
+      },
+      {
+        title: "Pembayaran & Settlement",
+        description: "Pantau pembayaran, settlement, dan status dana Vendor.",
+        icon: CreditCard,
+      },
+      {
+        title: "Withdrawal",
+        description: "Kelola penarikan saldo yang telah tersedia.",
+        icon: WalletCards,
+      },
+      {
+        title: "Laporan",
+        description: "Pantau performa penjualan dan aktivitas bisnis Vendor.",
+        icon: BarChart3,
+      },
+    ],
+
+    steps: [
+      {
+        number: "01",
+        title: "Daftarkan Bisnis",
+        description:
+          "Lengkapi identitas perusahaan, PIC, kategori Vendor, dan informasi dasar.",
+      },
+      {
+        number: "02",
+        title: "Verifikasi Vendor",
+        description:
+          "Data dan dokumen bisnis ditinjau sebelum akses Vendor diaktifkan.",
+      },
+      {
+        number: "03",
+        title: "Tambahkan Produk & Layanan",
+        description:
+          "Atur produk, layanan, harga, periode, kapasitas, dan ketentuan.",
+      },
+      {
+        number: "04",
+        title: "Mulai Terima Pesanan",
+        description:
+          "Kelola permintaan dan transaksi Travel melalui Vendor Portal Segaloka.",
+      },
+    ],
+
+    faq: [
+      {
+        q: "Siapa yang dapat bergabung sebagai Vendor Segaloka?",
+        a: "Penyedia produk maupun layanan yang mendukung industri perjalanan dapat mengajukan kemitraan, sepanjang kategori dan aktivitas bisnisnya sesuai dengan ketentuan Segaloka.",
+      },
+      {
+        q: "Apakah Vendor hanya untuk hotel, transportasi, dan visa?",
+        a: "Tidak. Vendor Segaloka mencakup penyedia produk, penyedia layanan, serta penyedia paket atau layanan operasional gabungan.",
+      },
+      {
+        q: "Apakah satu Vendor dapat memiliki beberapa kategori?",
+        a: "Ya. Satu Vendor dapat menawarkan beberapa kategori produk dan layanan sesuai bisnis, kemampuan operasional, dan hasil verifikasi.",
+      },
+      {
+        q: "Apakah Vendor dapat menawarkan Land Arrangement?",
+        a: "Ya. Vendor dapat menawarkan Land Arrangement dan layanan gabungan lainnya sesuai produk serta layanan yang dimiliki.",
+      },
+      {
+        q: "Bagaimana Vendor menerima pesanan dari Travel?",
+        a: "Produk dan layanan Vendor dapat ditemukan melalui ekosistem Segaloka. Pesanan kemudian dikelola melalui Vendor Portal.",
+      },
+      {
+        q: "Apakah Vendor dapat mengatur harga dan kuota sendiri?",
+        a: "Vendor dapat mengatur harga, periode, kapasitas, kuota, dan ketentuan produk sesuai konfigurasi dan kewenangan yang diberikan.",
+      },
+      {
+        q: "Bagaimana pembayaran dan penarikan dana Vendor?",
+        a: "Status pembayaran, settlement, saldo tersedia, dan withdrawal nantinya dikelola melalui sistem keuangan Vendor Segaloka sesuai transaksi.",
+      },
+      {
+        q: "Apakah pendaftaran langsung membuat akun Vendor aktif?",
+        a: "Tidak. Data dan dokumen Vendor harus melalui proses verifikasi sebelum akses penuh diaktifkan.",
+      },
+    ],
+  },
+
+  EN: {
+    heroBadge: "Segaloka Vendor Partner",
+    heroTitle: "Grow Your Vendor Business with Segaloka",
+    heroDescription:
+      "Connect your products and services with the Segaloka Travel ecosystem, from accommodation, transportation, tickets and visas to operational services and travel-related products.",
+
+    floatingProduct: "Products",
+    floatingService: "Services",
+    floatingInventory: "Inventory",
+    floatingComposite: "Packages & Operations",
+
+    vendorLabel: "Vendor Categories",
+    vendorTitle: "Vendor Products & Services on Segaloka",
+    vendorDescription:
+      "Segaloka Vendors are not limited to one business type. Providers may offer products, services, or combined travel solutions according to their business capabilities.",
+
+    tabs: {
+      all: "All",
+      product: "Products",
+      service: "Services",
+      composite: "Packages & Operations",
+    },
+
+    benefitLabel: "Why Segaloka",
+    benefitTitle: "Reach More Travel Businesses and Manage Sales Efficiently",
+    benefitDescription:
+      "Expand the distribution of your products and services through a more structured transaction and operational workflow.",
+
+    portalLabel: "Vendor Portal & Tools",
+    portalTitle: "Manage Your Vendor Business from One Workspace",
+    portalDescription:
+      "Products, services, inventory, orders, operations, payments, and reports can be managed through the Segaloka Vendor Portal.",
+
+    stepsLabel: "How to Join",
+    stepsTitle: "Become a Segaloka Vendor",
+    stepsDescription:
+      "A straightforward partnership process designed to help your business start offering products and services efficiently.",
+
+    ctaLabel: "Segaloka Vendor",
+    ctaTitle: "Ready to Expand Your Business Network?",
+    ctaDescription:
+      "Register your Vendor business and prepare your best products and services for the Segaloka Travel ecosystem.",
+    ctaButton: "Start Vendor Registration",
+
+    faqLabel: "FAQ",
+    faqTitle: "Frequently Asked Questions",
+    faqDescription:
+      "Essential information about becoming a Segaloka Vendor.",
+
+    vendorItems: [
+      { type: "product", title: "Hotels & Accommodation", description: "Hotels, resorts, villas, lodging, room allotments, and other accommodation products.", icon: Hotel },
+      { type: "product", title: "Flight Tickets", description: "Flight ticket products and air travel requirements according to Vendor capabilities.", icon: Plane },
+      { type: "product", title: "Transport Tickets", description: "Train, bus, ferry, and other transport ticket products.", icon: TicketCheck },
+      { type: "product", title: "Activities & Attractions", description: "Attraction tickets, local activities, tours, and travel experiences.", icon: Tag },
+      { type: "product", title: "SIM & eSIM", description: "Travel connectivity products including SIM cards, eSIM, and data packages.", icon: Wifi },
+      { type: "product", title: "Travel Products", description: "Travel equipment, merchandise, souvenirs, and other supporting products.", icon: ShoppingBag },
+
+      { type: "service", title: "Ground Transportation", description: "Buses, vehicles, shuttles, airport transfers, city transfers, and operational transport.", icon: BusFront },
+      { type: "service", title: "Visa & Documents", description: "Visa processing and travel document services according to Vendor scope.", icon: ShieldCheck },
+      { type: "service", title: "Handling & Meet Assist", description: "Airport handling, meet and assist, porter, baggage, arrival and departure support.", icon: Handshake },
+      { type: "service", title: "Catering & Meals", description: "Group meals, meal boxes, travel catering, and other consumption services.", icon: UtensilsCrossed },
+      { type: "service", title: "Guides & Assistance", description: "Tour guides, local guides, muthowif, travel assistants, and related personnel.", icon: Globe2 },
+      { type: "service", title: "Supporting Services", description: "Documentation, operational services, insurance services, and other travel support.", icon: ClipboardCheck },
+
+      { type: "composite", title: "Land Arrangement", description: "Combine accommodation, transportation, visa, handling, meals, and ground services into an LA package.", icon: MapPinned },
+      { type: "composite", title: "Ground Handling", description: "Integrated ground and operational services for groups and individual travelers.", icon: PackageCheck },
+      { type: "composite", title: "Custom Travel Services", description: "Custom combinations of Vendor products and services based on Travel requirements.", icon: Boxes },
+    ] satisfies VendorItem[],
+
+    benefits: [
+      { title: "Wider Market Reach", description: "Make your products and services discoverable by Travel businesses that need operational services.", icon: Globe2 },
+      { title: "Demand from Travel", description: "Receive needs and orders from active Travel businesses in the Segaloka ecosystem.", icon: Store },
+      { title: "Integrated System", description: "Manage products, services, inventory, orders, and operations in one platform.", icon: Boxes },
+      { title: "Ecosystem Support", description: "Build long-term business relationships with Travel partners through Segaloka.", icon: Headphones },
+    ],
+
+    tools: [
+      { title: "Products & Services", description: "Manage the products and services you offer.", icon: PackageCheck },
+      { title: "Pricing & Quota", description: "Configure pricing, periods, capacity, quotas, and sales terms.", icon: Tag },
+      { title: "Inventory & Availability", description: "Monitor product and service availability by period.", icon: Boxes },
+      { title: "Orders", description: "Receive and manage Travel transactions.", icon: ReceiptText },
+      { title: "Operations", description: "Manage service execution details and operational updates.", icon: ClipboardCheck },
+      { title: "Payments & Settlement", description: "Monitor payments, settlement, and Vendor fund status.", icon: CreditCard },
+      { title: "Withdrawal", description: "Manage withdrawals from available balances.", icon: WalletCards },
+      { title: "Reports", description: "Monitor sales performance and Vendor business activity.", icon: BarChart3 },
+    ],
+
+    steps: [
+      { number: "01", title: "Register Your Business", description: "Provide company identity, PIC, Vendor categories, and essential information." },
+      { number: "02", title: "Vendor Verification", description: "Business information and documents are reviewed before Vendor access is activated." },
+      { number: "03", title: "Add Products & Services", description: "Configure products, services, pricing, periods, capacity, and terms." },
+      { number: "04", title: "Start Receiving Orders", description: "Manage Travel requests and transactions through the Segaloka Vendor Portal." },
+    ],
+
+    faq: [
+      { q: "Who can become a Segaloka Vendor?", a: "Providers of products or services supporting the travel industry may apply, subject to Segaloka requirements and verification." },
+      { q: "Are Vendors limited to hotels, transportation, and visas?", a: "No. Segaloka supports product providers, service providers, and providers of combined operational travel solutions." },
+      { q: "Can one Vendor have multiple categories?", a: "Yes. A Vendor may offer multiple product and service categories according to its business scope and verified capabilities." },
+      { q: "Can Vendors offer Land Arrangement?", a: "Yes. Vendors may offer Land Arrangement and other combined services according to their available products and services." },
+      { q: "How do Vendors receive orders from Travel businesses?", a: "Vendor products and services can be discovered within the Segaloka ecosystem and orders are managed through the Vendor Portal." },
+      { q: "Can Vendors manage their own pricing and quotas?", a: "Vendors can configure pricing, periods, capacity, quotas, and applicable product terms based on their permissions." },
+      { q: "How do payments and Vendor withdrawals work?", a: "Payment status, settlement, available balance, and withdrawals will be managed through Segaloka's Vendor financial workflow." },
+      { q: "Does registration immediately activate the Vendor account?", a: "No. Vendor data and documents must be verified before full access is activated." },
+    ],
+  },
+} as const;
+
+export function VendorPartnerClient() {
+  const { language } = useMarketplacePreferences();
+
+  const lang: "ID" | "EN" =
+    language === "EN" ? "EN" : "ID";
+
+  const t = copy[lang];
+
+  const [activeType, setActiveType] =
+    useState<VendorType>("all");
+
+  const [openFaq, setOpenFaq] =
+    useState<number | null>(0);
+
+  const visibleItems = useMemo(() => {
+    if (activeType === "all") return t.vendorItems;
+    return t.vendorItems.filter((item) => item.type === activeType);
+  }, [activeType, t.vendorItems]);
+
+  return (
+    <main className="vendor-partner-page">
+      <section className="vendor-hero">
+        <div className="vendor-shell vendor-hero-grid">
+          <div className="vendor-hero-copy">
+            <div className="vendor-eyebrow">
+              <Sparkles size={14} />
+              {t.heroBadge}
+            </div>
+
+            <h1>{t.heroTitle}</h1>
+            <p>{t.heroDescription}</p>
+
+            <div className="vendor-hero-points">
+              <span>✓ Produk</span>
+              <span>✓ Layanan</span>
+              <span>✓ B2B Travel</span>
+              <span>✓ Operasional Terintegrasi</span>
+            </div>
+          </div>
+
+          <div className="vendor-hero-visual" aria-hidden="true">
+            <div className="vendor-visual-orbit vendor-orbit-one" />
+            <div className="vendor-visual-orbit vendor-orbit-two" />
+
+            <div className="vendor-main-visual">
+              <div className="vendor-main-icon">
+                <Store size={46} strokeWidth={1.7} />
+              </div>
+
+              <strong>Vendor Segaloka</strong>
+              <span>Travel Supply Ecosystem</span>
+            </div>
+
+            <div className="vendor-floating-card vendor-floating-hotel">
+              <ShoppingBag size={18} />
+              <span>{t.floatingProduct}</span>
+            </div>
+
+            <div className="vendor-floating-card vendor-floating-bus">
+              <Handshake size={18} />
+              <span>{t.floatingService}</span>
+            </div>
+
+            <div className="vendor-floating-card vendor-floating-visa">
+              <Boxes size={18} />
+              <span>{t.floatingInventory}</span>
+            </div>
+
+            <div className="vendor-floating-card vendor-floating-la">
+              <MapPinned size={18} />
+              <span>{t.floatingComposite}</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="vendor-section vendor-categories">
+        <div className="vendor-shell">
+          <div className="vendor-section-heading">
+            <span>{t.vendorLabel}</span>
+            <h2>{t.vendorTitle}</h2>
+            <p>{t.vendorDescription}</p>
+          </div>
+
+          <div className="vendor-filter-tabs">
+            {(
+              [
+                ["all", t.tabs.all],
+                ["product", t.tabs.product],
+                ["service", t.tabs.service],
+                ["composite", t.tabs.composite],
+              ] as const
+            ).map(([value, label]) => (
+              <button
+                type="button"
+                key={value}
+                className={activeType === value ? "is-active" : ""}
+                onClick={() => setActiveType(value)}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+
+          <div className="vendor-category-grid">
+            {visibleItems.map((item) => {
+              const Icon = item.icon;
+
+              return (
+                <article
+                  className={`vendor-category-card vendor-type-${item.type}`}
+                  key={`${item.type}-${item.title}`}
+                >
+                  <div className="vendor-category-card-top">
+                    <div className="vendor-category-icon">
+                      <Icon size={22} />
+                    </div>
+
+                    <span className="vendor-category-type">
+                      {item.type === "product"
+                        ? t.tabs.product
+                        : item.type === "service"
+                          ? t.tabs.service
+                          : t.tabs.composite}
+                    </span>
+                  </div>
+
+                  <h3>{item.title}</h3>
+                  <p>{item.description}</p>
+                </article>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      <section className="vendor-section vendor-benefits-section">
+        <div className="vendor-shell">
+          <div className="vendor-section-heading">
+            <span>{t.benefitLabel}</span>
+            <h2>{t.benefitTitle}</h2>
+            <p>{t.benefitDescription}</p>
+          </div>
+
+          <div className="vendor-benefit-grid">
+            {t.benefits.map((item) => {
+              const Icon = item.icon;
+
+              return (
+                <article className="vendor-benefit-card" key={item.title}>
+                  <div className="vendor-benefit-icon">
+                    <Icon size={22} />
+                  </div>
+
+                  <h3>{item.title}</h3>
+                  <p>{item.description}</p>
+                </article>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      <section className="vendor-section vendor-tools-section">
+        <div className="vendor-shell">
+          <div className="vendor-tools-layout">
+            <div className="vendor-tools-copy">
+              <div className="vendor-section-heading vendor-section-heading-left">
+                <span>{t.portalLabel}</span>
+                <h2>{t.portalTitle}</h2>
+                <p>{t.portalDescription}</p>
+              </div>
+
+              <div className="vendor-tool-list">
+                {t.tools.map((tool) => {
+                  const Icon = tool.icon;
+
+                  return (
+                    <article className="vendor-tool-row" key={tool.title}>
+                      <span className="vendor-tool-icon">
+                        <Icon size={18} />
+                      </span>
+
+                      <div>
+                        <strong>{tool.title}</strong>
+                        <p>{tool.description}</p>
+                      </div>
+
+                      <ArrowRight size={16} />
+                    </article>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div className="vendor-dashboard-preview">
+              <div className="vendor-dashboard-topbar">
+                <div>
+                  <span className="vendor-dashboard-logo">S</span>
+                  <strong>segaloka</strong>
+                </div>
+
+                <span>Vendor Portal</span>
+              </div>
+
+              <div className="vendor-dashboard-body">
+                <aside>
+                  <span className="active">Dashboard</span>
+                  <span>Produk & Layanan</span>
+                  <span>Pesanan</span>
+                  <span>Inventory</span>
+                  <span>Keuangan</span>
+                  <span>Laporan</span>
+                </aside>
+
+                <div className="vendor-dashboard-content">
+                  <div className="vendor-dashboard-welcome">
+                    <span>Vendor Workspace</span>
+                    <strong>Ringkasan Bisnis</strong>
+                  </div>
+
+                  <div className="vendor-dashboard-metrics">
+                    <article>
+                      <span>Produk Aktif</span>
+                      <strong>—</strong>
+                    </article>
+
+                    <article>
+                      <span>Pesanan</span>
+                      <strong>—</strong>
+                    </article>
+
+                    <article>
+                      <span>Saldo Tersedia</span>
+                      <strong>—</strong>
+                    </article>
+                  </div>
+
+                  <div className="vendor-dashboard-chart">
+                    <div className="vendor-chart-head">
+                      <strong>Performa Penjualan</strong>
+                      <span>Overview</span>
+                    </div>
+
+                    <div className="vendor-chart-bars">
+                      <i />
+                      <i />
+                      <i />
+                      <i />
+                      <i />
+                      <i />
+                      <i />
+                      <i />
+                    </div>
+                  </div>
+
+                  <div className="vendor-dashboard-orders">
+                    <strong>Pesanan Terbaru</strong>
+
+                    <div>
+                      <span className="vendor-order-icon">
+                        <BedDouble size={15} />
+                      </span>
+                      <p>
+                        <strong>Produk / Layanan Vendor</strong>
+                        <span>Menunggu transaksi nyata</span>
+                      </p>
+                      <em>—</em>
+                    </div>
+
+                    <div>
+                      <span className="vendor-order-icon">
+                        <BusFront size={15} />
+                      </span>
+                      <p>
+                        <strong>Operasional</strong>
+                        <span>Belum ada data</span>
+                      </p>
+                      <em>—</em>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="vendor-section vendor-steps-section">
+        <div className="vendor-shell">
+          <div className="vendor-section-heading">
+            <span>{t.stepsLabel}</span>
+            <h2>{t.stepsTitle}</h2>
+            <p>{t.stepsDescription}</p>
+          </div>
+
+          <div className="vendor-step-grid">
+            {t.steps.map((step, index) => (
+              <article className="vendor-step-card" key={step.number}>
+                <div className="vendor-step-top">
+                  <span>{step.number}</span>
+                  {index < t.steps.length - 1 ? (
+                    <div className="vendor-step-line" />
+                  ) : null}
+                </div>
+
+                <h3>{step.title}</h3>
+                <p>{step.description}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="vendor-cta-wrap">
+        <div className="vendor-shell">
+          <div className="vendor-cta">
+            <div>
+              <span>{t.ctaLabel}</span>
+              <h2>{t.ctaTitle}</h2>
+              <p>{t.ctaDescription}</p>
+            </div>
+
+            <Link
+              href="/daftar-vendor/registrasi"
+              className="vendor-button vendor-button-white"
+            >
+              {t.ctaButton}
+              <ArrowRight size={16} />
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      <section className="vendor-section vendor-faq-section">
+        <div className="vendor-shell vendor-faq-layout">
+          <div className="vendor-faq-heading">
+            <span>{t.faqLabel}</span>
+            <h2>{t.faqTitle}</h2>
+            <p>{t.faqDescription}</p>
+
+            <a
+              className="vendor-help-card vendor-help-card-link"
+              href="mailto:vendor@segaloka.com"
+              aria-label="Email Vendor Support Segaloka"
+            >
+              <span className="vendor-help-icon">
+                <Headphones size={21} />
+              </span>
+
+              <div>
+                <strong>Vendor Support</strong>
+                <span>vendor@segaloka.com</span>
+                <small>Hubungi tim Segaloka untuk bantuan kemitraan Vendor.</small>
+              </div>
+
+              <ArrowRight size={17} className="vendor-help-arrow" />
+            </a>
+          </div>
+
+          <div className="vendor-faq-list">
+            {t.faq.map((item, index) => {
+              const active = openFaq === index;
+
+              return (
+                <article
+                  className={`vendor-faq-item ${active ? "is-open" : ""}`}
+                  key={item.q}
+                >
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setOpenFaq(active ? null : index)
+                    }
+                    aria-expanded={active}
+                  >
+                    <span>{item.q}</span>
+                    <ChevronDown size={18} />
+                  </button>
+
+                  {active ? <p>{item.a}</p> : null}
+                </article>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+    </main>
+  );
+}
+
+
+============================================================
+FILE: src\app\daftar-vendor\registrasi\page.tsx
+============================================================
+import type { Metadata } from "next";
+import Link from "next/link";
+import {
+  ArrowLeft,
+  Building2,
+  CheckCircle2,
+  Mail,
+  MapPin,
+  Phone,
+  Store,
+  UserRound,
+} from "lucide-react";
+import "../vendor-partner.css";
+import "./registration.css";
+
+export const metadata: Metadata = {
+  title: "Pendaftaran Vendor | Segaloka",
+  description: "Form pendaftaran Vendor Segaloka.",
+};
+
+export default function VendorRegistrationPage() {
+  return (
+    <main className="vendor-registration-page">
+      <div className="vendor-registration-shell">
+        <Link href="/daftar-vendor" className="vendor-registration-back">
+          <ArrowLeft size={16} />
+          Kembali ke Vendor Partner
+        </Link>
+
+        <div className="vendor-registration-layout">
+          <section className="vendor-registration-intro">
+            <span className="vendor-registration-eyebrow">
+              Segaloka Vendor
+            </span>
+
+            <h1>Daftarkan Bisnis Vendor Anda</h1>
+
+            <p>
+              Lengkapi informasi awal bisnis. Data ini nantinya menjadi dasar
+              proses verifikasi dan pembuatan workspace Vendor Segaloka.
+            </p>
+
+            <div className="vendor-registration-points">
+              <div>
+                <CheckCircle2 size={18} />
+                <span>Identitas bisnis dan PIC</span>
+              </div>
+
+              <div>
+                <CheckCircle2 size={18} />
+                <span>Pilih kategori layanan Vendor</span>
+              </div>
+
+              <div>
+                <CheckCircle2 size={18} />
+                <span>Verifikasi sebelum akun diaktifkan</span>
+              </div>
+            </div>
+          </section>
+
+          <section className="vendor-registration-card">
+            <div className="vendor-registration-card-head">
+              <span>Informasi Bisnis</span>
+              <h2>Data awal Vendor</h2>
+              <p>
+                Form ini masih tahap UI. Pengiriman data akan dihubungkan
+                setelah backend Segaloka siap.
+              </p>
+            </div>
+
+            <form className="vendor-registration-form">
+              <label>
+                <span>Nama Bisnis / Vendor</span>
+                <div className="vendor-input-wrap">
+                  <Store size={17} />
+                  <input
+                    type="text"
+                    placeholder="Masukkan nama bisnis"
+                    autoComplete="organization"
+                  />
+                </div>
+              </label>
+
+              <label>
+                <span>Nama Legal Perusahaan</span>
+                <div className="vendor-input-wrap">
+                  <Building2 size={17} />
+                  <input
+                    type="text"
+                    placeholder="Nama badan usaha"
+                    autoComplete="organization"
+                  />
+                </div>
+              </label>
+
+              <div className="vendor-form-grid">
+                <label>
+                  <span>Nama PIC</span>
+                  <div className="vendor-input-wrap">
+                    <UserRound size={17} />
+                    <input
+                      type="text"
+                      placeholder="Nama lengkap"
+                      autoComplete="name"
+                    />
+                  </div>
+                </label>
+
+                <label>
+                  <span>Nomor WhatsApp</span>
+                  <div className="vendor-input-wrap">
+                    <Phone size={17} />
+                    <input
+                      type="tel"
+                      placeholder="+62"
+                      autoComplete="tel"
+                    />
+                  </div>
+                </label>
+              </div>
+
+              <label>
+                <span>Email Bisnis</span>
+                <div className="vendor-input-wrap">
+                  <Mail size={17} />
+                  <input
+                    type="email"
+                    placeholder="email@perusahaan.com"
+                    autoComplete="email"
+                  />
+                </div>
+              </label>
+
+              <label>
+                <span>Domisili Bisnis</span>
+                <div className="vendor-input-wrap">
+                  <MapPin size={17} />
+                  <input
+                    type="text"
+                    placeholder="Kota / Negara"
+                    autoComplete="address-level2"
+                  />
+                </div>
+              </label>
+
+              <fieldset>
+                <legend>Jenis Layanan</legend>
+
+                <div className="vendor-service-options">
+                  {[
+                    "Hotel & Akomodasi",
+                    "Transportasi",
+                    "Catering & Konsumsi",
+                    "Visa & Handling",
+                    "Tiket & Penerbangan",
+                    "Land Arrangement",
+                  ].map((service) => (
+                    <label key={service}>
+                      <input type="checkbox" />
+                      <span>{service}</span>
+                    </label>
+                  ))}
+                </div>
+              </fieldset>
+
+              <button
+                type="button"
+                className="vendor-registration-submit"
+                disabled
+                title="Backend pendaftaran belum diaktifkan"
+              >
+                Kirim Pendaftaran
+              </button>
+
+              <p className="vendor-registration-note">
+                Tombol pengiriman belum diaktifkan karena tahap ini hanya
+                menyelesaikan UI/UX dan belum terhubung ke backend.
+              </p>
+            </form>
+          </section>
+        </div>
+      </div>
+    </main>
+  );
+}
+
+
+============================================================
+FILE: src\app\daftar-vendor\registrasi\registration.css
+============================================================
+.vendor-registration-page {
+  min-height: 760px;
+  padding: 46px 0 80px;
+  background:
+    radial-gradient(circle at 12% 0%, rgba(37, 126, 255, .08), transparent 27%),
+    #f7f9fc;
+  color: #1d2b3f;
+  font-family: var(--font-jakarta), "Plus Jakarta Sans", sans-serif;
+}
+
+.vendor-registration-shell {
+  width: min(1080px, calc(100% - 40px));
+  margin-inline: auto;
+}
+
+.vendor-registration-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-bottom: 28px;
+  color: #496078;
+  text-decoration: none;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.vendor-registration-layout {
+  display: grid;
+  grid-template-columns: 360px minmax(0, 1fr);
+  gap: 58px;
+  align-items: start;
+}
+
+.vendor-registration-intro {
+  padding-top: 30px;
+}
+
+.vendor-registration-eyebrow {
+  color: #0b63f6;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.vendor-registration-intro h1 {
+  margin: 10px 0 14px;
+  color: #122743;
+  font-size: 35px;
+  line-height: 1.18;
+  letter-spacing: -.035em;
+}
+
+.vendor-registration-intro > p {
+  margin: 0;
+  color: #687b91;
+  font-size: 13px;
+  line-height: 1.75;
+}
+
+.vendor-registration-points {
+  display: grid;
+  gap: 14px;
+  margin-top: 27px;
+}
+
+.vendor-registration-points > div {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #405772;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.vendor-registration-points svg {
+  color: #14a26a;
+}
+
+.vendor-registration-card {
+  padding: 32px;
+  border: 1px solid #e2e9f2;
+  border-radius: 20px;
+  background: #fff;
+  box-shadow: 0 18px 55px rgba(40, 66, 99, .08);
+}
+
+.vendor-registration-card-head > span {
+  color: #0b63f6;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.vendor-registration-card-head h2 {
+  margin: 5px 0 7px;
+  color: #17304e;
+  font-size: 21px;
+  font-weight: 800;
+}
+
+.vendor-registration-card-head p {
+  margin: 0;
+  color: #75869a;
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+.vendor-registration-form {
+  display: grid;
+  gap: 18px;
+  margin-top: 28px;
+}
+
+.vendor-registration-form label > span,
+.vendor-registration-form legend {
+  display: block;
+  margin-bottom: 7px;
+  color: #344b66;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.vendor-input-wrap {
+  min-height: 46px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 13px;
+  border: 1px solid #dce5ef;
+  border-radius: 10px;
+  background: #fff;
+}
+
+.vendor-input-wrap:focus-within {
+  border-color: #80b1fa;
+  box-shadow: 0 0 0 3px rgba(11,99,246,.08);
+}
+
+.vendor-input-wrap svg {
+  flex: 0 0 auto;
+  color: #8191a4;
+}
+
+.vendor-input-wrap input {
+  width: 100%;
+  height: 44px;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: #21364f;
+  font: inherit;
+  font-size: 12px;
+}
+
+.vendor-input-wrap input::placeholder {
+  color: #a2afbd;
+}
+
+.vendor-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.vendor-registration-form fieldset {
+  margin: 2px 0 0;
+  padding: 0;
+  border: 0;
+}
+
+.vendor-service-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 9px;
+}
+
+.vendor-service-options label {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 42px;
+  padding: 0 12px;
+  border: 1px solid #e0e8f1;
+  border-radius: 9px;
+  cursor: pointer;
+}
+
+.vendor-service-options label > span {
+  margin: 0;
+  color: #52677f;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.vendor-service-options input {
+  accent-color: #0b63f6;
+}
+
+.vendor-registration-submit {
+  min-height: 47px;
+  margin-top: 5px;
+  border: 0;
+  border-radius: 10px;
+  background: #b9c6d6;
+  color: #fff;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 800;
+  cursor: not-allowed;
+}
+
+.vendor-registration-note {
+  margin: -6px 0 0;
+  color: #8795a7;
+  font-size: 10px;
+  line-height: 1.55;
+  text-align: center;
+}
+
+@media (max-width: 800px) {
+  .vendor-registration-layout {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+
+  .vendor-registration-intro {
+    padding-top: 0;
+  }
+
+  .vendor-registration-intro h1 {
+    font-size: 30px;
+  }
+}
+
+@media (max-width: 520px) {
+  .vendor-registration-page {
+    padding-top: 28px;
+  }
+
+  .vendor-registration-shell {
+    width: calc(100% - 24px);
+  }
+
+  .vendor-registration-card {
+    padding: 22px 17px;
+    border-radius: 16px;
+  }
+
+  .vendor-form-grid,
+  .vendor-service-options {
+    grid-template-columns: 1fr;
+  }
+}
+

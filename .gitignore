@@ -1,0 +1,76 @@
+# Environment and credentials
+.env
+.env.*
+!.env.example
+!.env.sample
+!.env.template
+**/.env
+**/.env.*
+!**/.env.example
+!**/.env.sample
+!**/.env.template
+**/.npmrc
+*.pem
+*.key
+*.p12
+*.pfx
+**/id_rsa
+**/id_ed25519
+
+# Server secrets and persistent data
+secrets/
+backups/
+storage/
+logs/
+runtime-logs/
+cleanup-quarantine/
+.cache/
+test-data/
+artifacts/
+
+# Local imports and nested Git repositories
+imports/
+projects/Dashboard-v7/
+
+# Dependencies and build output
+**/node_modules/
+**/.next/
+**/dist/
+**/build/
+**/.turbo/
+**/coverage/
+**/.vite/
+**/.cache/
+
+# Runtime files
+*.log
+*.log.*
+*.pid
+*.sock
+*.sqlite
+*.sqlite3
+*.db
+*.db-journal
+*.dump
+*.backup
+*.bak
+
+# OS and editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Local audit exports
+/audit-*.txt
+/dashboard-dependency-audit.csv
+/database/postgres/pgdata/
+/projects/Segaloka-webs/hero-search-canonical.txt
+/docker/cloudflared/tunnel-token.txt
+/database/source-data/geonames/import-work/
+/database/source-data/geonames/cities500.zip
+**/.backup-*/
+**/boundary-backup/
+**/travel-only-backup/
+**/*.backup-*
+**/backup-verify-*

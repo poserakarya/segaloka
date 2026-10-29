@@ -1,0 +1,355 @@
+SEGALOKA ASSET / ICON / SYNC AUDIT
+Generated: 2026-10-06 09:40:52
+
+============================================================
+1. PUBLIC DIRECTORY STRUCTURE
+============================================================
+public\images
+public\images\affiliate
+public\images\app
+public\images\attractions
+public\images\banners
+public\images\brand
+public\images\footer
+public\images\footer\payment
+public\images\footer\social
+public\images\help-center
+public\images\help-center\account
+public\images\help-center\affiliate
+public\images\help-center\akomodasi
+public\images\help-center\booking
+public\images\help-center\changes
+public\images\help-center\general
+public\images\help-center\haji
+public\images\help-center\halal-tour
+public\images\help-center\payment
+public\images\help-center\promo
+public\images\help-center\segadeals
+public\images\help-center\tour-domestic
+public\images\help-center\tour-international
+public\images\help-center\travel-partner
+public\images\help-center\umrah
+public\images\help-center\vendor
+public\images\help-center\visa
+public\images\hero
+public\images\hotels
+public\images\inspiration
+public\images\karier
+public\images\la
+public\images\packages
+public\images\promo
+public\images\segadeals
+public\images\travel
+
+============================================================
+2. IMAGE DIRECTORY STRUCTURE
+============================================================
+public\images\affiliate  [1 file]
+public\images\app  [0 file]
+public\images\attractions  [0 file]
+public\images\banners  [1 file]
+public\images\brand  [1 file]
+public\images\footer  [0 file]
+public\images\footer\payment  [3 file]
+public\images\footer\social  [2 file]
+public\images\help-center  [1 file]
+public\images\help-center\account  [5 file]
+public\images\help-center\affiliate  [5 file]
+public\images\help-center\akomodasi  [15 file]
+public\images\help-center\booking  [10 file]
+public\images\help-center\changes  [5 file]
+public\images\help-center\general  [3 file]
+public\images\help-center\haji  [4 file]
+public\images\help-center\halal-tour  [3 file]
+public\images\help-center\payment  [6 file]
+public\images\help-center\promo  [3 file]
+public\images\help-center\segadeals  [3 file]
+public\images\help-center\tour-domestic  [3 file]
+public\images\help-center\tour-international  [4 file]
+public\images\help-center\travel-partner  [3 file]
+public\images\help-center\umrah  [7 file]
+public\images\help-center\vendor  [5 file]
+public\images\help-center\visa  [1 file]
+public\images\hero  [1 file]
+public\images\hotels  [0 file]
+public\images\inspiration  [0 file]
+public\images\karier  [12 file]
+public\images\la  [8 file]
+public\images\packages  [0 file]
+public\images\promo  [0 file]
+public\images\segadeals  [8 file]
+public\images\travel  [0 file]
+
+============================================================
+3. ICON / LOGO / BRAND ASSETS
+============================================================
+public\images\brand\segaloka-logo.png
+
+============================================================
+4. ASSET REFERENCES
+============================================================
+Unique referenced assets: 150
+
+============================================================
+5. REQUIRED IMAGE FOLDERS
+============================================================
+OK      public\images\affiliate
+OK      public\images\attractions
+OK      public\images\banners
+OK      public\images\brand
+OK      public\images\footer\payment
+OK      public\images\footer\social
+OK      public\images\help-center\account
+OK      public\images\help-center\affiliate
+OK      public\images\help-center\akomodasi
+OK      public\images\help-center\booking
+OK      public\images\help-center\changes
+OK      public\images\help-center\general
+OK      public\images\help-center\haji
+OK      public\images\help-center\halal-tour
+OK      public\images\help-center\payment
+OK      public\images\help-center\promo
+OK      public\images\help-center\segadeals
+OK      public\images\help-center\tour-domestic
+OK      public\images\help-center\tour-international
+OK      public\images\help-center\travel-partner
+OK      public\images\help-center\umrah
+OK      public\images\help-center\vendor
+OK      public\images\help-center\visa
+OK      public\images\hero
+OK      public\images\karier
+OK      public\images\la
+OK      public\images\packages
+OK      public\images\promo
+OK      public\images\segadeals
+OK      public\images\travel
+
+============================================================
+6. MISSING ASSETS GROUPED BY FOLDER
+============================================================
+
+[\images\affiliate] — 8 missing
+  /images/affiliate/accommodation.jpg
+  /images/affiliate/domestic.jpg
+  /images/affiliate/haji.jpg
+  /images/affiliate/halal-tour.jpg
+  /images/affiliate/international.jpg
+  /images/affiliate/segadeals.jpg
+  /images/affiliate/services.jpg
+  /images/affiliate/umrah.jpg
+
+[\images\attractions] — 3 missing
+  /images/attractions/ragunan-jakarta.jpg
+  /images/attractions/tokyo-disneyland.jpg
+  /images/attractions/universal-studios-japan.jpg
+
+[\images\help-center\account] — 5 missing
+  /images/help-center/account/daftar-akun.webp
+  /images/help-center/account/keamanan-akun.webp
+  /images/help-center/account/lupa-password.webp
+  /images/help-center/account/masuk-akun.webp
+  /images/help-center/account/ubah-profil.webp
+
+[\images\help-center\affiliate] — 5 missing
+  /images/help-center/affiliate/bagikan-link.webp
+  /images/help-center/affiliate/daftar-affiliate.webp
+  /images/help-center/affiliate/dashboard-affiliate.webp
+  /images/help-center/affiliate/komisi-affiliate.webp
+  /images/help-center/affiliate/tracking-transaksi.webp
+
+[\images\help-center\akomodasi] — 15 missing
+  /images/help-center/akomodasi/cari-akomodasi-la.webp
+  /images/help-center/akomodasi/city-tour.webp
+  /images/help-center/akomodasi/confirmation-letter.webp
+  /images/help-center/akomodasi/detail-akomodasi-la.webp
+  /images/help-center/akomodasi/hotel-reservation.webp
+  /images/help-center/akomodasi/isi-data-pemesan.webp
+  /images/help-center/akomodasi/lihat-invoice.webp
+  /images/help-center/akomodasi/local-contact.webp
+  /images/help-center/akomodasi/masyair.webp
+  /images/help-center/akomodasi/paket-info.webp
+  /images/help-center/akomodasi/pilih-periode.webp
+  /images/help-center/akomodasi/pilih-tipe-kamar.webp
+  /images/help-center/akomodasi/transport-transfer.webp
+  /images/help-center/akomodasi/traveler-passport.webp
+  /images/help-center/akomodasi/visa.webp
+
+[\images\help-center\booking] — 10 missing
+  /images/help-center/booking/cara-pesan-01-cari-produk.webp
+  /images/help-center/booking/cara-pesan-02-pilih-paket.webp
+  /images/help-center/booking/cara-pesan-03-pilih-jadwal.webp
+  /images/help-center/booking/cara-pesan-04-pilih-traveler.webp
+  /images/help-center/booking/cara-pesan-05-data-pemesan.webp
+  /images/help-center/booking/cara-pesan-06-review-pesanan.webp
+  /images/help-center/booking/cara-pesan-07-pembayaran.webp
+  /images/help-center/booking/cara-pesan-08-pesanan-berhasil.webp
+  /images/help-center/booking/lihat-invoice.webp
+  /images/help-center/booking/lihat-status-pesanan.webp
+
+[\images\help-center\changes] — 5 missing
+  /images/help-center/changes/ajukan-pembatalan.webp
+  /images/help-center/changes/ajukan-refund.webp
+  /images/help-center/changes/ajukan-reschedule.webp
+  /images/help-center/changes/status-refund.webp
+  /images/help-center/changes/status-reschedule.webp
+
+[\images\help-center\general] — 3 missing
+  /images/help-center/general/cara-mencari-layanan.webp
+  /images/help-center/general/cara-menghubungi-bantuan.webp
+  /images/help-center/general/tentang-segaloka.webp
+
+[\images\help-center\haji] — 4 missing
+  /images/help-center/haji/cari-paket-haji.webp
+  /images/help-center/haji/detail-paket-haji.webp
+  /images/help-center/haji/pesan-paket-haji.webp
+  /images/help-center/haji/pilih-tahun-haji.webp
+
+[\images\help-center\halal-tour] — 3 missing
+  /images/help-center/halal-tour/cari-halal-tour.webp
+  /images/help-center/halal-tour/detail-halal-tour.webp
+  /images/help-center/halal-tour/pesan-halal-tour.webp
+
+[\images\help-center\payment] — 6 missing
+  /images/help-center/payment/invoice.webp
+  /images/help-center/payment/pembayaran-cicilan.webp
+  /images/help-center/payment/pembayaran-dp.webp
+  /images/help-center/payment/pembayaran-lunas.webp
+  /images/help-center/payment/pilih-metode-pembayaran.webp
+  /images/help-center/payment/status-pembayaran.webp
+
+[\images\help-center\promo] — 3 missing
+  /images/help-center/promo/gunakan-promo.webp
+  /images/help-center/promo/gunakan-voucher.webp
+  /images/help-center/promo/loyalty-points.webp
+
+[\images\help-center\segadeals] — 9 missing
+  /images/help-center/segadeals/buat-request.webp
+  /images/help-center/segadeals/cari-segadeals.webp
+  /images/help-center/segadeals/daftar-penawaran.webp
+  /images/help-center/segadeals/detail-penawaran.webp
+  /images/help-center/segadeals/detail-segadeals.webp
+  /images/help-center/segadeals/isi-kebutuhan-budget.webp
+  /images/help-center/segadeals/pesan-segadeals.webp
+  /images/help-center/segadeals/pilih-penawaran.webp
+  /images/help-center/segadeals/request-terkirim.webp
+
+[\images\help-center\tour-domestic] — 3 missing
+  /images/help-center/tour-domestic/cari-tour-domestic.webp
+  /images/help-center/tour-domestic/detail-tour-domestic.webp
+  /images/help-center/tour-domestic/pesan-tour-domestic.webp
+
+[\images\help-center\tour-international] — 4 missing
+  /images/help-center/tour-international/cari-tour-international.webp
+  /images/help-center/tour-international/detail-tour-international.webp
+  /images/help-center/tour-international/dokumen-perjalanan.webp
+  /images/help-center/tour-international/pesan-tour-international.webp
+
+[\images\help-center\travel-partner] — 3 missing
+  /images/help-center/travel-partner/daftar-travel.webp
+  /images/help-center/travel-partner/portal-travel.webp
+  /images/help-center/travel-partner/verifikasi-travel.webp
+
+[\images\help-center\umrah] — 7 missing
+  /images/help-center/umrah/cari-paket-umrah.webp
+  /images/help-center/umrah/detail-paket-umrah.webp
+  /images/help-center/umrah/detail-pesanan-umrah.webp
+  /images/help-center/umrah/isi-data-pemesan.webp
+  /images/help-center/umrah/isi-data-traveler.webp
+  /images/help-center/umrah/pilih-keberangkatan.webp
+  /images/help-center/umrah/pilih-tipe-kamar.webp
+
+[\images\help-center\vendor] — 5 missing
+  /images/help-center/vendor/daftar-vendor.webp
+  /images/help-center/vendor/kelola-layanan.webp
+  /images/help-center/vendor/kelola-produk.webp
+  /images/help-center/vendor/portal-vendor.webp
+  /images/help-center/vendor/verifikasi-vendor.webp
+
+[\images\help-center\visa] — 5 missing
+  /images/help-center/visa/cari-layanan-visa.webp
+  /images/help-center/visa/data-pemohon.webp
+  /images/help-center/visa/detail-layanan-visa.webp
+  /images/help-center/visa/review-pembayaran.webp
+  /images/help-center/visa/upload-dokumen.webp
+
+[\images\la] — 1 missing
+  /images/la/bali.jpg
+
+[\images\packages] — 3 missing
+  /images/packages/umrah-premium.jpg
+  /images/packages/umrah-reguler.jpg
+  /images/packages/umrah-turkiye.jpg
+
+[\images\promo] — 4 missing
+  /images/promo/promo-halal-tour-japan.png
+  /images/promo/promo-tour-domestic.png
+  /images/promo/promo-tour-international.png
+  /images/promo/promo-umrah.png
+
+[\images\travel] — 2 missing
+  /images/travel/nuzultrip.png
+  /images/travel/travel-placeholder.png
+
+============================================================
+7. CANONICAL SEGALOKA ASSET DOMAINS
+============================================================
+EXISTS  public\images\brand
+EXISTS  public\images\hero
+NEEDED  public\images\categories
+EXISTS  public\images\packages
+NEEDED  public\images\destinations
+EXISTS  public\images\travel
+NEEDED  public\images\vendors
+NEEDED  public\images\accommodation
+EXISTS  public\images\attractions
+EXISTS  public\images\promo
+EXISTS  public\images\segadeals
+EXISTS  public\images\affiliate
+EXISTS  public\images\help-center
+NEEDED  public\images\payments
+NEEDED  public\images\documents
+NEEDED  public\images\avatars
+NEEDED  public\images\placeholders
+
+============================================================
+8. CENTRAL ASSET REGISTRY / SERVICE
+============================================================
+src\data\help-center-assets.ts
+
+============================================================
+9. STORAGE / SUPABASE REFERENCES
+============================================================
+Belum ditemukan implementasi Supabase Storage di src.
+
+============================================================
+10. APP / DASHBOARD ARCHITECTURE REFERENCES
+============================================================
+.next\dev\server\app\affiliate
+.next\server\app\affiliate
+.next\server\app\affiliate.segments\affiliate
+.next\server\app\partner\travel
+apps
+apps\affiliate
+apps\travel
+apps\vendor
+public\images\affiliate
+public\images\help-center\affiliate
+public\images\help-center\vendor
+public\images\packages
+public\images\travel
+src\app\affiliate
+src\app\partner\travel
+
+============================================================
+SUMMARY
+============================================================
+Referenced assets : 150
+Missing assets    : 116
+Missing folders   : 0
+Storage refs      : 0
+
+READ-ONLY AUDIT.
+Tidak ada folder dibuat.
+Tidak ada asset dibuat.
+Tidak ada source diubah.
+Tidak ada push GitHub.

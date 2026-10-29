@@ -1,0 +1,242 @@
+============================================================
+SEGALOKA — MISSING ROUTES FINAL V2
+============================================================
+
+EXISTING ROUTES: 28
+
+  /
+  /affiliate
+  /akomodasi
+  /akomodasi/[slug]
+  /bantuan
+  /booking/[slug]
+  /booking/[slug]/paket-info
+  /booking/[slug]/pesanan
+  /booking/[slug]/traveler
+  /cara-pesan
+  /daftar-vendor
+  /daftar-vendor/registrasi
+  /karier
+  /kebijakan-privasi
+  /paket/[slug]
+  /partner/travel
+  /partner/travel/corporate
+  /partner/travel/daftar
+  /partner/travel/enterprise
+  /partner/travel/loyalty
+  /partner/travel/partner-network
+  /partner/travel/perjalanan
+  /partner/travel/voucher-promo
+  /pesanan
+  /pusat-bantuan
+  /search
+  /segadeals
+  /syarat-ketentuan
+
+============================================================
+MISSING ROUTES
+============================================================
+
+ROUTE: /atraksi
+REFERENCES: 1
+------------------------------------------------------------
+SOURCE: src\components\home\Sections.tsx:905
+    00901:               {popularPlaces.map((item) => (
+    00902:                 <a
+    00903:                   key={item.id}
+    00904:                   className="home-attraction-card"
+>>> 00905:                   href="/atraksi"
+    00906:                 >
+    00907:                   <div className="home-attraction-image">
+    00908:                     <img
+    00909:                       src={item.image}
+    00910:                       alt={item.title}
+    00911:                     />
+
+
+ROUTE: /daftar
+REFERENCES: 1
+------------------------------------------------------------
+SOURCE: src\components\home\Header.tsx:624
+    00620:               </button>
+    00621: 
+    00622: 
+    00623:               <a
+>>> 00624:                 href="/daftar"
+    00625:                 className="sg-auth-provider sg-auth-email"
+    00626:               >
+    00627:                 <span className="sg-auth-email-icon">
+    00628:                   @
+    00629:                 </span>
+    00630: 
+
+
+ROUTE: /daftar-travel
+REFERENCES: 1
+------------------------------------------------------------
+SOURCE: src\components\home\Footer.tsx:239
+    00235:             <a href="/mitra">
+    00236:               <MarketplaceText messageKey="footer.travelPartner" />
+    00237:             </a>
+    00238: 
+>>> 00239:             <a href="/daftar-travel">
+    00240:               <MarketplaceText messageKey="footer.registerTravel" />
+    00241:             </a>
+    00242: 
+    00243:             <a href="/daftar-vendor">
+    00244:               <MarketplaceText messageKey="footer.registerVendor" />
+    00245:             </a>
+
+
+ROUTE: /destinasi
+REFERENCES: 1
+------------------------------------------------------------
+SOURCE: src\components\home\Sections.tsx:893
+    00889:               <h2>
+    00890:                 <MarketplaceText messageKey="home.popularDestinationsAttractions" />
+    00891:               </h2>
+    00892: 
+>>> 00893:               <a href="/destinasi">
+    00894:                 Lihat Semua
+    00895:                 <ChevronRight size={14} />
+    00896:               </a>
+    00897:             </div>
+    00898: 
+    00899: 
+
+
+ROUTE: /inspirasi
+REFERENCES: 2
+------------------------------------------------------------
+SOURCE: src\components\home\Sections.tsx:955
+    00951:               <h2>
+    00952:                 <MarketplaceText messageKey="home.tipsInspiration" />
+    00953:               </h2>
+    00954: 
+>>> 00955:               <a href="/inspirasi">
+    00956:                 Lihat Semua
+    00957:                 <ChevronRight size={14} />
+    00958:               </a>
+    00959:             </div>
+    00960: 
+    00961: 
+
+SOURCE: src\components\home\Sections.tsx:966
+    00962:             <div className="home-tips-grid">
+    00963:               {travelTips.map((article) => (
+    00964:                 <a
+    00965:                   key={article.title}
+>>> 00966:                   href="/inspirasi"
+    00967:                   className="home-tip-card"
+    00968:                 >
+    00969:                   <div className="home-tip-image">
+    00970:                     <img
+    00971:                       src={article.image}
+    00972:                       alt={article.title}
+
+
+ROUTE: /masuk
+REFERENCES: 3
+------------------------------------------------------------
+SOURCE: src\components\home\Footer.tsx:364
+    00360:           <span><MarketplaceText messageKey="footer.notifications" /></span>
+    00361:         </a>
+    00362: 
+    00363:         <a
+>>> 00364:           href="/masuk"
+    00365:           className="sg-mobile-bottom-item"
+    00366:         >
+    00367:           <svg viewBox="0 0 24 24" aria-hidden="true">
+    00368:             <circle
+    00369:               cx="12"
+    00370:               cy="8"
+
+SOURCE: src\components\home\Header.tsx:415
+    00411:           )}
+    00412: 
+    00413: 
+    00414:           <a
+>>> 00415:             href="/masuk"
+    00416:             className="hero-login"
+    00417:           >
+    00418:             {t("header.login")}
+    00419:           </a>
+    00420: 
+    00421: 
+
+SOURCE: src\components\home\Header.tsx:534
+    00530: 
+    00531:           <div className="hero-mobile-auth">
+    00532: 
+    00533:             <a
+>>> 00534:               href="/masuk"
+    00535:               className="hero-login"
+    00536:             >
+    00537:               {t("header.login")}
+    00538:             </a>
+    00539: 
+    00540:             <button
+
+
+ROUTE: /mitra
+REFERENCES: 1
+------------------------------------------------------------
+SOURCE: src\components\home\Footer.tsx:235
+    00231:             <a href="/affiliate">
+    00232:               <MarketplaceText messageKey="footer.affiliate" />
+    00233:             </a>
+    00234: 
+>>> 00235:             <a href="/mitra">
+    00236:               <MarketplaceText messageKey="footer.travelPartner" />
+    00237:             </a>
+    00238: 
+    00239:             <a href="/daftar-travel">
+    00240:               <MarketplaceText messageKey="footer.registerTravel" />
+    00241:             </a>
+
+
+ROUTE: /notifikasi
+REFERENCES: 1
+------------------------------------------------------------
+SOURCE: src\components\home\Footer.tsx:342
+    00338:           <span><MarketplaceText messageKey="footer.orders" /></span>
+    00339:         </a>
+    00340: 
+    00341:         <a
+>>> 00342:           href="/notifikasi"
+    00343:           className="sg-mobile-bottom-item"
+    00344:         >
+    00345:           <svg viewBox="0 0 24 24" aria-hidden="true">
+    00346:             <path
+    00347:               d="M18 9a6 6 0 1 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9Z"
+    00348:               fill="none"
+
+
+ROUTE: /tentang-kami
+REFERENCES: 2
+------------------------------------------------------------
+SOURCE: src\app\karier\CareerClient.tsx:324
+    00320:             <p>{t.aboutDescription}</p>
+    00321: 
+    00322:             <Link
+    00323:               className="career-outline-button"
+>>> 00324:               href="/tentang-kami"
+    00325:             >
+    00326:               {t.aboutAction}
+    00327:               <ArrowRight size={16} />
+    00328:             </Link>
+    00329:           </div>
+    00330: 
+
+SOURCE: src\components\home\Footer.tsx:137
+    00133:             <a href="/karier">
+    00134:               <MarketplaceText messageKey="footer.career" />
+    00135:             </a>
+    00136: 
+>>> 00137:             <a href="/tentang-kami">
+    00138:               <MarketplaceText messageKey="footer.aboutUs" />
+    00139:             </a>
+    00140: 
+    00141: <div className="sg-footer-social-section">
+    00142:               <h3>
+    00143:                 <MarketplaceText messageKey="footer.follow" />

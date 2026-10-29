@@ -1,0 +1,2331 @@
+00080:   "Yogyakarta",
+00081:   "Bandung",
+00082:   "Semarang",
+00083:   "Balikpapan",
+00084:   "Banjarmasin",
+00085:   "Palembang",
+00086:   "Pekanbaru",
+00087:   "Padang",
+00088:   "Banda Aceh",
+00089:   "Batam",
+00090:   "Denpasar",
+00091:   "Manado",
+00092:   "Lombok",
+00093: ];
+00094: 
+00095: 
+00096: const umrahDestinations = [
+00097:   "Makkah",
+00098:   "Madinah",
+00099:   "Makkah & Madinah",
+00100: ];
+00101: 
+00102: 
+00103: const hajiDestinations = [
+00104:   "Makkah",
+00105:   "Madinah",
+00106: ];
+00107: 
+00108: 
+00109: const halalTourCountries = [
+00110:   "Indonesia",
+00111:   "Malaysia",
+00112:   "Singapura",
+00113:   "Jepang",
+00114:   "Korea Selatan",
+00115:   "Turki",
+00116:   "Uni Emirat Arab",
+00117:   "Thailand",
+00118:   "Vietnam",
+00119:   "Brunei Darussalam",
+00120:   "Mesir",
+00121:   "Maroko",
+00122:   "Uzbekistan",
+00123:   "Kazakhstan",
+00124:   "Qatar",
+00125:   "Oman",
+00126:   "Yordania",
+00127:   "Inggris",
+00128:   "Prancis",
+00129:   "Italia",
+00130:   "Spanyol",
+00131:   "Swiss",
+00132:   "Jerman",
+00133:   "Belanda",
+00134:   "Austria",
+00135:   "Bosnia & Herzegovina",
+00136:   "Albania",
+00137: ];
+00138: 
+00139: 
+00140: const halalTourPopularCountries = [
+00141:   "Indonesia",
+00142:   "Malaysia",
+00143:   "Singapura",
+00144:   "Jepang",
+00145:   "Korea Selatan",
+00146:   "Turki",
+00147:   "Uni Emirat Arab",
+00148: ];
+00149: 
+00150: 
+00151: const domesticCities = [
+00152:   "Jakarta",
+00153:   "Bandung",
+00154:   "Bogor",
+00155:   "Bekasi",
+00156:   "Depok",
+00157:   "Tangerang",
+00158:   "Serang",
+00159:   "Cirebon",
+00160:   "Tasikmalaya",
+00161:   "Sukabumi",
+00162:   "Yogyakarta",
+00163:   "Solo",
+00164:   "Semarang",
+00165:   "Magelang",
+00166:   "Purwokerto",
+00167:   "Surabaya",
+00168:   "Malang",
+00169:   "Batu",
+00170:   "Kediri",
+00171:   "Madiun",
+00172:   "Jember",
+00173:   "Banyuwangi",
+00174:   "Denpasar",
+00175:   "Ubud",
+00176:   "Kuta",
+00177:   "Nusa Dua",
+00178:   "Mataram",
+00179:   "Lombok",
+00180:   "Bima",
+00181:   "Labuan Bajo",
+00182:   "Medan",
+00183:   "Berastagi",
+00184:   "Parapat",
+00185:   "Banda Aceh",
+00186:   "Sabang",
+00187:   "Padang",
+00188:   "Bukittinggi",
+00189:   "Pekanbaru",
+00190:   "Batam",
+00191:   "Tanjung Pinang",
+00192:   "Palembang",
+00193:   "Bengkulu",
+00194:   "Bandar Lampung",
+00195:   "Pontianak",
+00196:   "Singkawang",
+00197:   "Palangka Raya",
+00198:   "Banjarmasin",
+00199:   "Samarinda",
+00200:   "Balikpapan",
+00201:   "Tarakan",
+00202:   "Makassar",
+00203:   "Parepare",
+00204:   "Palopo",
+00205:   "Bulukumba",
+00206:   "Manado",
+00207:   "Tomohon",
+00208:   "Gorontalo",
+00209:   "Palu",
+00210:   "Kendari",
+00211:   "Ambon",
+00212:   "Ternate",
+00213:   "Jayapura",
+00214:   "Sorong",
+00215:   "Manokwari",
+00216: ];
+00217: 
+00218: 
+00219: const domesticPopularCities = [
+00220:   "Jakarta",
+00221:   "Denpasar",
+00222:   "Yogyakarta",
+00223:   "Bandung",
+00224:   "Surabaya",
+00225:   "Makassar",
+00226:   "Lombok",
+00227:   "Labuan Bajo",
+00228: ];
+00229: 
+00230: 
+00231: const internationalCountries = [
+00232:   "Malaysia",
+00233:   "Singapura",
+00234:   "Brunei Darussalam",
+00235:   "Thailand",
+00236:   "Vietnam",
+00237:   "Filipina",
+00238:   "Kamboja",
+00239:   "Laos",
+00240:   "Myanmar",
+00241:   "Timor-Leste",
+00242:   "Jepang",
+00243:   "Korea Selatan",
+00244:   "Tiongkok",
+00245:   "Hong Kong",
+00246:   "Makau",
+00247:   "Taiwan",
+00248:   "Mongolia",
+00249:   "India",
+00250:   "Pakistan",
+00251:   "Bangladesh",
+00252:   "Sri Lanka",
+00253:   "Maladewa",
+00254:   "Nepal",
+00255:   "Bhutan",
+00256:   "Turki",
+00257:   "Uni Emirat Arab",
+00258:   "Qatar",
+00259:   "Oman",
+00260:   "Bahrain",
+00261:   "Kuwait",
+00262:   "Yordania",
+00263:   "Lebanon",
+00264:   "Mesir",
+00265:   "Maroko",
+00266:   "Tunisia",
+00267:   "Aljazair",
+00268:   "Afrika Selatan",
+00269:   "Kenya",
+00270:   "Tanzania",
+00271:   "Mauritius",
+00272:   "Seychelles",
+00273:   "Uzbekistan",
+00274:   "Kazakhstan",
+00275:   "Kyrgyzstan",
+00276:   "Azerbaijan",
+00277:   "Georgia",
+00278:   "Armenia",
+00279:   "Inggris",
+00280:   "Prancis",
+00281:   "Italia",
+00282:   "Spanyol",
+00283:   "Portugal",
+00284:   "Swiss",
+00285:   "Jerman",
+00286:   "Belanda",
+00287:   "Belgia",
+00288:   "Austria",
+00289:   "Republik Ceko",
+00290:   "Hungaria",
+00291:   "Polandia",
+00292:   "Yunani",
+00293:   "Kroasia",
+00294:   "Bosnia & Herzegovina",
+00295:   "Albania",
+00296:   "Serbia",
+00297:   "Rumania",
+00298:   "Bulgaria",
+00299:   "Norwegia",
+00300:   "Swedia",
+00301:   "Finlandia",
+00302:   "Denmark",
+00303:   "Islandia",
+00304:   "Irlandia",
+00305:   "Amerika Serikat",
+00306:   "Kanada",
+00307:   "Meksiko",
+00308:   "Brasil",
+00309:   "Argentina",
+00310:   "Chile",
+00311:   "Peru",
+00312:   "Kolombia",
+00313:   "Australia",
+00314:   "Selandia Baru",
+00315:   "Fiji",
+00316: ];
+00317: 
+00318: 
+00319: const internationalPopularCountries = [
+00320:   "Malaysia",
+00321:   "Singapura",
+00322:   "Jepang",
+00323:   "Korea Selatan",
+00324:   "Turki",
+00325:   "Uni Emirat Arab",
+00326:   "Thailand",
+00327:   "Vietnam",
+00328:   "Mesir",
+00329:   "Maroko",
+00330:   "Inggris",
+00331:   "Prancis",
+00332: ];
+00333: 
+00334: 
+00335: const segaDealsDestinations = [
+00336:   ...domesticCities,
+00337:   ...internationalCountries,
+00338: ];
+00339: 
+00340: 
+00341: const segaDealsPopularDestinations = [
+00342:   "Bali",
+00343:   "Lombok",
+00344:   "Labuan Bajo",
+00345:   "Yogyakarta",
+00346:   "Jepang",
+00347:   "Korea Selatan",
+00348:   "Turki",
+00349:   "Malaysia",
+00350: ];
+00351: 
+00352: 
+00353: /*
+00354:  * Negara asal SegaDeals.
+00355:  * Kota tidak di-hardcode.
+00356:  * User cukup mengetik kota keberangkatan.
+00357:  */
+00358: const segaDealsOriginCountries = [
+00359:   "Indonesia",
+00360:   "Malaysia",
+00361:   "Singapura",
+00362:   "Brunei Darussalam",
+00363:   "Thailand",
+00364:   "Vietnam",
+00365:   "Filipina",
+00366:   "Jepang",
+00367:   "Korea Selatan",
+00368:   "Tiongkok",
+00369:   "Hong Kong",
+00370:   "Taiwan",
+00371:   "India",
+00372:   "Pakistan",
+00373:   "Bangladesh",
+00374:   "Sri Lanka",
+00375:   "Maladewa",
+00376:   "Nepal",
+00377:   "Turki",
+00378:   "Uni Emirat Arab",
+00379:   "Arab Saudi",
+00380:   "Qatar",
+00381:   "Oman",
+00382:   "Bahrain",
+00383:   "Kuwait",
+00384:   "Yordania",
+00385:   "Mesir",
+00386:   "Maroko",
+00387:   "Afrika Selatan",
+00388:   "Uzbekistan",
+00389:   "Kazakhstan",
+00390:   "Azerbaijan",
+00391:   "Inggris",
+00392:   "Prancis",
+00393:   "Italia",
+00394:   "Spanyol",
+00395:   "Portugal",
+00396:   "Swiss",
+00397:   "Jerman",
+00398:   "Belanda",
+00399:   "Belgia",
+00400:   "Austria",
+00401:   "Yunani",
+00402:   "Norwegia",
+00403:   "Swedia",
+00404:   "Finlandia",
+00405:   "Denmark",
+00406:   "Amerika Serikat",
+00407:   "Kanada",
+00408:   "Meksiko",
+00409:   "Brasil",
+00410:   "Argentina",
+00411:   "Australia",
+00412:   "Selandia Baru",
+00413: ];
+00414: 
+00415: 
+00416: const segaDealsPopularOrigins = [
+00417:   "Indonesia",
+00418:   "Malaysia",
+00419:   "Singapura",
+00420:   "Jepang",
+00421:   "Uni Emirat Arab",
+00422:   "Turki",
+00423:   "Australia",
+00424:   "Inggris",
+00425: ];
+00426: 
+00427: 
+00428: const segaDealsCitiesByCountry: Record<string, string[]> = {
+00429:   Indonesia: [
+00430:     "Jakarta",
+00431:     "Makassar",
+00432:     "Surabaya",
+00433:     "Medan",
+00434:     "Denpasar",
+00435:     "Yogyakarta",
+00436:     "Bandung",
+00437:     "Semarang",
+00438:     "Balikpapan",
+00439:     "Banjarmasin",
+00440:     "Pekanbaru",
+00441:     "Palembang",
+00442:     "Padang",
+00443:     "Banda Aceh",
+00444:     "Batam",
+00445:     "Manado",
+00446:     "Lombok",
+00447:   ],
+00448: 
+00449:   Malaysia: [
+00450:     "Kuala Lumpur",
+00451:     "Johor Bahru",
+00452:     "Penang",
+00453:     "Kota Kinabalu",
+00454:     "Kuching",
+00455:     "Langkawi",
+00456:     "Malaka",
+00457:   ],
+00458: 
+00459:   Singapura: [
+00460:     "Singapore",
+00461:   ],
+00462: 
+00463:   Jepang: [
+00464:     "Tokyo",
+00465:     "Osaka",
+00466:     "Kyoto",
+00467:     "Nagoya",
+00468:     "Fukuoka",
+00469:     "Sapporo",
+00470:     "Okinawa",
+00471:   ],
+00472: 
+00473:   "Uni Emirat Arab": [
+00474:     "Dubai",
+00475:     "Abu Dhabi",
+00476:     "Sharjah",
+00477:     "Ajman",
+00478:     "Ras Al Khaimah",
+00479:   ],
+00480: 
+00481:   Turki: [
+00482:     "Istanbul",
+00483:     "Ankara",
+00484:     "Antalya",
+00485:     "Izmir",
+00486:     "Bursa",
+00487:     "Cappadocia",
+00488:   ],
+00489: 
+00490:   Australia: [
+00491:     "Sydney",
+00492:     "Melbourne",
+00493:     "Brisbane",
+00494:     "Perth",
+00495:     "Adelaide",
+00496:     "Gold Coast",
+00497:   ],
+00498: 
+00499:   Inggris: [
+00500:     "London",
+00501:     "Manchester",
+00502:     "Birmingham",
+00503:     "Liverpool",
+00504:     "Leeds",
+00505:     "Edinburgh",
+00506:   ],
+00507: 
+00508:   "Korea Selatan": [
+00509:     "Seoul",
+00510:     "Busan",
+00511:     "Incheon",
+00512:     "Jeju",
+00513:     "Daegu",
+00514:   ],
+00515: 
+00516:   Thailand: [
+00517:     "Bangkok",
+00518:     "Phuket",
+00519:     "Chiang Mai",
+00520:     "Pattaya",
+00521:     "Krabi",
+00522:   ],
+00523: 
+00524:   Vietnam: [
+00525:     "Ho Chi Minh City",
+00526:     "Hanoi",
+00527:     "Da Nang",
+00528:     "Nha Trang",
+00529:   ],
+00530: 
+00531:   "Amerika Serikat": [
+00532:     "New York",
+00533:     "Los Angeles",
+00534:     "San Francisco",
+00535:     "Chicago",
+00536:     "Miami",
+00537:     "Seattle",
+00538:   ],
+00539: 
+00540:   Kanada: [
+00541:     "Toronto",
+00542:     "Vancouver",
+00543:     "Montreal",
+00544:     "Calgary",
+00545:     "Ottawa",
+00546:   ],
+00547: 
+00548:   Prancis: [
+00549:     "Paris",
+00550:     "Nice",
+00551:     "Lyon",
+00552:     "Marseille",
+00553:   ],
+00554: 
+00555:   Italia: [
+00556:     "Rome",
+00557:     "Milan",
+00558:     "Venice",
+00559:     "Florence",
+00560:     "Naples",
+00561:   ],
+00562: 
+00563:   Spanyol: [
+00564:     "Madrid",
+00565:     "Barcelona",
+00566:     "Seville",
+00567:     "Valencia",
+00568:   ],
+00569: 
+00570:   Swiss: [
+00571:     "Zurich",
+00572:     "Geneva",
+00573:     "Bern",
+00574:     "Lucerne",
+00575:   ],
+00576: 
+00577:   Jerman: [
+00578:     "Berlin",
+00579:     "Frankfurt",
+00580:     "Munich",
+00581:     "Hamburg",
+00582:   ],
+00583: 
+00584:   Belanda: [
+00585:     "Amsterdam",
+00586:     "Rotterdam",
+00587:     "The Hague",
+00588:     "Utrecht",
+00589:   ],
+00590: 
+00591:   Mesir: [
+00592:     "Cairo",
+00593:     "Alexandria",
+00594:     "Luxor",
+00595:     "Sharm El Sheikh",
+00596:   ],
+00597: 
+00598:   Maroko: [
+00599:     "Casablanca",
+00600:     "Marrakesh",
+00601:     "Rabat",
+00602:     "Fez",
+00603:   ],
+00604: 
+00605:   Qatar: [
+00606:     "Doha",
+00607:   ],
+00608: 
+00609:   Oman: [
+00610:     "Muscat",
+00611:     "Salalah",
+00612:   ],
+00613: 
+00614:   "Arab Saudi": [
+00615:     "Riyadh",
+00616:     "Jeddah",
+00617:     "Makkah",
+00618:     "Madinah",
+00619:     "Dammam",
+00620:   ],
+00621: };
+00622: 
+00623: 
+00624: const umrahClasses = [
+00625:   "Hemat",
+00626:   "Regular",
+00627:   "Plus",
+00628:   "First",
+00629: ];
+00630: 
+00631: 
+00632: const hajiClasses = [
+00633:   "Plus",
+00634:   "Plus VVIP",
+00635: ];
+00636: 
+00637: 
+00638: function getMonthNames(locale: string) {
+00639:   const formatter = new Intl.DateTimeFormat(locale, {
+00640:     month: "long",
+00641:   });
+00642: 
+00643:   return Array.from(
+00644:     { length: 12 },
+00645:     (_, month) =>
+00646:       formatter.format(
+00647:         new Date(2026, month, 1),
+00648:       ),
+00649:   );
+00650: }
+00651: 
+00652: 
+00653: function getDayNames(locale: string) {
+00654:   const formatter = new Intl.DateTimeFormat(locale, {
+00655:     weekday: "short",
+00656:   });
+00657: 
+00658:   const sunday = new Date(2026, 0, 4);
+00659: 
+00660:   return Array.from(
+00661:     { length: 7 },
+00662:     (_, index) => {
+00663:       const date = new Date(sunday);
+00664: 
+00665:       date.setDate(
+00666:         sunday.getDate() + index,
+00667:       );
+00668: 
+00669:       return formatter.format(date);
+00670:     },
+00671:   );
+00672: }
+00673: 
+00674: 
+00675: type OpenPanel =
+00676:   | "origin"
+00677:   | "destination"
+00678:   | "traveler"
+00679:   | "budget"
+00680:   | "date"
+00681:   | "year"
+00682:   | null;
+00683: 
+00684: 
+00685: function rupiah(
+00686:   value: number,
+00687:   formatter: (amountInIdr: number) => string,
+00688: ) {
+00689:   return formatter(value);
+00690: }
+00691: 
+00692: 
+00693: function formatDate(
+00694:   date: Date | null,
+00695:   locale: string,
+00696:   emptyLabel: string,
+00697: ) {
+00698:   if (!date) {
+00699:     return emptyLabel;
+00700:   }
+00701: 
+00702:   return new Intl.DateTimeFormat(locale, {
+00703:     day: "numeric",
+00704:     month: "short",
+00705:     year: "numeric",
+00706:   }).format(date);
+00707: }
+00708: 
+00709: 
+00710: function getCalendarDays(year: number, month: number) {
+00711:   const firstDay = new Date(year, month, 1).getDay();
+00712:   const numberOfDays = new Date(
+00713:     year,
+00714:     month + 1,
+00715:     0,
+00716:   ).getDate();
+00717: 
+00718:   const result: Array<number | null> = [];
+00719: 
+00720:   for (let index = 0; index < firstDay; index += 1) {
+00721:     result.push(null);
+00722:   }
+00723: 
+00724:   for (let day = 1; day <= numberOfDays; day += 1) {
+00725:     result.push(day);
+00726:   }
+00727: 
+00728:   while (result.length % 7 !== 0) {
+00729:     result.push(null);
+00730:   }
+00731: 
+00732:   return result;
+00733: }
+00734: 
+00735: 
+00736: function CalendarMonth({
+00737:   year,
+00738:   month,
+00739:   selectedDate,
+00740:   onSelect,
+00741:   locale,
+00742: }: {
+00743:   year: number;
+00744:   month: number;
+00745:   selectedDate: Date | null;
+00746:   onSelect: (date: Date) => void;
+00747:   locale: string;
+00748: }) {
+00749:   const days = getCalendarDays(year, month);
+00750:   const monthNames = getMonthNames(locale);
+00751:   const dayNames = getDayNames(locale);
+00752: 
+00753:   const today = new Date();
+00754:   today.setHours(0, 0, 0, 0);
+00755: 
+00756:   return (
+00757:     <div className="hero-calendar-month">
+00758:       <h4>
+00759:         {monthNames[month]} {year}
+00760:       </h4>
+00761: 
+00762:       <div className="hero-calendar-weekdays">
+00763:         {dayNames.map((name, index) => (
+00764:           <span
+00765:             key={name}
+00766:             className={index === 0 ? "sunday" : ""}
+00767:           >
+00768:             {name}
+00769:           </span>
+00770:         ))}
+00771:       </div>
+00772: 
+00773:       <div className="hero-calendar-days">
+00774:         {days.map((day, index) => {
+00775:           if (!day) {
+00776:             return (
+00777:               <span
+00778:                 key={`empty-${index}`}
+00779:                 className="empty"
+00780:               />
+00781:             );
+00782:           }
+00783: 
+00784:           const candidate = new Date(
+00785:             year,
+00786:             month,
+00787:             day,
+00788:           );
+00789: 
+00790:           candidate.setHours(0, 0, 0, 0);
+00791: 
+00792:           const disabled = candidate < today;
+00793: 
+00794:           const selected =
+00795:             selectedDate &&
+00796:             candidate.getFullYear() ===
+00797:               selectedDate.getFullYear() &&
+00798:             candidate.getMonth() ===
+00799:               selectedDate.getMonth() &&
+00800:             candidate.getDate() ===
+00801:               selectedDate.getDate();
+00802: 
+00803:           return (
+00804:             <button
+00805:               key={day}
+00806:               type="button"
+00807:               disabled={disabled}
+00808:               className={selected ? "selected" : ""}
+00809:               onClick={() => {
+00810:                 if (!disabled) {
+00811:                   onSelect(candidate);
+00812:                 }
+00813:               }}
+00814:             >
+00815:               {day}
+00816:             </button>
+00817:           );
+00818:         })}
+00819:       </div>
+00820:     </div>
+00821:   );
+00822: }
+00823: 
+00824: 
+00825: export function Hero() {
+00826:   const { currency, formatCurrency, language, locale } = useMarketplacePreferences();
+00827:   const t = (
+00828:     key: Parameters<typeof marketplaceTranslate>[1],
+00829:   ) => marketplaceTranslate(language, key);
+00830: 
+00831:   const monthNames = getMonthNames(locale);
+00832:   const router = useRouter();
+00833:   const [active, setActive] = useState("Umrah");
+00834: 
+00835:   const [adult, setAdult] = useState(2);
+00836:   const [child, setChild] = useState(0);
+00837:   const [infant, setInfant] = useState(0);
+00838: 
+00839:   const [travelClass, setTravelClass] =
+00840:     useState("Hemat");
+00841: 
+00842:   const [origin, setOrigin] =
+00843:     useState("Jakarta");
+00844: 
+00845:   const [originQuery, setOriginQuery] =
+00846:     useState("");
+00847: 
+00848:   const [destination, setDestination] =
+00849:     useState("");
+00850: 
+00851:   const [destinationQuery, setDestinationQuery] =
+00852:     useState("");
+00853: 
+00854:   const [budget, setBudget] =
+00855:     useState("");
+00856: 
+00857:   const [hotelStars, setHotelStars] =
+00858:     useState<number | null>(null);
+00859: 
+00860:   const [segaOriginCountry, setSegaOriginCountry] =
+00861:     useState("Indonesia");
+00862: 
+00863:   const [segaOriginCountryQuery, setSegaOriginCountryQuery] =
+00864:     useState("");
+00865: 
+00866:   const [segaOriginCity, setSegaOriginCity] =
+00867:     useState("Jakarta");
+00868: 
+00869:   const [segaOriginCityQuery, setSegaOriginCityQuery] =
+00870:     useState("");
+00871: 
+00872:   const [selectedDate, setSelectedDate] =
+00873:     useState<Date | null>(null);
+00874: 
+00875:   const [calendarCursor, setCalendarCursor] =
+00876:     useState(() => {
+00877:       const now = new Date();
+00878: 
+00879:       return new Date(
+00880:         now.getFullYear(),
+00881:         now.getMonth(),
+00882:         1,
+00883:       );
+00884:     });
+00885: 
+00886:   const currentYear = new Date().getFullYear();
+00887: 
+00888:   const [hajiYear, setHajiYear] =
+00889:     useState<number | null>(null);
+00890: 
+00891:   const [openPanel, setOpenPanel] =
+00892:     useState<OpenPanel>(null);
+00893: 
+00894:   const [showSegaDealsInfo, setShowSegaDealsInfo] =
+00895:     useState(false);
+00896:   /* SEGADEALS_MODAL_ESCAPE_V1 */
+00897:   useEffect(() => {
+00898:     if (!showSegaDealsInfo) {
+00899:       return;
+00900:     }
+00901: 
+00902:     const handleKeyDown = (event: KeyboardEvent) => {
+00903:       if (event.key === "Escape") {
+00904:         setShowSegaDealsInfo(false);
+00905:       }
+00906:     };
+00907: 
+00908:     document.addEventListener("keydown", handleKeyDown);
+00909: 
+00910:     return () => {
+00911:       document.removeEventListener("keydown", handleKeyDown);
+00912:     };
+00913:   }, [showSegaDealsInfo]);
+00914: 
+00915: 
+00916:   const controlsRef = useRef<HTMLDivElement>(null);
+00917: 
+00918: 
+00919:   const isHaji = active === "Haji";
+00920:   const isUmrah = active === "Umrah";
+00921:   const isHalalTour = active === "Halal Tour";
+00922:   const isDomestic = active === "Tour Domestic";
+00923:   const isInternational =
+00924:     active === "Tour International";
+00925:   const isSegaDeals = active === "SegaDeals";
+00926: 
+00927: 
+00928:   const totalTraveler =
+00929:     adult + child + infant;
+00930: 
+00931: 
+00932:   const availableClasses =
+00933:     isHaji
+00934:       ? hajiClasses
+00935:       : umrahClasses;
+00936: 
+00937: 
+00938:   const filteredOrigins = useMemo(() => {
+00939:     const query =
+00940:       originQuery.trim().toLowerCase();
+00941: 
+00942:     if (!query) {
+00943:       return indonesiaCities;
+00944:     }
+00945: 
+00946:     return indonesiaCities.filter((city) =>
+00947:       city.toLowerCase().includes(query),
+00948:     );
+00949:   }, [originQuery]);
+00950: 
+00951: 
+00952:   const filteredSegaOriginCountries =
+00953:     useMemo(() => {
+00954:       const query =
+00955:         segaOriginCountryQuery
+00956:           .trim()
+00957:           .toLowerCase();
+00958: 
+00959:       if (!query) {
+00960:         return segaDealsPopularOrigins;
+00961:       }
+00962: 
+00963:       return segaDealsOriginCountries.filter(
+00964:         (country) =>
+00965:           country
+00966:             .toLowerCase()
+00967:             .includes(query),
+00968:       );
+00969:     }, [segaOriginCountryQuery]);
+00970: 
+00971: 
+00972:   const segaOriginCities =
+00973:     segaDealsCitiesByCountry[
+00974:       segaOriginCountry
+00975:     ] ?? [];
+00976: 
+00977: 
+00978:   const filteredSegaOriginCities =
+00979:     useMemo(() => {
+00980:       const query =
+00981:         segaOriginCityQuery
+00982:           .trim()
+00983:           .toLowerCase();
+00984: 
+00985:       if (!query) {
+00986:         return segaOriginCities;
+00987:       }
+00988: 
+00989:       return segaOriginCities.filter(
+00990:         (city) =>
+00991:           city
+00992:             .toLowerCase()
+00993:             .includes(query),
+00994:       );
+00995:     }, [
+00996:       segaOriginCityQuery,
+00997:       segaOriginCities,
+00998:     ]);
+00999: 
+01000: 
+01001:   const destinations = useMemo(() => {
+01002:     if (isHaji) {
+01003:       return hajiDestinations;
+01004:     }
+01005: 
+01006:     if (isHalalTour) {
+01007:       return halalTourCountries;
+01008:     }
+01009: 
+01010:     if (isDomestic) {
+01011:       return domesticCities;
+01012:     }
+01013: 
+01014:     if (isInternational) {
+01015:       return internationalCountries;
+01016:     }
+01017: 
+01018:     if (isSegaDeals) {
+01019:       return segaDealsDestinations;
+01020:     }
+01021: 
+01022:     return umrahDestinations;
+01023:   }, [
+01024:     isHaji,
+01025:     isHalalTour,
+01026:     isDomestic,
+01027:     isInternational,
+01028:     isSegaDeals,
+01029:   ]);
+01030: 
+01031: 
+01032:   const filteredDestinations = useMemo(() => {
+01033:     const query =
+01034:       destinationQuery
+01035:         .trim()
+01036:         .toLowerCase();
+01037: 
+01038:     if (!query) {
+01039:       if (isHalalTour) {
+01040:         return halalTourPopularCountries;
+01041:       }
+01042: 
+01043:       if (isDomestic) {
+01044:         return domesticPopularCities;
+01045:       }
+01046: 
+01047:       if (isInternational) {
+01048:         return internationalPopularCountries;
+01049:       }
+01050: 
+01051:       if (isSegaDeals) {
+01052:         return segaDealsPopularDestinations;
+01053:       }
+01054: 
+01055:       return destinations;
+01056:     }
+01057: 
+01058:     return destinations.filter((item) =>
+01059:       item.toLowerCase().includes(query),
+01060:     );
+01061:   }, [
+01062:     destinationQuery,
+01063:     destinations,
+01064:     isHalalTour,
+01065:     isDomestic,
+01066:     isInternational,
+01067:     isSegaDeals,
+01068:   ]);
+01069: 
+01070: 
+01071:   const hajiYears = Array.from(
+01072:     { length: 6 },
+01073:     (_, index) => currentYear + index,
+01074:   );
+01075: 
+01076:   const isHajiYearDisabled = (year: number) => {
+01077:     /*
+01078:      * UI sementara Segaloka:
+01079:      * musim Haji 2026 sudah berlalu.
+01080:      *
+01081:      * Nantinya status availability / closed / sold-out
+01082:      * wajib berasal dari konfigurasi paket Haji Travel,
+01083:      * bukan hardcode di frontend.
+01084:      */
+01085:     return year === 2026;
+01086:   };
+01087: 
+01088: 
+01089:   const firstCalendarYear =
+01090:     calendarCursor.getFullYear();
+01091: 
+01092:   const firstCalendarMonth =
+01093:     calendarCursor.getMonth();
+01094: 
+01095:   const secondCalendarDate = new Date(
+01096:     firstCalendarYear,
+01097:     firstCalendarMonth + 1,
+01098:     1,
+01099:   );
+01100: 
+01101:   const todayCalendarMonth = new Date();
+01102: 
+01103:   todayCalendarMonth.setDate(1);
+01104:   todayCalendarMonth.setHours(0, 0, 0, 0);
+01105: 
+01106:   const canGoPrevious =
+01107:     calendarCursor.getTime() >
+01108:     todayCalendarMonth.getTime();
+01109: 
+01110:   const calendarYears = Array.from(
+01111:     { length: 7 },
+01112:     (_, index) =>
+01113:       todayCalendarMonth.getFullYear() + index,
+01114:   );
+01115: 
+01116: 
+01117:   function moveCalendarMonth(offset: number) {
+01118:     setCalendarCursor((current) => {
+01119:       const candidate = new Date(
+01120:         current.getFullYear(),
+01121:         current.getMonth() + offset,
+01122:         1,
+01123:       );
+01124: 
+01125:       if (
+01126:         candidate.getTime() <
+01127:         todayCalendarMonth.getTime()
+01128:       ) {
+01129:         return new Date(
+01130:           todayCalendarMonth.getFullYear(),
+01131:           todayCalendarMonth.getMonth(),
+01132:           1,
+01133:         );
+01134:       }
+01135: 
+01136:       return candidate;
+01137:     });
+01138:   }
+01139: 
+01140: 
+01141:   function changeCalendarMonth(month: number) {
+01142:     setCalendarCursor((current) => {
+01143:       const candidate = new Date(
+01144:         current.getFullYear(),
+01145:         month,
+01146:         1,
+01147:       );
+01148: 
+01149:       if (
+01150:         candidate.getTime() <
+01151:         todayCalendarMonth.getTime()
+01152:       ) {
+01153:         return new Date(
+01154:           todayCalendarMonth.getFullYear(),
+01155:           todayCalendarMonth.getMonth(),
+01156:           1,
+01157:         );
+01158:       }
+01159: 
+01160:       return candidate;
+01161:     });
+01162:   }
+01163: 
+01164: 
+01165:   function changeCalendarYear(year: number) {
+01166:     setCalendarCursor((current) => {
+01167:       let month = current.getMonth();
+01168: 
+01169:       if (
+01170:         year === todayCalendarMonth.getFullYear() &&
+01171:         month < todayCalendarMonth.getMonth()
+01172:       ) {
+01173:         month = todayCalendarMonth.getMonth();
+01174:       }
+01175: 
+01176:       return new Date(
+01177:         year,
+01178:         month,
+01179:         1,
+01180:       );
+01181:     });
+01182:   }
+01183: 
+01184: 
+01185:   useEffect(() => {
+01186:     function handlePointerDown(event: PointerEvent) {
+01187:       if (
+01188:         controlsRef.current &&
+01189:         !controlsRef.current.contains(
+01190:           event.target as Node,
+01191:         )
+01192:       ) {
+01193:         setOpenPanel(null);
+01194:       }
+01195:     }
+01196: 
+01197:     document.addEventListener(
+01198:       "pointerdown",
+01199:       handlePointerDown,
+01200:     );
+01201: 
+01202:     return () => {
+01203:       document.removeEventListener(
+01204:         "pointerdown",
+01205:         handlePointerDown,
+01206:       );
+01207:     };
+01208:   }, []);
+01209: 
+01210: 
+01211:   function changeCategory(category: string) {
+01212:     setActive(category);
+01213:     setOpenPanel(null);
+01214:     setDestination("");
+01215:     setDestinationQuery("");
+01216:     setBudget("");
+01217: 
+01218:     if (category === "Haji") {
+01219:       setSelectedDate(null);
+01220: 
+01221:       if (
+01222:         travelClass !== "Plus" &&
+01223:         travelClass !== "Plus VVIP"
+01224:       ) {
+01225:         setTravelClass("Plus");
+01226:       }
+01227:     } else {
+01228:       setHajiYear(null);
+01229: 
+01230:       if (travelClass === "Plus VVIP") {
+01231:         setTravelClass("Hemat");
+01232:       }
+01233:     }
+01234: 
+01235:     if (category === "SegaDeals") {
+01236:       setShowSegaDealsInfo(true);
+01237:     }
+01238:   }
+01239: 
+01240: 
+01241:   function DestinationField() {
+01242:     return (
+01243:       <div className="hero-field-wrap">
+01244:         <button
+01245:           type="button"
+01246:           className="hero-field"
+01247:           onClick={() =>
+01248:             setOpenPanel(
+01249:               openPanel === "destination"
+01250:                 ? null
+01251:                 : "destination",
+01252:             )
+01253:           }
+01254:         >
+01255:           <span className="hero-field-icon">
+01256:             <Globe2 size={19} />
+01257:           </span>
+01258: 
+01259:           <span className="hero-field-content">
+01260:             <small>
+01261:               {isHaji
+01262:                 ? t("destination.entry")
+01263:                 : t("hero.destination")}
+01264:             </small>
+01265: 
+01266:             <strong>
+01267:               {destination ||
+01268:                 (isHaji
+01269:                   ? t("destination.selectEntry")
+01270:                   : isUmrah
+01271:                     ? t("destination.selectUmrah")
+01272:                     : isDomestic
+01273:                       ? t("destination.selectCity")
+01274:                       : t("destination.selectCountry"))}
+01275:             </strong>
+01276:           </span>
+01277:         </button>
+01278: 
+01279: 
+01280:         {openPanel === "destination" && (
+01281:           <div className="hero-popover hero-destination-popover">
+01282:             <h3>
+01283:               {isHaji
+01284:                 ? t("destination.entry")
+01285:                 : isDomestic
+01286:                   ? t("destination.selectCity")
+01287:                   : t("destination.select")}
+01288:             </h3>
+01289: 
+01290:             {!isHaji && (
+01291:               <label className="hero-popover-search">
+01292:                 <Search size={20} />
+01293: 
+01294:                 <input
+01295:                   type="text"
+01296:                   value={destinationQuery}
+01297:                   placeholder={
+01298:                     isDomestic
+01299:                       ? t("destination.searchIndonesiaCity")
+01300:                       : t("destination.searchCountry")
+01301:                   }
+01302:                   onChange={(event) =>
+01303:                     setDestinationQuery(
+01304:                       event.target.value,
+01305:                     )
+01306:                   }
+01307:                   autoFocus
+01308:                 />
+01309:               </label>
+01310:             )}
+01311: 
+01312:             <h4>
+01313:               {destinationQuery
+01314:                 ? t("destination.searchResults")
+01315:                 : isDomestic
+01316:                   ? t("destination.popular")
+01317:                   : isHaji
+01318:                     ? t("destination.chooseCity")
+01319:                     : t("destination.popular")}
+01320:             </h4>
+01321: 
+01322:             <div className="hero-location-options">
+01323:               {filteredDestinations.map((item) => (
+01324:                 <button
+01325:                   key={item}
+01326:                   type="button"
+01327:                   className={
+01328:                     destination === item
+01329:                       ? "selected"
+01330:                       : ""
+01331:                   }
+01332:                   onClick={() => {
+01333:                     setDestination(item);
+01334:                     setDestinationQuery("");
+01335:                     setOpenPanel(null);
+01336:                   }}
+01337:                 >
+01338:                   {item}
+01339:                 </button>
+01340:               ))}
+01341:             </div>
+01342:           </div>
+01343:         )}
+01344:       </div>
+01345:     );
+01346:   }
+01347: 
+01348: 
+01349:   function OriginField() {
+01350:     if (isSegaDeals) {
+01351:       return (
+01352:         <div className="hero-field-wrap">
+01353:           <button
+01354:             type="button"
+01355:             className="hero-field"
+01356:             onClick={() =>
+01357:               setOpenPanel(
+01358:                 openPanel === "origin"
+01359:                   ? null
+01360:                   : "origin",
+01361:               )
+01362:             }
+01363:           >
+01364:             <span className="hero-field-icon">
+01365:               <Building2 size={19} />
+01366:             </span>
+01367: 
+01368:             <span className="hero-field-content">
+01369:               <small>{t("hero.from")}</small>
+01370: 
+01371:               <strong>
+01372:                 {segaOriginCity.trim()
+01373:                   ? `${segaOriginCity.trim()}, ${segaOriginCountry}`
+01374:                   : segaOriginCountry}
+01375:               </strong>
+01376:             </span>
+01377:           </button>
+01378: 
+01379: 
+01380:           {openPanel === "origin" && (
+01381:             <div className="hero-popover hero-segadeals-origin-popover">
+01382:               <h3>{t("origin.whereFrom")}</h3>
+01383: 
+01384:               <div className="hero-sega-origin-section">
+01385:                 <label className="hero-sega-field-label">
+01386:                   {t("origin.country")}
+01387:                 </label>
+01388: 
+01389:                 <label className="hero-popover-search">
+01390:                   <Search size={20} />
+01391: 
+01392:                   <input
+01393:                     type="text"
+01394:                     value={segaOriginCountryQuery}
+01395:                     placeholder={t("origin.searchCountry")}
+01396:                     onChange={(event) =>
+01397:                       setSegaOriginCountryQuery(
+01398:                         event.target.value,
+01399:                       )
+01400:                     }
+01401:                   />
+01402:                 </label>
+01403: 
+01404:                 <div className="hero-location-options">
+01405:                   {filteredSegaOriginCountries.map(
+01406:                     (country) => (
+01407:                       <button
+01408:                         key={country}
+01409:                         type="button"
+01410:                         className={
+01411:                           country ===
+01412:                           segaOriginCountry
+01413:                             ? "selected"
+01414:                             : ""
+01415:                         }
+01416:                         onClick={() => {
+01417:                           setSegaOriginCountry(
+01418:                             country,
+01419:                           );
+01420: 
+01421:                           setSegaOriginCountryQuery(
+01422:                             "",
+01423:                           );
+01424: 
+01425:                           const cities =
+01426:                             segaDealsCitiesByCountry[
+01427:                               country
+01428:                             ] ?? [];
+01429: 
+01430:                           setSegaOriginCity(
+01431:                             cities[0] ?? "",
+01432:                           );
+01433: 
+01434:                           setSegaOriginCityQuery("");
+01435:                         }}
+01436:                       >
+01437:                         {country}
+01438:                       </button>
+01439:                     ),
+01440:                   )}
+01441:                 </div>
+01442:               </div>
+01443: 
+01444: 
+01445:               <div className="hero-sega-origin-section">
+01446:                 <label className="hero-sega-field-label">
+01447:                   {t("origin.departureCity")}
+01448:                 </label>
+01449: 
+01450:                 <label className="hero-popover-search">
+01451:                   <Search size={20} />
+01452: 
+01453:                   <input
+01454:                     type="text"
+01455:                     value={segaOriginCityQuery}
+01456:                     placeholder={`${t("origin.searchCityIn")} ${segaOriginCountry}...`}
+01457:                     onChange={(event) =>
+01458:                       setSegaOriginCityQuery(
+01459:                         event.target.value,
+01460:                       )
+01461:                     }
+01462:                   />
+01463:                 </label>
+01464: 
+01465:                 {segaOriginCities.length > 0 ? (
+01466:                   <div className="hero-location-options hero-sega-city-options">
+01467:                     {filteredSegaOriginCities.map(
+01468:                       (city) => (
+01469:                         <button
+01470:                           key={city}
+01471:                           type="button"
+01472:                           className={
+01473:                             city === segaOriginCity
+01474:                               ? "selected"
+01475:                               : ""
+01476:                           }
+01477:                           onClick={() => {
+01478:                             setSegaOriginCity(city);
+01479:                             setSegaOriginCityQuery("");
+01480:                           }}
+01481:                         >
+01482:                           {city}
+01483:                         </button>
+01484:                       ),
+01485:                     )}
+01486:                   </div>
+01487:                 ) : (
+01488:                   <div className="hero-sega-city-empty">
+01489:                     <input
+01490:                       type="text"
+01491:                       className="hero-sega-text-input"
+01492:                       value={segaOriginCity}
+01493:                       placeholder={t("origin.typeDepartureCity")}
+01494:                       onChange={(event) =>
+01495:                         setSegaOriginCity(
+01496:                           event.target.value,
+01497:                         )
+01498:                       }
+01499:                     />
+01500:                   </div>
+01501:                 )}
+01502:               </div>
+01503: 
+01504: 
+01505:               <button
+01506:                 type="button"
+01507:                 className="hero-traveler-done"
+01508:                 disabled={!segaOriginCity.trim()}
+01509:                 onClick={handleSearch}
+01510:               >
+01511:                 {t("origin.useLocation")}
+01512:               </button>
+01513:             </div>
+01514:           )}
+01515:         </div>
+01516:       );
+01517:     }
+01518: 
+01519: 
+01520:     return (
+01521:       <div className="hero-field-wrap">
+01522:         <button
+01523:           type="button"
+01524:           className="hero-field"
+01525:           onClick={() =>
+01526:             setOpenPanel(
+01527:               openPanel === "origin"
+01528:                 ? null
+01529:                 : "origin",
+01530:             )
+01531:           }
+01532:         >
+01533:           <span className="hero-field-icon">
+01534:             <Building2 size={19} />
+01535:           </span>
+01536: 
+01537:           <span className="hero-field-content">
+01538:             <small>{t("hero.from")}</small>
+01539:             <strong>{origin}</strong>
+01540:           </span>
+01541:         </button>
+01542: 
+01543:         {openPanel === "origin" && (
+01544:           <div className="hero-popover hero-location-popover">
+01545:             <h3>
+01546:               {t("origin.selectCityOrAirport")}
+01547:             </h3>
+01548: 
+01549:             <label className="hero-popover-search">
+01550:               <Search size={20} />
+01551: 
+01552:               <input
+01553:                 type="text"
+01554:                 value={originQuery}
+01555:                 placeholder={t("origin.cityOrAirportPlaceholder")}
+01556:                 onChange={(event) =>
+01557:                   setOriginQuery(
+01558:                     event.target.value,
+01559:                   )
+01560:                 }
+01561:                 autoFocus
+01562:               />
+01563:             </label>
+01564: 
+01565:             <h4>{t("destination.popular")}</h4>
+01566: 
+01567:             <div className="hero-location-options">
+01568:               {filteredOrigins.map((city) => (
+01569:                 <button
+01570:                   key={city}
+01571:                   type="button"
+01572:                   className={
+01573:                     city === origin
+01574:                       ? "selected"
+01575:                       : ""
+01576:                   }
+01577:                   onClick={() => {
+01578:                     setOrigin(city);
+01579:                     setOriginQuery("");
+01580:                     setOpenPanel(null);
+01581:                   }}
+01582:                 >
+01583:                   {city}
+01584:                 </button>
+01585:               ))}
+01586:             </div>
+01587:           </div>
+01588:         )}
+01589:       </div>
+01590:     );
+01591:   }
+01592: 
+01593: 
+01594:   function TravelerField() {
+01595:     return (
+01596:       <div className="hero-field-wrap">
+01597:         <button
+01598:           type="button"
+01599:           className="hero-field hero-traveler"
+01600:           onClick={() =>
+01601:             setOpenPanel(
+01602:               openPanel === "traveler"
+01603:                 ? null
+01604:                 : "traveler",
+01605:             )
+01606:           }
+01607:         >
+01608:           <span className="hero-field-icon">
+01609:             <UsersRound size={19} />
+01610:           </span>
+01611: 
+01612:           <span className="hero-field-content">
+01613:             <small>{t("hero.traveler")}</small>
+01614: 
+01615:             <strong>
+01616:               {t("traveler.count").replace(
+01617:                 "{count}",
+01618:                 String(totalTraveler),
+01619:               )}
+01620:               {!isSegaDeals &&
+01621:                 ` Â· ${travelClass}`}
+01622:             </strong>
+01623:           </span>
+01624:         </button>
+01625: 
+01626: 
+01627:         {openPanel === "traveler" && (
+01628:           <div className="hero-popover hero-traveler-popover">
+01629:             <h3>
+01630:               {isSegaDeals
+01631:                 ? t("traveler.configure")
+01632:                 : t("traveler.configureAndClass")}
+01633:             </h3>
+01634: 
+01635:             <div className="hero-traveler-rows">
+01636: 
+01637:               <div className="hero-traveler-row">
+01638:                 <div>
+01639:                   <strong>{t("traveler.adult")}</strong>
+01640:                   <small>{t("traveler.adultAge")}</small>
+01641:                 </div>
+01642: 
+01643:                 <div className="hero-traveler-stepper">
+01644:                   <button
+01645:                     type="button"
+01646:                     disabled={adult <= 1}
+01647:                     onClick={() =>
+01648:                       setAdult((value) =>
+01649:                         Math.max(
+01650:                           1,
+01651:                           value - 1,
+01652:                         ),
+01653:                       )
+01654:                     }
+01655:                   >
+01656:                     <CircleMinus size={24} />
+01657:                   </button>
+01658: 
+01659:                   <strong>{adult}</strong>
+01660: 
+01661:                   <button
+01662:                     type="button"
+01663:                     onClick={() =>
+01664:                       setAdult((value) =>
+01665:                         Math.min(
+01666:                           20,
+01667:                           value + 1,
+01668:                         ),
+01669:                       )
+01670:                     }
+01671:                   >
+01672:                     <CirclePlus size={24} />
+01673:                   </button>
+01674:                 </div>
+01675:               </div>
+01676: 
+01677: 
+01678:               <div className="hero-traveler-row">
+01679:                 <div>
+01680:                   <strong>{t("traveler.child")}</strong>
+01681:                   <small>{t("traveler.childAge")}</small>
+01682:                 </div>
+01683: 
+01684:                 <div className="hero-traveler-stepper">
+01685:                   <button
+01686:                     type="button"
+01687:                     disabled={child <= 0}
+01688:                     onClick={() =>
+01689:                       setChild((value) =>
+01690:                         Math.max(
+01691:                           0,
+01692:                           value - 1,
+01693:                         ),
+01694:                       )
+01695:                     }
+01696:                   >
+01697:                     <CircleMinus size={24} />
+01698:                   </button>
+01699: 
+01700:                   <strong>{child}</strong>
+01701: 
+01702:                   <button
+01703:                     type="button"
+01704:                     onClick={() =>
+01705:                       setChild((value) =>
+01706:                         Math.min(
+01707:                           20,
+01708:                           value + 1,
+01709:                         ),
+01710:                       )
+01711:                     }
+01712:                   >
+01713:                     <CirclePlus size={24} />
+01714:                   </button>
+01715:                 </div>
+01716:               </div>
+01717: 
+01718: 
+01719:               <div className="hero-traveler-row">
+01720:                 <div>
+01721:                   <strong>{t("traveler.infant")}</strong>
+01722:                   <small>{t("traveler.infantAge")}</small>
+01723:                 </div>
+01724: 
+01725:                 <div className="hero-traveler-stepper">
+01726:                   <button
+01727:                     type="button"
+01728:                     disabled={infant <= 0}
+01729:                     onClick={() =>
+01730:                       setInfant((value) =>
+01731:                         Math.max(
+01732:                           0,
+01733:                           value - 1,
+01734:                         ),
+01735:                       )
+01736:                     }
+01737:                   >
+01738:                     <CircleMinus size={24} />
+01739:                   </button>
+01740: 
+01741:                   <strong>{infant}</strong>
+01742: 
+01743:                   <button
+01744:                     type="button"
+01745:                     onClick={() =>
+01746:                       setInfant((value) =>
+01747:                         Math.min(
+01748:                           10,
+01749:                           value + 1,
+01750:                         ),
+01751:                       )
+01752:                     }
+01753:                   >
+01754:                     <CirclePlus size={24} />
+01755:                   </button>
+01756:                 </div>
+01757:               </div>
+01758: 
+01759:             </div>
+01760: 
+01761: 
+01762:             {!isSegaDeals && (
+01763:               <div className="hero-class-section">
+01764:                 <h4>
+01765:                   {isHaji
+01766:                     ? t("traveler.hajjClass")
+01767:                     : t("traveler.umrahClass")}
+01768:                 </h4>
+01769: 
+01770:                 <div className="hero-class-options">
+01771:                   {availableClasses.map((item) => (
+01772:                     <button
+01773:                       key={item}
+01774:                       type="button"
+01775:                       className={
+01776:                         travelClass === item
+01777:                           ? "selected"
+01778:                           : ""
+01779:                       }
+01780:                       onClick={() =>
+01781:                         setTravelClass(item)
+01782:                       }
+01783:                     >
+01784:                       {item}
+01785:                     </button>
+01786:                   ))}
+01787:                 </div>
+01788:               </div>
+01789:             )}
+01790: 
+01791: 
+01792:             <button
+01793:               type="button"
+01794:               className="hero-traveler-done"
+01795:               onClick={() =>
+01796:                 setOpenPanel(null)
+01797:               }
+01798:             >
+01799:               {t("traveler.done")}
+01800:             </button>
+01801:           </div>
+01802:         )}
+01803:       </div>
+01804:     );
+01805:   }
+01806: 
+01807: 
+01808:   function BudgetField() {
+01809:     function formatBudgetInput(value: string) {
+01810:       const digits =
+01811:         value.replace(/\D/g, "");
+01812: 
+01813:       if (!digits) {
+01814:         return "";
+01815:       }
+01816: 
+01817:       return new Intl.NumberFormat(locale, {
+01818:         maximumFractionDigits: 0,
+01819:       }).format(Number(digits));
+01820:     }
+01821: 
+01822: 
+01823:     return (
+01824:       <div className="hero-field-wrap">
+01825:         <button
+01826:           type="button"
+01827:           className="hero-field"
+01828:           onClick={() =>
+01829:             setOpenPanel(
+01830:               openPanel === "budget"
+01831:                 ? null
+01832:                 : "budget",
+01833:             )
+01834:           }
+01835:         >
+01836:           <span className="hero-field-icon">
+01837:             <Banknote size={19} />
+01838:           </span>
+01839: 
+01840:           <span className="hero-field-content">
+01841:             <small>{t("budget.label")}</small>
+01842: 
+01843:             <strong>
+01844:               {budget
+01845:                 ? `${currency} ${budget}${
+01846:                     hotelStars
+01847:                       ? ` Â· ${hotelStars}â˜…`
+01848:                       : ""
+01849:                   }`
+01850:                 : t("budget.enter")}
+01851:             </strong>
+01852:           </span>
+01853:         </button>
+01854: 
+01855: 
+01856:         {openPanel === "budget" && (
+01857:           <div className="hero-popover hero-budget-popover">
+01858:             <h3>
+01859:               {t("budget.title")}
+01860:             </h3>
+01861: 
+01862: 
+01863:             <div className="hero-budget-input-section">
+01864:               <label className="hero-sega-field-label">
+01865:                 {t("budget.perTraveler")}
+01866:               </label>
+01867: 
+01868:               <div className="hero-budget-input-wrap">
+01869:                 <span>{currency}</span>
+01870: 
+01871:                 <input
+01872:                   type="text"
+01873:                   inputMode="numeric"
+01874:                   value={budget}
+01875:                   placeholder={t("budget.placeholder")}
+01876:                   onChange={(event) =>
+01877:                     setBudget(
+01878:                       formatBudgetInput(
+01879:                         event.target.value,
+01880:                       ),
+01881:                     )
+01882:                   }
+01883:                 />
+01884:               </div>
+01885: 
+01886:               <small className="hero-sega-helper">
+01887:                 {t("budget.helper")}
+01888:               </small>
+01889:             </div>
+01890: 
+01891: 
+01892:             <div className="hero-hotel-star-section">
+01893:               <label className="hero-sega-field-label">
+01894:                 {t("hotel.preference")}
+01895:               </label>
+01896: 
+01897:               <div className="hero-hotel-star-options">
+01898:                 {[3, 4, 5].map((stars) => (
+01899:                   <button
+01900:                     key={stars}
+01901:                     type="button"
+01902:                     className={
+01903:                       hotelStars === stars
+01904:                         ? "selected"
+01905:                         : ""
+01906:                     }
+01907:                     onClick={() =>
+01908:                       setHotelStars(stars)
+01909:                     }
+01910:                   >
+01911:                     <span>
+01912:                       {"â˜…".repeat(stars)}
+01913:                     </span>
+01914: 
+01915:                     <strong>
+01916:                       {t("hotel.stars")} {stars}
+01917:                     </strong>
+01918:                   </button>
+01919:                 ))}
+01920:               </div>
+01921:             </div>
+01922: 
+01923: 
+01924:             <button
+01925:               type="button"
+01926:               className="hero-traveler-done"
+01927:               disabled={!budget}
+01928:               onClick={() =>
+01929:                 setOpenPanel(null)
+01930:               }
+01931:             >
+01932:               {t("common.apply")}
+01933:             </button>
+01934:           </div>
+01935:         )}
+01936:       </div>
+01937:     );
+01938:   }
+01939: 
+01940: 
+01941:   function DateYearField() {
+01942:     const isYear = isHaji;
+01943: 
+01944:     return (
+01945:       <div className="hero-field-wrap">
+01946:         <button
+01947:           type="button"
+01948:           className="hero-field"
+01949:           onClick={() =>
+01950:             setOpenPanel(
+01951:               isYear
+01952:                 ? openPanel === "year"
+01953:                   ? null
+01954:                   : "year"
+01955:                 : openPanel === "date"
+01956:                   ? null
+01957:                   : "date",
+01958:             )
+01959:           }
+01960:         >
+01961:           <span className="hero-field-icon">
+01962:             <CalendarDays size={19} />
+01963:           </span>
+01964: 
+01965:           <span className="hero-field-content">
+01966:             <small>
+01967:               {isYear ? t("hero.year") : t("hero.date")}
+01968:             </small>
+01969: 
+01970:             <strong>
+01971:               {isYear
+01972:                 ? hajiYear
+01973:                   ? String(hajiYear)
+01974:                   : t("search.selectYear")
+01975:                 : formatDate(selectedDate, locale, t("search.selectDate"))}
+01976:             </strong>
+01977:           </span>
+01978:         </button>
+01979: 
+01980: 
+01981:         {openPanel === "year" && isYear && (
+01982:           <div className="hero-popover hero-year-popover">
+01983:             <h3>
+01984:               {t("calendar.selectDepartureYear")}
+01985:             </h3>
+01986: 
+01987:             <div className="hero-year-options">
+01988:               {hajiYears.map((year) => {
+01989:                 const disabled =
+01990:                   isHajiYearDisabled(year);
+01991: 
+01992:                 return (
+01993:                   <button
+01994:                     key={year}
+01995:                     type="button"
+01996:                     disabled={disabled}
+01997:                     aria-disabled={disabled}
+01998:                     className={
+01999:                       [
+02000:                         year === hajiYear
+02001:                           ? "selected"
+02002:                           : "",
+02003:                         disabled
+02004:                           ? "disabled"
+02005:                           : "",
+02006:                       ]
+02007:                         .filter(Boolean)
+02008:                         .join(" ")
+02009:                     }
+02010:                     onClick={() => {
+02011:                       if (disabled) {
+02012:                         return;
+02013:                       }
+02014: 
+02015:                       setHajiYear(year);
+02016:                       setOpenPanel(null);
+02017:                     }}
+02018:                   >
+02019:                     {year}
+02020: 
+02021:                     {disabled && (
+02022:                       <span
+02023:                         className="hero-year-status"
+02024:                         aria-hidden="true"
+02025:                       >
+02026:                         {t("calendar.passed")}
+02027:                       </span>
+02028:                     )}
+02029:                   </button>
+02030:                 );
+02031:               })}
+02032:             </div>
+02033:           </div>
+02034:         )}
+02035: 
+02036: 
+02037:         {openPanel === "date" && !isYear && (
+02038:           <div className="hero-popover hero-date-popover">
+02039:             <div className="hero-date-header">
+02040:               <h3>{t("calendar.setDate")}</h3>
+02041: 
+02042:               <button
+02043:                 type="button"
+02044:                 className="hero-popover-close"
+02045:                 onClick={handleSearch}
+02046:               >
+02047:                 <X size={22} />
+02048:               </button>
+02049:             </div>
+02050: 
+02051: 
+02052:             <div className="hero-calendar-navigation">
+02053: 
+02054:               <button
+02055:                 type="button"
+02056:                 className="hero-calendar-nav-button"
+02057:                 aria-label={t("calendar.previousMonth")}
+02058:                 disabled={!canGoPrevious}
+02059:                 onClick={() =>
+02060:                   moveCalendarMonth(-1)
+02061:                 }
+02062:               >
+02063:                 <ChevronLeft size={19} />
+02064:               </button>
+02065: 
+02066: 
+02067:               <div className="hero-calendar-selectors">
+02068: 
+02069:                 <select
+02070:                   aria-label={t("calendar.selectMonth")}
+02071:                   value={firstCalendarMonth}
+02072:                   onChange={(event) =>
+02073:                     changeCalendarMonth(
+02074:                       Number(event.target.value),
+02075:                     )
+02076:                   }
+02077:                 >
+02078:                   {monthNames.map(
+02079:                     (monthName, monthIndex) => {
+02080:                       const disabled =
+02081:                         firstCalendarYear ===
+02082:                           todayCalendarMonth.getFullYear() &&
+02083:                         monthIndex <
+02084:                           todayCalendarMonth.getMonth();
+02085: 
+02086:                       return (
+02087:                         <option
+02088:                           key={monthName}
+02089:                           value={monthIndex}
+02090:                           disabled={disabled}
+02091:                         >
+02092:                           {monthName}
+02093:                         </option>
+02094:                       );
+02095:                     },
+02096:                   )}
+02097:                 </select>
+02098: 
+02099: 
+02100:                 <select
+02101:                   aria-label={t("calendar.selectYear")}
+02102:                   value={firstCalendarYear}
+02103:                   onChange={(event) =>
+02104:                     changeCalendarYear(
+02105:                       Number(event.target.value),
+02106:                     )
+02107:                   }
+02108:                 >
+02109:                   {calendarYears.map((year) => (
+02110:                     <option
+02111:                       key={year}
+02112:                       value={year}
+02113:                     >
+02114:                       {year}
+02115:                     </option>
+02116:                   ))}
+02117:                 </select>
+02118: 
+02119:               </div>
+02120: 
+02121: 
+02122:               <button
+02123:                 type="button"
+02124:                 className="hero-calendar-nav-button"
+02125:                 aria-label={t("calendar.nextMonth")}
+02126:                 onClick={() =>
+02127:                   moveCalendarMonth(1)
+02128:                 }
+02129:               >
+02130:                 <ChevronRight size={19} />
+02131:               </button>
+02132: 
+02133:             </div>
+02134: 
+02135: 
+02136:             <div className="hero-calendar-grid">
+02137:               <CalendarMonth
+02138:                 year={firstCalendarYear}
+02139:                 month={firstCalendarMonth}
+02140:                 selectedDate={selectedDate}
+02141:                 onSelect={(date) => {
+02142:                   setSelectedDate(date);
+02143:                   setOpenPanel(null);
+02144:                 }}
+02145:                 locale={locale}
+02146:               />
+02147: 
+02148:               <CalendarMonth
+02149:                 year={
+02150:                   secondCalendarDate.getFullYear()
+02151:                 }
+02152:                 month={
+02153:                   secondCalendarDate.getMonth()
+02154:                 }
+02155:                 selectedDate={selectedDate}
+02156:                 onSelect={(date) => {
+02157:                   setSelectedDate(date);
+02158:                   setOpenPanel(null);
+02159:                 }}
+02160:                 locale={locale}
+02161:               />
+02162:             </div>
+02163:           </div>
+02164:         )}
+02165:       </div>
+02166:     );
+02167:   }
+02168: 
+02169: 
+02170: 
+02171:   const searchOrigin =
+02172:     isSegaDeals
+02173:       ? segaOriginCity.trim()
+02174:       : origin.trim();
+02175: 
+02176:   const travelerTotal =
+02177:     adult +
+02178:     child +
+02179:     infant;
+02180: 
+02181:   const hasValidSchedule =
+02182:     isHaji
+02183:       ? hajiYear !== null &&
+02184:         !isHajiYearDisabled(hajiYear)
+02185:       : selectedDate !== null;
+02186: 
+02187:   const canSearch =
+02188:     searchOrigin.length > 0 &&
+02189:     destination.trim().length > 0 &&
+02190:     travelerTotal > 0 &&
+02191:     hasValidSchedule;
+02192: 
+02193:   function handleSearch() {
+02194:     if (!canSearch) {
+02195:       return;
+02196:     }
+02197:     
+02198: 
+02199:     const params =
+02200:       new URLSearchParams();
+02201: 
+02202:     params.set(
+02203:       "category",
+02204:       active,
+02205:     );
+02206: 
+02207:     params.set(
+02208:       "origin",
+02209:       isSegaDeals
+02210:         ? segaOriginCity
+02211:         : origin,
+02212:     );
+02213: 
+02214:     if (destination) {
+02215:       params.set(
+02216:         "destination",
+02217:         destination,
+02218:       );
+02219:     }
+02220: 
+02221:     params.set(
+02222:       "travelers",
+02223:       String(travelerTotal),
+02224:     );
+02225: 
+02226:     params.set(
+02227:       "adult",
+02228:       String(adult),
+02229:     );
+02230: 
+02231:     params.set(
+02232:       "child",
+02233:       String(child),
+02234:     );
+02235: 
+02236:     params.set(
+02237:       "infant",
+02238:       String(infant),
+02239:     );
+02240: 
+02241:     if (selectedDate) {
+02242:       const year =
+02243:         selectedDate.getFullYear();
+02244: 
+02245:       const month =
+02246:         String(
+02247:           selectedDate.getMonth() + 1,
+02248:         ).padStart(2, "0");
+02249: 
+02250:       const day =
+02251:         String(
+02252:           selectedDate.getDate(),
+02253:         ).padStart(2, "0");
+02254: 
+02255:       params.set(
+02256:         "date",
+02257:         `${year}-${month}-${day}`,
+02258:       );
+02259:     }
+02260: 
+02261:     if (isHaji && hajiYear) {
+02262:       params.set(
+02263:         "year",
+02264:         String(hajiYear),
+02265:       );
+02266:     }
+02267: 
+02268:     if (budget) {
+02269:       params.set(
+02270:         "budget",
+02271:         budget,
+02272:       );
+02273:     }
+02274: 
+02275:     setOpenPanel(null);
+02276: 
+02277:     router.push(
+02278:       `/search?${params.toString()}`,
+02279:     );
+02280:   }
+02281:   return (
+02282:     <>
+02283:       <section className="hero-reference">
+02284:         <div className="hero-reference-media">
+02285:           <Image
+02286:             src="/images/hero/hero-segaloka.png"
+02287:             alt="Destinasi perjalanan Segaloka"
+02288:             fill
+02289:             priority
+02290:             sizes="100vw"
+02291:             className="hero-reference-photo"
+02292:           />
+02293:         </div>
+02294: 
+02295:         <div className="hero-reference-overlay" />
+02296: 
+02297:         <div className="hero-reference-shell">
+02298: 
+02299:           <div className="hero-reference-copy">
+02300:             <h1>
+02301:               {t("hero.headlineLine1")}
+02302:               <br />
+02303:               {t("hero.headlineLine2")}
+02304:             </h1>
+02305: 
+02306:             <p>
+02307:               {t("hero.descriptionLine1")}
+02308:               <br />
+02309:               {t("hero.descriptionLine2")}
+02310:               <br />
+02311:               {t("hero.descriptionLine3")}
+02312:             </p>
+02313:           </div>
+02314: 
+02315: 
+02316:           <div
+02317:             ref={controlsRef}
+02318:             className="hero-controls"
+02319:           >
+02320:             <div className="hero-tabs">
+02321:               {categories.map(
+02322:                 ({ value, labelKey, icon: Icon }) => (
+02323:                   <button
+02324:                     key={value}
+02325:                     type="button"
+02326:                     className={
+02327:                       active === value
+02328:                         ? "active"
+02329:                         : ""
+02330:                     }
+02331:                     onClick={() =>
+02332:                       changeCategory(value)
+02333:                     }
+02334:                   >
+02335:                     <span className="hero-tab-icon">
+02336:                       <Icon
+02337:                         size={17}
+02338:                         strokeWidth={2}
+02339:                       />
+02340:                     </span>
+02341: 
+02342:                     <span>
+02343:                       {t(labelKey)}
+02344:                     </span>
+02345:                   </button>
+02346:                 ),
+02347:               )}
+02348:             </div>
+02349: 
+02350: 
+02351:             <div
+02352:               className={[
+02353:                 "hero-search-card",
+02354:                 isSegaDeals
+02355:                   ? "hero-search-card-segadeals"
+02356:                   : "",
+02357:               ].join(" ")}
+02358:             >
+02359:               {isSegaDeals ? (
+02360:                 <>
+02361:                   <DestinationField />
+02362:                   <OriginField />
+02363:                   <TravelerField />
+02364:                   <BudgetField />
+02365:                   <DateYearField />
+02366:                 </>
+02367:               ) : (
+02368:                 <>
+02369:                   <OriginField />
+02370:                   <DestinationField />
+02371:                   <TravelerField />
+02372:                   <DateYearField />
+02373:                 </>
+02374:               )}
+02375: 
+02376:               <button
+02377:                 type="button"
+02378:                 className="hero-search-button"
+02379:                 onClick={handleSearch}
+02380:                disabled={!canSearch} aria-disabled={!canSearch}>
+02381:                 <Search size={19} />
+02382:                 <span>{t("hero.search")}</span>
+02383:               </button>
+02384:             </div>
+02385:           </div>
+02386:         </div>
+02387:       </section>
+02388: 
+02389: 
+02390:       {showSegaDealsInfo && (
+02391:         <div
+02392:           className="segadeals-info-overlay"
+02393:           role="presentation"
+02394:           onMouseDown={() =>
+02395:             setShowSegaDealsInfo(false)
+02396:           }
+02397:         >
+02398:           <div
+02399:             className="segadeals-info-modal"
+02400:             role="dialog"
+02401:             aria-modal="true"
+02402:             aria-labelledby="segadeals-title"
+02403:             onMouseDown={(event) =>
+02404:               event.stopPropagation()
+02405:             }
+02406:           >
+02407:             <button
+02408:               type="button"
+02409:               className="segadeals-info-close"
+02410:               aria-label="Tutup"

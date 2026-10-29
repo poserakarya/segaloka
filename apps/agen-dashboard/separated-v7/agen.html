@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>Segaloka · Agen Dashboard</title>
+
+  <!--
+    V7 visual parity source.
+    Business/runtime modules remain reference-only.
+  -->
+  <link rel="stylesheet" href="./runtime/styles.css">
+  <link rel="stylesheet" href="./agen.css">
+  <link rel="stylesheet" href="/shared/v7-presentational.css">
+</head>
+
+<body data-segaloka-app="agen">
+
+  <div id="agen-app" class="app agen-app">
+
+    <aside
+      id="agen-sidebar"
+      class="side agen-sidebar"
+      aria-label="Navigasi Agen"
+    >
+      <div class="agen-brand">
+        <div class="agen-brand-mark" aria-hidden="true">S</div>
+
+        <div class="agen-brand-copy">
+          <strong>Segaloka</strong>
+          <span>Agen Dashboard</span>
+        </div>
+
+        <button
+          id="agen-sidebar-close"
+          class="agen-icon-button agen-mobile-only"
+          type="button"
+          aria-label="Tutup navigasi"
+        >
+          ×
+        </button>
+      </div>
+
+      <div class="agen-tenant">
+        <div class="agen-tenant-icon" aria-hidden="true">T</div>
+
+        <div>
+          <strong>Agen</strong>
+          <span>Dashboard</span>
+        </div>
+      </div>
+
+      <nav
+        id="agen-navigation"
+        class="agen-navigation"
+        aria-label="Menu Agen"
+      ></nav>
+
+      <div class="agen-sidebar-footer">
+        <div class="agen-boundary-label">
+          Dashboard Agen
+        </div>
+
+        <div class="agen-boundary-status">
+          Independent boundary
+        </div>
+      </div>
+    </aside>
+
+    <div
+      id="agen-sidebar-overlay"
+      class="agen-sidebar-overlay"
+      hidden
+    ></div>
+
+    <div class="main agen-main">
+
+      <header class="top agen-topbar">
+
+        <div class="agen-topbar-start">
+          <button
+            id="agen-sidebar-open"
+            class="agen-icon-button agen-mobile-only"
+            type="button"
+            aria-label="Buka navigasi"
+          >
+            ☰
+          </button>
+
+          <div>
+            <div class="agen-topbar-eyebrow">
+              SEGALOKA
+            </div>
+
+            <div
+              id="agen-page-title"
+              class="agen-page-title"
+            >
+              Beranda
+            </div>
+          </div>
+        </div>
+
+        <div class="agen-topbar-end">
+
+          <div
+            class="agen-runtime-indicator"
+            title="Runtime Agen masih dalam tahap ekstraksi"
+          >
+            <span
+              class="agen-runtime-dot"
+              aria-hidden="true"
+            ></span>
+
+            <span>Agen</span>
+          </div>
+
+          <button
+            id="agen-account-button"
+            class="agen-account"
+            type="button"
+            disabled
+            aria-label="Akun Agen belum diaktifkan"
+          >
+            <span
+              class="agen-account-avatar"
+              aria-hidden="true"
+            >
+              T
+            </span>
+
+            <span class="agen-account-copy">
+              <strong>Agen</strong>
+              <small>Auth belum diaktifkan</small>
+            </span>
+          </button>
+
+        </div>
+      </header>
+
+      <main
+        id="agen-content"
+        class="work agen-content"
+        tabindex="-1"
+      ></main>
+
+    </div>
+  </div>
+
+  <!-- Contracts are executable metadata only. -->
+  <script src="./contracts/app.contract.js"></script>
+  <script src="./contracts/auth.contract.js"></script>
+  <script src="./contracts/data.contract.js"></script>
+  <script src="./contracts/services.contract.js"></script>
+  <script src="./contracts/navigation.contract.js"></script>
+
+  <!--
+    IMPORTANT:
+    runtime/core.js
+    runtime/data.js
+    runtime/portals.js
+    runtime/gateway.js
+    runtime/notify.js
+    runtime/sync.js
+    and other V7 runtime modules are NOT loaded here.
+  -->
+  <script src="./ui/agen-ui.js"></script>
+<script src="./renderers/agen-renderers.js"></script>
+<script src="./agen-bootstrap.js"></script>
+</body>
+</html>

@@ -1,0 +1,895 @@
+﻿
+========== src\components\home\Hero.tsx ==========
+Baris 97
+];
+
+
+const umrahDestinations = [
+  "Makkah",
+  "Madinah",
+  "Makkah & Madinah",
+];
+
+---
+Baris 104
+];
+
+
+const hajiDestinations = [
+  "Makkah",
+  "Madinah",
+];
+
+
+---
+Baris 110
+];
+
+
+const halalTourCountries = [
+  "Indonesia",
+  "Malaysia",
+  "Singapura",
+  "Jepang",
+  "Korea Selatan",
+---
+Baris 152
+];
+
+
+const domesticCities = [
+  "Jakarta",
+  "Bandung",
+  "Bogor",
+  "Bekasi",
+  "Depok",
+---
+Baris 232
+];
+
+
+const internationalCountries = [
+  "Malaysia",
+  "Singapura",
+  "Brunei Darussalam",
+  "Thailand",
+  "Vietnam",
+---
+Baris 337
+
+
+const segaDealsDestinations = [
+  ...domesticCities,
+  ...internationalCountries,
+];
+
+
+const segaDealsPopularDestinations = [
+---
+Baris 338
+
+const segaDealsDestinations = [
+  ...domesticCities,
+  ...internationalCountries,
+];
+
+
+const segaDealsPopularDestinations = [
+  "Bali",
+---
+Baris 741
+function CalendarMonth({
+  year,
+  month,
+  selectedDate, returnDate, onSelect, locale, minDate,
+}: {
+  year: number;
+  month: number;
+  selectedDate: Date | null;
+  returnDate?: Date | null;
+---
+Baris 745
+}: {
+  year: number;
+  month: number;
+  selectedDate: Date | null;
+  returnDate?: Date | null;
+  onSelect: (date: Date) => void;
+  locale: string;
+  minDate?: Date | null;
+}) {
+---
+Baris 808
+              candidate < normalizedMinDate);
+
+          const selected =
+            selectedDate &&
+            candidate.getFullYear() ===
+              selectedDate.getFullYear() &&
+            candidate.getMonth() ===
+              selectedDate.getMonth() &&
+            candidate.getDate() ===
+---
+Baris 810
+          const selected =
+            selectedDate &&
+            candidate.getFullYear() ===
+              selectedDate.getFullYear() &&
+            candidate.getMonth() ===
+              selectedDate.getMonth() &&
+            candidate.getDate() ===
+              selectedDate.getDate();
+
+---
+Baris 812
+            candidate.getFullYear() ===
+              selectedDate.getFullYear() &&
+            candidate.getMonth() ===
+              selectedDate.getMonth() &&
+            candidate.getDate() ===
+              selectedDate.getDate();
+
+          return (
+            <button
+---
+Baris 814
+            candidate.getMonth() ===
+              selectedDate.getMonth() &&
+            candidate.getDate() ===
+              selectedDate.getDate();
+
+          return (
+            <button
+              key={day}
+              type="button"
+---
+Baris 827
+                  candidate.getTime() === returnDate.getTime()
+                    ? "selected"
+                    : "",
+                  selectedDate &&
+                  returnDate &&
+                  candidate > selectedDate &&
+                  candidate < returnDate
+                    ? "visa-range-between"
+                    : "",
+---
+Baris 829
+                    : "",
+                  selectedDate &&
+                  returnDate &&
+                  candidate > selectedDate &&
+                  candidate < returnDate
+                    ? "visa-range-between"
+                    : "",
+                ].filter(Boolean).join(" ")}
+              onClick={() => {
+---
+Baris 951
+  const [segaOriginCityQuery, setSegaOriginCityQuery] =
+    useState("");
+
+  const [selectedDate, setSelectedDate] =
+    useState<Date | null>(null);
+
+  /* VISA_RANGE_V3 */
+  const [visaPickingReturn, setVisaPickingReturn] = useState(false);
+  const [returnDate, setReturnDate] =
+---
+Baris 972
+
+  const currentYear = new Date().getFullYear();
+
+  const [hajiYear, setHajiYear] =
+    useState<number | null>(null);
+
+  const [openPanel, setOpenPanel] =
+    useState<OpenPanel>(null);
+
+---
+Baris 1090
+
+  const destinations = useMemo(() => {
+    if (isHaji) {
+      return hajiDestinations;
+    }
+
+    if (isHalalTour) {
+      return halalTourCountries;
+    }
+---
+Baris 1094
+    }
+
+    if (isHalalTour) {
+      return halalTourCountries;
+    }
+
+    if (isDomestic) {
+      return domesticCities;
+    }
+---
+Baris 1098
+    }
+
+    if (isDomestic) {
+      return domesticCities;
+    }
+
+    if (isInternational) {
+      return internationalCountries;
+    }
+---
+Baris 1102
+    }
+
+    if (isInternational) {
+      return internationalCountries;
+    }
+
+    if (isSegaDeals) {
+      return segaDealsDestinations;
+    }
+---
+Baris 1109
+      return segaDealsDestinations;
+    }
+
+    return umrahDestinations;
+  }, [
+    isHaji,
+    isHalalTour,
+    isDomestic,
+    isInternational,
+---
+Baris 1158
+  ]);
+
+
+  const hajiYears = Array.from(
+    { length: 6 },
+    (_, index) => currentYear + index,
+  );
+
+  const isHajiYearDisabled = (year: number) => {
+---
+Baris 1163
+    (_, index) => currentYear + index,
+  );
+
+  const isHajiYearDisabled = (year: number) => {
+    /*
+     * UI sementara Segaloka:
+     * musim Haji 2026 sudah berlalu.
+     *
+     * Nantinya status availability / closed / sold-out
+---
+Baris 1306
+    setBudget("");
+
+    if (category === "Haji") {
+      setSelectedDate(null);
+
+      if (
+        travelClass !== "Plus" &&
+        travelClass !== "Plus VVIP"
+      ) {
+---
+Baris 1315
+        setTravelClass("Plus");
+      }
+    } else {
+      setHajiYear(null);
+
+      if (travelClass === "Plus VVIP") {
+        setTravelClass("Hemat");
+      }
+    }
+---
+Baris 1688
+                type="button"
+                className="hero-traveler-done"
+                disabled={!segaOriginCity.trim()}
+                onClick={handleSearch}
+              >
+                {t("origin.useLocation")}
+              </button>
+            </div>
+          )}
+---
+Baris 2120
+
+
+  function selectVisaRangeDate(date: Date) {
+    if (!selectedDate || !visaPickingReturn) {
+      setSelectedDate(date);
+      setReturnDate(null);
+      setVisaPickingReturn(true);
+      return;
+    }
+---
+Baris 2121
+
+  function selectVisaRangeDate(date: Date) {
+    if (!selectedDate || !visaPickingReturn) {
+      setSelectedDate(date);
+      setReturnDate(null);
+      setVisaPickingReturn(true);
+      return;
+    }
+
+---
+Baris 2127
+      return;
+    }
+
+    if (date < selectedDate) {
+      setSelectedDate(date);
+      setReturnDate(null);
+      return;
+    }
+
+---
+Baris 2128
+    }
+
+    if (date < selectedDate) {
+      setSelectedDate(date);
+      setReturnDate(null);
+      return;
+    }
+
+    setReturnDate(date);
+---
+Baris 2180
+
+            <strong>
+              {isYear
+                ? hajiYear
+                  ? String(hajiYear)
+                  : t("search.selectYear")
+                : formatDate(selectedDate, locale, t("search.selectDate"))}
+            </strong>
+          </span>
+---
+Baris 2181
+            <strong>
+              {isYear
+                ? hajiYear
+                  ? String(hajiYear)
+                  : t("search.selectYear")
+                : formatDate(selectedDate, locale, t("search.selectDate"))}
+            </strong>
+          </span>
+        </button>
+---
+Baris 2183
+                ? hajiYear
+                  ? String(hajiYear)
+                  : t("search.selectYear")
+                : formatDate(selectedDate, locale, t("search.selectDate"))}
+            </strong>
+          </span>
+        </button>
+
+
+---
+Baris 2196
+            </h3>
+
+            <div className="hero-year-options">
+              {hajiYears.map((year) => {
+                const disabled =
+                  isHajiYearDisabled(year);
+
+                return (
+                  <button
+---
+Baris 2198
+            <div className="hero-year-options">
+              {hajiYears.map((year) => {
+                const disabled =
+                  isHajiYearDisabled(year);
+
+                return (
+                  <button
+                    key={year}
+                    type="button"
+---
+Baris 2208
+                    aria-disabled={disabled}
+                    className={
+                      [
+                        year === hajiYear
+                          ? "selected"
+                          : "",
+                        disabled
+                          ? "disabled"
+                          : "",
+---
+Baris 2223
+                        return;
+                      }
+
+                      setHajiYear(year);
+                      setOpenPanel(null);
+                    }}
+                  >
+                    {year}
+
+---
+Baris 2348
+              <CalendarMonth
+                year={firstCalendarYear}
+                month={firstCalendarMonth}
+                selectedDate={selectedDate}
+                returnDate={isVisa ? returnDate : null}
+                onSelect={(date) => {
+                  if (isVisa) {
+                    selectVisaRangeDate(date);
+                    return;
+---
+Baris 2356
+                    return;
+                  }
+
+                  setSelectedDate(date);
+                  if (returnDate && returnDate < date) {
+                    setReturnDate(null);
+                  }
+                  setOpenPanel(null);
+                }}
+---
+Baris 2372
+                month={
+                  secondCalendarDate.getMonth()
+                }
+                selectedDate={selectedDate}
+                returnDate={isVisa ? returnDate : null}
+                onSelect={(date) => {
+                  if (isVisa) {
+                    selectVisaRangeDate(date);
+                    return;
+---
+Baris 2380
+                    return;
+                  }
+
+                  setSelectedDate(date);
+                  if (returnDate && returnDate < date) {
+                    setReturnDate(null);
+                  }
+                  setOpenPanel(null);
+                }}
+---
+Baris 2409
+          type="button"
+          className="hero-field"
+          onClick={() => {
+            if (selectedDate) {
+              setCalendarCursor(
+                new Date(
+                  selectedDate.getFullYear(),
+                  selectedDate.getMonth(),
+                  1,
+---
+Baris 2412
+            if (selectedDate) {
+              setCalendarCursor(
+                new Date(
+                  selectedDate.getFullYear(),
+                  selectedDate.getMonth(),
+                  1,
+                ),
+              );
+            }
+---
+Baris 2413
+              setCalendarCursor(
+                new Date(
+                  selectedDate.getFullYear(),
+                  selectedDate.getMonth(),
+                  1,
+                ),
+              );
+            }
+
+---
+Baris 2473
+              </button>
+            </div>
+
+            {!selectedDate && (
+              <p className="hero-visa-date-hint">
+                {language === "ID"
+                  ? "Pilih tanggal berangkat terlebih dahulu."
+                  : language === "EN"
+                    ? "Select a departure date first."
+---
+Baris 2559
+              <CalendarMonth
+                year={firstCalendarYear}
+                month={firstCalendarMonth}
+                selectedDate={selectedDate}
+                returnDate={returnDate}
+                minDate={selectedDate}
+                onSelect={(date) => {
+                  setReturnDate(date); setVisaPickingReturn(false); setOpenPanel(null);
+                }}
+---
+Baris 2561
+                month={firstCalendarMonth}
+                selectedDate={selectedDate}
+                returnDate={returnDate}
+                minDate={selectedDate}
+                onSelect={(date) => {
+                  setReturnDate(date); setVisaPickingReturn(false); setOpenPanel(null);
+                }}
+                locale={locale}
+              />
+---
+Baris 2571
+              <CalendarMonth
+                year={secondCalendarDate.getFullYear()}
+                month={secondCalendarDate.getMonth()}
+                selectedDate={selectedDate}
+                returnDate={returnDate}
+                minDate={selectedDate}
+                onSelect={(date) => {
+                  setReturnDate(date); setVisaPickingReturn(false); setOpenPanel(null);
+                }}
+---
+Baris 2573
+                month={secondCalendarDate.getMonth()}
+                selectedDate={selectedDate}
+                returnDate={returnDate}
+                minDate={selectedDate}
+                onSelect={(date) => {
+                  setReturnDate(date); setVisaPickingReturn(false); setOpenPanel(null);
+                }}
+                locale={locale}
+              />
+---
+Baris 2597
+
+  const hasValidSchedule =
+    isHaji
+      ? hajiYear !== null &&
+        !isHajiYearDisabled(hajiYear)
+      : isVisa
+        ? selectedDate !== null &&
+          returnDate !== null &&
+          returnDate >= selectedDate
+---
+Baris 2598
+  const hasValidSchedule =
+    isHaji
+      ? hajiYear !== null &&
+        !isHajiYearDisabled(hajiYear)
+      : isVisa
+        ? selectedDate !== null &&
+          returnDate !== null &&
+          returnDate >= selectedDate
+        : selectedDate !== null;
+---
+Baris 2600
+      ? hajiYear !== null &&
+        !isHajiYearDisabled(hajiYear)
+      : isVisa
+        ? selectedDate !== null &&
+          returnDate !== null &&
+          returnDate >= selectedDate
+        : selectedDate !== null;
+
+  const canSearch =
+---
+Baris 2602
+      : isVisa
+        ? selectedDate !== null &&
+          returnDate !== null &&
+          returnDate >= selectedDate
+        : selectedDate !== null;
+
+  const canSearch =
+    (isVisa || searchOrigin.length > 0) &&
+    destination.trim().length > 0 &&
+---
+Baris 2603
+        ? selectedDate !== null &&
+          returnDate !== null &&
+          returnDate >= selectedDate
+        : selectedDate !== null;
+
+  const canSearch =
+    (isVisa || searchOrigin.length > 0) &&
+    destination.trim().length > 0 &&
+    travelerTotal > 0 &&
+---
+Baris 2611
+    travelerTotal > 0 &&
+    hasValidSchedule;
+
+  function handleSearch() {
+    if (!canSearch) {
+      return;
+    }
+    
+
+---
+Baris 2659
+      String(infant),
+    );
+
+    if (selectedDate) {
+      const year =
+        selectedDate.getFullYear();
+
+      const month =
+        String(
+---
+Baris 2661
+
+    if (selectedDate) {
+      const year =
+        selectedDate.getFullYear();
+
+      const month =
+        String(
+          selectedDate.getMonth() + 1,
+        ).padStart(2, "0");
+---
+Baris 2665
+
+      const month =
+        String(
+          selectedDate.getMonth() + 1,
+        ).padStart(2, "0");
+
+      const day =
+        String(
+          selectedDate.getDate(),
+---
+Baris 2670
+
+      const day =
+        String(
+          selectedDate.getDate(),
+        ).padStart(2, "0");
+
+      const formattedDate =
+        `${year}-${month}-${day}`;
+
+---
+Baris 2729
+        `${returnYear}-${returnMonth}-${returnDay}`,
+      );
+    }
+    if (isHaji && hajiYear) {
+      params.set(
+        "year",
+        String(hajiYear),
+      );
+    }
+---
+Baris 2732
+    if (isHaji && hajiYear) {
+      params.set(
+        "year",
+        String(hajiYear),
+      );
+    }
+
+    if (budget) {
+      params.set(
+---
+Baris 2855
+                    ? <VisaReturnDateField />
+                    : undefined
+                }
+                onSearch={handleSearch}
+                canSearch={canSearch}
+                searchLabel={
+                  isVisa
+                    ? language === "ID"
+                      ? "Cari Visa"
+---
+
+========== src\components\search\SearchEditBar.tsx ==========
+Baris 69
+  "Lombok",
+];
+
+const categoryOptions: Record<string, string[]> = {
+  Umrah: [
+    "Makkah",
+    "Madinah",
+    "Makkah & Madinah",
+  ],
+---
+Baris 478
+  });
+
+  const [
+    selectedDate,
+    setSelectedDate,
+  ] = useState(
+    initialDate || "",
+  );
+
+---
+Baris 479
+
+  const [
+    selectedDate,
+    setSelectedDate,
+  ] = useState(
+    initialDate || "",
+  );
+
+  const parsedInitialDate =
+---
+Baris 567
+  const destinationOptions =
+    useMemo(
+      () =>
+        categoryOptions[
+          category
+        ] || [],
+      [category],
+    );
+
+---
+Baris 623
+    origin.trim().length > 0 &&
+    destination.trim().length > 0 &&
+    travelerTotal > 0 &&
+    selectedDate.length > 0;
+
+  function togglePanel(
+    nextPanel: Exclude<
+      Panel,
+      null
+---
+Baris 666
+    );
+  }
+
+  function formatSelectedDate() {
+    if (!selectedDate) {
+      return t.chooseDate;
+    }
+
+    const parsed =
+---
+Baris 667
+  }
+
+  function formatSelectedDate() {
+    if (!selectedDate) {
+      return t.chooseDate;
+    }
+
+    const parsed =
+      parseDateValue(
+---
+Baris 673
+
+    const parsed =
+      parseDateValue(
+        selectedDate,
+      );
+
+    if (!parsed) {
+      return selectedDate;
+    }
+---
+Baris 677
+      );
+
+    if (!parsed) {
+      return selectedDate;
+    }
+
+    return new Intl.DateTimeFormat(
+      locale,
+      {
+---
+Baris 690
+    ).format(parsed);
+  }
+
+  function submitSearch() {
+    if (!canSearch) {
+      return;
+    }
+
+    const params =
+---
+Baris 737
+
+    params.set(
+      "date",
+      selectedDate,
+    );
+
+    setPanel(null);
+
+    router.push(
+---
+Baris 772
+      nextMonth.getMonth(),
+    );
+
+  const selectedDateObject =
+    parseDateValue(
+      selectedDate,
+    );
+
+  function renderMonth(
+---
+Baris 774
+
+  const selectedDateObject =
+    parseDateValue(
+      selectedDate,
+    );
+
+  function renderMonth(
+    year: number,
+    month: number,
+---
+Baris 836
+                normalizedToday;
+
+              const active =
+                selectedDateObject
+                  ? sameDay(
+                      value,
+                      selectedDateObject,
+                    )
+                  : false;
+---
+Baris 839
+                selectedDateObject
+                  ? sameDay(
+                      value,
+                      selectedDateObject,
+                    )
+                  : false;
+
+              return (
+                <button
+---
+Baris 854
+                      : undefined
+                  }
+                  onClick={() => {
+                    setSelectedDate(
+                      toDateValue(
+                        year,
+                        month,
+                        day,
+                      ),
+---
+Baris 1096
+            </small>
+
+            <strong>
+              {formatSelectedDate()}
+            </strong>
+          </span>
+        </button>
+
+        {panel === "date" && (
+---
+Baris 1383
+        type="button"
+        className="search-edit-submit"
+        disabled={!canSearch}
+        onClick={submitSearch}
+      >
+        <Search size={18} />
+        {t.search}
+      </button>
+    </div>
+---

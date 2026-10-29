@@ -1,0 +1,224 @@
+SEGALOKA BACKEND / STORAGE / SYNC AUDIT
+Generated: 2026-10-06 09:44:55
+
+============================================================
+1. BACKEND DIRECTORIES
+============================================================
+NONE
+
+============================================================
+2. SQL / MIGRATION FILES
+============================================================
+NONE
+
+============================================================
+3. DATABASE TABLE / RPC REFERENCES
+============================================================
+
+PATTERN: \.from\(\s*["'][^"']+["']
+NONE
+
+PATTERN: \.rpc\(\s*["'][^"']+["']
+NONE
+
+PATTERN: supabase
+src\lib\assets\asset.types.ts:79: * URL resolved dari CDN / Supabase Storage.
+
+PATTERN: createClient
+NONE
+
+PATTERN: postgres
+NONE
+
+PATTERN: storage\.from
+NONE
+
+============================================================
+4. ENV VARIABLE NAMES
+============================================================
+
+============================================================
+5. AUTH / ROLE / TENANT / OWNERSHIP
+============================================================
+
+PATTERN: tenant_id
+NONE
+
+PATTERN: travel_id
+NONE
+
+PATTERN: vendor_id
+NONE
+
+PATTERN: user_id
+NONE
+
+PATTERN: owner_id
+NONE
+
+PATTERN: owner_type
+NONE
+
+PATTERN: role
+.backup\header-global-i18n-20261005-003254\Header.tsx:325: role="menu"
+.backup\header-global-i18n-20261005-003254\Header.tsx:339: role="menuitemradio"
+.backup\header-global-i18n-20261005-003254\Header.tsx:379: role="menuitemradio"
+.backup\header-global-i18n-20261005-003254\Header.tsx:557: role="presentation"
+.backup\header-global-i18n-20261005-003254\Header.tsx:566: role="dialog"
+.backup\header-i18n-recovery-20261005-003618\Header.tsx:329: role="menu"
+.backup\header-i18n-recovery-20261005-003618\Header.tsx:343: role="menuitemradio"
+.backup\header-i18n-recovery-20261005-003618\Header.tsx:383: role="menuitemradio"
+.backup\header-i18n-recovery-20261005-003618\Header.tsx:561: role="presentation"
+.backup\header-i18n-recovery-20261005-003618\Header.tsx:570: role="dialog"
+.backup\header-import-recovery-20261004-231656\Header.tsx:325: role="menu"
+.backup\header-import-recovery-20261004-231656\Header.tsx:339: role="menuitemradio"
+.backup\header-import-recovery-20261004-231656\Header.tsx:379: role="menuitemradio"
+.backup\header-import-recovery-20261004-231656\Header.tsx:557: role="presentation"
+.backup\header-import-recovery-20261004-231656\Header.tsx:566: role="dialog"
+.backup\header-import-recovery-20261004-232841\Header.tsx:325: role="menu"
+.backup\header-import-recovery-20261004-232841\Header.tsx:339: role="menuitemradio"
+.backup\header-import-recovery-20261004-232841\Header.tsx:379: role="menuitemradio"
+.backup\header-import-recovery-20261004-232841\Header.tsx:557: role="presentation"
+.backup\header-import-recovery-20261004-232841\Header.tsx:566: role="dialog"
+.backup\hero-budget-segadeals-v2-20261005-053723\Hero.tsx:2366: role="presentation"
+.backup\hero-budget-segadeals-v2-20261005-053723\Hero.tsx:2373: role="dialog"
+.backup\hero-global-i18n-20261005-004040\Hero.tsx:2312: role="presentation"
+.backup\hero-global-i18n-20261005-004040\Hero.tsx:2319: role="dialog"
+.backup\hero-global-preferences-v4-final-20261005-055101\Hero.tsx:2366: role="presentation"
+.backup\hero-global-preferences-v4-final-20261005-055101\Hero.tsx:2373: role="dialog"
+.backup\hero-i18n-budget-segadeals-20261005-031358\Hero.tsx:2366: role="presentation"
+.backup\hero-i18n-budget-segadeals-20261005-031358\Hero.tsx:2373: role="dialog"
+.backup\hero-i18n-currency-v3-20261005-054542\Hero.tsx:2366: role="presentation"
+.backup\hero-i18n-currency-v3-20261005-054542\Hero.tsx:2373: role="dialog"
+.backup\hero-i18n-phase1a-20261005-004400\Hero.tsx:2312: role="presentation"
+.backup\hero-i18n-phase1a-20261005-004400\Hero.tsx:2319: role="dialog"
+.backup\hero-i18n-phase1a-final-20261005-004843\Hero.tsx:2312: role="presentation"
+.backup\hero-i18n-phase1a-final-20261005-004843\Hero.tsx:2319: role="dialog"
+.backup\hero-i18n-phase1b1-20261005-005308\Hero.tsx:2341: role="presentation"
+.backup\hero-i18n-phase1b1-20261005-005308\Hero.tsx:2348: role="dialog"
+.backup\hero-i18n-phase1b1-final-20261005-010911\Hero.tsx:2341: role="presentation"
+.backup\hero-i18n-phase1b1-final-20261005-010911\Hero.tsx:2348: role="dialog"
+.backup\hero-i18n-phase1b1-final-20261005-011345\Hero.tsx:2341: role="presentation"
+.backup\hero-i18n-phase1b1-final-20261005-011345\Hero.tsx:2348: role="dialog"
+.backup\hero-i18n-phase1b1-recovery-20261005-011656\Hero.tsx:2341: role="presentation"
+.backup\hero-i18n-phase1b1-recovery-20261005-011656\Hero.tsx:2348: role="dialog"
+.backup\hero-i18n-phase1b2-v3-20261005-013204\Hero.tsx:2363: role="presentation"
+.backup\hero-i18n-phase1b2-v3-20261005-013204\Hero.tsx:2370: role="dialog"
+.backup\home-currency-recovery-20261004-234312\src\components\home\Hero.tsx:2311: role="presentation"
+.backup\home-currency-recovery-20261004-234312\src\components\home\Hero.tsx:2318: role="dialog"
+.backup\la-canonical-snapshot-20261004-220559\src\components\booking\AccommodationPackageInfoClient.tsx:71: role: string;
+.backup\la-canonical-snapshot-20261004-220559\src\components\booking\AccommodationPackageInfoClient.tsx:183: role: "Tour Leader",
+.backup\la-canonical-snapshot-20261004-220559\src\components\booking\AccommodationPackageInfoClient.tsx:189: role: "Mutawif",
+.backup\la-canonical-snapshot-20261004-220559\src\components\booking\AccommodationPackageInfoClient.tsx:195: role: "Handling",
+.backup\la-canonical-snapshot-20261004-220559\src\components\booking\AccommodationPackageInfoClient.tsx:925: value={contact.role}
+.backup\la-canonical-snapshot-20261004-220559\src\components\booking\AccommodationPackageInfoClient.tsx:929: "role",
+.backup\la-canonical-snapshot-20261004-220559\src\components\booking\AccommodationPackageInfoClient.tsx:1208: role="presentation"
+.backup\la-canonical-snapshot-20261004-220559\src\components\booking\AccommodationPackageInfoClient.tsx:1215: role="dialog"
+.backup\marketplace-preferences-20261004-231329\Header.tsx:326: role="menu"
+.backup\marketplace-preferences-20261004-231329\Header.tsx:340: role="menuitemradio"
+.backup\marketplace-preferences-20261004-231329\Header.tsx:380: role="menuitemradio"
+.backup\marketplace-preferences-20261004-231329\Header.tsx:558: role="presentation"
+.backup\marketplace-preferences-20261004-231329\Header.tsx:567: role="dialog"
+.backup\paket-info-phase1b-20261004-221922\AccommodationPackageInfoClient.tsx:84: role: string;
+.backup\paket-info-phase1b-20261004-221922\AccommodationPackageInfoClient.tsx:215: role: "Tour Leader",
+.backup\paket-info-phase1b-20261004-221922\AccommodationPackageInfoClient.tsx:221: role: "Mutawif",
+.backup\paket-info-phase1b-20261004-221922\AccommodationPackageInfoClient.tsx:227: role: "Handling",
+.backup\paket-info-phase1b-20261004-221922\AccommodationPackageInfoClient.tsx:988: value={contact.role}
+.backup\paket-info-phase1b-20261004-221922\AccommodationPackageInfoClient.tsx:992: "role",
+.backup\paket-info-phase1b-20261004-221922\AccommodationPackageInfoClient.tsx:1271: role="presentation"
+.backup\paket-info-phase1b-20261004-221922\AccommodationPackageInfoClient.tsx:1278: role="dialog"
+.backup\partner-travel-20261005-061405\Header.tsx:329: role="menu"
+.backup\partner-travel-20261005-061405\Header.tsx:343: role="menuitemradio"
+.backup\partner-travel-20261005-061405\Header.tsx:383: role="menuitemradio"
+.backup\partner-travel-20261005-061405\Header.tsx:561: role="presentation"
+.backup\partner-travel-20261005-061405\Header.tsx:570: role="dialog"
+.backup\phase2-auth-card-20261005-055745\Header.tsx:329: role="menu"
+.backup\phase2-auth-card-20261005-055745\Header.tsx:343: role="menuitemradio"
+.backup\phase2-auth-card-20261005-055745\Header.tsx:383: role="menuitemradio"
+.backup\phase2-auth-card-20261005-055745\Header.tsx:561: role="presentation"
+.backup\phase2-auth-card-20261005-055745\Header.tsx:570: role="dialog"
+.backup\phase2a-v2-20261005-060345\Header.tsx:329: role="menu"
+.backup\phase2a-v2-20261005-060345\Header.tsx:343: role="menuitemradio"
+.backup\phase2a-v2-20261005-060345\Header.tsx:383: role="menuitemradio"
+
+PATTERN: auth\.uid
+NONE
+
+PATTERN: auth\.users
+NONE
+
+============================================================
+6. STORAGE / UPLOAD IMPLEMENTATION
+============================================================
+
+PATTERN: storage.from
+NONE
+
+PATTERN: supabase.storage
+src\lib\assets\asset.types.ts:79: * URL resolved dari CDN / Supabase Storage.
+
+PATTERN: getPublicUrl
+NONE
+
+PATTERN: createSignedUrl
+NONE
+
+PATTERN: createSignedUrls
+NONE
+
+PATTERN: \.upload\(
+NONE
+
+PATTERN: remove\(
+NONE
+
+PATTERN: download\(
+NONE
+
+============================================================
+7. WEBSITE / APP / DASHBOARD STRUCTURE
+============================================================
+apps
+apps\affiliate
+apps\travel
+apps\vendor
+public\images\affiliate
+public\images\help-center\affiliate
+public\images\help-center\vendor
+public\images\packages
+public\images\travel
+src\app\affiliate
+src\app\partner\travel
+src\lib
+
+============================================================
+8. WORKSPACE CONFIG
+============================================================
+
+FILE: .\package.json
+
+FILE: .\pnpm-workspace.yaml
+
+============================================================
+9. CENTRAL ASSET FOUNDATION
+============================================================
+src\lib\assets\asset.registry.ts
+src\lib\assets\asset.resolver.ts
+src\lib\assets\asset.types.ts
+src\lib\assets\index.ts
+src\lib\assets\README.md
+src\lib\assets\storage.contract.ts
+
+============================================================
+SUMMARY
+============================================================
+SQL files        : 0
+Backend dirs     : 0
+ENV files        : 0
+Source files     : 224
+
+READ ONLY.
+Tidak ada database diubah.
+Tidak ada bucket dibuat.
+Tidak ada source diubah.
+Tidak ada push.

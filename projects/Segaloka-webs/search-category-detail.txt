@@ -1,0 +1,465 @@
+﻿
+========== src\components\search\SearchEditBar.tsx [60-165] ==========
+   60:   "Pekanbaru",
+   61:   "Padang",
+   62:   "Banda Aceh",
+   63:   "Batam",
+   64:   "Denpasar",
+   65:   "Manado",
+   66:   "Lombok",
+   67: ];
+   68: 
+   69: const categoryOptions: Record<string, string[]> = {
+   70:   Umrah: [
+   71:     "Makkah",
+   72:     "Madinah",
+   73:     "Makkah & Madinah",
+   74:   ],
+   75: 
+   76:   Haji: [
+   77:     "Makkah",
+   78:     "Madinah",
+   79:     "Makkah & Madinah",
+   80:   ],
+   81: 
+   82:   "Halal Tour": [
+   83:     "Turkiye",
+   84:     "Malaysia",
+   85:     "Singapura",
+   86:     "Jepang",
+   87:     "Korea Selatan",
+   88:     "Uni Emirat Arab",
+   89:     "Mesir",
+   90:     "Maroko",
+   91:     "Uzbekistan",
+   92:     "Yordania",
+   93:     "Eropa",
+   94:   ],
+   95: 
+   96:   "Tour Domestic": [
+   97:     "Bali",
+   98:     "Yogyakarta",
+   99:     "Bandung",
+  100:     "Lombok",
+  101:     "Labuan Bajo",
+  102:     "Raja Ampat",
+  103:     "Bromo",
+  104:     "Malang",
+  105:     "Makassar",
+  106:     "Toraja",
+  107:   ],
+  108: 
+  109:   "Tour International": [
+  110:     "Malaysia",
+  111:     "Singapura",
+  112:     "Thailand",
+  113:     "Vietnam",
+  114:     "Jepang",
+  115:     "Korea Selatan",
+  116:     "Tiongkok",
+  117:     "Hong Kong",
+  118:     "Turkiye",
+  119:     "Uni Emirat Arab",
+  120:     "Australia",
+  121:     "Eropa",
+  122:   ],
+  123: 
+  124:   SegaDeals: [
+  125:     "Umrah",
+  126:     "Haji",
+  127:     "Halal Tour",
+  128:     "Tour Domestic",
+  129:     "Tour International",
+  130:   ],
+  131: };
+  132: 
+  133: const copy = {
+  134:   ID: {
+  135:     from: "Dari",
+  136:     destination: "Tujuan",
+  137:     umrahDestination: "Tujuan Umrah",
+  138:     date: "Tanggal",
+  139:     traveler: "Traveler",
+  140:     search: "Cari",
+  141: 
+  142:     originTitle: "Pilih Kota atau Bandara",
+  143:     originPlaceholder: "Masukkan nama kota atau bandara...",
+  144:     popularDestination: "Destinasi Populer",
+  145: 
+  146:     destinationTitle: "Pilih Tujuan",
+  147:     destinationPlaceholder: "Cari negara tujuan...",
+  148:     chooseDestination: "Pilih tujuan",
+  149: 
+  150:     dateTitle: "Atur Tanggal",
+  151:     chooseDate: "Pilih tanggal",
+  152: 
+  153:     travelerTitle: "Atur Traveler",
+  154:     travelerDescription: "Tentukan jumlah traveler",
+  155: 
+  156:     adult: "Dewasa",
+  157:     adultDescription: "Usia 12 tahun ke atas",
+  158: 
+  159:     child: "Anak",
+  160:     childDescription: "Usia 2â€“11 tahun",
+  161: 
+  162:     infant: "Bayi",
+  163:     infantDescription: "Di bawah 2 tahun",
+  164: 
+  165:     person: "orang",
+
+========== src\components\search\SearchEditBar.tsx [550-615] ==========
+  550:         handleKeyDown,
+  551:       );
+  552:     };
+  553:   }, []);
+  554: 
+  555:   useEffect(() => {
+  556:     setDestination(
+  557:       initialDestination || "",
+  558:     );
+  559:   }, [
+  560:     category,
+  561:     initialDestination,
+  562:   ]);
+  563: 
+  564:   const destinationOptions =
+  565:     useMemo(
+  566:       () =>
+  567:         categoryOptions[
+  568:           category
+  569:         ] || [],
+  570:       [category],
+  571:     );
+  572: 
+  573:   const filteredOrigins =
+  574:     useMemo(() => {
+  575:       const query =
+  576:         originQuery
+  577:           .trim()
+  578:           .toLowerCase();
+  579: 
+  580:       if (!query) {
+  581:         return origins;
+  582:       }
+  583: 
+  584:       return origins.filter(
+  585:         (value) =>
+  586:           value
+  587:             .toLowerCase()
+  588:             .includes(query),
+  589:       );
+  590:     }, [originQuery]);
+  591: 
+  592:   const filteredDestinations =
+  593:     useMemo(() => {
+  594:       const query =
+  595:         destinationQuery
+  596:           .trim()
+  597:           .toLowerCase();
+  598: 
+  599:       if (!query) {
+  600:         return destinationOptions;
+  601:       }
+  602: 
+  603:       return destinationOptions.filter(
+  604:         (value) =>
+  605:           value
+  606:             .toLowerCase()
+  607:             .includes(query),
+  608:       );
+  609:     }, [
+  610:       destinationOptions,
+  611:       destinationQuery,
+  612:     ]);
+  613: 
+  614:   const travelerTotal =
+  615:     travelers.adult +
+
+========== src\components\search\SearchResultsClient.tsx [175-245] ==========
+  175:   },
+  176: };
+  177: 
+  178: 
+  179: function categoryFor(
+  180:   item: TravelProduct,
+  181: ) {
+  182:   const value =
+  183:     item.title.toLowerCase();
+  184: 
+  185:   if (value.includes("haji")) {
+  186:     return {
+  187:       label: "Haji",
+  188:       Icon: Map,
+  189:     };
+  190:   }
+  191: 
+  192:   if (value.includes("halal")) {
+  193:     return {
+  194:       label: "Halal Tour",
+  195:       Icon: Globe2,
+  196:     };
+  197:   }
+  198: 
+  199:   return {
+  200:     label: "Umrah",
+  201:     Icon: Building2,
+  202:   };
+  203: }
+  204: 
+  205: 
+  206: function normalizeCategory(
+  207:   value: string,
+  208: ) {
+  209:   return value
+  210:     .trim()
+  211:     .toLowerCase();
+  212: }
+  213: 
+  214: 
+  215: function packageUmrahType(
+  216:   item: TravelProduct,
+  217: ) {
+  218:   const title =
+  219:     item.title.toLowerCase();
+  220: 
+  221:   if (
+  222:     title.includes("plus")
+  223:   ) {
+  224:     return "Plus";
+  225:   }
+  226: 
+  227:   if (
+  228:     title.includes("first")
+  229:   ) {
+  230:     return "First";
+  231:   }
+  232: 
+  233:   if (
+  234:     title.includes("regular") ||
+  235:     title.includes("reguler") ||
+  236:     title.includes("premium")
+  237:   ) {
+  238:     return "Regular";
+  239:   }
+  240: 
+  241:   return "Hemat";
+  242: }
+  243: 
+  244: function numericDuration(
+  245:   value?: string,
+
+========== src\components\search\SearchResultsClient.tsx [350-410] ==========
+  350:     locale,
+  351:     direction,
+  352:     formatCurrency,
+  353:   } = useMarketplacePreferences();
+  354: 
+  355:   const initialCategory =
+  356:     normalizeCategory(category);
+  357: 
+  358: 
+  359:   
+  360:   if (initialCategory === "visa") {
+  361:     return (
+  362:       <VisaCategory
+  363:         destination={destination}
+  364:         travelers={travelers}
+  365:         adult={adult}
+  366:         child={child}
+  367:         infant={infant}
+  368:         departureDate={departureDate}
+  369:         returnDate={returnDate}
+  370:       />
+  371:     );
+  372:   }
+  373: const categoryPackages =
+  374:     useMemo(
+  375:       () => {
+  376:         const matches =
+  377:           featuredPackages.filter(
+  378:             (item) =>
+  379:               normalizeCategory(
+  380:                 categoryFor(item).label,
+  381:               ) ===
+  382:               initialCategory,
+  383:           );
+  384: 
+  385:         /*
+  386:          * STRICT CATEGORY:
+  387:          * kategori hanya boleh menampilkan paket
+  388:          * yang memang termasuk kategori tersebut.
+  389:          *
+  390:          * Jika belum ada paket pada kategori ini,
+  391:          * hasil harus kosong dan tidak boleh fallback
+  392:          * ke paket dari kategori lain.
+  393:          */
+  394:         return matches;
+  395:       },
+  396:       [
+  397:         initialCategory,
+  398:       ],
+  399:     );
+  400: 
+  401: 
+  402:   const destinationOptions =
+  403:     useMemo(
+  404:       () => {
+  405: 
+  406:         if (
+  407:           initialCategory ===
+  408:           "umrah"
+  409:         ) {
+  410:           return umrahFilterOptions;
+
+========== src\components\home\Hero.tsx [1010-1160] ==========
+ 1010:   const isInternational =
+ 1011:     active === "Tour International";
+ 1012:   const isSegaDeals = active === "SegaDeals";
+ 1013: 
+ 1014: 
+ 1015:   const totalTraveler =
+ 1016:     adult + child + infant;
+ 1017: 
+ 1018: 
+ 1019:   const availableClasses =
+ 1020:     isHaji
+ 1021:       ? hajiClasses
+ 1022:       : umrahClasses;
+ 1023: 
+ 1024: 
+ 1025:   const filteredOrigins = useMemo(() => {
+ 1026:     const query =
+ 1027:       originQuery.trim().toLowerCase();
+ 1028: 
+ 1029:     if (!query) {
+ 1030:       return indonesiaCities;
+ 1031:     }
+ 1032: 
+ 1033:     return indonesiaCities.filter((city) =>
+ 1034:       city.toLowerCase().includes(query),
+ 1035:     );
+ 1036:   }, [originQuery]);
+ 1037: 
+ 1038: 
+ 1039:   const filteredSegaOriginCountries =
+ 1040:     useMemo(() => {
+ 1041:       const query =
+ 1042:         segaOriginCountryQuery
+ 1043:           .trim()
+ 1044:           .toLowerCase();
+ 1045: 
+ 1046:       if (!query) {
+ 1047:         return segaDealsPopularOrigins;
+ 1048:       }
+ 1049: 
+ 1050:       return segaDealsOriginCountries.filter(
+ 1051:         (country) =>
+ 1052:           country
+ 1053:             .toLowerCase()
+ 1054:             .includes(query),
+ 1055:       );
+ 1056:     }, [segaOriginCountryQuery]);
+ 1057: 
+ 1058: 
+ 1059:   const segaOriginCities =
+ 1060:     segaDealsCitiesByCountry[
+ 1061:       segaOriginCountry
+ 1062:     ] ?? [];
+ 1063: 
+ 1064: 
+ 1065:   const filteredSegaOriginCities =
+ 1066:     useMemo(() => {
+ 1067:       const query =
+ 1068:         segaOriginCityQuery
+ 1069:           .trim()
+ 1070:           .toLowerCase();
+ 1071: 
+ 1072:       if (!query) {
+ 1073:         return segaOriginCities;
+ 1074:       }
+ 1075: 
+ 1076:       return segaOriginCities.filter(
+ 1077:         (city) =>
+ 1078:           city
+ 1079:             .toLowerCase()
+ 1080:             .includes(query),
+ 1081:       );
+ 1082:     }, [
+ 1083:       segaOriginCityQuery,
+ 1084:       segaOriginCities,
+ 1085:     ]);
+ 1086: 
+ 1087: 
+ 1088:   const destinations = useMemo(() => {
+ 1089:     if (isHaji) {
+ 1090:       return hajiDestinations;
+ 1091:     }
+ 1092: 
+ 1093:     if (isHalalTour) {
+ 1094:       return halalTourCountries;
+ 1095:     }
+ 1096: 
+ 1097:     if (isDomestic) {
+ 1098:       return domesticCities;
+ 1099:     }
+ 1100: 
+ 1101:     if (isInternational) {
+ 1102:       return internationalCountries;
+ 1103:     }
+ 1104: 
+ 1105:     if (isSegaDeals) {
+ 1106:       return segaDealsDestinations;
+ 1107:     }
+ 1108: 
+ 1109:     return umrahDestinations;
+ 1110:   }, [
+ 1111:     isHaji,
+ 1112:     isHalalTour,
+ 1113:     isDomestic,
+ 1114:     isInternational,
+ 1115:     isSegaDeals,
+ 1116:   ]);
+ 1117: 
+ 1118: 
+ 1119:   const filteredDestinations = useMemo(() => {
+ 1120:     const query =
+ 1121:       destinationQuery
+ 1122:         .trim()
+ 1123:         .toLowerCase();
+ 1124: 
+ 1125:     if (!query) {
+ 1126:       if (isHalalTour) {
+ 1127:         return halalTourPopularCountries;
+ 1128:       }
+ 1129: 
+ 1130:       if (isDomestic) {
+ 1131:         return domesticPopularCities;
+ 1132:       }
+ 1133: 
+ 1134:       if (isInternational) {
+ 1135:         return internationalPopularCountries;
+ 1136:       }
+ 1137: 
+ 1138:       if (isSegaDeals) {
+ 1139:         return segaDealsPopularDestinations;
+ 1140:       }
+ 1141: 
+ 1142:       return destinations;
+ 1143:     }
+ 1144: 
+ 1145:     return destinations.filter((item) =>
+ 1146:       item.toLowerCase().includes(query),
+ 1147:     );
+ 1148:   }, [
+ 1149:     destinationQuery,
+ 1150:     destinations,
+ 1151:     isHalalTour,
+ 1152:     isDomestic,
+ 1153:     isInternational,
+ 1154:     isSegaDeals,
+ 1155:   ]);
+ 1156: 
+ 1157: 
+ 1158:   const hajiYears = Array.from(
+ 1159:     { length: 6 },
+ 1160:     (_, index) => currentYear + index,

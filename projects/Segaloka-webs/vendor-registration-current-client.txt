@@ -1,0 +1,1305 @@
+"use client";
+
+import Link from "next/link";
+import {
+  ArrowLeft,
+  ArrowRight,
+  Building2,
+  Check,
+  CheckCircle2,
+  ChevronLeft,
+  FileCheck2,
+  FileText,
+  Globe2,
+  Mail,
+  MapPin,
+  Network,
+  PackageCheck,
+  Phone,
+  Plus,
+  Save,
+  ShieldCheck,
+  Store,
+  Trash2,
+  UploadCloud,
+  UserRound,
+  UsersRound,
+  X,
+} from "lucide-react";
+import {
+  type ChangeEvent,
+  type FormEvent,
+  type KeyboardEvent,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+
+import { useMarketplacePreferences } from "@/components/providers/MarketplacePreferencesProvider";
+
+type RegistrationStep = 1 | 2 | 3 | 4;
+
+type VendorDraft = {
+  businessName: string;
+  legalName: string;
+  businessType: string;
+  registrationNumber: string;
+  taxNumber: string;
+  establishedYear: string;
+  businessEmail: string;
+  website: string;
+  description: string;
+
+  picName: string;
+  picPosition: string;
+  picPhone: string;
+  picEmail: string;
+
+  services: string[];
+
+  address: string;
+  city: string;
+  province: string;
+  country: string;
+  postalCode: string;
+};
+
+type DocumentKey =
+  | "business"
+  | "tax"
+  | "identity"
+  | "supporting";
+
+type SelectedDocuments = Record<DocumentKey, File | null>;
+
+const EMPTY_DRAFT: VendorDraft = {
+  businessName: "",
+  legalName: "",
+  businessType: "",
+  registrationNumber: "",
+  taxNumber: "",
+  establishedYear: "",
+  businessEmail: "",
+  website: "",
+  description: "",
+
+  picName: "",
+  picPosition: "",
+  picPhone: "",
+  picEmail: "",
+
+  services: [],
+
+  address: "",
+  city: "",
+  province: "",
+  country: "Indonesia",
+  postalCode: "",
+};
+
+const EMPTY_DOCUMENTS: SelectedDocuments = {
+  business: null,
+  tax: null,
+  identity: null,
+  supporting: null,
+};
+
+const STORAGE_KEY = "segaloka-vendor-registration-draft-v1";
+
+const COPY = {
+  ID: {
+    back: "Kembali ke Vendor Partner",
+    badge: "SEGALOKA VENDOR PARTNER",
+    heroTitle: "Bergabung sebagai Vendor Segaloka",
+    heroDescription:
+      "Perluas jangkauan bisnis Anda dan hubungkan produk maupun layanan perjalanan dengan ekosistem Travel Segaloka.",
+
+    benefits: [
+      {
+        title: "Jangkauan Travel Lebih Luas",
+        description:
+          "Tawarkan produk dan layanan kepada Travel dalam ekosistem Segaloka.",
+      },
+      {
+        title: "Kelola Produk & Layanan",
+        description:
+          "Siapkan katalog, harga, ketersediaan, dan kebutuhan operasional.",
+      },
+      {
+        title: "Transaksi Lebih Terstruktur",
+        description:
+          "Kelola permintaan, pesanan, pembayaran, dan settlement dalam satu alur.",
+      },
+      {
+        title: "Ekosistem Terintegrasi",
+        description:
+          "Bangun hubungan bisnis berkelanjutan dengan jaringan Travel Segaloka.",
+      },
+    ],
+
+    steps: [
+      "Data Vendor",
+      "Produk & Layanan",
+      "Dokumen",
+      "Review",
+    ],
+
+    step1Eyebrow: "Tahap 1 dari 4",
+    step1Title: "Data Vendor",
+    step1Description:
+      "Lengkapi identitas bisnis dan penanggung jawab utama Vendor.",
+
+    step2Eyebrow: "Tahap 2 dari 4",
+    step2Title: "Produk & Layanan",
+    step2Description:
+      "Tuliskan produk atau layanan yang disediakan oleh bisnis Anda.",
+
+    step3Eyebrow: "Tahap 3 dari 4",
+    step3Title: "Dokumen Legalitas",
+    step3Description:
+      "Pilih dokumen yang akan digunakan dalam proses verifikasi Vendor.",
+
+    step4Eyebrow: "Tahap 4 dari 4",
+    step4Title: "Review Pendaftaran",
+    step4Description:
+      "Periksa kembali data Vendor sebelum proses verifikasi dilanjutkan.",
+
+    businessSection: "Informasi Bisnis",
+    picSection: "Penanggung Jawab / PIC",
+    addressSection: "Alamat Bisnis",
+
+    serviceLabel: "Jenis Produk / Layanan",
+    servicePlaceholder: "Contoh: Hotel Makkah, Bus Pariwisata, Visa Umrah",
+    serviceHelp:
+      "Ketik satu produk atau layanan lalu tekan Enter atau tombol Tambah.",
+
+    documentNotice:
+      "Dokumen yang dipilih tetap berada di perangkat Anda sampai proses pengiriman resmi dilakukan.",
+
+    saveLocal: "Simpan Draft",
+    saved: "Draft tersimpan di perangkat ini.",
+    continue: "Lanjutkan",
+    previous: "Kembali",
+    finish: "Kirim untuk Verifikasi",
+    finishNotice:
+      "Pengiriman verifikasi akan tersedia saat layanan registrasi Vendor resmi diaktifkan.",
+
+    required: "Wajib diisi",
+  },
+
+  EN: {
+    back: "Back to Vendor Partner",
+    badge: "SEGALOKA VENDOR PARTNER",
+    heroTitle: "Join Segaloka as a Vendor",
+    heroDescription:
+      "Expand your business reach and connect your travel products and services with the Segaloka Travel ecosystem.",
+
+    benefits: [
+      {
+        title: "Reach More Travel Businesses",
+        description:
+          "Offer your products and services to Travel businesses across the Segaloka ecosystem.",
+      },
+      {
+        title: "Manage Products & Services",
+        description:
+          "Prepare your catalogue, pricing, availability, and operational requirements.",
+      },
+      {
+        title: "Structured Transactions",
+        description:
+          "Manage requests, orders, payments, and settlement through a structured workflow.",
+      },
+      {
+        title: "Integrated Ecosystem",
+        description:
+          "Build sustainable business relationships with the Segaloka Travel network.",
+      },
+    ],
+
+    steps: [
+      "Vendor Data",
+      "Products & Services",
+      "Documents",
+      "Review",
+    ],
+
+    step1Eyebrow: "Step 1 of 4",
+    step1Title: "Vendor Data",
+    step1Description:
+      "Complete your business identity and primary contact information.",
+
+    step2Eyebrow: "Step 2 of 4",
+    step2Title: "Products & Services",
+    step2Description:
+      "Add the products or services provided by your business.",
+
+    step3Eyebrow: "Step 3 of 4",
+    step3Title: "Legal Documents",
+    step3Description:
+      "Select the documents to be used for Vendor verification.",
+
+    step4Eyebrow: "Step 4 of 4",
+    step4Title: "Registration Review",
+    step4Description:
+      "Review your Vendor information before proceeding to verification.",
+
+    businessSection: "Business Information",
+    picSection: "Person in Charge",
+    addressSection: "Business Address",
+
+    serviceLabel: "Product / Service Type",
+    servicePlaceholder: "Example: Makkah Hotel, Tour Bus, Umrah Visa",
+    serviceHelp:
+      "Type one product or service and press Enter or Add.",
+
+    documentNotice:
+      "Selected documents remain on your device until the official submission process is performed.",
+
+    saveLocal: "Save Draft",
+    saved: "Draft saved on this device.",
+    continue: "Continue",
+    previous: "Back",
+    finish: "Submit for Verification",
+    finishNotice:
+      "Verification submission will be available when Vendor registration is officially activated.",
+
+    required: "Required",
+  },
+} as const;
+
+const BENEFIT_ICONS = [
+  UsersRound,
+  PackageCheck,
+  ShieldCheck,
+  Network,
+] as const;
+
+function FieldLabel({
+  children,
+  required,
+}: {
+  children: React.ReactNode;
+  required?: boolean;
+}) {
+  return (
+    <span className="vendor-reg-label">
+      {children}
+      {required ? <em>*</em> : null}
+    </span>
+  );
+}
+
+function ReviewRow({
+  label,
+  value,
+}: {
+  label: string;
+  value?: string;
+}) {
+  return (
+    <div className="vendor-reg-review-row">
+      <span>{label}</span>
+      <strong>{value?.trim() || "—"}</strong>
+    </div>
+  );
+}
+
+export default function VendorRegistrationClient() {
+  const { language } = useMarketplacePreferences();
+
+  const lang = language === "EN" ? "EN" : "ID";
+  const t = COPY[lang];
+
+  const [step, setStep] = useState<RegistrationStep>(1);
+  const [draft, setDraft] = useState<VendorDraft>(EMPTY_DRAFT);
+  const [documents, setDocuments] =
+    useState<SelectedDocuments>(EMPTY_DOCUMENTS);
+
+  const [serviceInput, setServiceInput] = useState("");
+  const [saved, setSaved] = useState(false);
+  const [hydrated, setHydrated] = useState(false);
+
+  useEffect(() => {
+    try {
+      const existing = window.localStorage.getItem(STORAGE_KEY);
+
+      if (existing) {
+        const parsed = JSON.parse(existing) as Partial<VendorDraft>;
+
+        setDraft({
+          ...EMPTY_DRAFT,
+          ...parsed,
+          services: Array.isArray(parsed.services)
+            ? parsed.services.filter(
+                (item): item is string => typeof item === "string",
+              )
+            : [],
+        });
+      }
+    } catch {
+      // Draft lokal yang rusak diabaikan agar form tetap dapat digunakan.
+    } finally {
+      setHydrated(true);
+    }
+  }, []);
+
+  const stepMeta = useMemo(() => {
+    if (step === 1) {
+      return {
+        eyebrow: t.step1Eyebrow,
+        title: t.step1Title,
+        description: t.step1Description,
+      };
+    }
+
+    if (step === 2) {
+      return {
+        eyebrow: t.step2Eyebrow,
+        title: t.step2Title,
+        description: t.step2Description,
+      };
+    }
+
+    if (step === 3) {
+      return {
+        eyebrow: t.step3Eyebrow,
+        title: t.step3Title,
+        description: t.step3Description,
+      };
+    }
+
+    return {
+      eyebrow: t.step4Eyebrow,
+      title: t.step4Title,
+      description: t.step4Description,
+    };
+  }, [step, t]);
+
+  function updateField<K extends keyof VendorDraft>(
+    key: K,
+    value: VendorDraft[K],
+  ) {
+    setDraft((current) => ({
+      ...current,
+      [key]: value,
+    }));
+
+    setSaved(false);
+  }
+
+  function saveDraft() {
+    window.localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify(draft),
+    );
+
+    setSaved(true);
+  }
+
+  function addService() {
+    const value = serviceInput.trim();
+
+    if (!value) return;
+
+    const exists = draft.services.some(
+      (item) => item.toLocaleLowerCase() === value.toLocaleLowerCase(),
+    );
+
+    if (!exists) {
+      updateField("services", [...draft.services, value]);
+    }
+
+    setServiceInput("");
+  }
+
+  function onServiceKeyDown(
+    event: KeyboardEvent<HTMLInputElement>,
+  ) {
+    if (event.key === "Enter" || event.key === ",") {
+      event.preventDefault();
+      addService();
+    }
+  }
+
+  function removeService(service: string) {
+    updateField(
+      "services",
+      draft.services.filter((item) => item !== service),
+    );
+  }
+
+  function selectDocument(
+    key: DocumentKey,
+    event: ChangeEvent<HTMLInputElement>,
+  ) {
+    const file = event.target.files?.[0] ?? null;
+
+    setDocuments((current) => ({
+      ...current,
+      [key]: file,
+    }));
+  }
+
+  function nextStep() {
+    setStep((current) =>
+      Math.min(4, current + 1) as RegistrationStep,
+    );
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }
+
+  function previousStep() {
+    setStep((current) =>
+      Math.max(1, current - 1) as RegistrationStep,
+    );
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }
+
+  function preventSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+  }
+
+  return (
+    <main
+      className="vendor-reg-page"
+      dir={language === "AR" ? "rtl" : "ltr"}
+    >
+      <div className="vendor-reg-top">
+        <Link href="/daftar-vendor" className="vendor-reg-back">
+          <ArrowLeft size={16} />
+          <span>{t.back}</span>
+        </Link>
+      </div>
+
+      <div className="vendor-reg-shell">
+        <aside className="vendor-reg-brand">
+          <div className="vendor-reg-brand-decoration vendor-reg-brand-decoration-one" />
+          <div className="vendor-reg-brand-decoration vendor-reg-brand-decoration-two" />
+
+          <div className="vendor-reg-brand-content">
+            <span className="vendor-reg-brand-badge">
+              <Store size={15} />
+              {t.badge}
+            </span>
+
+            <h1>{t.heroTitle}</h1>
+            <p>{t.heroDescription}</p>
+
+            <div className="vendor-reg-benefits">
+              {t.benefits.map((benefit, index) => {
+                const Icon = BENEFIT_ICONS[index];
+
+                return (
+                  <div
+                    className="vendor-reg-benefit"
+                    key={benefit.title}
+                  >
+                    <span className="vendor-reg-benefit-icon">
+                      <Icon size={20} />
+                    </span>
+
+                    <div>
+                      <strong>{benefit.title}</strong>
+                      <p>{benefit.description}</p>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          <div className="vendor-reg-brand-footer">
+            <span>
+              <CheckCircle2 size={15} />
+              Vendor terverifikasi
+            </span>
+
+            <span>
+              <Globe2 size={15} />
+              Ekosistem Travel
+            </span>
+          </div>
+        </aside>
+
+        <section className="vendor-reg-panel">
+          <div className="vendor-reg-stepper">
+            {t.steps.map((label, index) => {
+              const number = (index + 1) as RegistrationStep;
+              const active = number === step;
+              const completed = number < step;
+
+              return (
+                <div
+                  className={[
+                    "vendor-reg-step",
+                    active ? "is-active" : "",
+                    completed ? "is-completed" : "",
+                  ]
+                    .filter(Boolean)
+                    .join(" ")}
+                  key={label}
+                >
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (completed) setStep(number);
+                    }}
+                    disabled={!completed && !active}
+                    aria-current={active ? "step" : undefined}
+                  >
+                    <span>
+                      {completed ? (
+                        <Check size={15} strokeWidth={3} />
+                      ) : (
+                        number
+                      )}
+                    </span>
+
+                    <strong>{label}</strong>
+                  </button>
+
+                  {index < t.steps.length - 1 ? (
+                    <i aria-hidden="true" />
+                  ) : null}
+                </div>
+              );
+            })}
+          </div>
+
+          <div className="vendor-reg-heading">
+            <span>{stepMeta.eyebrow}</span>
+            <h2>{stepMeta.title}</h2>
+            <p>{stepMeta.description}</p>
+          </div>
+
+          <form
+            className="vendor-reg-form"
+            onSubmit={preventSubmit}
+          >
+            {step === 1 ? (
+              <>
+                <section className="vendor-reg-section">
+                  <div className="vendor-reg-section-title">
+                    <span>
+                      <Building2 size={18} />
+                    </span>
+                    <div>
+                      <h3>{t.businessSection}</h3>
+                      <p>
+                        Identitas utama bisnis yang akan terdaftar sebagai
+                        Vendor Segaloka.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="vendor-reg-grid">
+                    <label>
+                      <FieldLabel required>
+                        Nama Bisnis / Vendor
+                      </FieldLabel>
+                      <input
+                        value={draft.businessName}
+                        onChange={(event) =>
+                          updateField(
+                            "businessName",
+                            event.target.value,
+                          )
+                        }
+                        placeholder="Contoh: ABW Travel Service"
+                        autoComplete="organization"
+                      />
+                    </label>
+
+                    <label>
+                      <FieldLabel required>
+                        Nama Legal Perusahaan
+                      </FieldLabel>
+                      <input
+                        value={draft.legalName}
+                        onChange={(event) =>
+                          updateField(
+                            "legalName",
+                            event.target.value,
+                          )
+                        }
+                        placeholder="PT / CV / badan usaha"
+                        autoComplete="organization"
+                      />
+                    </label>
+
+                    <label>
+                      <FieldLabel required>
+                        Bentuk Badan Usaha
+                      </FieldLabel>
+                      <select
+                        value={draft.businessType}
+                        onChange={(event) =>
+                          updateField(
+                            "businessType",
+                            event.target.value,
+                          )
+                        }
+                      >
+                        <option value="">Pilih badan usaha</option>
+                        <option value="PT">PT</option>
+                        <option value="CV">CV</option>
+                        <option value="Firma">Firma</option>
+                        <option value="Koperasi">Koperasi</option>
+                        <option value="Perorangan">
+                          Usaha Perorangan
+                        </option>
+                        <option value="Lainnya">Lainnya</option>
+                      </select>
+                    </label>
+
+                    <label>
+                      <FieldLabel>Nomor NIB / Registrasi</FieldLabel>
+                      <input
+                        value={draft.registrationNumber}
+                        onChange={(event) =>
+                          updateField(
+                            "registrationNumber",
+                            event.target.value,
+                          )
+                        }
+                        placeholder="Nomor registrasi usaha"
+                      />
+                    </label>
+
+                    <label>
+                      <FieldLabel>NPWP</FieldLabel>
+                      <input
+                        value={draft.taxNumber}
+                        onChange={(event) =>
+                          updateField(
+                            "taxNumber",
+                            event.target.value,
+                          )
+                        }
+                        placeholder="Nomor NPWP"
+                        inputMode="numeric"
+                      />
+                    </label>
+
+                    <label>
+                      <FieldLabel>Tahun Berdiri</FieldLabel>
+                      <input
+                        type="number"
+                        min="1900"
+                        max="2100"
+                        value={draft.establishedYear}
+                        onChange={(event) =>
+                          updateField(
+                            "establishedYear",
+                            event.target.value,
+                          )
+                        }
+                        placeholder="Contoh: 2024"
+                      />
+                    </label>
+
+                    <label>
+                      <FieldLabel required>Email Bisnis</FieldLabel>
+                      <input
+                        type="email"
+                        value={draft.businessEmail}
+                        onChange={(event) =>
+                          updateField(
+                            "businessEmail",
+                            event.target.value,
+                          )
+                        }
+                        placeholder="vendor@perusahaan.com"
+                        autoComplete="email"
+                      />
+                    </label>
+
+                    <label>
+                      <FieldLabel>Website</FieldLabel>
+                      <input
+                        type="url"
+                        value={draft.website}
+                        onChange={(event) =>
+                          updateField(
+                            "website",
+                            event.target.value,
+                          )
+                        }
+                        placeholder="https://"
+                        autoComplete="url"
+                      />
+                    </label>
+
+                    <label className="vendor-reg-span-2">
+                      <FieldLabel>Deskripsi Singkat Bisnis</FieldLabel>
+                      <textarea
+                        value={draft.description}
+                        onChange={(event) =>
+                          updateField(
+                            "description",
+                            event.target.value,
+                          )
+                        }
+                        placeholder="Jelaskan produk, layanan, wilayah operasional, dan profil singkat bisnis Anda."
+                        rows={4}
+                      />
+                    </label>
+                  </div>
+                </section>
+
+                <section className="vendor-reg-section">
+                  <div className="vendor-reg-section-title">
+                    <span>
+                      <UserRound size={18} />
+                    </span>
+
+                    <div>
+                      <h3>{t.picSection}</h3>
+                      <p>
+                        Kontak utama yang mewakili bisnis dalam proses
+                        verifikasi dan operasional.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="vendor-reg-grid">
+                    <label>
+                      <FieldLabel required>Nama PIC</FieldLabel>
+                      <input
+                        value={draft.picName}
+                        onChange={(event) =>
+                          updateField(
+                            "picName",
+                            event.target.value,
+                          )
+                        }
+                        placeholder="Nama lengkap"
+                        autoComplete="name"
+                      />
+                    </label>
+
+                    <label>
+                      <FieldLabel required>Jabatan</FieldLabel>
+                      <input
+                        value={draft.picPosition}
+                        onChange={(event) =>
+                          updateField(
+                            "picPosition",
+                            event.target.value,
+                          )
+                        }
+                        placeholder="Direktur / Manager / PIC"
+                      />
+                    </label>
+
+                    <label>
+                      <FieldLabel required>
+                        Nomor WhatsApp
+                      </FieldLabel>
+                      <div className="vendor-reg-input-icon">
+                        <Phone size={17} />
+                        <input
+                          type="tel"
+                          value={draft.picPhone}
+                          onChange={(event) =>
+                            updateField(
+                              "picPhone",
+                              event.target.value,
+                            )
+                          }
+                          placeholder="+62"
+                          autoComplete="tel"
+                        />
+                      </div>
+                    </label>
+
+                    <label>
+                      <FieldLabel required>Email PIC</FieldLabel>
+                      <div className="vendor-reg-input-icon">
+                        <Mail size={17} />
+                        <input
+                          type="email"
+                          value={draft.picEmail}
+                          onChange={(event) =>
+                            updateField(
+                              "picEmail",
+                              event.target.value,
+                            )
+                          }
+                          placeholder="nama@perusahaan.com"
+                          autoComplete="email"
+                        />
+                      </div>
+                    </label>
+                  </div>
+                </section>
+
+                <section className="vendor-reg-section">
+                  <div className="vendor-reg-section-title">
+                    <span>
+                      <MapPin size={18} />
+                    </span>
+
+                    <div>
+                      <h3>{t.addressSection}</h3>
+                      <p>
+                        Alamat utama yang digunakan untuk identitas dan
+                        verifikasi bisnis.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="vendor-reg-grid">
+                    <label className="vendor-reg-span-2">
+                      <FieldLabel required>Alamat Lengkap</FieldLabel>
+                      <textarea
+                        value={draft.address}
+                        onChange={(event) =>
+                          updateField(
+                            "address",
+                            event.target.value,
+                          )
+                        }
+                        placeholder="Nama jalan, nomor, kecamatan, dan detail alamat"
+                        rows={3}
+                        autoComplete="street-address"
+                      />
+                    </label>
+
+                    <label>
+                      <FieldLabel required>Kota / Kabupaten</FieldLabel>
+                      <input
+                        value={draft.city}
+                        onChange={(event) =>
+                          updateField("city", event.target.value)
+                        }
+                        placeholder="Kota / Kabupaten"
+                        autoComplete="address-level2"
+                      />
+                    </label>
+
+                    <label>
+                      <FieldLabel required>Provinsi</FieldLabel>
+                      <input
+                        value={draft.province}
+                        onChange={(event) =>
+                          updateField(
+                            "province",
+                            event.target.value,
+                          )
+                        }
+                        placeholder="Provinsi"
+                        autoComplete="address-level1"
+                      />
+                    </label>
+
+                    <label>
+                      <FieldLabel required>Negara</FieldLabel>
+                      <input
+                        value={draft.country}
+                        onChange={(event) =>
+                          updateField(
+                            "country",
+                            event.target.value,
+                          )
+                        }
+                        placeholder="Indonesia"
+                        autoComplete="country-name"
+                      />
+                    </label>
+
+                    <label>
+                      <FieldLabel>Kode Pos</FieldLabel>
+                      <input
+                        value={draft.postalCode}
+                        onChange={(event) =>
+                          updateField(
+                            "postalCode",
+                            event.target.value,
+                          )
+                        }
+                        placeholder="Kode pos"
+                        autoComplete="postal-code"
+                      />
+                    </label>
+                  </div>
+                </section>
+              </>
+            ) : null}
+
+            {step === 2 ? (
+              <section className="vendor-reg-section">
+                <div className="vendor-reg-section-title">
+                  <span>
+                    <PackageCheck size={18} />
+                  </span>
+
+                  <div>
+                    <h3>{t.serviceLabel}</h3>
+                    <p>
+                      Vendor dapat memiliki lebih dari satu produk atau
+                      layanan sesuai kegiatan bisnisnya.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="vendor-reg-service-box">
+                  <label>
+                    <FieldLabel required>
+                      Tambahkan Produk / Layanan
+                    </FieldLabel>
+
+                    <div className="vendor-reg-service-input">
+                      <input
+                        value={serviceInput}
+                        onChange={(event) =>
+                          setServiceInput(event.target.value)
+                        }
+                        onKeyDown={onServiceKeyDown}
+                        placeholder={t.servicePlaceholder}
+                      />
+
+                      <button
+                        type="button"
+                        onClick={addService}
+                        disabled={!serviceInput.trim()}
+                      >
+                        <Plus size={17} />
+                        Tambah
+                      </button>
+                    </div>
+
+                    <small>{t.serviceHelp}</small>
+                  </label>
+
+                  {draft.services.length > 0 ? (
+                    <div className="vendor-reg-tags">
+                      {draft.services.map((service) => (
+                        <span key={service}>
+                          {service}
+
+                          <button
+                            type="button"
+                            onClick={() => removeService(service)}
+                            aria-label={`Hapus ${service}`}
+                          >
+                            <X size={14} />
+                          </button>
+                        </span>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="vendor-reg-empty">
+                      <PackageCheck size={28} />
+                      <strong>Belum ada produk atau layanan</strong>
+                      <p>
+                        Tambahkan sesuai bisnis Anda. Contohnya hotel,
+                        transportasi, visa, tiket, catering, handling,
+                        aktivitas, atau layanan lainnya.
+                      </p>
+                    </div>
+                  )}
+                </div>
+              </section>
+            ) : null}
+
+            {step === 3 ? (
+              <section className="vendor-reg-section">
+                <div className="vendor-reg-section-title">
+                  <span>
+                    <FileCheck2 size={18} />
+                  </span>
+
+                  <div>
+                    <h3>{t.step3Title}</h3>
+                    <p>
+                      Siapkan dokumen bisnis yang relevan untuk proses
+                      pemeriksaan Vendor.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="vendor-reg-document-grid">
+                  {(
+                    [
+                      {
+                        key: "business",
+                        title: "NIB / Izin Usaha",
+                        description:
+                          "Dokumen legalitas atau izin usaha yang berlaku.",
+                        required: true,
+                      },
+                      {
+                        key: "tax",
+                        title: "NPWP",
+                        description:
+                          "Dokumen NPWP perusahaan atau pemilik usaha.",
+                        required: false,
+                      },
+                      {
+                        key: "identity",
+                        title: "Identitas Penanggung Jawab",
+                        description:
+                          "KTP atau paspor Direktur / PIC yang berwenang.",
+                        required: true,
+                      },
+                      {
+                        key: "supporting",
+                        title: "Dokumen Pendukung",
+                        description:
+                          "Dokumen tambahan sesuai jenis produk atau layanan.",
+                        required: false,
+                      },
+                    ] as const
+                  ).map((item) => {
+                    const file = documents[item.key];
+
+                    return (
+                      <label
+                        className={[
+                          "vendor-reg-document",
+                          file ? "has-file" : "",
+                        ]
+                          .filter(Boolean)
+                          .join(" ")}
+                        key={item.key}
+                      >
+                        <input
+                          type="file"
+                          accept=".pdf,.jpg,.jpeg,.png"
+                          onChange={(event) =>
+                            selectDocument(item.key, event)
+                          }
+                        />
+
+                        <span className="vendor-reg-document-icon">
+                          {file ? (
+                            <FileText size={23} />
+                          ) : (
+                            <UploadCloud size={23} />
+                          )}
+                        </span>
+
+                        <div>
+                          <strong>
+                            {item.title}
+                            {item.required ? <em>*</em> : null}
+                          </strong>
+
+                          <p>{item.description}</p>
+
+                          <small>
+                            {file
+                              ? file.name
+                              : "PDF, JPG atau PNG"}
+                          </small>
+                        </div>
+                      </label>
+                    );
+                  })}
+                </div>
+
+                <div className="vendor-reg-info">
+                  <ShieldCheck size={18} />
+                  <p>{t.documentNotice}</p>
+                </div>
+              </section>
+            ) : null}
+
+            {step === 4 ? (
+              <>
+                <section className="vendor-reg-section">
+                  <div className="vendor-reg-section-title">
+                    <span>
+                      <CheckCircle2 size={18} />
+                    </span>
+
+                    <div>
+                      <h3>Ringkasan Vendor</h3>
+                      <p>
+                        Pastikan informasi utama bisnis sudah sesuai.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="vendor-reg-review">
+                    <ReviewRow
+                      label="Nama Vendor"
+                      value={draft.businessName}
+                    />
+                    <ReviewRow
+                      label="Nama Legal"
+                      value={draft.legalName}
+                    />
+                    <ReviewRow
+                      label="Badan Usaha"
+                      value={draft.businessType}
+                    />
+                    <ReviewRow
+                      label="NIB / Registrasi"
+                      value={draft.registrationNumber}
+                    />
+                    <ReviewRow
+                      label="Email Bisnis"
+                      value={draft.businessEmail}
+                    />
+                    <ReviewRow
+                      label="PIC"
+                      value={draft.picName}
+                    />
+                    <ReviewRow
+                      label="WhatsApp"
+                      value={draft.picPhone}
+                    />
+                    <ReviewRow
+                      label="Domisili"
+                      value={
+                        [draft.city, draft.province, draft.country]
+                          .filter(Boolean)
+                          .join(", ")
+                      }
+                    />
+                  </div>
+                </section>
+
+                <section className="vendor-reg-section">
+                  <div className="vendor-reg-section-title">
+                    <span>
+                      <PackageCheck size={18} />
+                    </span>
+
+                    <div>
+                      <h3>Produk & Layanan</h3>
+                      <p>
+                        Produk dan layanan yang akan diajukan untuk
+                        verifikasi.
+                      </p>
+                    </div>
+                  </div>
+
+                  {draft.services.length ? (
+                    <div className="vendor-reg-tags is-review">
+                      {draft.services.map((service) => (
+                        <span key={service}>{service}</span>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="vendor-reg-review-empty">
+                      Belum ada produk atau layanan.
+                    </div>
+                  )}
+                </section>
+
+                <section className="vendor-reg-section">
+                  <div className="vendor-reg-section-title">
+                    <span>
+                      <FileCheck2 size={18} />
+                    </span>
+
+                    <div>
+                      <h3>Dokumen</h3>
+                      <p>
+                        Dokumen yang saat ini telah dipilih dari
+                        perangkat.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="vendor-reg-review-documents">
+                    {(
+                      [
+                        ["business", "NIB / Izin Usaha"],
+                        ["tax", "NPWP"],
+                        ["identity", "Identitas Penanggung Jawab"],
+                        ["supporting", "Dokumen Pendukung"],
+                      ] as const
+                    ).map(([key, label]) => (
+                      <div key={key}>
+                        <FileText size={17} />
+                        <span>{label}</span>
+                        <strong>
+                          {documents[key]?.name || "Belum dipilih"}
+                        </strong>
+                      </div>
+                    ))}
+                  </div>
+                </section>
+
+                <div className="vendor-reg-submit-notice">
+                  <ShieldCheck size={20} />
+                  <div>
+                    <strong>Verifikasi Vendor Segaloka</strong>
+                    <p>{t.finishNotice}</p>
+                  </div>
+                </div>
+              </>
+            ) : null}
+
+            <div className="vendor-reg-actions">
+              <div className="vendor-reg-actions-left">
+                {step > 1 ? (
+                  <button
+                    type="button"
+                    className="vendor-reg-button vendor-reg-button-secondary"
+                    onClick={previousStep}
+                  >
+                    <ChevronLeft size={17} />
+                    {t.previous}
+                  </button>
+                ) : null}
+
+                <button
+                  type="button"
+                  className="vendor-reg-button vendor-reg-button-ghost"
+                  onClick={saveDraft}
+                  disabled={!hydrated}
+                >
+                  <Save size={16} />
+                  {t.saveLocal}
+                </button>
+              </div>
+
+              <div className="vendor-reg-actions-right">
+                {saved ? (
+                  <span className="vendor-reg-saved">
+                    <CheckCircle2 size={15} />
+                    {t.saved}
+                  </span>
+                ) : null}
+
+                {step < 4 ? (
+                  <button
+                    type="button"
+                    className="vendor-reg-button vendor-reg-button-primary"
+                    onClick={nextStep}
+                  >
+                    {t.continue}
+                    <ArrowRight size={17} />
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    className="vendor-reg-button vendor-reg-button-primary"
+                    disabled
+                    title={t.finishNotice}
+                  >
+                    {t.finish}
+                    <ArrowRight size={17} />
+                  </button>
+                )}
+              </div>
+            </div>
+          </form>
+        </section>
+      </div>
+    </main>
+  );
+}

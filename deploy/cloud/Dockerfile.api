@@ -1,0 +1,12 @@
+FROM node:24-alpine
+
+WORKDIR /app
+
+COPY services/api/package.json services/api/pnpm-lock.yaml ./
+RUN corepack enable && pnpm install --prod --frozen-lockfile
+
+COPY services/api/src ./src
+
+USER node
+EXPOSE 4192
+CMD ["node", "src/server.js"]

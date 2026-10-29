@@ -1,0 +1,53 @@
+import 'dotenv/config';
+import { request } from 'node:http';
+import { signIngressRequest } from '../src/security/ingress-identity-v3.js';
+
+const secret = process.env.INGRESS_IDENTITY_SECRET;
+
+if (typeof secret !== 'string' || secret.length < 32) {
+  throw new Error('Konfigurasi HMAC tidak valid.');
+}
+
+const method = 'GET';
+const target = '/auth/me';
+
+const headers = signIngressRequest(secret, {
+  ip: '127.0.0.1',
+  method,
+  target,
+  body: Buffer.alloc(0)
+});
+
+const status = await new Promise((resolve, reject) => {
+  const req = request({
+    hostname: '127.0.0.1',
+    port: 4192,
+    path: target,
+    method,
+    headers,
+    timeout: 5000
+  }, (res) => {
+    res.resume();
+    res.on('end', () => resolve(res.statusCode));
+    res.on('error', reject);
+  });
+
+  req.on('timeout', () => {
+    req.destroy(new Error('REQUEST_TIMEOUT'));
+  });
+
+  req.on('error', reject);
+  req.end();
+});
+
+console.log('HTTP:', status);
+
+if (status === 401) {
+  console.log('PASS: HMAC diterima. Token pengguna belum diberikan.');
+} else if (status === 403) {
+  console.error('STOP: HMAC masih ditolak.');
+  process.exitCode = 1;
+} else {
+  console.error('STOP: Respons tidak sesuai ekspektasi.');
+  process.exitCode = 1;
+}

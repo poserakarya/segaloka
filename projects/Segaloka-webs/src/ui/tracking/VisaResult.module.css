@@ -1,0 +1,1240 @@
+.root {
+  --visa-blue: var(--ui-primary, #0866e8);
+  --visa-text: var(--ui-foreground, #152b52);
+  --visa-muted: var(--ui-muted-foreground, #687b97);
+  --visa-border: var(--ui-border, #e1e9f4);
+  --visa-surface: var(--ui-surface, #ffffff);
+  display: grid;
+  gap: 14px;
+  min-width: 0;
+  padding: 16px;
+  background: var(--visa-surface);
+  border: 1px solid var(--visa-border);
+  border-radius: 16px;
+  color: var(--visa-text);
+}
+
+.heading h2 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 750;
+  line-height: 1.4;
+}
+
+.heading p {
+  margin: 5px 0 0;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--visa-muted);
+}
+
+.notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+  padding: 13px 15px;
+  border-radius: 11px;
+  background: color-mix(in srgb, var(--visa-blue) 7%, var(--visa-surface));
+  color: var(--visa-blue);
+}
+
+.notice svg {
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.notice strong {
+  display: block;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.notice p {
+  margin: 4px 0 0;
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--visa-muted);
+}
+
+.applicantList {
+  display: grid;
+  gap: 13px;
+  min-width: 0;
+}
+
+.applicantCard {
+  overflow: hidden;
+  border: 1px solid var(--visa-border);
+  border-radius: 14px;
+  background: var(--visa-surface);
+}
+
+.applicantHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 15px;
+  border-bottom: 1px solid var(--visa-border);
+}
+
+.approved .applicantHeader {
+  background: color-mix(in srgb, #10a578 9%, var(--visa-surface));
+}
+
+.rejected .applicantHeader {
+  background: color-mix(in srgb, #dc3545 8%, var(--visa-surface));
+}
+
+.pending .applicantHeader {
+  background: color-mix(in srgb, var(--visa-blue) 7%, var(--visa-surface));
+}
+
+.person {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.avatar {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--visa-surface);
+  font-size: 25px;
+}
+
+.personDetails {
+  min-width: 0;
+}
+
+.personName {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 750;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+.confirmedDate {
+  margin: 4px 0 0;
+  color: var(--visa-muted);
+  font-size: 12px;
+}
+
+.statusBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 10px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 750;
+  white-space: nowrap;
+}
+
+.approved .statusBadge {
+  background: #dcf7e9;
+  color: #08734c;
+}
+
+.rejected .statusBadge {
+  background: #ffe3e5;
+  color: #b42335;
+}
+
+.pending .statusBadge {
+  background: #e4efff;
+  color: #1256ae;
+}
+
+.applicantBody {
+  display: grid;
+  gap: 12px;
+  padding: 13px;
+}
+
+.documentGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 13fr) minmax(0, 7fr);
+  gap: 11px;
+  min-width: 0;
+}
+
+.detailPanel {
+  min-width: 0;
+  padding: 13px;
+  border: 1px solid var(--visa-border);
+  border-radius: 11px;
+  background: var(--visa-surface);
+}
+
+.panelHeading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--visa-blue);
+}
+
+.approved .detailPanel:first-child .panelHeading {
+  color: #07865e;
+}
+
+.rejected .panelHeading {
+  color: #c02b3b;
+}
+
+.panelHeading h4 {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 750;
+  line-height: 1.45;
+}
+
+.panelDescription {
+  margin: 7px 0 0;
+  color: var(--visa-muted);
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+.fileList {
+  display: grid;
+  gap: 8px;
+  margin-top: 11px;
+}
+
+.fileRow {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 9px;
+  min-width: 0;
+  padding: 10px;
+  border: 1px solid var(--visa-border);
+  border-radius: 9px;
+}
+
+.fileIcon {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 38px;
+  flex-shrink: 0;
+  border-radius: 7px;
+  background: #fff0f1;
+  color: #d12737;
+}
+
+.fileDetails {
+  flex: 1;
+  min-width: 0;
+  display: grid;
+  gap: 4px;
+}
+
+.fileName {
+  font-size: 12px;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+.fileMeta {
+  color: var(--visa-muted);
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.fileActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.viewButton,
+.downloadButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 33px;
+  padding: 7px 10px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.viewButton {
+  border: 1px solid var(--visa-border);
+  background: var(--visa-surface);
+  color: var(--visa-blue);
+}
+
+.downloadButton {
+  border: 1px solid var(--visa-blue);
+  background: var(--visa-blue);
+  color: #ffffff;
+}
+
+.viewButton:hover,
+.downloadButton:hover {
+  filter: brightness(0.94);
+}
+
+.viewButton:focus-visible,
+.downloadButton:focus-visible {
+  outline: 3px solid var(--visa-blue);
+  outline-offset: 2px;
+}
+
+.unavailable {
+  color: var(--visa-muted);
+  font-size: 11px;
+}
+
+.waitingDocument {
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  gap: 7px;
+  min-height: 130px;
+  margin-top: 11px;
+  padding: 15px;
+  border: 1px dashed var(--visa-border);
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--visa-blue) 3%, var(--visa-surface));
+  text-align: center;
+}
+
+.waitingDocument svg {
+  color: var(--visa-blue);
+}
+
+.waitingDocument strong {
+  font-size: 12px;
+}
+
+.waitingDocument span {
+  max-width: 260px;
+  color: var(--visa-muted);
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+.rejectionMessage {
+  margin-top: 12px;
+  padding: 14px;
+  border-radius: 9px;
+  background: color-mix(in srgb, #dc3545 9%, var(--visa-surface));
+  color: #b42335;
+  font-size: 12px;
+  font-weight: 650;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+.vendorNote {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  padding: 12px;
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--visa-blue) 6%, var(--visa-surface));
+}
+
+.vendorNote svg {
+  flex-shrink: 0;
+  color: var(--visa-blue);
+}
+
+.vendorNote strong {
+  font-size: 12px;
+}
+
+.vendorNote p {
+  margin: 5px 0 0;
+  color: var(--visa-muted);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.resultFooter {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--visa-muted);
+  font-size: 11px;
+  font-weight: 650;
+}
+
+.visaMetadata {
+  margin: 10px 0 0;
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+
+.timelineCard {
+  min-width: 0;
+  padding: 15px;
+  border: 1px solid var(--visa-border);
+  border-radius: 13px;
+  background: var(--visa-surface);
+}
+
+.timelineTitle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--visa-blue);
+}
+
+.timelineTitle h3 {
+  margin: 0;
+  color: var(--visa-text);
+  font-size: 14px;
+}
+
+.timeline {
+  margin: 15px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.timelineItem {
+  position: relative;
+  display: flex;
+  gap: 12px;
+  padding-bottom: 16px;
+}
+
+.timelineItem:last-child {
+  padding-bottom: 0;
+}
+
+.timelineItem:not(:last-child)::before {
+  content: "";
+  position: absolute;
+  top: 13px;
+  bottom: 0;
+  inset-inline-start: 5px;
+  width: 2px;
+  background: var(--visa-border);
+}
+
+.timelineDot {
+  position: relative;
+  z-index: 1;
+  width: 12px;
+  height: 12px;
+  flex-shrink: 0;
+  margin-top: 3px;
+  border: 3px solid var(--visa-blue);
+  border-radius: 50%;
+  background: var(--visa-surface);
+}
+
+.timelineContent {
+  min-width: 0;
+}
+
+.timelineDate {
+  font-size: 12px;
+  font-weight: 750;
+}
+
+.timelineContent p {
+  margin: 5px 0 0;
+  color: var(--visa-muted);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.emptyText {
+  margin: 8px 0;
+  color: var(--visa-muted);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+@media (max-width: 1100px) {
+  .documentGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .root {
+    padding: 12px;
+    gap: 12px;
+  }
+
+  .applicantHeader {
+    align-items: flex-start;
+    padding: 12px;
+  }
+
+  .personName {
+    font-size: 15px;
+  }
+
+  .applicantBody {
+    padding: 10px;
+  }
+
+  .detailPanel {
+    padding: 11px;
+  }
+
+  .fileActions {
+    width: 100%;
+  }
+
+  .viewButton,
+  .downloadButton {
+    flex: 1;
+  }
+
+  .statusBadge {
+    white-space: normal;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .viewButton,
+  .downloadButton {
+    transition: filter 150ms ease;
+  }
+}
+/* Step 5: bulk PDF download */
+
+.bulkPdfPanel {
+  display: grid;
+  gap: 14px;
+  min-width: 0;
+  padding: 15px;
+  border: 1px solid var(--visa-border);
+  border-radius: 13px;
+  background: var(--visa-surface);
+}
+
+.bulkPdfHeading {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.bulkPdfHeading > svg {
+  flex-shrink: 0;
+  color: var(--visa-blue);
+}
+
+.bulkPdfHeading h3 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 750;
+}
+
+.bulkPdfHeading p {
+  margin: 5px 0 0;
+  color: var(--visa-muted);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.bulkPdfGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.bulkPdfButton {
+  display: grid;
+  justify-items: start;
+  align-content: start;
+  gap: 8px;
+  min-width: 0;
+  padding: 12px;
+  border: 1px solid var(--visa-border);
+  border-radius: 10px;
+  background: var(--visa-surface);
+  color: var(--visa-text);
+  text-align: start;
+  font: inherit;
+  cursor: pointer;
+}
+
+.bulkPdfButton:hover:not(:disabled) {
+  border-color: var(--visa-blue);
+}
+
+.bulkPdfButton:focus-visible {
+  outline: 2px solid var(--visa-blue);
+  outline-offset: 2px;
+}
+
+.bulkPdfButton:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.bulkPdfLabel {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12px;
+  font-weight: 750;
+  line-height: 1.5;
+}
+
+.bulkPdfLabel svg {
+  flex-shrink: 0;
+  color: var(--visa-blue);
+}
+
+.bulkPdfMeta {
+  color: var(--visa-muted);
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.bulkPdfFormat {
+  padding: 3px 7px;
+  border: 1px solid var(--visa-border);
+  border-radius: 6px;
+  color: var(--visa-blue);
+  font-size: 10px;
+  font-weight: 750;
+}
+
+.bulkPdfError {
+  margin: 0;
+  color: var(--ui-error, #b42335);
+  font-size: 12px;
+}
+
+@media (max-width: 850px) {
+  .bulkPdfGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* STEP 5 - COLLAPSE ARROW DIRECTION */
+.root .collapseButton svg {
+  transform: rotate(0deg);
+  transition: transform 180ms ease;
+}
+
+.root .collapseButton svg.chevronOpen {
+  transform: rotate(180deg);
+}
+
+/* SEGALOKA STEP 5 VENDOR NOTE V2 */
+.root .vendorNote {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 10px;
+  min-width: 0;
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+.root .vendorNoteHeading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--visa-foreground, currentColor);
+}
+
+.root .vendorNoteHeading svg {
+  flex: 0 0 auto;
+  color: var(--visa-blue);
+}
+
+.root .vendorNoteHeading strong {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.root .vendorNoteMessage {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  min-width: 0;
+  padding: 16px;
+  border-radius: 12px;
+  background: color-mix(
+    in srgb,
+    var(--visa-blue) 6%,
+    var(--visa-surface)
+  );
+}
+
+.root .vendorNoteMessage svg {
+  flex: 0 0 auto;
+  color: var(--visa-blue);
+}
+
+.root .vendorNoteMessage p {
+  margin: 0;
+  min-width: 0;
+  color: var(--visa-muted);
+  font-size: 14px;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 640px) {
+  .root .vendorNoteMessage {
+    padding: 12px;
+    gap: 10px;
+  }
+}
+
+/* STEP 5 - VENDOR NOTE TWO LINES */
+.root .vendorNoteMessage {
+  min-height: 76px;
+  align-items: flex-start;
+}
+
+.root .vendorNoteMessage p {
+  max-width: 31ch;
+  line-height: 1.65;
+  white-space: normal;
+  overflow-wrap: break-word;
+}
+
+@media (max-width: 640px) {
+  .root .vendorNoteMessage {
+    min-height: auto;
+  }
+
+  .root .vendorNoteMessage p {
+    max-width: 100%;
+  }
+}
+
+/* Step 5 - entire applicant header is an accordion trigger */
+button.applicantHeader {
+  width: 100%;
+  font: inherit;
+  color: inherit;
+  text-align: start;
+  cursor: pointer;
+  appearance: none;
+}
+
+button.applicantHeader:focus-visible {
+  outline: 2px solid var(--visa-blue);
+  outline-offset: -3px;
+}
+
+button.applicantHeader .collapseButton {
+  pointer-events: none;
+}
+
+/* SEGALOKA STEP 5 COMPACT DOWNLOAD V1 */
+.root .bulkPdfPanel {
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+.root .bulkPdfGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 2.3fr) minmax(0, 1fr) minmax(0, 1fr);
+  gap: 8px;
+}
+
+.root .bulkPdfButton {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  min-height: 68px;
+  padding: 10px 12px;
+  text-align: start;
+  border: 1px solid var(--visa-border);
+  border-radius: 12px;
+  background: var(--visa-surface);
+  color: inherit;
+  cursor: pointer;
+}
+
+.root .bulkPdfButton:hover:not(:disabled) {
+  border-color: var(--visa-blue);
+}
+
+.root .bulkPdfButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.root .bulkPdfCompactIcon {
+  display: grid;
+  place-items: center;
+  flex: 0 0 28px;
+  width: 28px;
+  height: 32px;
+  color: var(--visa-blue);
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--visa-blue) 8%, var(--visa-surface));
+}
+
+.root .bulkPdfCompactText {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.root .bulkPdfCompactText strong {
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.root .bulkPdfCompactText small {
+  color: var(--visa-muted);
+  font-size: 11px;
+  line-height: 1.4;
+}
+
+.root .bulkPdfCompactAction {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  flex-shrink: 0;
+  min-width: 32px;
+  min-height: 34px;
+  padding: 7px;
+  color: var(--visa-blue);
+  border: 1px solid var(--visa-border);
+  border-radius: 8px;
+}
+
+.root .bulkPdfPrimary .bulkPdfCompactAction {
+  padding-inline: 13px;
+  color: white;
+  background: var(--visa-blue);
+  border-color: var(--visa-blue);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+@media (max-width: 850px) {
+  .root .bulkPdfGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .root .bulkPdfButton {
+    min-height: 62px;
+  }
+}
+
+/* SEGALOKA STEP 5 DOWNLOAD ACTION FIX V2 */
+.root .bulkPdfButton {
+  cursor: default;
+}
+
+.root .bulkPdfButton:hover {
+  border-color: var(--visa-border);
+}
+
+.root .bulkPdfCompactAction {
+  cursor: pointer;
+  font: inherit;
+}
+
+.root .bulkPdfCompactAction:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.root .bulkPdfCompactAction:focus-visible {
+  outline: 2px solid var(--visa-blue);
+  outline-offset: 2px;
+}
+
+.root .bulkPdfRejected .bulkPdfCompactIcon {
+  color: var(--visa-red, #dc2626);
+  background: color-mix(
+    in srgb,
+    var(--visa-red, #dc2626) 9%,
+    var(--visa-surface)
+  );
+}
+
+.root .bulkPdfRejected .bulkPdfCompactAction {
+  color: var(--visa-red, #dc2626);
+  border-color: color-mix(
+    in srgb,
+    var(--visa-red, #dc2626) 20%,
+    var(--visa-border)
+  );
+}
+
+.root .bulkPdfRejected .bulkPdfCompactAction:hover:not(:disabled) {
+  background: color-mix(
+    in srgb,
+    var(--visa-red, #dc2626) 7%,
+    var(--visa-surface)
+  );
+}
+
+/* SEGALOKA STEP 5 CARD HOVER FIX */
+
+/* Semua card: border tetap netral saat hover */
+.root .bulkPdfGrid .bulkPdfButton:hover,
+.root .bulkPdfGrid .bulkPdfButton:focus-within {
+  border-color: var(--visa-border);
+  box-shadow: none;
+  background: var(--visa-surface);
+}
+
+/* Hanya tombol download yang memiliki hover */
+.root .bulkPdfGrid .bulkPdfCompactAction:hover:not(:disabled) {
+  border-color: var(--visa-blue);
+  background: color-mix(
+    in srgb,
+    var(--visa-blue) 8%,
+    var(--visa-surface)
+  );
+}
+
+/* Tombol Download Semua tetap biru */
+.root .bulkPdfGrid .bulkPdfPrimary
+.bulkPdfCompactAction:hover:not(:disabled) {
+  background: color-mix(
+    in srgb,
+    var(--visa-blue) 85%,
+    black
+  );
+  color: white;
+}
+
+/* Tombol Download Ditolak tetap merah */
+.root .bulkPdfGrid .bulkPdfRejected
+.bulkPdfCompactAction:hover:not(:disabled) {
+  color: var(--visa-red, #dc2626);
+  border-color: var(--visa-red, #dc2626);
+  background: color-mix(
+    in srgb,
+    var(--visa-red, #dc2626) 8%,
+    var(--visa-surface)
+  );
+}
+
+/* SEGALOKA STEP 5 VENDOR NOTE COMPACT */
+.root .documentGrid {
+  align-items: start;
+}
+
+.root .vendorNote {
+  align-self: start;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 8px;
+  height: auto;
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+.root .vendorNoteHeading {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 20px;
+}
+
+.root .vendorNoteMessage {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  width: 100%;
+  height: auto;
+  min-height: 0;
+  padding: 13px 15px;
+  border-radius: 12px;
+  background: color-mix(
+    in srgb,
+    var(--visa-blue) 6%,
+    var(--visa-surface)
+  );
+}
+
+.root .vendorNoteMessage svg {
+  flex: 0 0 auto;
+  margin-top: 2px;
+  color: var(--visa-blue);
+}
+
+.root .vendorNoteMessage p {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  line-height: 1.6;
+  white-space: pre-line;
+}
+
+/* SEGALOKA STEP 5 EQUAL HEIGHT CARDS */
+
+/* Kedua kolom memiliki tinggi yang sama */
+.root .documentGrid {
+  align-items: stretch;
+}
+
+/* Card dokumen dan catatan mengikuti tinggi baris */
+.root .documentGrid > .detailPanel,
+.root .documentGrid > .vendorNote {
+  height: 100%;
+  min-height: 0;
+  box-sizing: border-box;
+}
+
+/* Catatan vendor tetap memakai desain ringkas */
+.root .documentGrid > .vendorNote {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-self: stretch;
+}
+
+/* Kotak pesan tetap sesuai isi, tidak dipaksa memanjang */
+.root .vendorNoteMessage {
+  flex: 0 0 auto;
+}
+
+/* Mobile: card kembali mengikuti tinggi konten */
+@media (max-width: 1100px) {
+  .root .documentGrid {
+    align-items: start;
+  }
+
+  .root .documentGrid > .detailPanel,
+  .root .documentGrid > .vendorNote {
+    height: auto;
+  }
+}
+
+/* SEGALOKA STEP 5 MATCH VENDOR NOTE HEIGHT */
+
+/* Kedua kolom selalu mengikuti tinggi baris yang sama */
+.root .documentGrid {
+  align-items: stretch;
+}
+
+/* Card bukti dokumen */
+.root .documentGrid > .detailPanel {
+  box-sizing: border-box;
+  height: 100%;
+}
+
+/* Area catatan vendor */
+.root .documentGrid > .vendorNote {
+  display: flex;
+  flex-direction: column;
+  align-self: stretch;
+  height: 100%;
+  min-height: 0;
+  box-sizing: border-box;
+}
+
+/* Kotak pesan mengisi sisa tinggi agar sejajar */
+.root .documentGrid > .vendorNote .vendorNoteMessage {
+  flex: 1 1 auto;
+  min-height: 0;
+  height: auto;
+  align-items: flex-start;
+}
+
+/* Mobile tetap menggunakan susunan vertikal */
+@media (max-width: 1100px) {
+  .root .documentGrid > .detailPanel,
+  .root .documentGrid > .vendorNote {
+    height: auto;
+  }
+
+  .root .documentGrid > .vendorNote .vendorNoteMessage {
+    flex: 0 0 auto;
+  }
+}
+
+/* SEGALOKA STEP 5 VENDOR NOTE ALIGNMENT V2 */
+
+/*
+ * Kolom ikon dan teks identik.
+ * Padding kotak pesan dikompensasi pada judul.
+ */
+.root .vendorNote {
+  --note-padding: 12px;
+  --note-icon-size: 18px;
+  --note-gap: 10px;
+}
+
+.root .vendorNoteHeading,
+.root .vendorNoteMessage {
+  display: grid;
+  grid-template-columns: var(--note-icon-size) minmax(0, 1fr);
+  column-gap: var(--note-gap);
+  align-items: start;
+  text-align: start;
+}
+
+.root .vendorNoteHeading {
+  padding-inline: var(--note-padding);
+}
+
+.root .vendorNoteMessage {
+  padding: 12px;
+  align-content: center;
+  align-items: start;
+}
+
+.root .vendorNoteMessage svg {
+  align-self: start;
+}
+
+.root .vendorNoteHeading svg,
+.root .vendorNoteMessage svg {
+  width: var(--note-icon-size);
+  height: var(--note-icon-size);
+  margin: 0;
+  justify-self: start;
+  flex: none;
+}
+
+.root .vendorNoteHeading strong,
+.root .vendorNoteMessage p {
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+  text-align: start;
+}
+
+.root .vendorNoteMessage p {
+  white-space: pre-line;
+  line-height: 1.55;
+  max-width: none;
+}
+
+/* Step 5: status pemohon dan tanggal konfirmasi */
+.statusTopRow {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.statusConfirmedDate {
+  display: block;
+  text-align: end;
+  font-size: 12px;
+  line-height: 1.5;
+  white-space: nowrap;
+  color: var(--muted-foreground, #64748b);
+}
+
+.statusTopRow .statusBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 14px;
+  font-weight: 700;
+  padding: 8px 12px;
+}
+
+.statusTopRow .collapseButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+}
+
+@media (max-width: 640px) {
+  .statusTopRow {
+    gap: 6px;
+  }
+
+  .statusTopRow .statusBadge {
+    font-size: 12px;
+    padding: 6px 8px;
+  }
+
+  .statusConfirmedDate {
+    font-size: 10px;
+    white-space: normal;
+  }
+}
+/* Step 5 - Keputusan Final */
+.resultFooter.finalApproved,
+.resultFooter.finalRejected,
+.resultFooter.finalPending {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: 0;
+}
+
+.resultFooter.finalApproved {
+  background: var(--visa-final-approved-bg, #ecfdf3);
+  color: var(--visa-final-approved-fg, #15803d);
+}
+
+.resultFooter.finalRejected {
+  background: var(--visa-final-rejected-bg, #fff1f2);
+  color: var(--visa-final-rejected-fg, #dc2626);
+}
+
+.resultFooter.finalPending {
+  background: var(--visa-final-pending-bg, #eff6ff);
+  color: var(--visa-final-pending-fg, #2563eb);
+}
+
+.finalDecisionText {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+  line-height: 1.45;
+}
+
+.finalDecisionText strong {
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.finalDecisionText span {
+  font-size: 12px;
+}
+
+.resultFooter.finalApproved > svg,
+.resultFooter.finalRejected > svg,
+.resultFooter.finalPending > svg {
+  flex-shrink: 0;
+}
+
+@media (max-width: 640px) {
+  .resultFooter.finalApproved,
+  .resultFooter.finalRejected,
+  .resultFooter.finalPending {
+    padding: 12px;
+    gap: 10px;
+  }
+}

@@ -1,0 +1,195 @@
+﻿========== Baris 434 ==========
+  const router = useRouter();
+
+  const {
+    language,
+    locale,
+    direction,
+  } = useMarketplacePreferences();
+
+  const t = copy[language];
+  // SEGALOKA_HAJI_YEAR_UI_V1
+  const isHaji = category.trim().toLowerCase() === "haji";
+  const hajiYearLabel = language === "EN" ? "Hajj Year" : language === "AR" ? "Ø³Ù†Ø© Ø§Ù„Ø­Ø¬" : "Tahun Haji";
+  const hajiYearTitle = language === "EN" ? "Choose Hajj Year" : language === "AR" ? "Ø§Ø®ØªØ± Ø³Ù†Ø© Ø§Ù„Ø­Ø¬" : "Pilih Tahun Haji";
+  const hajiYearPassed = language === "EN" ? "Passed" : language === "AR" ? "Ø§Ù†ØªÙ‡Ù‰" : "Lewat";
+
+  const rootRef =
+    useRef<HTMLDivElement | null>(
+      null,
+    );
+
+  const [panel, setPanel] =
+    useState<Panel>(null);
+
+  const [origin, setOrigin] =
+    useState(
+      initialOrigin || "Jakarta",
+    );
+
+  const [
+    originQuery,
+    setOriginQuery,
+  ] = useState("");
+
+  const [
+    destination,
+    setDestination,
+  ] = useState(
+
+========== Baris 502 ==========
+
+  const [selectedHajiYear, setSelectedHajiYear] = useState<number | null>(() => {
+    const parsed = Number(initialYear);
+    return /^\d{4}$/.test(initialYear) && Number.isInteger(parsed) ? parsed : null;
+  });
+
+  useEffect(() => {
+    const parsed = Number(initialYear);
+    setSelectedHajiYear(/^\d{4}$/.test(initialYear) && Number.isInteger(parsed) ? parsed : null);
+  }, [initialYear]);
+
+  const currentHajiYear = new Date().getFullYear();
+  const hajiYears = Array.from({ length: 6 }, (_, index) => currentHajiYear + index);
+  const isValidHajiYear = (value: number | null) =>
+    value !== null && hajiYears.includes(value) && value !== 2026;
+
+  const parsedInitialDate =
+    parseDateValue(
+      initialDate,
+    );
+
+  const today = new Date();
+
+  const [
+    calendarMonth,
+    setCalendarMonth,
+  ] = useState(
+    parsedInitialDate
+      ? new Date(
+          parsedInitialDate.getFullYear(),
+          parsedInitialDate.getMonth(),
+          1,
+        )
+      : new Date(
+          today.getFullYear(),
+          today.getMonth(),
+          1,
+
+========== Baris 504 ==========
+    const parsed = Number(initialYear);
+    return /^\d{4}$/.test(initialYear) && Number.isInteger(parsed) ? parsed : null;
+  });
+
+  useEffect(() => {
+    const parsed = Number(initialYear);
+    setSelectedHajiYear(/^\d{4}$/.test(initialYear) && Number.isInteger(parsed) ? parsed : null);
+  }, [initialYear]);
+
+  const currentHajiYear = new Date().getFullYear();
+  const hajiYears = Array.from({ length: 6 }, (_, index) => currentHajiYear + index);
+  const isValidHajiYear = (value: number | null) =>
+    value !== null && hajiYears.includes(value) && value !== 2026;
+
+  const parsedInitialDate =
+    parseDateValue(
+      initialDate,
+    );
+
+  const today = new Date();
+
+  const [
+    calendarMonth,
+    setCalendarMonth,
+  ] = useState(
+    parsedInitialDate
+      ? new Date(
+          parsedInitialDate.getFullYear(),
+          parsedInitialDate.getMonth(),
+          1,
+        )
+      : new Date(
+          today.getFullYear(),
+          today.getMonth(),
+          1,
+        ),
+  );
+
+========== Baris 1125 ==========
+          <span>
+            <small>
+              {isHaji ? hajiYearLabel : t.date}
+            </small>
+
+            <strong>
+              {isHaji ? (selectedHajiYear ? String(selectedHajiYear) : hajiYearTitle) : formatSelectedDate()}
+            </strong>
+          </span>
+        </button>
+
+        {isHaji && panel === "date" && (
+          <div className="search-edit-dropdown search-unified-dropdown search-unified-year">
+            <div className="search-unified-dropdown-head">
+              <strong>{hajiYearTitle}</strong>
+              <button type="button" className="search-unified-close" aria-label={language === "EN" ? "Close" : language === "AR" ? "Ø¥ØºÙ„Ø§Ù‚" : "Tutup"} onClick={() => setPanel(null)}>
+                <X size={18} />
+              </button>
+            </div>
+            <div className="search-haji-year-options" role="group" aria-label={hajiYearTitle}>
+              {hajiYears.map((year) => {
+                const disabled = year === 2026;
+                return (
+                  <button
+                    key={year}
+                    type="button"
+                    disabled={disabled}
+                    aria-pressed={selectedHajiYear === year}
+                    className={selectedHajiYear === year ? "selected" : undefined}
+                    onClick={() => { setSelectedHajiYear(year); setPanel(null); }}
+                  >
+                    <span>{year}</span>
+                    {disabled && <small>{hajiYearPassed}</small>}
+                  </button>
+                );
+              })}
+            </div>
+
+========== Baris 1133 ==========
+          </span>
+        </button>
+
+        {isHaji && panel === "date" && (
+          <div className="search-edit-dropdown search-unified-dropdown search-unified-year">
+            <div className="search-unified-dropdown-head">
+              <strong>{hajiYearTitle}</strong>
+              <button type="button" className="search-unified-close" aria-label={language === "EN" ? "Close" : language === "AR" ? "Ø¥ØºÙ„Ø§Ù‚" : "Tutup"} onClick={() => setPanel(null)}>
+                <X size={18} />
+              </button>
+            </div>
+            <div className="search-haji-year-options" role="group" aria-label={hajiYearTitle}>
+              {hajiYears.map((year) => {
+                const disabled = year === 2026;
+                return (
+                  <button
+                    key={year}
+                    type="button"
+                    disabled={disabled}
+                    aria-pressed={selectedHajiYear === year}
+                    className={selectedHajiYear === year ? "selected" : undefined}
+                    onClick={() => { setSelectedHajiYear(year); setPanel(null); }}
+                  >
+                    <span>{year}</span>
+                    {disabled && <small>{hajiYearPassed}</small>}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
+        {!isHaji && panel === "date" && (
+          <div className="search-edit-dropdown search-unified-dropdown search-unified-date">
+            <div className="search-unified-dropdown-head">
+              <strong>
+                {t.dateTitle}
+

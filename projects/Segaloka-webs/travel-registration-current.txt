@@ -1,0 +1,2051 @@
+============================================================
+FILE: .\src\app\partner\travel\daftar\page.tsx
+============================================================
+import type { Metadata } from "next";
+import { Suspense } from "react";
+
+import "../partner-feature-detail.css";
+import TravelRegistrationClient from "./TravelRegistrationClient";
+
+export const metadata: Metadata = {
+  title: "Daftar Travel | Segaloka",
+  description:
+    "Daftarkan bisnis Travel Anda untuk bergabung ke ekosistem Segaloka.",
+};
+
+function RegistrationFallback() {
+  return (
+    <main className="travel-registration-page">
+      <div className="travel-registration-shell">
+        <div className="travel-registration-loading">
+          Memuat pendaftaran Travel...
+        </div>
+      </div>
+    </main>
+  );
+}
+
+export default function TravelRegistrationPage() {
+  return (
+    <Suspense fallback={<RegistrationFallback />}>
+      <TravelRegistrationClient />
+    </Suspense>
+  );
+}
+
+============================================================
+FILE: .\src\app\partner\travel\daftar\TravelRegistrationClient.tsx
+============================================================
+"use client";
+
+import {
+  ArrowLeft,
+  ArrowRight,
+  Building2,
+  Check,
+  CheckCircle2,
+  FileCheck2,
+  FileText,
+  MapPin,
+  ShieldCheck,
+  Upload,
+  UserRound,
+} from "lucide-react";
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import { useMemo, useState } from "react";
+
+import { useMarketplacePreferences } from "@/components/providers/MarketplacePreferencesProvider";
+
+type LicenseType = "BPW" | "PPIU" | "PIHK";
+
+type StepId = 1 | 2 | 3 | 4;
+
+type RegistrationForm = {
+  businessName: string;
+  legalName: string;
+  licenseType: LicenseType;
+  licenseNumber: string;
+  directorName: string;
+  email: string;
+  phone: string;
+  province: string;
+  city: string;
+  address: string;
+  website: string;
+};
+
+const initialForm: RegistrationForm = {
+  businessName: "",
+  legalName: "",
+  licenseType: "BPW",
+  licenseNumber: "",
+  directorName: "",
+  email: "",
+  phone: "",
+  province: "",
+  city: "",
+  address: "",
+  website: "",
+};
+
+const steps = [
+  {
+    id: 1 as StepId,
+    label: "Data Travel",
+    shortLabel: "Travel",
+    icon: Building2,
+  },
+  {
+    id: 2 as StepId,
+    label: "Perizinan",
+    shortLabel: "Izin",
+    icon: ShieldCheck,
+  },
+  {
+    id: 3 as StepId,
+    label: "Dokumen",
+    shortLabel: "Dokumen",
+    icon: FileText,
+  },
+  {
+    id: 4 as StepId,
+    label: "Review",
+    shortLabel: "Review",
+    icon: CheckCircle2,
+  },
+];
+
+const licenseOptions: Array<{
+  id: LicenseType;
+  title: string;
+  subtitle: string;
+  description: string;
+}> = [
+  {
+    id: "BPW",
+    title: "BPW",
+    subtitle: "Biro Perjalanan Wisata",
+    description:
+      "Untuk Travel yang menjalankan perjalanan domestik, internasional, dan halal tour.",
+  },
+  {
+    id: "PPIU",
+    title: "PPIU",
+    subtitle: "Penyelenggara Perjalanan Ibadah Umrah",
+    description:
+      "Untuk Travel berizin penyelenggaraan perjalanan ibadah Umrah.",
+  },
+  {
+    id: "PIHK",
+    title: "PIHK",
+    subtitle: "Penyelenggara Ibadah Haji Khusus",
+    description:
+      "Untuk Travel berizin penyelenggaraan ibadah Haji Khusus.",
+  },
+];
+
+function Field({
+  label,
+  required,
+  children,
+}: {
+  label: string;
+  required?: boolean;
+  children: React.ReactNode;
+}) {
+  return (
+    <label className="travel-registration-field">
+      <span className="travel-registration-field-label">
+        {label}
+        {required && <b aria-hidden="true">*</b>}
+      </span>
+
+      {children}
+    </label>
+  );
+}
+
+export default function TravelRegistrationClient() {
+  const searchParams = useSearchParams();
+  const { language } = useMarketplacePreferences();
+
+  const [step, setStep] = useState<StepId>(1);
+  const [form, setForm] =
+    useState<RegistrationForm>(initialForm);
+
+  const requestedPlan = searchParams.get("plan");
+
+  const selectedPlan = useMemo(() => {
+    if (requestedPlan === "starter") return "Starter";
+    if (requestedPlan === "growth") return "Growth";
+    return null;
+  }, [requestedPlan]);
+
+  const setValue = (
+    key: keyof RegistrationForm,
+    value: string,
+  ) => {
+    setForm((current) => ({
+      ...current,
+      [key]: value,
+    }));
+  };
+
+  const next = () => {
+    setStep((current) =>
+      Math.min(4, current + 1) as StepId,
+    );
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
+
+  const previous = () => {
+    setStep((current) =>
+      Math.max(1, current - 1) as StepId,
+    );
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
+
+  return (
+    <main
+      className="travel-registration-page"
+      dir={language === "AR" ? "rtl" : "ltr"}
+    >
+      <div className="travel-registration-shell">
+        <Link
+          href="/partner/travel"
+          className="travel-registration-back"
+        >
+          <ArrowLeft size={16} />
+          <span>Kembali ke Segaloka for Travel</span>
+        </Link>
+
+        <header className="travel-registration-header">
+          <div className="travel-registration-header-copy">
+            <span className="travel-registration-eyebrow">
+              SEGALOKA FOR TRAVEL
+            </span>
+
+            <h1>Daftarkan Travel Anda</h1>
+
+            <p>
+              Lengkapi informasi bisnis Travel untuk memulai
+              proses verifikasi dan aktivasi di ekosistem
+              Segaloka.
+            </p>
+          </div>
+
+          {selectedPlan && (
+            <div className="travel-registration-plan">
+              <span>Paket dipilih</span>
+              <strong>{selectedPlan}</strong>
+            </div>
+          )}
+        </header>
+
+        <nav
+          className="travel-registration-steps"
+          aria-label="Tahapan pendaftaran"
+        >
+          {steps.map((item) => {
+            const Icon = item.icon;
+            const active = item.id === step;
+            const completed = item.id < step;
+
+            return (
+              <div
+                key={item.id}
+                className={[
+                  "travel-registration-step",
+                  active ? "is-active" : "",
+                  completed ? "is-completed" : "",
+                ]
+                  .filter(Boolean)
+                  .join(" ")}
+              >
+                <div className="travel-registration-step-icon">
+                  {completed ? (
+                    <Check size={17} />
+                  ) : (
+                    <Icon size={17} />
+                  )}
+                </div>
+
+                <div>
+                  <small>Langkah {item.id}</small>
+                  <strong className="desktop-step-label">
+                    {item.label}
+                  </strong>
+                  <strong className="mobile-step-label">
+                    {item.shortLabel}
+                  </strong>
+                </div>
+              </div>
+            );
+          })}
+        </nav>
+
+        <div className="travel-registration-layout">
+          <section className="travel-registration-card">
+            {step === 1 && (
+              <>
+                <div className="travel-registration-section-heading">
+                  <div className="travel-registration-heading-icon">
+                    <Building2 size={20} />
+                  </div>
+
+                  <div>
+                    <h2>Informasi Travel</h2>
+                    <p>
+                      Masukkan identitas utama bisnis Travel
+                      yang akan didaftarkan.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="travel-registration-form-grid">
+                  <Field
+                    label="Nama brand Travel"
+                    required
+                  >
+                    <input
+                      value={form.businessName}
+                      onChange={(event) =>
+                        setValue(
+                          "businessName",
+                          event.target.value,
+                        )
+                      }
+                      placeholder="Contoh: Segaloka Travel"
+                    />
+                  </Field>
+
+                  <Field
+                    label="Nama badan usaha"
+                    required
+                  >
+                    <input
+                      value={form.legalName}
+                      onChange={(event) =>
+                        setValue(
+                          "legalName",
+                          event.target.value,
+                        )
+                      }
+                      placeholder="PT / badan usaha"
+                    />
+                  </Field>
+
+                  <Field
+                    label="Nama direktur"
+                    required
+                  >
+                    <input
+                      value={form.directorName}
+                      onChange={(event) =>
+                        setValue(
+                          "directorName",
+                          event.target.value,
+                        )
+                      }
+                      placeholder="Nama lengkap direktur"
+                    />
+                  </Field>
+
+                  <Field
+                    label="Email bisnis"
+                    required
+                  >
+                    <input
+                      type="email"
+                      value={form.email}
+                      onChange={(event) =>
+                        setValue(
+                          "email",
+                          event.target.value,
+                        )
+                      }
+                      placeholder="nama@travel.com"
+                    />
+                  </Field>
+
+                  <Field
+                    label="Nomor WhatsApp"
+                    required
+                  >
+                    <input
+                      type="tel"
+                      value={form.phone}
+                      onChange={(event) =>
+                        setValue(
+                          "phone",
+                          event.target.value,
+                        )
+                      }
+                      placeholder="+62"
+                    />
+                  </Field>
+
+                  <Field label="Website">
+                    <input
+                      type="url"
+                      value={form.website}
+                      onChange={(event) =>
+                        setValue(
+                          "website",
+                          event.target.value,
+                        )
+                      }
+                      placeholder="https://"
+                    />
+                  </Field>
+
+                  <Field
+                    label="Provinsi"
+                    required
+                  >
+                    <input
+                      value={form.province}
+                      onChange={(event) =>
+                        setValue(
+                          "province",
+                          event.target.value,
+                        )
+                      }
+                      placeholder="Provinsi"
+                    />
+                  </Field>
+
+                  <Field
+                    label="Kota / Kabupaten"
+                    required
+                  >
+                    <input
+                      value={form.city}
+                      onChange={(event) =>
+                        setValue(
+                          "city",
+                          event.target.value,
+                        )
+                      }
+                      placeholder="Kota / Kabupaten"
+                    />
+                  </Field>
+
+                  <div className="travel-registration-field-full">
+                    <Field
+                      label="Alamat kantor"
+                      required
+                    >
+                      <textarea
+                        rows={4}
+                        value={form.address}
+                        onChange={(event) =>
+                          setValue(
+                            "address",
+                            event.target.value,
+                          )
+                        }
+                        placeholder="Alamat lengkap kantor Travel"
+                      />
+                    </Field>
+                  </div>
+                </div>
+              </>
+            )}
+
+            {step === 2 && (
+              <>
+                <div className="travel-registration-section-heading">
+                  <div className="travel-registration-heading-icon">
+                    <ShieldCheck size={20} />
+                  </div>
+
+                  <div>
+                    <h2>Perizinan Travel</h2>
+                    <p>
+                      Pilih jenis perizinan utama yang dimiliki
+                      Travel.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="travel-license-options">
+                  {licenseOptions.map((license) => (
+                    <button
+                      type="button"
+                      key={license.id}
+                      className={[
+                        "travel-license-card",
+                        form.licenseType === license.id
+                          ? "is-selected"
+                          : "",
+                      ]
+                        .filter(Boolean)
+                        .join(" ")}
+                      onClick={() =>
+                        setValue(
+                          "licenseType",
+                          license.id,
+                        )
+                      }
+                    >
+                      <span className="travel-license-radio">
+                        {form.licenseType ===
+                          license.id && <Check size={14} />}
+                      </span>
+
+                      <span className="travel-license-copy">
+                        <strong>{license.title}</strong>
+                        <small>{license.subtitle}</small>
+                        <p>{license.description}</p>
+                      </span>
+                    </button>
+                  ))}
+                </div>
+
+                <div className="travel-registration-form-grid license-number-grid">
+                  <Field
+                    label={`Nomor izin ${form.licenseType}`}
+                    required
+                  >
+                    <input
+                      value={form.licenseNumber}
+                      onChange={(event) =>
+                        setValue(
+                          "licenseNumber",
+                          event.target.value,
+                        )
+                      }
+                      placeholder={`Masukkan nomor izin ${form.licenseType}`}
+                    />
+                  </Field>
+                </div>
+
+                <div className="travel-registration-info">
+                  <ShieldCheck size={19} />
+
+                  <p>
+                    Data perizinan akan diverifikasi sebelum
+                    akun Travel dapat diaktifkan.
+                  </p>
+                </div>
+              </>
+            )}
+
+            {step === 3 && (
+              <>
+                <div className="travel-registration-section-heading">
+                  <div className="travel-registration-heading-icon">
+                    <FileCheck2 size={20} />
+                  </div>
+
+                  <div>
+                    <h2>Dokumen Verifikasi</h2>
+                    <p>
+                      Siapkan dokumen badan usaha dan dokumen
+                      perizinan sesuai jenis Travel.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="travel-document-list">
+                  <DocumentUpload
+                    title="Dokumen badan usaha"
+                    description="Dokumen legalitas badan usaha Travel."
+                  />
+
+                  <DocumentUpload
+                    title={`Izin ${form.licenseType}`}
+                    description={`Dokumen izin ${form.licenseType} yang masih berlaku.`}
+                  />
+
+                  <DocumentUpload
+                    title="Identitas direktur"
+                    description="Dokumen identitas direktur atau penanggung jawab."
+                  />
+
+                  <DocumentUpload
+                    title="Dokumen pendukung"
+                    description="Dokumen tambahan apabila diperlukan untuk proses verifikasi."
+                    optional
+                  />
+                </div>
+
+                <div className="travel-registration-info">
+                  <ShieldCheck size={19} />
+
+                  <p>
+                    Upload pada tahap ini adalah antarmuka
+                    persiapan dokumen. File belum dikirim sampai
+                    layanan Storage Segaloka diaktifkan.
+                  </p>
+                </div>
+              </>
+            )}
+
+            {step === 4 && (
+              <>
+                <div className="travel-registration-section-heading">
+                  <div className="travel-registration-heading-icon">
+                    <CheckCircle2 size={20} />
+                  </div>
+
+                  <div>
+                    <h2>Review Pendaftaran</h2>
+                    <p>
+                      Periksa kembali data sebelum nantinya
+                      dikirim untuk proses verifikasi.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="travel-review-grid">
+                  <ReviewItem
+                    label="Nama Travel"
+                    value={
+                      form.businessName || "Belum diisi"
+                    }
+                  />
+
+                  <ReviewItem
+                    label="Badan usaha"
+                    value={form.legalName || "Belum diisi"}
+                  />
+
+                  <ReviewItem
+                    label="Direktur"
+                    value={
+                      form.directorName || "Belum diisi"
+                    }
+                  />
+
+                  <ReviewItem
+                    label="Jenis izin"
+                    value={form.licenseType}
+                  />
+
+                  <ReviewItem
+                    label="Nomor izin"
+                    value={
+                      form.licenseNumber || "Belum diisi"
+                    }
+                  />
+
+                  <ReviewItem
+                    label="Email"
+                    value={form.email || "Belum diisi"}
+                  />
+
+                  <ReviewItem
+                    label="WhatsApp"
+                    value={form.phone || "Belum diisi"}
+                  />
+
+                  <ReviewItem
+                    label="Lokasi"
+                    value={
+                      [form.city, form.province]
+                        .filter(Boolean)
+                        .join(", ") || "Belum diisi"
+                    }
+                  />
+                </div>
+
+                <div className="travel-review-notice">
+                  <ShieldCheck size={22} />
+
+                  <div>
+                    <strong>
+                      Pengiriman belum diaktifkan
+                    </strong>
+
+                    <p>
+                      Data belum akan dikirim atau disimpan
+                      sampai database, autentikasi, Storage,
+                      dan proses verifikasi Segaloka
+                      dihubungkan.
+                    </p>
+                  </div>
+                </div>
+              </>
+            )}
+
+            <div className="travel-registration-actions">
+              {step > 1 ? (
+                <button
+                  type="button"
+                  className="travel-registration-button secondary"
+                  onClick={previous}
+                >
+                  <ArrowLeft size={17} />
+                  Kembali
+                </button>
+              ) : (
+                <Link
+                  href="/partner/travel"
+                  className="travel-registration-button secondary"
+                >
+                  Batal
+                </Link>
+              )}
+
+              {step < 4 ? (
+                <button
+                  type="button"
+                  className="travel-registration-button primary"
+                  onClick={next}
+                >
+                  Lanjutkan
+                  <ArrowRight size={17} />
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  className="travel-registration-button primary"
+                  disabled
+                  title="Backend registrasi belum diaktifkan"
+                >
+                  Kirim untuk Verifikasi
+                </button>
+              )}
+            </div>
+          </section>
+
+          <aside className="travel-registration-aside">
+            <div className="travel-registration-aside-card">
+              <div className="travel-registration-aside-icon">
+                <ShieldCheck size={21} />
+              </div>
+
+              <h3>Proses verifikasi Travel</h3>
+
+              <p>
+                Setiap Travel melalui pemeriksaan data bisnis,
+                izin, dan dokumen sebelum aktivasi.
+              </p>
+
+              <div className="travel-registration-aside-points">
+                <span>
+                  <Check size={15} />
+                  Data badan usaha
+                </span>
+
+                <span>
+                  <Check size={15} />
+                  Perizinan Travel
+                </span>
+
+                <span>
+                  <Check size={15} />
+                  Dokumen pendukung
+                </span>
+
+                <span>
+                  <Check size={15} />
+                  Aktivasi setelah disetujui
+                </span>
+              </div>
+            </div>
+
+            <div className="travel-registration-help">
+              <UserRound size={18} />
+
+              <div>
+                <strong>Butuh bantuan?</strong>
+                <p>
+                  Tim Segaloka akan membantu pada proses
+                  onboarding setelah layanan registrasi
+                  diaktifkan.
+                </p>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </main>
+  );
+}
+
+function DocumentUpload({
+  title,
+  description,
+  optional,
+}: {
+  title: string;
+  description: string;
+  optional?: boolean;
+}) {
+  return (
+    <div className="travel-document-card">
+      <div className="travel-document-icon">
+        <FileText size={20} />
+      </div>
+
+      <div className="travel-document-copy">
+        <strong>
+          {title}
+          {optional && <small>Opsional</small>}
+        </strong>
+
+        <p>{description}</p>
+      </div>
+
+      <button
+        type="button"
+        className="travel-document-upload"
+        disabled
+        title="Storage belum diaktifkan"
+      >
+        <Upload size={16} />
+        Pilih file
+      </button>
+    </div>
+  );
+}
+
+function ReviewItem({
+  label,
+  value,
+}: {
+  label: string;
+  value: string;
+}) {
+  return (
+    <div className="travel-review-item">
+      <span>{label}</span>
+      <strong>{value}</strong>
+    </div>
+  );
+}
+
+============================================================
+FILE: .\src\app\partner\travel\daftar\travel-registration.css
+============================================================
+NOT FOUND
+
+============================================================
+FILE: .\src\app\partner\travel\partner-feature-detail.css
+============================================================
+.partner-feature-detail {
+  min-height: 72vh;
+  padding: 64px 20px 90px;
+  background:
+    radial-gradient(circle at 90% 0%, #eef7ff 0, transparent 28%),
+    #f8fbfe;
+  color: #082b55;
+}
+
+.partner-feature-detail-shell {
+  width: min(1180px, 100%);
+  margin: 0 auto;
+}
+
+.partner-feature-hero {
+  padding: 34px;
+  border: 1px solid #dce9f7;
+  border-radius: 22px;
+  background: #fff;
+  box-shadow: 0 14px 40px rgba(18, 66, 115, 0.06);
+}
+
+.partner-feature-eyebrow {
+  display: block;
+  margin-bottom: 7px;
+  color: #087af5;
+  font-size: 11px;
+  font-weight: 750;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+
+.partner-feature-hero h1 {
+  margin: 0;
+  font: inherit;
+  font-size: clamp(28px, 4vw, 42px);
+  font-weight: 750;
+  line-height: 1.1;
+  letter-spacing: -.035em;
+}
+
+.partner-feature-lead {
+  max-width: 720px;
+  margin: 12px 0 0;
+  color: #617895;
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+/* ==========================================================
+   TRAVEL REGISTRATION
+   ========================================================== */
+
+.travel-registration-page {
+  min-height: calc(100vh - var(--header-height, 0px));
+  padding: 34px 0 80px;
+  background:
+    radial-gradient(
+      circle at 92% 0%,
+      rgba(8, 124, 240, .075),
+      transparent 24%
+    ),
+    #f7fafe;
+  color: #102f52;
+}
+
+.travel-registration-page *,
+.travel-registration-page *::before,
+.travel-registration-page *::after {
+  box-sizing: border-box;
+}
+
+.travel-registration-shell {
+  width: min(1180px, calc(100% - 48px));
+  margin-inline: auto;
+}
+
+.travel-registration-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-bottom: 22px;
+  color: #52708f;
+  font-size: 12px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.travel-registration-back:hover {
+  color: #087cf0;
+}
+
+.travel-registration-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 30px;
+  margin-bottom: 28px;
+}
+
+.travel-registration-header-copy {
+  min-width: 0;
+}
+
+.travel-registration-eyebrow {
+  display: block;
+  margin-bottom: 8px;
+  color: #087cf0;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .06em;
+}
+
+.travel-registration-header h1 {
+  margin: 0;
+  color: #102f52;
+  font-size: clamp(30px, 3.5vw, 43px);
+  font-weight: 800;
+  line-height: 1.08;
+  letter-spacing: -.04em;
+}
+
+.travel-registration-header p {
+  max-width: 690px;
+  margin: 12px 0 0;
+  color: #687f97;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.travel-registration-plan {
+  flex: 0 0 auto;
+  min-width: 160px;
+  padding: 13px 17px;
+  border: 1px solid #dce9f5;
+  border-radius: 13px;
+  background: #fff;
+  box-shadow: 0 7px 22px rgba(26, 64, 103, .045);
+}
+
+.travel-registration-plan span {
+  display: block;
+  color: #8091a4;
+  font-size: 10px;
+  font-weight: 650;
+}
+
+.travel-registration-plan strong {
+  display: block;
+  margin-top: 3px;
+  color: #087cf0;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.travel-registration-steps {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  overflow: hidden;
+  margin-bottom: 20px;
+  border: 1px solid #e0e9f3;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 7px 24px rgba(26, 64, 103, .045);
+}
+
+.travel-registration-step {
+  position: relative;
+  min-width: 0;
+  min-height: 76px;
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 14px 18px;
+  border-right: 1px solid #edf2f7;
+}
+
+.travel-registration-step:last-child {
+  border-right: 0;
+}
+
+.travel-registration-step::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  background: transparent;
+}
+
+.travel-registration-step.is-active::after {
+  background: #087cf0;
+}
+
+.travel-registration-step-icon {
+  width: 36px;
+  height: 36px;
+  flex: 0 0 36px;
+  display: grid;
+  place-items: center;
+  border-radius: 11px;
+  background: #f1f5f9;
+  color: #8494a7;
+}
+
+.travel-registration-step.is-active
+.travel-registration-step-icon {
+  background: #e8f4ff;
+  color: #087cf0;
+}
+
+.travel-registration-step.is-completed
+.travel-registration-step-icon {
+  background: #e7f8f2;
+  color: #0b9b72;
+}
+
+.travel-registration-step small {
+  display: block;
+  margin-bottom: 2px;
+  color: #96a4b3;
+  font-size: 9px;
+  font-weight: 650;
+}
+
+.travel-registration-step strong {
+  display: block;
+  overflow: hidden;
+  color: #536d88;
+  font-size: 11px;
+  font-weight: 750;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.travel-registration-step.is-active strong {
+  color: #102f52;
+}
+
+.mobile-step-label {
+  display: none !important;
+}
+
+.travel-registration-layout {
+  display: grid;
+  grid-template-columns:
+    minmax(0, 1fr)
+    minmax(250px, 300px);
+  align-items: start;
+  gap: 20px;
+}
+
+.travel-registration-card {
+  min-width: 0;
+  padding: 28px;
+  border: 1px solid #dfe9f3;
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: 0 10px 32px rgba(26, 64, 103, .055);
+}
+
+.travel-registration-section-heading {
+  display: flex;
+  align-items: flex-start;
+  gap: 13px;
+  padding-bottom: 22px;
+  border-bottom: 1px solid #edf2f7;
+}
+
+.travel-registration-heading-icon {
+  width: 42px;
+  height: 42px;
+  flex: 0 0 42px;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  background: #eaf5ff;
+  color: #087cf0;
+}
+
+.travel-registration-section-heading h2 {
+  margin: 0;
+  color: #102f52;
+  font-size: 19px;
+  font-weight: 800;
+  line-height: 1.25;
+  letter-spacing: -.02em;
+}
+
+.travel-registration-section-heading p {
+  margin: 5px 0 0;
+  color: #75899e;
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+.travel-registration-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  margin-top: 24px;
+}
+
+.travel-registration-field {
+  min-width: 0;
+  display: block;
+}
+
+.travel-registration-field-full {
+  grid-column: 1 / -1;
+}
+
+.travel-registration-field-label {
+  display: block;
+  margin-bottom: 7px;
+  color: #385673;
+  font-size: 11px;
+  font-weight: 750;
+}
+
+.travel-registration-field-label b {
+  margin-left: 3px;
+  color: #e25c5c;
+}
+
+.travel-registration-field input,
+.travel-registration-field textarea,
+.travel-registration-field select {
+  width: 100%;
+  min-width: 0;
+  border: 1px solid #dce6f0;
+  border-radius: 10px;
+  outline: none;
+  background: #fff;
+  color: #173957;
+  font: inherit;
+  font-size: 12px;
+  transition:
+    border-color .18s ease,
+    box-shadow .18s ease;
+}
+
+.travel-registration-field input,
+.travel-registration-field select {
+  min-height: 44px;
+  padding: 0 13px;
+}
+
+.travel-registration-field textarea {
+  min-height: 100px;
+  resize: vertical;
+  padding: 12px 13px;
+}
+
+.travel-registration-field input::placeholder,
+.travel-registration-field textarea::placeholder {
+  color: #a0adba;
+}
+
+.travel-registration-field input:focus,
+.travel-registration-field textarea:focus,
+.travel-registration-field select:focus {
+  border-color: #79b9f6;
+  box-shadow: 0 0 0 3px rgba(8, 124, 240, .09);
+}
+
+.license-number-grid {
+  grid-template-columns: minmax(0, 1fr);
+  max-width: 540px;
+}
+
+.travel-license-options {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.travel-license-card {
+  min-width: 0;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 16px;
+  border: 1px solid #dfe8f1;
+  border-radius: 13px;
+  background: #fff;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    border-color .18s ease,
+    background .18s ease,
+    box-shadow .18s ease;
+}
+
+.travel-license-card:hover {
+  border-color: #a8cff4;
+}
+
+.travel-license-card.is-selected {
+  border-color: #64adf3;
+  background: #f4faff;
+  box-shadow: 0 0 0 2px rgba(8, 124, 240, .06);
+}
+
+.travel-license-radio {
+  width: 22px;
+  height: 22px;
+  flex: 0 0 22px;
+  display: grid;
+  place-items: center;
+  margin-top: 1px;
+  border: 1.5px solid #c9d6e2;
+  border-radius: 999px;
+  color: #fff;
+}
+
+.travel-license-card.is-selected
+.travel-license-radio {
+  border-color: #087cf0;
+  background: #087cf0;
+}
+
+.travel-license-copy {
+  min-width: 0;
+  display: block;
+}
+
+.travel-license-copy strong {
+  display: block;
+  color: #173957;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.travel-license-copy small {
+  display: block;
+  margin-top: 2px;
+  color: #698198;
+  font-size: 9px;
+  line-height: 1.45;
+}
+
+.travel-license-copy p {
+  margin: 8px 0 0;
+  color: #8293a5;
+  font-size: 9.5px;
+  line-height: 1.55;
+}
+
+.travel-registration-info {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-top: 22px;
+  padding: 13px 14px;
+  border: 1px solid #d9eafa;
+  border-radius: 11px;
+  background: #f4faff;
+  color: #3971a4;
+}
+
+.travel-registration-info svg {
+  flex: 0 0 auto;
+  margin-top: 1px;
+}
+
+.travel-registration-info p {
+  margin: 0;
+  font-size: 10.5px;
+  line-height: 1.6;
+}
+
+.travel-document-list {
+  display: grid;
+  gap: 11px;
+  margin-top: 24px;
+}
+
+.travel-document-card {
+  display: grid;
+  grid-template-columns:
+    40px
+    minmax(0, 1fr)
+    auto;
+  align-items: center;
+  gap: 13px;
+  padding: 14px;
+  border: 1px solid #e1e9f1;
+  border-radius: 12px;
+}
+
+.travel-document-icon {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border-radius: 10px;
+  background: #f1f7fc;
+  color: #5d7d9c;
+}
+
+.travel-document-copy {
+  min-width: 0;
+}
+
+.travel-document-copy strong {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: #244763;
+  font-size: 11px;
+  font-weight: 750;
+}
+
+.travel-document-copy strong small {
+  padding: 2px 6px;
+  border-radius: 999px;
+  background: #f1f4f7;
+  color: #8292a2;
+  font-size: 8px;
+}
+
+.travel-document-copy p {
+  margin: 4px 0 0;
+  color: #8495a5;
+  font-size: 9.5px;
+  line-height: 1.5;
+}
+
+.travel-document-upload {
+  min-height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 0 12px;
+  border: 1px solid #d9e4ee;
+  border-radius: 9px;
+  background: #f7f9fb;
+  color: #93a0ad;
+  font-size: 10px;
+  font-weight: 700;
+  cursor: not-allowed;
+}
+
+.travel-review-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 24px;
+}
+
+.travel-review-item {
+  min-width: 0;
+  padding: 13px 14px;
+  border: 1px solid #e4ebf2;
+  border-radius: 11px;
+  background: #fbfcfd;
+}
+
+.travel-review-item span {
+  display: block;
+  margin-bottom: 4px;
+  color: #8a99a8;
+  font-size: 9px;
+}
+
+.travel-review-item strong {
+  display: block;
+  overflow-wrap: anywhere;
+  color: #294966;
+  font-size: 11px;
+  font-weight: 750;
+}
+
+.travel-review-notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+  margin-top: 20px;
+  padding: 15px;
+  border: 1px solid #f0dfb6;
+  border-radius: 12px;
+  background: #fffbef;
+  color: #8a691c;
+}
+
+.travel-review-notice svg {
+  flex: 0 0 auto;
+}
+
+.travel-review-notice strong {
+  display: block;
+  font-size: 11px;
+}
+
+.travel-review-notice p {
+  margin: 4px 0 0;
+  font-size: 9.5px;
+  line-height: 1.6;
+}
+
+.travel-registration-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 28px;
+  padding-top: 20px;
+  border-top: 1px solid #edf2f7;
+}
+
+.travel-registration-button {
+  min-height: 42px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 0 18px;
+  border-radius: 10px;
+  font: inherit;
+  font-size: 11px;
+  font-weight: 750;
+  text-decoration: none;
+}
+
+.travel-registration-button.secondary {
+  border: 1px solid #dce5ee;
+  background: #fff;
+  color: #526e88;
+}
+
+.travel-registration-button.primary {
+  border: 1px solid #087cf0;
+  background: #087cf0;
+  color: #fff;
+  box-shadow: 0 7px 16px rgba(8, 124, 240, .18);
+}
+
+.travel-registration-button.primary:not(:disabled):hover {
+  background: #0671dc;
+}
+
+.travel-registration-button:disabled {
+  border-color: #b9c7d4;
+  background: #b9c7d4;
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+.travel-registration-aside {
+  display: grid;
+  gap: 13px;
+}
+
+.travel-registration-aside-card,
+.travel-registration-help {
+  padding: 19px;
+  border: 1px solid #dfe8f1;
+  border-radius: 15px;
+  background: #fff;
+  box-shadow: 0 7px 24px rgba(26, 64, 103, .04);
+}
+
+.travel-registration-aside-icon {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  margin-bottom: 13px;
+  border-radius: 11px;
+  background: #eaf5ff;
+  color: #087cf0;
+}
+
+.travel-registration-aside-card h3 {
+  margin: 0;
+  color: #244763;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.travel-registration-aside-card > p {
+  margin: 7px 0 0;
+  color: #7a8fa3;
+  font-size: 10px;
+  line-height: 1.6;
+}
+
+.travel-registration-aside-points {
+  display: grid;
+  gap: 9px;
+  margin-top: 16px;
+  padding-top: 15px;
+  border-top: 1px solid #edf2f6;
+}
+
+.travel-registration-aside-points span {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: #57718a;
+  font-size: 10px;
+  font-weight: 650;
+}
+
+.travel-registration-aside-points svg {
+  color: #0aa178;
+}
+
+.travel-registration-help {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.travel-registration-help > svg {
+  flex: 0 0 auto;
+  margin-top: 1px;
+  color: #087cf0;
+}
+
+.travel-registration-help strong {
+  display: block;
+  color: #31516e;
+  font-size: 11px;
+}
+
+.travel-registration-help p {
+  margin: 4px 0 0;
+  color: #8495a5;
+  font-size: 9.5px;
+  line-height: 1.55;
+}
+
+.travel-registration-loading {
+  min-height: 300px;
+  display: grid;
+  place-items: center;
+  color: #73889c;
+  font-size: 12px;
+}
+
+/* ==========================================================
+   RTL
+   ========================================================== */
+
+html[dir="rtl"] .travel-registration-page,
+.travel-registration-page[dir="rtl"] {
+  text-align: right;
+}
+
+html[dir="rtl"] .travel-registration-back svg,
+.travel-registration-page[dir="rtl"]
+.travel-registration-back svg,
+html[dir="rtl"] .travel-registration-button svg,
+.travel-registration-page[dir="rtl"]
+.travel-registration-button svg {
+  transform: rotate(180deg);
+}
+
+html[dir="rtl"] .travel-license-card,
+.travel-registration-page[dir="rtl"]
+.travel-license-card {
+  text-align: right;
+}
+
+/* ==========================================================
+   RESPONSIVE
+   ========================================================== */
+
+@media (max-width: 900px) {
+  .travel-registration-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .travel-registration-aside {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .travel-license-options {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 720px) {
+  .travel-registration-page {
+    padding: 24px 0 58px;
+  }
+
+  .travel-registration-shell {
+    width: min(100% - 28px, 1180px);
+  }
+
+  .travel-registration-header {
+    display: block;
+  }
+
+  .travel-registration-plan {
+    width: 100%;
+    margin-top: 17px;
+  }
+
+  .travel-registration-steps {
+    grid-template-columns: repeat(4, minmax(70px, 1fr));
+    overflow-x: auto;
+  }
+
+  .travel-registration-step {
+    min-height: 68px;
+    display: grid;
+    justify-items: center;
+    gap: 5px;
+    padding: 10px 6px;
+    text-align: center;
+  }
+
+  .travel-registration-step-icon {
+    width: 31px;
+    height: 31px;
+    flex-basis: 31px;
+  }
+
+  .travel-registration-step small {
+    display: none;
+  }
+
+  .desktop-step-label {
+    display: none !important;
+  }
+
+  .mobile-step-label {
+    display: block !important;
+    font-size: 9px !important;
+  }
+
+  .travel-registration-card {
+    padding: 20px 16px;
+  }
+
+  .travel-registration-form-grid,
+  .travel-review-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .travel-registration-field-full {
+    grid-column: auto;
+  }
+
+  .travel-registration-aside {
+    grid-template-columns: 1fr;
+  }
+
+  .travel-document-card {
+    grid-template-columns: 38px minmax(0, 1fr);
+  }
+
+  .travel-document-upload {
+    grid-column: 1 / -1;
+    width: 100%;
+  }
+}
+
+@media (max-width: 440px) {
+  .travel-registration-shell {
+    width: min(100% - 22px, 1180px);
+  }
+
+  .travel-registration-header h1 {
+    font-size: 29px;
+  }
+
+  .travel-registration-section-heading {
+    gap: 10px;
+  }
+
+  .travel-registration-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .travel-registration-button {
+    width: 100%;
+    padding-inline: 10px;
+  }
+}
+
+============================================================
+FILE: .\src\ui\tokens.css
+============================================================
+/*
+ * ============================================================
+ * SEGALOKA DESIGN TOKENS
+ * ============================================================
+ *
+ * Pusat pengaturan visual Segaloka.
+ *
+ * Ubah font, ukuran, warna, radius, shadow, spacing,
+ * Search, Package Card dan Detail Package dari sini.
+ *
+ * Jangan hardcode nilai visual baru di halaman.
+ */
+
+:root {
+  /* ========================================================
+     TYPOGRAPHY
+     ======================================================== */
+
+  --ui-font-primary:
+    "Plus Jakarta Sans",
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+
+  --ui-font-xs: 11px;
+  --ui-font-sm: 12px;
+  --ui-font-md: 14px;
+  --ui-font-lg: 16px;
+  --ui-font-xl: 20px;
+  --ui-font-2xl: 24px;
+  --ui-font-3xl: 32px;
+  --ui-font-4xl: 40px;
+
+  --ui-weight-normal: 400;
+  --ui-weight-medium: 500;
+  --ui-weight-semibold: 600;
+  --ui-weight-bold: 700;
+
+  --ui-line-tight: 1.2;
+  --ui-line-normal: 1.5;
+  --ui-line-relaxed: 1.7;
+
+  /* ========================================================
+     BRAND
+     ======================================================== */
+
+  --ui-primary: #1473e6;
+  --ui-primary-hover: #0d63cb;
+  --ui-primary-soft: #eef6ff;
+
+  /* ========================================================
+     TEXT
+     ======================================================== */
+
+  --ui-text: #172033;
+  --ui-text-secondary: #667085;
+  --ui-text-muted: #98a2b3;
+  --ui-text-inverse: #ffffff;
+
+  /* ========================================================
+     SURFACE
+     ======================================================== */
+
+  --ui-background: #ffffff;
+  --ui-surface: #ffffff;
+  --ui-surface-soft: #f8fafc;
+  --ui-surface-muted: #f2f4f7;
+
+  /* ========================================================
+     BORDER
+     ======================================================== */
+
+  --ui-border: #e4e7ec;
+  --ui-border-strong: #d0d5dd;
+
+  /* ========================================================
+     STATUS
+     ======================================================== */
+
+  --ui-success: #12b76a;
+  --ui-warning: #f79009;
+  --ui-danger: #f04438;
+  --ui-info: #2e90fa;
+
+  /* ========================================================
+     RADIUS
+     ======================================================== */
+
+  --ui-radius-xs: 6px;
+  --ui-radius-sm: 8px;
+  --ui-radius-md: 12px;
+  --ui-radius-lg: 16px;
+  --ui-radius-xl: 20px;
+  --ui-radius-2xl: 24px;
+  --ui-radius-pill: 999px;
+
+  /* ========================================================
+     SHADOW
+     ======================================================== */
+
+  --ui-shadow-sm:
+    0 1px 3px rgb(15 23 42 / 8%);
+
+  --ui-shadow-card:
+    0 4px 16px rgb(15 23 42 / 8%);
+
+  --ui-shadow-popup:
+    0 18px 50px rgb(15 23 42 / 14%);
+
+  /* ========================================================
+     SPACING
+     ======================================================== */
+
+  --ui-space-1: 4px;
+  --ui-space-2: 8px;
+  --ui-space-3: 12px;
+  --ui-space-4: 16px;
+  --ui-space-5: 20px;
+  --ui-space-6: 24px;
+  --ui-space-7: 28px;
+  --ui-space-8: 32px;
+  --ui-space-10: 40px;
+  --ui-space-12: 48px;
+
+  /* ========================================================
+     LAYOUT
+     ======================================================== */
+
+  --ui-container-max: 1200px;
+  --ui-container-padding: 16px;
+
+  /* ========================================================
+     SEARCH
+     ======================================================== */
+
+  --search-font-family: var(--ui-font-primary);
+
+  --search-height: 68px;
+  --search-gap: 6px;
+
+  --search-radius: 12px;
+  --search-container-radius: 20px;
+
+  --search-label-size: 12px;
+  --search-value-size: 14px;
+
+  --search-label-weight: var(--ui-weight-medium);
+  --search-value-weight: var(--ui-weight-semibold);
+
+  --search-label-color: var(--ui-text-secondary);
+  --search-value-color: var(--ui-text);
+
+  --search-background: var(--ui-surface);
+  --search-border: var(--ui-border);
+
+  --search-icon-size: 20px;
+  --search-icon-color: var(--ui-primary);
+  --search-icon-background: var(--ui-primary-soft);
+
+  --search-button-height: 68px;
+  --search-button-radius: 12px;
+  --search-button-font-size: 14px;
+
+  --search-dropdown-width: 360px;
+  --search-dropdown-radius: 20px;
+  --search-dropdown-background: var(--ui-surface);
+  --search-dropdown-shadow: var(--ui-shadow-popup);
+
+  --search-calendar-width: 720px;
+  --search-calendar-day-size: 38px;
+
+  /*
+   * Canonical Search field geometry.
+   * Hero dan Search Results harus mengambil nilai dari sini.
+   */
+
+  --search-field-padding-x: 14px;
+  --search-field-padding-y: 10px;
+
+  --search-field-border-width: 1px;
+
+  --search-icon-box-size: 36px;
+  --search-icon-radius: 10px;
+
+  --search-container-padding: 12px;
+
+  --search-origin-flex: 1.15;
+  --search-destination-flex: 1.15;
+  --search-travelers-flex: 0.82;
+  --search-date-flex: 0.94;
+
+  --search-button-padding-x: 22px;
+
+  --search-calendar-title-size: 20px;
+  --search-calendar-month-size: 14px;
+  --search-calendar-weekday-size: 12px;
+  --search-calendar-date-size: 13px;
+
+  --search-traveler-title-size: 14px;
+  --search-traveler-value-size: 13px;
+
+  /* ========================================================
+     GENERIC CARD
+     ======================================================== */
+
+  --card-background: var(--ui-surface);
+  --card-border: var(--ui-border);
+  --card-radius: 16px;
+  --card-shadow: var(--ui-shadow-card);
+  --card-padding: 16px;
+
+  /* ========================================================
+     PACKAGE CARD
+     ======================================================== */
+
+  --package-card-radius: 16px;
+  --package-card-image-height: 190px;
+
+  --package-card-title-size: 15px;
+  --package-card-title-weight: var(--ui-weight-bold);
+
+  --package-card-meta-size: 12px;
+
+  --package-card-price-size: 18px;
+  --package-card-price-weight: var(--ui-weight-bold);
+
+  /* ========================================================
+     PACKAGE DETAIL
+     ======================================================== */
+
+  --package-detail-title-size: 30px;
+  --package-detail-title-weight: var(--ui-weight-bold);
+
+  --package-detail-price-size: 26px;
+  --package-detail-price-weight: var(--ui-weight-bold);
+
+  --package-detail-section-title-size: 20px;
+  --package-detail-body-size: 14px;
+
+  /* ========================================================
+     BUTTON
+     ======================================================== */
+
+  --button-height-sm: 36px;
+  --button-height-md: 44px;
+  --button-height-lg: 52px;
+
+  --button-radius: 12px;
+  --button-font-size: 14px;
+  --button-font-weight: var(--ui-weight-semibold);
+
+  /* ========================================================
+     FORM
+     ======================================================== */
+
+  --form-height: 44px;
+  --form-radius: 12px;
+  --form-font-size: 14px;
+
+  /* ========================================================
+     HEADER / NAVIGATION
+     ======================================================== */
+
+  --header-height: 72px;
+  --header-font-size: 14px;
+
+  /* ========================================================
+     MODAL
+     ======================================================== */
+
+  --modal-radius: 20px;
+  --modal-background: var(--ui-surface);
+  --modal-shadow: var(--ui-shadow-popup);
+}
+
+/* ==========================================================
+   MOBILE
+   ========================================================== */
+
+@media (max-width: 767px) {
+  :root {
+    --ui-container-padding: 12px;
+
+    --search-height: 60px;
+    --search-button-height: 52px;
+
+    --search-label-size: 11px;
+    --search-value-size: 13px;
+
+    --search-calendar-width:
+      calc(100vw - 24px);
+
+    --package-card-image-height: 170px;
+
+    --package-detail-title-size: 24px;
+    --package-detail-price-size: 22px;
+  }
+}
+
+
+============================================================
+FILE: .\src\ui\index.css
+============================================================
+@import "./tokens.css";
+@import "./theme.css";
+
+@import "./search/search.css";
+@import "./cards/cards.css";
+@import "./package-detail/package-detail.css";
+@import "./buttons/buttons.css";
+@import "./forms/forms.css";
+@import "./navigation/navigation.css";
+@import "./modal/modal.css";
+@import "./layout/layout.css";
+
+@import "./responsive.css";
+@import "./rtl.css";
+@import "./layout/public-pages.css";
+

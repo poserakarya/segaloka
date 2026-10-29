@@ -1,0 +1,555 @@
+﻿
+========== src\components\search\SearchEditBar.tsx [125-235] ==========
+  125:   SegaDeals: [
+  126:     "Umrah",
+  127:     "Haji",
+  128:     "Halal Tour",
+  129:     "Tour Domestic",
+  130:     "Tour International",
+  131:   ],
+  132: };
+  133: 
+  134: const copy = {
+  135:   ID: {
+  136:     from: "Dari",
+  137:     destination: "Tujuan",
+  138:     umrahDestination: "Tujuan Umrah",
+  139:     date: "Tanggal",
+  140:     traveler: "Traveler",
+  141:     search: "Cari",
+  142: 
+  143:     originTitle: "Pilih Kota atau Bandara",
+  144:     originPlaceholder: "Masukkan nama kota atau bandara...",
+  145:     popularDestination: "Destinasi Populer",
+  146: 
+  147:     destinationTitle: "Pilih Tujuan",
+  148:     destinationPlaceholder: "Cari negara tujuan...",
+  149:     chooseDestination: "Pilih tujuan",
+  150: 
+  151:     dateTitle: "Atur Tanggal",
+  152:     chooseDate: "Pilih tanggal",
+  153: 
+  154:     travelerTitle: "Atur Traveler",
+  155:     travelerDescription: "Tentukan jumlah traveler",
+  156: 
+  157:     adult: "Dewasa",
+  158:     adultDescription: "Usia 12 tahun ke atas",
+  159: 
+  160:     child: "Anak",
+  161:     childDescription: "Usia 2â€“11 tahun",
+  162: 
+  163:     infant: "Bayi",
+  164:     infantDescription: "Di bawah 2 tahun",
+  165: 
+  166:     person: "orang",
+  167:     done: "Selesai",
+  168: 
+  169:     weekdays: [
+  170:       "Min",
+  171:       "Sen",
+  172:       "Sel",
+  173:       "Rab",
+  174:       "Kam",
+  175:       "Jum",
+  176:       "Sab",
+  177:     ],
+  178: 
+  179:     months: [
+  180:       "Januari",
+  181:       "Februari",
+  182:       "Maret",
+  183:       "April",
+  184:       "Mei",
+  185:       "Juni",
+  186:       "Juli",
+  187:       "Agustus",
+  188:       "September",
+  189:       "Oktober",
+  190:       "November",
+  191:       "Desember",
+  192:     ],
+  193:   },
+  194: 
+  195:   EN: {
+  196:     from: "From",
+  197:     destination: "Destination",
+  198:     umrahDestination: "Umrah Destination",
+  199:     date: "Date",
+  200:     traveler: "Traveler",
+  201:     search: "Search",
+  202: 
+  203:     originTitle: "Choose City or Airport",
+  204:     originPlaceholder: "Enter city or airport name...",
+  205:     popularDestination: "Popular Destinations",
+  206: 
+  207:     destinationTitle: "Choose Destination",
+  208:     destinationPlaceholder: "Search destination...",
+  209:     chooseDestination: "Choose destination",
+  210: 
+  211:     dateTitle: "Set Date",
+  212:     chooseDate: "Choose date",
+  213: 
+  214:     travelerTitle: "Set Travelers",
+  215:     travelerDescription: "Choose number of travelers",
+  216: 
+  217:     adult: "Adult",
+  218:     adultDescription: "12 years and above",
+  219: 
+  220:     child: "Child",
+  221:     childDescription: "2â€“11 years",
+  222: 
+  223:     infant: "Infant",
+  224:     infantDescription: "Under 2 years",
+  225: 
+  226:     person: "people",
+  227:     done: "Done",
+  228: 
+  229:     weekdays: [
+  230:       "Sun",
+  231:       "Mon",
+  232:       "Tue",
+  233:       "Wed",
+  234:       "Thu",
+  235:       "Fri",
+
+========== src\components\search\SearchEditBar.tsx [505-575] ==========
+  505:           today.getMonth(),
+  506:           1,
+  507:         ),
+  508:   );
+  509: 
+  510:   useEffect(() => {
+  511:     function handlePointerDown(
+  512:       event: PointerEvent,
+  513:     ) {
+  514:       if (
+  515:         rootRef.current &&
+  516:         !rootRef.current.contains(
+  517:           event.target as Node,
+  518:         )
+  519:       ) {
+  520:         setPanel(null);
+  521:       }
+  522:     }
+  523: 
+  524:     function handleKeyDown(
+  525:       event: KeyboardEvent,
+  526:     ) {
+  527:       if (
+  528:         event.key === "Escape"
+  529:       ) {
+  530:         setPanel(null);
+  531:       }
+  532:     }
+  533: 
+  534:     document.addEventListener(
+  535:       "pointerdown",
+  536:       handlePointerDown,
+  537:     );
+  538: 
+  539:     document.addEventListener(
+  540:       "keydown",
+  541:       handleKeyDown,
+  542:     );
+  543: 
+  544:     return () => {
+  545:       document.removeEventListener(
+  546:         "pointerdown",
+  547:         handlePointerDown,
+  548:       );
+  549: 
+  550:       document.removeEventListener(
+  551:         "keydown",
+  552:         handleKeyDown,
+  553:       );
+  554:     };
+  555:   }, []);
+  556: 
+  557:   useEffect(() => {
+  558:     setDestination(
+  559:       initialDestination || "",
+  560:     );
+  561:   }, [
+  562:     category,
+  563:     initialDestination,
+  564:   ]);
+  565: 
+  566:   const destinationOptions =
+  567:     useMemo(
+  568:       () =>
+  569:         categoryOptions[
+  570:           category
+  571:         ] || [],
+  572:       [category],
+  573:     );
+  574: 
+  575:   const filteredOrigins =
+
+========== src\components\search\SearchEditBar.tsx [1070-1245] ==========
+ 1070:                     {value}
+ 1071:                   </button>
+ 1072:                 ),
+ 1073:               )}
+ 1074:             </div>
+ 1075:           </div>
+ 1076:         )}
+ 1077:       </div>
+ 1078: 
+ 1079:       <div className="search-edit-control">
+ 1080:         <button
+ 1081:           type="button"
+ 1082:           className="search-edit-field"
+ 1083:           aria-expanded={
+ 1084:             panel === "date"
+ 1085:           }
+ 1086:           onClick={() =>
+ 1087:             togglePanel("date")
+ 1088:           }
+ 1089:         >
+ 1090:           <CalendarDays size={18} />
+ 1091: 
+ 1092:           <span>
+ 1093:             <small>
+ 1094:               {t.date}
+ 1095:             </small>
+ 1096: 
+ 1097:             <strong>
+ 1098:               {formatSelectedDate()}
+ 1099:             </strong>
+ 1100:           </span>
+ 1101:         </button>
+ 1102: 
+ 1103:         {panel === "date" && (
+ 1104:           <div className="search-edit-dropdown search-unified-dropdown search-unified-date">
+ 1105:             <div className="search-unified-dropdown-head">
+ 1106:               <strong>
+ 1107:                 {t.dateTitle}
+ 1108:               </strong>
+ 1109: 
+ 1110:               <button
+ 1111:                 type="button"
+ 1112:                 className="search-unified-close"
+ 1113:                 aria-label="Close"
+ 1114:                 onClick={() =>
+ 1115:                   setPanel(null)
+ 1116:                 }
+ 1117:               >
+ 1118:                 <X size={18} />
+ 1119:               </button>
+ 1120:             </div>
+ 1121: 
+ 1122:             <div className="search-unified-calendar-controls">
+ 1123:               <button
+ 1124:                 type="button"
+ 1125:                 aria-label="Previous month"
+ 1126:                 onClick={() =>
+ 1127:                   setCalendarMonth(
+ 1128:                     new Date(
+ 1129:                       currentYear,
+ 1130:                       currentMonth - 1,
+ 1131:                       1,
+ 1132:                     ),
+ 1133:                   )
+ 1134:                 }
+ 1135:               >
+ 1136:                 <ChevronLeft size={18} />
+ 1137:               </button>
+ 1138: 
+ 1139:               <div>
+ 1140:                 <select
+ 1141:                   value={currentMonth}
+ 1142:                   onChange={(event) =>
+ 1143:                     setCalendarMonth(
+ 1144:                       new Date(
+ 1145:                         currentYear,
+ 1146:                         Number(
+ 1147:                           event.target.value,
+ 1148:                         ),
+ 1149:                         1,
+ 1150:                       ),
+ 1151:                     )
+ 1152:                   }
+ 1153:                 >
+ 1154:                   {t.months.map(
+ 1155:                     (
+ 1156:                       month,
+ 1157:                       index,
+ 1158:                     ) => (
+ 1159:                       <option
+ 1160:                         key={month}
+ 1161:                         value={index}
+ 1162:                       >
+ 1163:                         {month}
+ 1164:                       </option>
+ 1165:                     ),
+ 1166:                   )}
+ 1167:                 </select>
+ 1168: 
+ 1169:                 <select
+ 1170:                   value={currentYear}
+ 1171:                   onChange={(event) =>
+ 1172:                     setCalendarMonth(
+ 1173:                       new Date(
+ 1174:                         Number(
+ 1175:                           event.target.value,
+ 1176:                         ),
+ 1177:                         currentMonth,
+ 1178:                         1,
+ 1179:                       ),
+ 1180:                     )
+ 1181:                   }
+ 1182:                 >
+ 1183:                   {Array.from(
+ 1184:                     {
+ 1185:                       length: 4,
+ 1186:                     },
+ 1187:                     (_, index) =>
+ 1188:                       today.getFullYear() +
+ 1189:                       index,
+ 1190:                   ).map(
+ 1191:                     (year) => (
+ 1192:                       <option
+ 1193:                         key={year}
+ 1194:                         value={year}
+ 1195:                       >
+ 1196:                         {year}
+ 1197:                       </option>
+ 1198:                     ),
+ 1199:                   )}
+ 1200:                 </select>
+ 1201:               </div>
+ 1202: 
+ 1203:               <button
+ 1204:                 type="button"
+ 1205:                 aria-label="Next month"
+ 1206:                 onClick={() =>
+ 1207:                   setCalendarMonth(
+ 1208:                     new Date(
+ 1209:                       currentYear,
+ 1210:                       currentMonth + 1,
+ 1211:                       1,
+ 1212:                     ),
+ 1213:                   )
+ 1214:                 }
+ 1215:               >
+ 1216:                 <ChevronRight size={18} />
+ 1217:               </button>
+ 1218:             </div>
+ 1219: 
+ 1220:             <div className="search-unified-calendar-grid">
+ 1221:               {renderMonth(
+ 1222:                 currentYear,
+ 1223:                 currentMonth,
+ 1224:                 monthOneDays,
+ 1225:               )}
+ 1226: 
+ 1227:               {renderMonth(
+ 1228:                 nextMonth.getFullYear(),
+ 1229:                 nextMonth.getMonth(),
+ 1230:                 monthTwoDays,
+ 1231:               )}
+ 1232:             </div>
+ 1233:           </div>
+ 1234:         )}
+ 1235:       </div>
+ 1236: 
+ 1237:       <div className="search-edit-control">
+ 1238:         <button
+ 1239:           type="button"
+ 1240:           className="search-edit-field"
+ 1241:           aria-expanded={
+ 1242:             panel === "traveler"
+ 1243:           }
+ 1244:           onClick={() =>
+ 1245:             togglePanel(
+
+========== src\components\search\SearchResultsClient.tsx [15-115] ==========
+   15:   ArrowRight,
+   16:   Building2,
+   17:   ChevronRight,
+   18:   Filter,
+   19:   Globe2,
+   20:   Grid2X2,
+   21:   List,
+   22:   Map,
+   23:   MapPin,
+   24:   Search,
+   25:   Sparkles,
+   26:   Star,
+   27:   UsersRound,
+   28:   CalendarDays,
+   29:   X,
+   30: } from "lucide-react";
+   31: 
+   32: import {
+   33:   featuredPackages,
+   34:   type TravelProduct,
+   35: } from "@/data/home";
+   36: 
+   37: import {
+   38:   useMarketplacePreferences,
+   39: } from "@/components/providers/MarketplacePreferencesProvider";
+   40: 
+   41: import {
+   42:   useMemo,
+   43:   useState,
+   44: } from "react";
+   45: 
+   46: 
+   47: type Props = {
+   48:   category: string;
+   49:   origin: string;
+   50:   destination: string;
+   51:   travelers: string;
+   52:   adult: string;
+   53:   child: string;
+   54:   infant: string;
+   55:   date: string;
+   56:   departureDate: string;
+   57:   returnDate: string;
+   58:   year: string;
+   59: };
+   60: 
+   61: 
+   62: const supportedAirlines = [
+   63:   "Garuda Indonesia",
+   64:   "Saudia",
+   65:   "Emirates",
+   66:   "Qatar Airways",
+   67:   "Etihad Airways",
+   68:   "Turkish Airlines",
+   69:   "Oman Air",
+   70:   "Malaysia Airlines",
+   71:   "AirAsia",
+   72:   "Scoot",
+   73:   "Lion Air",
+   74:   "Hainan Airlines",
+   75:   "IndiGo",
+   76: ];
+   77: 
+   78: const umrahFilterOptions = [
+   79:   "Hemat",
+   80:   "Regular",
+   81:   "Plus",
+   82:   "First",
+   83: ];
+   84: 
+   85: type SortMode =
+   86:   | "relevant"
+   87:   | "lowest"
+   88:   | "highest"
+   89:   | "departure";
+   90: 
+   91: 
+   92: type ViewMode =
+   93:   | "grid"
+   94:   | "list";
+   95: 
+   96: 
+   97: type PackageMeta = {
+   98:   airline: string;
+   99:   departure: string;
+  100: };
+  101: 
+  102: 
+  103: 
+  104: const sponsoredPackages = [
+  105:   {
+  106:     id: "sponsored-nuzultrip-umrah",
+  107:     travel: "Nuzultrip",
+  108:     category: "Umrah",
+  109:     title: "Umrah Premium 12 Hari",
+  110:     location: "Makkah Â· Madinah",
+  111:     duration: "12 Hari",
+  112:     rating: 4.9,
+  113:     reviews: 128,
+  114:     price: 32900000,
+  115:     badge: "Sponsored",
+
+========== src\components\search\SearchResultsClient.tsx [270-355] ==========
+  270:     "id-ID",
+  271:     {
+  272:       style: "currency",
+  273:       currency: "IDR",
+  274:       maximumFractionDigits: 0,
+  275:     },
+  276:   )
+  277:     .format(value)
+  278:     .replace("Rp", "Rp ");
+  279: }
+  280: 
+  281: 
+  282: function legacyDisplayDate(
+  283:   value: string,
+  284: ) {
+  285:   if (!value) {
+  286:     return "Pilih tanggal";
+  287:   }
+  288: 
+  289:   const parsed =
+  290:     new Date(`${value}T00:00:00`);
+  291: 
+  292:   if (
+  293:     Number.isNaN(
+  294:       parsed.getTime(),
+  295:     )
+  296:   ) {
+  297:     return value;
+  298:   }
+  299: 
+  300:   return new Intl.DateTimeFormat(
+  301:     "id-ID",
+  302:     {
+  303:       day: "numeric",
+  304:       month: "short",
+  305:       year: "numeric",
+  306:     },
+  307:   ).format(parsed);
+  308: }
+  309: 
+  310: 
+  311: function formatSearchDate(
+  312:   value: string,
+  313:   locale: string,
+  314: ) {
+  315:   if (!value) {
+  316:     return "";
+  317:   }
+  318: 
+  319:   const parsed =
+  320:     new Date(
+  321:       `${value}T00:00:00`,
+  322:     );
+  323: 
+  324:   if (
+  325:     Number.isNaN(
+  326:       parsed.getTime(),
+  327:     )
+  328:   ) {
+  329:     return value;
+  330:   }
+  331: 
+  332:   return new Intl.DateTimeFormat(
+  333:     locale,
+  334:     {
+  335:       day: "numeric",
+  336:       month: "short",
+  337:       year: "numeric",
+  338:     },
+  339:   ).format(parsed);
+  340: }
+  341: 
+  342: export function SearchResultsClient({
+  343:   category,
+  344:   origin,
+  345:   destination,
+  346:   travelers,
+  347:   adult,
+  348:   child,
+  349:   infant,
+  350:   date,
+  351:   departureDate,
+  352:   returnDate,
+  353:   year,
+  354: }: Props) {
+  355: const {

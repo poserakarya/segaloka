@@ -1,0 +1,1123 @@
+"use client";
+
+import {
+  BedDouble,
+  Building2,
+  Bus,
+  CalendarDays,
+  Check,
+  ChevronLeft,
+  ChevronRight,
+  CircleX,
+  Clock3,
+  MapPin,
+  Minus,
+  Plane,
+  Plus,
+  ShieldCheck,
+  Star,
+  Utensils,
+  Users,
+} from "lucide-react";
+import { useMemo, useState } from "react";
+
+type AccommodationProduct = {
+  slug: string;
+  title: string;
+  city: string;
+  country: string;
+  duration: string;
+  providerType: "Travel" | "Vendor";
+  providerName: string;
+  rating: number;
+  reviews: number;
+  price: number;
+  image: string;
+  route: string;
+  description: string;
+  includes: string[];
+  excludes: string[];
+  facilities: string[];
+  itinerary: {
+    day: string;
+    title: string;
+    description: string;
+  }[];
+  periods?: AccommodationPeriod[];
+};
+
+type RoomType = "quad" | "triple" | "double";
+
+type AccommodationPeriod = {
+  id: string;
+  startDate: string;
+  endDate: string;
+  bookingDeadline: string;
+  quota: number;
+  remainingQuota: number;
+  status: "AVAILABLE" | "SOLD_OUT" | "CLOSED";
+  rooms: Record<
+    RoomType,
+    {
+      pricePerPax: number;
+      availableRooms: number;
+    }
+  >;
+};
+
+const products: AccommodationProduct[] = [
+  {
+    slug: "makkah-madinah-9d",
+    title: "Land Arrangement Makkah & Madinah",
+    city: "Makkah & Madinah",
+    country: "Arab Saudi",
+    duration: "9 Hari",
+    providerType: "Vendor",
+    providerName: "Penyedia LA",
+    rating: 4.9,
+    reviews: 128,
+    price: 6450000,
+    image: "/images/la/makkah-madinah.jpg",
+    route: "Makkah → Madinah",
+    description:
+      "Land Arrangement untuk perjalanan Makkah dan Madinah dengan layanan darat yang dapat mencakup akomodasi, transportasi, handling, dan layanan pendukung sesuai komponen produk.",
+    includes: [
+      "Akomodasi sesuai paket",
+      "Transportasi darat sesuai program",
+      "Handling perjalanan",
+      "Pendampingan layanan LA",
+      "Bagasi sesuai ketentuan penyedia",
+      "Layanan sesuai itinerary",
+    ],
+    excludes: [
+      "Tiket pesawat internasional kecuali dinyatakan termasuk",
+      "Pengeluaran pribadi",
+      "Kelebihan bagasi",
+      "Upgrade kamar",
+      "Layanan di luar itinerary",
+      "Biaya tambahan yang tidak tercantum",
+    ],
+    facilities: ["Hotel", "Transportasi", "Visa", "Handling"],
+    itinerary: [
+      {
+        day: "Hari 1",
+        title: "Kedatangan & Transfer",
+        description:
+          "Penjemputan dan transfer menuju akomodasi sesuai jadwal perjalanan.",
+      },
+      {
+        day: "Hari 2–5",
+        title: "Program Makkah",
+        description:
+          "Akomodasi dan layanan darat di Makkah sesuai program produk.",
+      },
+      {
+        day: "Hari 6",
+        title: "Makkah → Madinah",
+        description:
+          "Perjalanan antarkota dan proses check-in akomodasi Madinah.",
+      },
+      {
+        day: "Hari 7–9",
+        title: "Program Madinah",
+        description:
+          "Akomodasi dan layanan darat di Madinah hingga jadwal kepulangan.",
+      },
+    ],
+  },
+  {
+    slug: "istanbul-7d",
+    title: "Land Arrangement Istanbul",
+    city: "Istanbul",
+    country: "Turki",
+    duration: "7 Hari",
+    providerType: "Vendor",
+    providerName: "Penyedia LA",
+    rating: 4.8,
+    reviews: 86,
+    price: 5750000,
+    image: "/images/la/istanbul.jpg",
+    route: "Istanbul",
+    description:
+      "Pilihan Land Arrangement Istanbul untuk kebutuhan akomodasi dan layanan perjalanan darat.",
+    includes: ["Hotel", "Transportasi", "Guide", "Makan sesuai program"],
+    excludes: [
+      "Tiket pesawat",
+      "Pengeluaran pribadi",
+      "Kelebihan bagasi",
+      "Layanan tambahan di luar paket",
+    ],
+    facilities: ["Hotel", "Transportasi", "Guide", "Makan"],
+    itinerary: [
+      {
+        day: "Hari 1",
+        title: "Kedatangan Istanbul",
+        description: "Transfer kedatangan dan check-in akomodasi.",
+      },
+      {
+        day: "Hari 2–6",
+        title: "Program Istanbul",
+        description: "Layanan perjalanan sesuai itinerary produk.",
+      },
+      {
+        day: "Hari 7",
+        title: "Check-out & Transfer",
+        description: "Check-out dan transfer sesuai jadwal kepulangan.",
+      },
+    ],
+  },
+  {
+    slug: "dubai-5d",
+    title: "Land Arrangement Dubai",
+    city: "Dubai",
+    country: "Uni Emirat Arab",
+    duration: "5 Hari",
+    providerType: "Vendor",
+    providerName: "Penyedia LA",
+    rating: 4.8,
+    reviews: 72,
+    price: 4950000,
+    image: "/images/la/dubai.jpg",
+    route: "Dubai",
+    description:
+      "Land Arrangement Dubai dengan pilihan akomodasi dan layanan darat sesuai konfigurasi produk.",
+    includes: ["Hotel", "Transportasi", "Guide", "Handling"],
+    excludes: [
+      "Tiket pesawat",
+      "Pengeluaran pribadi",
+      "Upgrade kamar",
+      "Layanan di luar itinerary",
+    ],
+    facilities: ["Hotel", "Transportasi", "Guide", "Handling"],
+    itinerary: [
+      {
+        day: "Hari 1",
+        title: "Kedatangan Dubai",
+        description: "Penjemputan dan transfer menuju hotel.",
+      },
+      {
+        day: "Hari 2–4",
+        title: "Program Dubai",
+        description: "Program perjalanan sesuai itinerary produk.",
+      },
+      {
+        day: "Hari 5",
+        title: "Kepulangan",
+        description: "Check-out dan transfer keberangkatan.",
+      },
+    ],
+  },
+  {
+    slug: "cairo-6d",
+    title: "Land Arrangement Kairo",
+    city: "Kairo",
+    country: "Mesir",
+    duration: "6 Hari",
+    providerType: "Travel",
+    providerName: "Travel",
+    rating: 4.7,
+    reviews: 61,
+    price: 5250000,
+    image: "/images/la/cairo.jpg",
+    route: "Kairo",
+    description:
+      "Land Arrangement Kairo untuk perjalanan dengan layanan darat sesuai program Travel.",
+    includes: ["Hotel", "Transportasi", "Guide", "Makan sesuai program"],
+    excludes: [
+      "Tiket pesawat",
+      "Pengeluaran pribadi",
+      "Kelebihan bagasi",
+      "Biaya di luar program",
+    ],
+    facilities: ["Hotel", "Transportasi", "Guide", "Makan"],
+    itinerary: [
+      {
+        day: "Hari 1",
+        title: "Kedatangan Kairo",
+        description: "Transfer menuju akomodasi.",
+      },
+      {
+        day: "Hari 2–5",
+        title: "Program Kairo",
+        description: "Program perjalanan sesuai itinerary.",
+      },
+      {
+        day: "Hari 6",
+        title: "Kepulangan",
+        description: "Check-out dan transfer keberangkatan.",
+      },
+    ],
+  },
+  {
+    slug: "kuala-lumpur-4d",
+    title: "Land Arrangement Kuala Lumpur",
+    city: "Kuala Lumpur",
+    country: "Malaysia",
+    duration: "4 Hari",
+    providerType: "Vendor",
+    providerName: "Penyedia LA",
+    rating: 4.7,
+    reviews: 54,
+    price: 2850000,
+    image: "/images/la/kuala-lumpur.jpg",
+    route: "Kuala Lumpur",
+    description:
+      "Land Arrangement Kuala Lumpur dengan akomodasi dan layanan darat untuk perjalanan singkat.",
+    includes: ["Hotel", "Transportasi", "Guide"],
+    excludes: [
+      "Tiket pesawat",
+      "Pengeluaran pribadi",
+      "Makan di luar program",
+      "Layanan tambahan",
+    ],
+    facilities: ["Hotel", "Transportasi", "Guide"],
+    itinerary: [
+      {
+        day: "Hari 1",
+        title: "Kedatangan",
+        description: "Transfer dan check-in.",
+      },
+      {
+        day: "Hari 2–3",
+        title: "Program Kuala Lumpur",
+        description: "Program sesuai itinerary produk.",
+      },
+      {
+        day: "Hari 4",
+        title: "Kepulangan",
+        description: "Check-out dan transfer.",
+      },
+    ],
+  },
+  {
+    slug: "pulau-nusa",
+    title: "Land Arrangement Pulau Nusa",
+    city: "Bali",
+    country: "Indonesia",
+    duration: "4 Hari",
+    providerType: "Vendor",
+    providerName: "Nusa Hospitality",
+    rating: 4.7,
+    reviews: 49,
+    price: 2450000,
+    image: "/images/la/pulau-nusa.jpg",
+    route: "Bali → Pulau Nusa",
+    description:
+      "Akomodasi dan Land Arrangement Pulau Nusa dengan layanan perjalanan darat sesuai komponen produk.",
+    includes: ["Hotel", "Transportasi", "Guide"],
+    excludes: [
+      "Tiket menuju Bali",
+      "Pengeluaran pribadi",
+      "Aktivitas tambahan",
+      "Layanan di luar program",
+    ],
+    facilities: ["Hotel", "Transportasi", "Guide"],
+    itinerary: [
+      {
+        day: "Hari 1",
+        title: "Kedatangan Bali",
+        description: "Transfer menuju akomodasi.",
+      },
+      {
+        day: "Hari 2–3",
+        title: "Program Pulau Nusa",
+        description: "Program perjalanan sesuai itinerary.",
+      },
+      {
+        day: "Hari 4",
+        title: "Kepulangan",
+        description: "Check-out dan transfer.",
+      },
+    ],
+  },
+];
+
+function formatRupiah(value: number) {
+  return new Intl.NumberFormat("id-ID", {
+    style: "currency",
+    currency: "IDR",
+    maximumFractionDigits: 0,
+  }).format(value);
+}
+
+function roomCapacity(roomType: RoomType) {
+  if (roomType === "double") return 2;
+  if (roomType === "triple") return 3;
+  return 4;
+}
+
+function roomLabel(roomType: RoomType) {
+  if (roomType === "double") return "Double";
+  if (roomType === "triple") return "Triple";
+  return "Quad";
+}
+
+
+
+const prototypePeriods: Record<string, AccommodationPeriod[]> = {
+  "makkah-madinah-9d": [
+    {
+      id: "makkah-madinah-2026-12-10",
+      startDate: "2026-12-10",
+      endDate: "2026-12-18",
+      bookingDeadline: "2026-12-05",
+      quota: 40,
+      remainingQuota: 28,
+      status: "AVAILABLE",
+      rooms: {
+        quad: {
+          pricePerPax: 6450000,
+          availableRooms: 7,
+        },
+        triple: {
+          pricePerPax: 7095000,
+          availableRooms: 4,
+        },
+        double: {
+          pricePerPax: 7869000,
+          availableRooms: 3,
+        },
+      },
+    },
+    {
+      id: "makkah-madinah-2026-12-20",
+      startDate: "2026-12-20",
+      endDate: "2026-12-28",
+      bookingDeadline: "2026-12-15",
+      quota: 36,
+      remainingQuota: 20,
+      status: "AVAILABLE",
+      rooms: {
+        quad: {
+          pricePerPax: 6650000,
+          availableRooms: 5,
+        },
+        triple: {
+          pricePerPax: 7295000,
+          availableRooms: 3,
+        },
+        double: {
+          pricePerPax: 8069000,
+          availableRooms: 2,
+        },
+      },
+    },
+    {
+      id: "makkah-madinah-2027-01-05",
+      startDate: "2027-01-05",
+      endDate: "2027-01-13",
+      bookingDeadline: "2026-12-30",
+      quota: 40,
+      remainingQuota: 0,
+      status: "SOLD_OUT",
+      rooms: {
+        quad: {
+          pricePerPax: 6750000,
+          availableRooms: 0,
+        },
+        triple: {
+          pricePerPax: 7395000,
+          availableRooms: 0,
+        },
+        double: {
+          pricePerPax: 8169000,
+          availableRooms: 0,
+        },
+      },
+    },
+  ],
+};
+
+function getPrototypePeriods(
+  product: AccommodationProduct,
+): AccommodationPeriod[] {
+  const existing = prototypePeriods[product.slug];
+
+  if (existing) {
+    return existing;
+  }
+
+  /*
+   * Produk lain tetap diberi satu periode prototype agar UI dapat diuji.
+   * Saat dashboard Vendor/Travel aktif, fallback ini dihapus dan seluruh
+   * periode wajib berasal dari data produk.
+   */
+  return [
+    {
+      id: `${product.slug}-2026-12-10`,
+      startDate: "2026-12-10",
+      endDate: "2026-12-10",
+      bookingDeadline: "2026-12-05",
+      quota: 20,
+      remainingQuota: 20,
+      status: "AVAILABLE",
+      rooms: {
+        quad: {
+          pricePerPax: product.price,
+          availableRooms: 5,
+        },
+        triple: {
+          pricePerPax: product.price,
+          availableRooms: 5,
+        },
+        double: {
+          pricePerPax: product.price,
+          availableRooms: 5,
+        },
+      },
+    },
+  ];
+}
+
+function formatPeriodDate(value: string) {
+  return new Intl.DateTimeFormat("id-ID", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  }).format(new Date(`${value}T00:00:00`));
+}
+
+function periodStatusLabel(period: AccommodationPeriod) {
+  if (
+    period.status === "SOLD_OUT" ||
+    period.remainingQuota <= 0
+  ) {
+    return "Habis";
+  }
+
+  if (period.status === "CLOSED") {
+    return "Ditutup";
+  }
+
+  return "Tersedia";
+}
+export default function AccommodationDetailClient({
+  slug,
+}: {
+  slug: string;
+}) {
+  const product = useMemo(
+    () => products.find((item) => item.slug === slug),
+    [slug],
+  );
+
+  const [selectedPeriodId, setSelectedPeriodId] = useState("");
+  const [roomType, setRoomType] = useState<RoomType>("quad");
+  const [rooms, setRooms] = useState(1);
+  const [activeTab, setActiveTab] = useState<
+    "detail" | "itinerary" | "included" | "policy"
+  >("detail");
+
+  if (!product) {
+    return (
+      <main className="la-detail-page">
+        <div className="la-detail-container la-not-found">
+          <Building2 size={32} />
+          <h1>Akomodasi tidak ditemukan</h1>
+          <p>Produk LA yang Anda buka belum tersedia.</p>
+          <a href="/akomodasi">Kembali ke Akomodasi</a>
+        </div>
+      </main>
+    );
+  }
+
+  const periods = getPrototypePeriods(product);
+
+  const selectedPeriod =
+    periods.find((period) => period.id === selectedPeriodId) ?? null;
+
+  const capacity = roomCapacity(roomType);
+  const traveler = capacity * rooms;
+
+  const selectedRoom =
+    selectedPeriod?.rooms[roomType] ?? null;
+
+  const pricePerPax =
+    selectedRoom?.pricePerPax ?? product.price;
+
+  const total = pricePerPax * traveler;
+
+  const periodCanBook =
+    selectedPeriod !== null &&
+    selectedPeriod.status === "AVAILABLE" &&
+    selectedPeriod.remainingQuota >= traveler &&
+    (selectedRoom?.availableRooms ?? 0) >= rooms;
+
+  const maxRoomsByQuota =
+    selectedPeriod && selectedRoom
+      ? Math.max(
+          0,
+          Math.min(
+            selectedRoom.availableRooms,
+            Math.floor(selectedPeriod.remainingQuota / capacity),
+          ),
+        )
+      : 0;
+
+  const continueBooking = () => {
+    if (!selectedPeriod || !periodCanBook) {
+      return;
+    }
+
+    const params = new URLSearchParams({
+      type: "accommodation",
+      periodId: selectedPeriod.id,
+      startDate: selectedPeriod.startDate,
+      endDate: selectedPeriod.endDate,
+      traveler: String(traveler),
+      roomType,
+      rooms: String(rooms),
+    });
+
+    window.location.href =
+      `/booking/${product.slug}?${params.toString()}`;
+  };
+
+  return (
+    <main className="la-detail-page">
+      <div className="la-detail-container">
+        <div className="la-breadcrumb">
+          <a href="/">Beranda</a>
+          <ChevronRight size={12} />
+          <a href="/akomodasi">Akomodasi</a>
+          <ChevronRight size={12} />
+          <span>{product.city}</span>
+        </div>
+
+        <section className="la-heading">
+          <div>
+            <div className="la-heading-meta">
+              <span>
+                <MapPin size={14} />
+                {product.city}, {product.country}
+              </span>
+
+              <span>
+                <Clock3 size={14} />
+                {product.duration}
+              </span>
+            </div>
+
+            <h1>{product.title}</h1>
+
+            <div className="la-rating-line">
+              <Star size={15} fill="currentColor" />
+              <strong>{product.rating}</strong>
+              <span>({product.reviews} ulasan)</span>
+              <i />
+              <span>{product.route}</span>
+            </div>
+          </div>
+        </section>
+
+        <section className="la-gallery">
+          <div className="la-gallery-main">
+            <img src={product.image} alt={product.title} />
+          </div>
+
+          <div className="la-gallery-side">
+            <div>
+              <img src={product.image} alt={product.city} />
+            </div>
+
+            <div>
+              <img src={product.image} alt={product.country} />
+              <span>Lihat Semua Foto</span>
+            </div>
+          </div>
+        </section>
+
+        <section className="la-main-grid">
+          <div className="la-main-content">
+            <div className="la-provider-card">
+              <div className="la-provider-icon">
+                <Building2 size={21} />
+              </div>
+
+              <div>
+                <small>Disediakan oleh {product.providerType}</small>
+                <strong>{product.providerName}</strong>
+              </div>
+
+              <span>
+                <ShieldCheck size={15} />
+                Penyedia di Segaloka
+              </span>
+            </div>
+
+            <div className="la-flight-warning">
+              <Plane size={20} />
+              <div>
+                <strong>Paket Land Arrangement</strong>
+                <span>
+                  Harga ini tidak termasuk tiket pesawat, kecuali pada
+                  komponen produk dinyatakan secara khusus bahwa tiket sudah
+                  termasuk.
+                </span>
+              </div>
+            </div>
+
+            <section className="la-program-card">
+              <div className="la-section-heading">
+                <div>
+                  <span>RINGKASAN PROGRAM</span>
+                  <h2>{product.duration} · {product.route}</h2>
+                </div>
+              </div>
+
+              <div className="la-program-grid">
+                <div>
+                  <BedDouble />
+                  <strong>Akomodasi</strong>
+                  <span>Hotel sesuai program</span>
+                </div>
+
+                <div>
+                  <Bus />
+                  <strong>Transportasi</strong>
+                  <span>Transportasi darat</span>
+                </div>
+
+                <div>
+                  <ShieldCheck />
+                  <strong>Layanan</strong>
+                  <span>Handling perjalanan</span>
+                </div>
+
+                <div>
+                  <Utensils />
+                  <strong>Program</strong>
+                  <span>Sesuai paket LA</span>
+                </div>
+              </div>
+            </section>
+
+            <section className="la-room-section">
+              <div className="la-section-heading">
+                <div>
+                  <span>PILIHAN KAMAR</span>
+                  <h2>Pilih tipe kamar sesuai kebutuhan</h2>
+                </div>
+              </div>
+
+              <div className="la-room-options">
+                {(["quad", "triple", "double"] as RoomType[]).map((type) => {
+                  const capacityValue = roomCapacity(type);
+
+                  const periodRoom =
+                    selectedPeriod?.rooms[type] ?? null;
+
+                  const priceValue =
+                    periodRoom?.pricePerPax ?? product.price;
+
+                  const selected = roomType === type;
+
+                  const roomUnavailable =
+                    selectedPeriod !== null &&
+                    (
+                      selectedPeriod.status !== "AVAILABLE" ||
+                      periodRoom === null ||
+                      periodRoom.availableRooms <= 0
+                    );
+
+                  return (
+                    <button
+                      key={type}
+                      type="button"
+                      className={`la-room-option ${selected ? "active" : ""}`}
+                      onClick={() => {
+                        if (roomUnavailable) {
+                          return;
+                        }
+
+                        setRoomType(type);
+                        setRooms(1);
+                      }}
+                      disabled={roomUnavailable}
+                    >
+                      <div className="la-room-option-top">
+                        <div className="la-room-icon">
+                          <BedDouble size={19} />
+                        </div>
+
+                        {type === "quad" && (
+                          <span className="la-room-badge">Paling Hemat</span>
+                        )}
+                      </div>
+
+                      <strong>{roomLabel(type)}</strong>
+                      <span>{capacityValue} orang / kamar</span>
+
+                      {selectedPeriod && (
+                        <small className="la-room-stock">
+                          {periodRoom && periodRoom.availableRooms > 0
+                            ? `${periodRoom.availableRooms} kamar tersedia`
+                            : "Kamar habis"}
+                        </small>
+                      )}
+
+                      <div className="la-room-price">
+                        <b>{formatRupiah(priceValue)}</b>
+                        <small>/ pax</small>
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            </section>
+
+            <section className="la-inclusion-overview">
+              <div className="la-inclusion-box included">
+                <div className="la-section-heading">
+                  <div>
+                    <span>FASILITAS</span>
+                    <h2>Yang Anda Dapatkan</h2>
+                  </div>
+                </div>
+
+                <div className="la-overview-list">
+                  {product.includes.map((item) => (
+                    <div key={item}>
+                      <Check size={15} />
+                      <span>{item}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="la-inclusion-box excluded">
+                <div className="la-section-heading">
+                  <div>
+                    <span>PERLU DIPERHATIKAN</span>
+                    <h2>Tidak Termasuk</h2>
+                  </div>
+                </div>
+
+                <div className="la-overview-list">
+                  {product.excludes.map((item) => (
+                    <div key={item}>
+                      <CircleX size={15} />
+                      <span>{item}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </section>
+
+            <div className="la-tabs">
+              <div className="la-tab-nav">
+                <button
+                  type="button"
+                  className={activeTab === "detail" ? "active" : ""}
+                  onClick={() => setActiveTab("detail")}
+                >
+                  Detail
+                </button>
+
+                <button
+                  type="button"
+                  className={activeTab === "itinerary" ? "active" : ""}
+                  onClick={() => setActiveTab("itinerary")}
+                >
+                  Itinerary
+                </button>
+
+                <button
+                  type="button"
+                  className={activeTab === "included" ? "active" : ""}
+                  onClick={() => setActiveTab("included")}
+                >
+                  Termasuk & Tidak Termasuk
+                </button>
+
+                <button
+                  type="button"
+                  className={activeTab === "policy" ? "active" : ""}
+                  onClick={() => setActiveTab("policy")}
+                >
+                  Kebijakan
+                </button>
+              </div>
+
+              <div className="la-tab-panel">
+                {activeTab === "detail" && (
+                  <div className="la-description">
+                    <h2>Tentang Land Arrangement</h2>
+                    <p>{product.description}</p>
+
+                    <h3>Fasilitas & layanan</h3>
+
+                    <div className="la-facility-grid">
+                      {product.facilities.map((facility) => (
+                        <span key={facility}>
+                          <Check size={14} />
+                          {facility}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {activeTab === "itinerary" && (
+                  <div className="la-itinerary">
+                    {product.itinerary.map((item, index) => (
+                      <article key={`${item.day}-${item.title}`}>
+                        <div className="la-itinerary-number">
+                          {index + 1}
+                        </div>
+
+                        <div>
+                          <small>{item.day}</small>
+                          <h3>{item.title}</h3>
+                          <p>{item.description}</p>
+                        </div>
+                      </article>
+                    ))}
+                  </div>
+                )}
+
+                {activeTab === "included" && (
+                  <div className="la-include-columns">
+                    <section>
+                      <h2>Termasuk</h2>
+
+                      {product.includes.map((item) => (
+                        <span key={item}>
+                          <Check size={14} />
+                          {item}
+                        </span>
+                      ))}
+                    </section>
+
+                    <section>
+                      <h2>Tidak Termasuk</h2>
+
+                      {product.excludes.map((item) => (
+                        <span key={item}>
+                          <CircleX size={14} />
+                          {item}
+                        </span>
+                      ))}
+                    </section>
+                  </div>
+                )}
+
+                {activeTab === "policy" && (
+                  <div className="la-policy">
+                    <h2>Kebijakan Produk</h2>
+
+                    <p>
+                      Ketentuan pembatalan, perubahan jadwal, refund, batas
+                      waktu pembayaran, dan dokumen perjalanan mengikuti
+                      kebijakan produk yang ditetapkan Travel atau Vendor pada
+                      saat pemesanan.
+                    </p>
+
+                    <p>
+                      Rincian final harus ditampilkan sebelum pelanggan
+                      melakukan pembayaran.
+                    </p>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+
+          <aside className="la-booking-card">
+            <div className="la-booking-price">
+              <small>Mulai dari</small>
+              <div>
+                <strong>{formatRupiah(pricePerPax)}</strong>
+                <span>/ pax</span>
+              </div>
+            </div>
+
+            <div className="la-selected-room">
+              <BedDouble size={17} />
+
+              <div>
+                <small>Tipe kamar</small>
+                <strong>{roomLabel(roomType)}</strong>
+              </div>
+
+              <span>{capacity} pax/kamar</span>
+            </div>
+
+            <div className="la-booking-field la-period-field">
+              <span>Periode Perjalanan</span>
+
+              <div className="la-period-options">
+                {periods.map((period) => {
+                  const unavailable =
+                    period.status !== "AVAILABLE" ||
+                    period.remainingQuota <= 0;
+
+                  const selected =
+                    selectedPeriodId === period.id;
+
+                  return (
+                    <button
+                      key={period.id}
+                      type="button"
+                      className={`la-period-option ${
+                        selected ? "active" : ""
+                      }`}
+                      disabled={unavailable}
+                      onClick={() => {
+                        setSelectedPeriodId(period.id);
+                        setRoomType("quad");
+                        setRooms(1);
+                      }}
+                    >
+                      <div className="la-period-calendar">
+                        <CalendarDays size={17} />
+                      </div>
+
+                      <div className="la-period-copy">
+                        <strong>
+                          {formatPeriodDate(period.startDate)}
+                          <ChevronRight size={12} />
+                          {formatPeriodDate(period.endDate)}
+                        </strong>
+
+                        <span>
+                          Batas pesan{" "}
+                          {formatPeriodDate(period.bookingDeadline)}
+                        </span>
+                      </div>
+
+                      <div
+                        className={`la-period-status ${
+                          unavailable ? "sold-out" : ""
+                        }`}
+                      >
+                        {periodStatusLabel(period)}
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div className="la-booking-field">
+              <span>Jumlah Kamar</span>
+
+              <div className="la-traveler-control">
+                <BedDouble size={17} />
+
+                <button
+                  type="button"
+                  aria-label="Kurangi jumlah kamar"
+                  onClick={() =>
+                    setRooms((value) => Math.max(1, value - 1))
+                  }
+                  disabled={rooms <= 1}
+                >
+                  <Minus size={14} />
+                </button>
+
+                <strong>{rooms} kamar</strong>
+
+                <button
+                  type="button"
+                  aria-label="Tambah jumlah kamar"
+                  onClick={() =>
+                    setRooms((value) =>
+                      Math.min(
+                        Math.max(1, maxRoomsByQuota),
+                        value + 1,
+                      ),
+                    )
+                  }
+                  disabled={
+                    !selectedPeriod ||
+                    maxRoomsByQuota <= 0 ||
+                    rooms >= maxRoomsByQuota
+                  }
+                >
+                  <Plus size={14} />
+                </button>
+              </div>
+            </div>
+
+            <div className="la-booking-summary">
+              {selectedPeriod && (
+                <div>
+                  <CalendarDays size={15} />
+                  <span>Periode</span>
+                  <strong>
+                    {formatPeriodDate(selectedPeriod.startDate)}
+                    {" – "}
+                    {formatPeriodDate(selectedPeriod.endDate)}
+                  </strong>
+                </div>
+              )}
+
+              <div>
+                <Users size={15} />
+                <span>Total traveler</span>
+                <strong>{traveler} orang</strong>
+              </div>
+
+              <div>
+                <BedDouble size={15} />
+                <span>Konfigurasi</span>
+                <strong>
+                  {rooms} {roomLabel(roomType)}
+                </strong>
+              </div>
+            </div>
+
+            <div className="la-price-breakdown">
+              <div>
+                <span>
+                  {formatRupiah(pricePerPax)} × {traveler} pax
+                </span>
+                <strong>{formatRupiah(total)}</strong>
+              </div>
+            </div>
+
+            <div className="la-total">
+              <span>Total Harga</span>
+              <strong>{formatRupiah(total)}</strong>
+            </div>
+
+            <small className="la-total-note">
+              Harga mengikuti periode, tipe kamar, jumlah kamar, dan kuota yang ditetapkan Travel/Vendor.
+            </small>
+
+            <button
+              type="button"
+              className="la-booking-button"
+              onClick={continueBooking}
+              disabled={!periodCanBook}
+            >
+              Lanjut Pemesanan
+              <ChevronRight size={16} />
+            </button>
+
+            {!selectedPeriod && (
+              <small className="la-date-note">
+                Pilih periode perjalanan yang disediakan Travel/Vendor.
+              </small>
+            )}
+
+            {selectedPeriod && !periodCanBook && (
+              <small className="la-date-note la-date-note-error">
+                Kuota traveler atau kamar untuk pilihan ini tidak mencukupi.
+              </small>
+            )}
+
+            <div className="la-booking-assurance">
+              <ShieldCheck size={15} />
+              <span>
+                Detail harga dan komponen produk akan ditinjau kembali sebelum
+                pembayaran.
+              </span>
+            </div>
+          </aside>
+        </section>
+      </div>
+    </main>
+  );
+}

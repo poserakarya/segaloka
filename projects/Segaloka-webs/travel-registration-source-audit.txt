@@ -1,0 +1,4355 @@
+SEGALOKA - TRAVEL REGISTRATION SOURCE AUDIT
+Generated read-only
+
+============================================================
+FILE: .\src\app\partner\travel\daftar\TravelRegistrationClient.tsx
+============================================================
+"use client";
+
+import { Check, Mail } from "lucide-react";
+import { useSearchParams } from "next/navigation";
+
+import { useMarketplacePreferences } from "@/components/providers/MarketplacePreferencesProvider";
+
+export default function TravelRegistrationClient() {
+  const searchParams = useSearchParams();
+  const { language } = useMarketplacePreferences();
+
+  const plan = searchParams.get("plan");
+
+  const selectedPlan =
+    plan === "starter"
+      ? "Starter"
+      : plan === "growth"
+        ? "Growth"
+        : null;
+
+  const title =
+    language === "EN"
+      ? "Register Your Travel Business"
+      : language === "AR"
+        ? "سجّل شركة السفر الخاصة بك"
+        : "Daftarkan Travel Anda";
+
+  const description =
+    language === "EN"
+      ? "Start the Segaloka Travel onboarding process. Our team will guide the verification and activation stages."
+      : language === "AR"
+        ? "ابدأ عملية انضمام شركة السفر إلى Segaloka وسيساعدك فريقنا خلال مراحل التحقق والتفعيل."
+        : "Mulai proses onboarding Travel Segaloka. Tim kami akan membantu proses verifikasi hingga aktivasi.";
+
+  const formDescription =
+    language === "EN"
+      ? "The complete registration form will be connected to the Segaloka onboarding system in the implementation phase."
+      : language === "AR"
+        ? "سيتم ربط نموذج التسجيل الكامل بنظام الانضمام إلى Segaloka في مرحلة التنفيذ."
+        : "Form registrasi lengkap akan dihubungkan ke sistem onboarding Segaloka pada tahap implementasi berikutnya.";
+
+  const selectedPlanLabel =
+    language === "EN"
+      ? "Selected plan"
+      : language === "AR"
+        ? "الباقة المختارة"
+        : "Paket dipilih";
+
+  return (
+    <main className="partner-feature-detail">
+      <div className="partner-feature-detail-shell">
+        <section className="partner-feature-hero">
+          <div>
+            <span className="partner-feature-eyebrow">
+              SEGALOKA TRAVEL PARTNER
+            </span>
+
+            <h1>{title}</h1>
+
+            <p className="partner-feature-lead">
+              {description}
+            </p>
+          </div>
+        </section>
+
+        <section className="partner-feature-content">
+          {selectedPlan && (
+            <div className="partner-feature-benefit">
+              <span>
+                <Check size={16} />
+              </span>
+
+              <p>
+                {selectedPlanLabel}: {selectedPlan}
+              </p>
+            </div>
+          )}
+
+          <p style={{ marginTop: 18 }}>
+            {formDescription}
+          </p>
+
+          <a
+            className="partner-feature-cta"
+            href="mailto:partnership@segaloka.com"
+          >
+            <Mail
+              size={16}
+              style={{ marginRight: 7 }}
+            />
+
+            partnership@segaloka.com
+          </a>
+        </section>
+      </div>
+    </main>
+  );
+}
+
+============================================================
+FILE: .\src\app\partner\travel\partner-feature-detail.css
+============================================================
+.partner-feature-detail {
+  min-height: 72vh;
+  padding: 64px 20px 90px;
+  background:
+    radial-gradient(circle at 90% 0%, #eef7ff 0, transparent 28%),
+    #f8fbfe;
+  color: #082b55;
+}
+
+.partner-feature-detail-shell {
+  width: min(980px, 100%);
+  margin: 0 auto;
+}
+
+.partner-feature-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-bottom: 28px;
+  color: #087af5;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 650;
+}
+
+.partner-feature-hero {
+  display: grid;
+  grid-template-columns: 64px minmax(0, 1fr);
+  gap: 20px;
+  padding: 34px;
+  border: 1px solid #dce9f7;
+  border-radius: 22px;
+  background: #fff;
+  box-shadow: 0 14px 40px rgba(18, 66, 115, 0.06);
+}
+
+.partner-feature-hero-icon {
+  width: 58px;
+  height: 58px;
+  display: grid;
+  place-items: center;
+  border-radius: 17px;
+  color: #087af5;
+  background: #eaf5ff;
+}
+
+.partner-feature-eyebrow {
+  display: block;
+  margin-bottom: 7px;
+  color: #087af5;
+  font-size: 11px;
+  font-weight: 750;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+
+.partner-feature-hero h1 {
+  margin: 0;
+  font: inherit;
+  font-size: clamp(28px, 4vw, 42px);
+  font-weight: 750;
+  line-height: 1.1;
+  letter-spacing: -.035em;
+}
+
+.partner-feature-lead {
+  max-width: 720px;
+  margin: 12px 0 0;
+  color: #617895;
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+.partner-feature-content {
+  margin-top: 18px;
+  padding: 34px;
+  border: 1px solid #e1eaf4;
+  border-radius: 22px;
+  background: #fff;
+}
+
+.partner-feature-content > p {
+  margin: 0;
+  color: #536b86;
+  font-size: 14px;
+  line-height: 1.75;
+}
+
+.partner-feature-content h2 {
+  margin: 30px 0 16px;
+  font: inherit;
+  font-size: 19px;
+  font-weight: 750;
+  letter-spacing: -.02em;
+}
+
+.partner-feature-benefits {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.partner-feature-benefit {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  min-height: 64px;
+  padding: 15px;
+  border: 1px solid #e5edf6;
+  border-radius: 13px;
+  background: #f9fcff;
+}
+
+.partner-feature-benefit span {
+  flex: 0 0 auto;
+  width: 26px;
+  height: 26px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  color: #079b70;
+  background: #e5f8f1;
+}
+
+.partner-feature-benefit p {
+  margin: 2px 0 0;
+  color: #425d7b;
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.partner-feature-cta {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  margin-top: 28px;
+  padding: 0 24px;
+  border-radius: 10px;
+  background: #087af5;
+  color: #fff;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+html[dir="rtl"] .partner-feature-hero {
+  direction: rtl;
+}
+
+@media (max-width: 680px) {
+  .partner-feature-detail {
+    padding: 34px 14px 60px;
+  }
+
+  .partner-feature-hero {
+    grid-template-columns: 1fr;
+    padding: 24px 20px;
+  }
+
+  .partner-feature-content {
+    padding: 24px 20px;
+  }
+
+  .partner-feature-benefits {
+    grid-template-columns: 1fr;
+  }
+}
+
+============================================================
+FILE: .\src\app\partner\travel\daftar\partner-feature-detail.css
+============================================================
+NOT FOUND
+
+============================================================
+FILE: .\src\app\partner\travel\partner-travel.css
+============================================================
+.partner-travel-page {
+  background: #fff;
+  color: #0b2343;
+  overflow-x: clip;
+}
+
+.partner-shell {
+  width: min(1180px, calc(100% - 40px));
+  margin-inline: auto;
+}
+
+.partner-local-nav {
+  position: sticky;
+  top: var(--header-height, 0px);
+  z-index: 25;
+  border-bottom: 1px solid #edf1f6;
+  background: rgba(255,255,255,.96);
+  backdrop-filter: blur(14px);
+}
+
+.partner-local-nav-inner {
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.partner-local-links {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 34px;
+}
+
+.partner-local-links button {
+  padding: 7px 0;
+  border: 0;
+  background: transparent;
+  color: #1a3555;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.partner-local-links button:hover {
+  color: #0877f9;
+}
+
+.partner-hero {
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 69% 36%, rgba(46,153,255,.13), transparent 28%),
+    linear-gradient(115deg,#fff 0%,#fff 44%,#f0f8ff 70%,#e7f5ff 100%);
+}
+
+.partner-hero-grid {
+  min-height: 520px;
+  display: grid;
+  grid-template-columns: minmax(0, .88fr) minmax(480px, 1.12fr);
+  align-items: center;
+  gap: 42px;
+}
+
+.partner-hero-copy {
+  position: relative;
+  z-index: 4;
+  padding-block: 42px;
+}
+
+.partner-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-bottom: 14px;
+  color: #0877f9;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.partner-hero-copy h1 {
+  max-width: 580px;
+  margin: 0;
+  color: #0b203d;
+  font-size: clamp(39px, 4vw, 55px);
+  font-weight: 800;
+  line-height: 1.06;
+  letter-spacing: -.045em;
+}
+
+.partner-hero-copy h1 strong {
+  color: #0877f9;
+}
+
+.partner-hero-copy > p {
+  max-width: 560px;
+  margin: 18px 0 0;
+  color: #536b86;
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+.partner-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 25px;
+}
+
+.partner-primary-button,
+.partner-secondary-button {
+  min-height: 44px;
+  padding: 0 21px;
+  border-radius: 7px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.partner-primary-button {
+  border: 1px solid #0877f9;
+  background: #0877f9;
+  color: #fff;
+  box-shadow: 0 9px 20px rgba(8,119,249,.18);
+}
+
+.partner-secondary-button {
+  border: 1px solid #82b8f8;
+  background: #fff;
+  color: #0877f9;
+}
+
+.partner-hero-benefits {
+  margin-top: 28px;
+  display: grid;
+  grid-template-columns: repeat(3,minmax(0,1fr));
+  gap: 14px;
+}
+
+.partner-hero-benefits > div {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.partner-benefit-icon {
+  flex: 0 0 32px;
+  width: 32px;
+  height: 32px;
+  border: 1px solid #a9d0fb;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  color: #0877f9;
+  background: #f8fcff;
+}
+
+.partner-hero-benefits > div > span:last-child {
+  display: flex;
+  flex-direction: column;
+  color: #6b7e94;
+  font-size: 9px;
+  line-height: 1.35;
+}
+
+.partner-hero-benefits strong {
+  color: #17385f;
+  font-size: 10px;
+}
+
+.partner-hero-visual {
+  position: relative;
+  align-self: stretch;
+  min-height: 520px;
+  margin-inline-end: calc((100vw - min(1180px, calc(100vw - 40px))) / -2);
+  overflow: hidden;
+}
+
+.partner-map-dots {
+  position: absolute;
+  z-index: 0;
+  inset: 32px 0 70px 4%;
+  opacity: .52;
+  background-image: radial-gradient(circle,#58aef8 1.6px,transparent 1.8px);
+  background-size: 11px 11px;
+  mask-image:
+    radial-gradient(ellipse at 52% 45%,#000 0 43%,transparent 66%);
+}
+
+.partner-hero-photo {
+  position: absolute;
+  z-index: 1;
+  right: -5%;
+  bottom: -8%;
+  width: 93%;
+  height: 75%;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 52% 0 0 0;
+  filter: saturate(.96) contrast(.98);
+}
+
+.partner-hero-fade {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  background:
+    linear-gradient(90deg,#f5fbff 0%,rgba(245,251,255,.72) 9%,transparent 31%),
+    linear-gradient(0deg,rgba(240,249,255,.12),transparent 58%);
+  pointer-events: none;
+}
+
+.partner-plane {
+  position: absolute;
+  z-index: 4;
+  color: #577b9f;
+  filter: drop-shadow(0 8px 8px rgba(34,75,115,.16));
+  transform: rotate(-17deg);
+}
+
+.partner-plane-one {
+  top: 88px;
+  left: 38%;
+}
+
+.partner-plane-two {
+  top: 210px;
+  left: 23%;
+}
+
+.partner-map-pin {
+  position: absolute;
+  z-index: 4;
+  width: 10px;
+  height: 10px;
+  border: 3px solid #fff;
+  border-radius: 50%;
+  background: #0877f9;
+  box-shadow: 0 3px 9px rgba(8,119,249,.35);
+}
+
+.partner-pin-one {
+  top: 170px;
+  left: 25%;
+}
+
+.partner-pin-two {
+  top: 274px;
+  left: 16%;
+}
+
+.partner-pin-three {
+  top: 110px;
+  left: 58%;
+}
+
+.partner-country {
+  position: absolute;
+  z-index: 5;
+  width: 41px;
+  height: 41px;
+  border: 4px solid rgba(255,255,255,.92);
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 900;
+  box-shadow: 0 8px 18px rgba(22,70,115,.18);
+}
+
+.partner-country-id {
+  top: 62px;
+  right: 28%;
+  background: linear-gradient(#ef3e46 0 50%,#fff 50%);
+  color: #17385f;
+}
+
+.partner-country-sa {
+  top: 82px;
+  right: 16%;
+  background: #15944b;
+}
+
+.partner-country-my {
+  top: 151px;
+  right: 9%;
+  background: #1758a6;
+}
+
+.partner-country-tr {
+  top: 215px;
+  right: 16%;
+  background: #e8373d;
+}
+
+.partner-network-card,
+.partner-floating-badge {
+  position: absolute;
+  z-index: 6;
+  border: 1px solid rgba(255,255,255,.9);
+  background: rgba(255,255,255,.93);
+  box-shadow: 0 13px 30px rgba(20,70,120,.14);
+  backdrop-filter: blur(9px);
+}
+
+.partner-network-card {
+  left: 13%;
+  bottom: 35px;
+  padding: 10px 13px;
+  border-radius: 13px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.partner-network-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  background: #e9f4ff;
+  color: #0877f9;
+}
+
+.partner-network-card div {
+  display: flex;
+  flex-direction: column;
+}
+
+.partner-network-card small {
+  color: #7a8ca0;
+  font-size: 9px;
+}
+
+.partner-network-card strong {
+  color: #16375e;
+  font-size: 10px;
+}
+
+.partner-floating-badge {
+  padding: 7px 10px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #0b65c5;
+  font-size: 9px;
+  font-weight: 800;
+}
+
+.partner-floating-badge-a {
+  top: 273px;
+  right: 8%;
+}
+
+.partner-floating-badge-b {
+  top: 316px;
+  right: 19%;
+}
+
+.partner-section {
+  padding: 48px 0;
+  scroll-margin-top: 110px;
+}
+
+.partner-section-soft {
+  background: #fbfdff;
+}
+
+.partner-section-heading {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.partner-section-marker {
+  flex: 0 0 26px;
+  width: 26px;
+  height: 5px;
+  margin-top: 10px;
+  border-radius: 999px;
+  background: #0877f9;
+}
+
+.partner-section-heading h2 {
+  margin: 0;
+  color: #0b2343;
+  font-size: 22px;
+  line-height: 1.2;
+  letter-spacing: -.025em;
+}
+
+.partner-section-heading p {
+  margin: 5px 0 0;
+  color: #71849a;
+  font-size: 11px;
+  line-height: 1.55;
+}
+
+.partner-card-grid {
+  display: grid;
+  gap: 14px;
+}
+
+.partner-card-grid-four {
+  grid-template-columns: repeat(4,minmax(0,1fr));
+}
+
+.partner-card-grid-three {
+  grid-template-columns: repeat(3,minmax(0,1fr));
+}
+
+.partner-image-card,
+.partner-feature-card,
+.partner-audience-card {
+  overflow: hidden;
+  border: 1px solid #e3ebf4;
+  border-radius: 9px;
+  background: #fff;
+  box-shadow: 0 5px 16px rgba(29,66,107,.06);
+}
+
+.partner-image-card-media {
+  height: 108px;
+  background: #edf5fc;
+}
+
+.partner-image-card-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.partner-image-card-body,
+.partner-feature-card,
+.partner-audience-body {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.partner-image-card-body {
+  min-height: 80px;
+  padding: 13px;
+}
+
+.partner-card-icon {
+  flex: 0 0 31px;
+  width: 31px;
+  height: 31px;
+  border-radius: 7px;
+  display: grid;
+  place-items: center;
+  color: #0877f9;
+  background: #eaf5ff;
+}
+
+.partner-feature-icon {
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  color: #0877f9;
+}
+
+.partner-image-card h3,
+.partner-feature-card h3,
+.partner-audience-card h3 {
+  margin: 0;
+  color: #102d50;
+  font-size: 12px;
+}
+
+.partner-image-card p,
+.partner-feature-card p,
+.partner-audience-card p {
+  margin: 4px 0 0;
+  color: #71849a;
+  font-size: 9px;
+  line-height: 1.5;
+}
+
+.partner-card-arrow {
+  flex: 0 0 auto;
+  margin-inline-start: auto;
+  color: #0877f9;
+}
+
+.partner-feature-card {
+  min-height: 94px;
+  padding: 16px;
+}
+
+.partner-audience-visual {
+  height: 112px;
+  display: grid;
+  place-items: center;
+  color: #0877f9;
+  background:
+    radial-gradient(circle at center,#fff,transparent 58%),
+    linear-gradient(135deg,#e8f5ff,#f7fbff);
+}
+
+.partner-audience-body {
+  min-height: 72px;
+  padding: 14px;
+}
+
+.partner-steps {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(4,minmax(0,1fr));
+  gap: 20px;
+  margin-top: 29px;
+}
+
+.partner-step-line {
+  position: absolute;
+  top: 17px;
+  inset-inline: 12.5%;
+  border-top: 1px dashed #78b7fb;
+}
+
+.partner-step {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+}
+
+.partner-step-number {
+  width: 35px;
+  height: 35px;
+  margin-inline: auto;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: #0877f9;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 800;
+  box-shadow: 0 7px 15px rgba(8,119,249,.19);
+}
+
+.partner-step-icon {
+  width: 38px;
+  height: 38px;
+  margin: 8px auto 7px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: #e9f4ff;
+  color: #0877f9;
+}
+
+.partner-step h3 {
+  margin: 0;
+  color: #16375e;
+  font-size: 11px;
+}
+
+.partner-step p {
+  max-width: 185px;
+  margin: 5px auto 0;
+  color: #71849a;
+  font-size: 9px;
+  line-height: 1.5;
+}
+
+.partner-registration-cta {
+  margin-top: 32px;
+  padding: 20px 23px;
+  border: 1px solid #dceafa;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 22px;
+  background: #fff;
+}
+
+.partner-registration-cta span {
+  color: #0877f9;
+  font-size: 9px;
+  font-weight: 800;
+}
+
+.partner-registration-cta h3 {
+  margin: 3px 0 0;
+  color: #102d50;
+  font-size: 16px;
+}
+
+.partner-registration-cta p {
+  max-width: 650px;
+  margin: 5px 0 0;
+  color: #71849a;
+  font-size: 10px;
+}
+
+.partner-faq-list {
+  overflow: hidden;
+  border: 1px solid #e1eaf4;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.partner-faq + .partner-faq {
+  border-top: 1px solid #e7eef6;
+}
+
+.partner-faq button {
+  width: 100%;
+  min-height: 38px;
+  padding: 0 14px;
+  border: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  background: #fff;
+  color: #17385f;
+  text-align: start;
+  font: inherit;
+  font-size: 10px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.partner-faq button svg {
+  flex: 0 0 auto;
+  color: #0877f9;
+  transition: transform 180ms ease;
+}
+
+.partner-faq.is-open button svg {
+  transform: rotate(180deg);
+}
+
+.partner-faq-answer {
+  padding: 0 14px 13px;
+}
+
+.partner-faq-answer p {
+  max-width: 900px;
+  margin: 0;
+  color: #71849a;
+  font-size: 10px;
+  line-height: 1.65;
+}
+
+.partner-contact-section {
+  padding: 47px 0 58px;
+  background:
+    radial-gradient(circle at 85% 60%,rgba(29,148,255,.08),transparent 25%),
+    linear-gradient(135deg,#fff,#f7fbff);
+}
+
+.partner-contact-grid {
+  min-height: 185px;
+  display: grid;
+  grid-template-columns: 1fr .72fr;
+  align-items: center;
+  gap: 38px;
+}
+
+.partner-contact-link {
+  width: fit-content;
+  min-height: 41px;
+  padding: 0 14px;
+  border: 1px solid #8ebdf5;
+  border-radius: 7px;
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  color: #0877f9;
+  text-decoration: none;
+  font-size: 11px;
+  font-weight: 800;
+  background: #fff;
+}
+
+.partner-contact-visual {
+  min-height: 160px;
+  display: grid;
+  place-items: center;
+  background-image: radial-gradient(circle,#acd7fa 1.2px,transparent 1.3px);
+  background-size: 10px 10px;
+  mask-image: linear-gradient(90deg,transparent,#000 25%,#000);
+}
+
+.partner-contact-circle {
+  width: 235px;
+  height: 135px;
+  border-radius: 70% 35% 55% 45%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 19px;
+  color: #0877f9;
+  background:
+    radial-gradient(circle at 70% 28%,#fff,transparent 23%),
+    linear-gradient(135deg,#dff2ff,#f8fcff);
+  box-shadow: 0 15px 35px rgba(42,119,188,.09);
+}
+
+html[dir="rtl"] .partner-hero-photo {
+  right: auto;
+  left: -5%;
+  border-radius: 0 52% 0 0;
+}
+
+html[dir="rtl"] .partner-plane {
+  transform: scaleX(-1) rotate(-17deg);
+}
+
+html[dir="rtl"] .partner-primary-button svg,
+html[dir="rtl"] .partner-card-arrow {
+  transform: scaleX(-1);
+}
+
+@media (max-width: 980px) {
+  .partner-local-links {
+    gap: 20px;
+  }
+
+  .partner-hero-grid {
+    min-height: auto;
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .partner-hero-copy {
+    padding: 42px 0 20px;
+  }
+
+  .partner-hero-visual {
+    min-height: 390px;
+    margin-inline-end: 0;
+  }
+
+  .partner-card-grid-four {
+    grid-template-columns: repeat(2,minmax(0,1fr));
+  }
+
+  .partner-card-grid-three {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 720px) {
+  .partner-shell {
+    width: min(100% - 24px,1180px);
+  }
+
+  .partner-local-nav {
+    overflow-x: auto;
+  }
+
+  .partner-local-nav-inner {
+    justify-content: flex-start;
+  }
+
+  .partner-local-links {
+    width: max-content;
+    justify-content: flex-start;
+    gap: 22px;
+  }
+
+  .partner-hero-copy {
+    padding-top: 30px;
+  }
+
+  .partner-hero-copy h1 {
+    font-size: 34px;
+  }
+
+  .partner-hero-copy > p {
+    font-size: 13px;
+  }
+
+  .partner-hero-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .partner-primary-button,
+  .partner-secondary-button {
+    width: 100%;
+  }
+
+  .partner-hero-benefits {
+    grid-template-columns: 1fr;
+  }
+
+  .partner-hero-visual {
+    min-height: 310px;
+  }
+
+  .partner-hero-photo {
+    width: 108%;
+    height: 78%;
+  }
+
+  .partner-country {
+    width: 34px;
+    height: 34px;
+    font-size: 8px;
+  }
+
+  .partner-section {
+    padding: 38px 0;
+  }
+
+  .partner-section-heading h2 {
+    font-size: 20px;
+  }
+
+  .partner-card-grid-four {
+    grid-template-columns: 1fr;
+  }
+
+  .partner-steps {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .partner-step-line {
+    display: none;
+  }
+
+  .partner-registration-cta {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .partner-contact-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .partner-contact-visual {
+    min-height: 130px;
+  }
+}
+/* ==========================================================
+   PARTNER TRAVEL V3 — REFERENCE TARGET
+   ========================================================== */
+
+.partner-travel-page .partner-shell {
+  width: min(1120px, calc(100% - 36px));
+}
+
+.partner-travel-page .partner-section {
+  padding-top: 34px;
+  padding-bottom: 34px;
+}
+
+.partner-travel-page .partner-section-heading {
+  margin-bottom: 16px;
+}
+
+.partner-travel-page .partner-section-heading h2 {
+  font-size: 20px;
+}
+
+.partner-travel-page .partner-section-heading p {
+  font-size: 10px;
+}
+
+.partner-travel-page .partner-image-card-media {
+  height: 104px;
+}
+
+.partner-travel-page .partner-image-card-body {
+  min-height: 74px;
+}
+
+.partner-travel-page .partner-feature-card {
+  min-height: 84px;
+}
+
+.partner-travel-page .partner-audience-visual {
+  height: 104px;
+}
+
+.partner-travel-page .partner-audience-body {
+  min-height: 68px;
+}
+
+.partner-pricing-section {
+  background: #fff;
+}
+
+.partner-pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  align-items: stretch;
+}
+
+.partner-pricing-card {
+  position: relative;
+  min-height: 350px;
+  padding: 24px 24px 20px;
+  border: 1px solid #dbe6f2;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  box-shadow: 0 6px 18px rgba(22, 62, 104, .055);
+}
+
+.partner-pricing-card.is-popular {
+  border: 2px solid #0877f9;
+  box-shadow: 0 10px 26px rgba(8, 119, 249, .11);
+}
+
+.partner-pricing-popular {
+  position: absolute;
+  top: -13px;
+  left: 50%;
+  transform: translateX(-50%);
+  min-width: 108px;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: #0877f9;
+  color: #fff;
+  text-align: center;
+  font-size: 9px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+html[dir="rtl"] .partner-pricing-popular {
+  left: auto;
+  right: 50%;
+  transform: translateX(50%);
+}
+
+.partner-pricing-heading {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  color: #0877f9;
+}
+
+.partner-pricing-heading h3 {
+  margin: 0;
+  color: #102d50;
+  font-size: 18px;
+  line-height: 1.2;
+}
+
+.partner-pricing-heading p {
+  margin: 4px 0 0;
+  color: #71849a;
+  font-size: 10px;
+  line-height: 1.45;
+}
+
+.partner-pricing-price {
+  margin-top: 20px;
+  display: flex;
+  align-items: baseline;
+  gap: 7px;
+}
+
+.partner-pricing-price strong {
+  color: #075ed2;
+  font-size: 27px;
+  line-height: 1;
+  letter-spacing: -.03em;
+}
+
+.partner-pricing-price span {
+  color: #71849a;
+  font-size: 10px;
+}
+
+.partner-pricing-card ul {
+  margin: 22px 0;
+  padding: 0;
+  display: grid;
+  gap: 9px;
+  list-style: none;
+}
+
+.partner-pricing-card li {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  color: #344f6e;
+  font-size: 10px;
+  line-height: 1.4;
+}
+
+.partner-pricing-card li svg {
+  flex: 0 0 auto;
+  margin-top: 1px;
+  color: #0877f9;
+  stroke-width: 3;
+}
+
+.partner-pricing-button {
+  width: 100%;
+  min-height: 39px;
+  margin-top: auto;
+  border: 1px solid #0877f9;
+  border-radius: 6px;
+  background: #fff;
+  color: #0877f9;
+  font: inherit;
+  font-size: 10px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.partner-pricing-button.primary {
+  background: #0877f9;
+  color: #fff;
+  box-shadow: 0 7px 16px rgba(8, 119, 249, .16);
+}
+
+.partner-subscription-benefit {
+  min-height: 44px;
+  margin-top: 16px;
+  padding: 9px 16px;
+  border: 1px solid #b9ddfb;
+  border-radius: 7px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #eaf7ff;
+  color: #175d9e;
+}
+
+.partner-subscription-benefit svg {
+  flex: 0 0 auto;
+  color: #0877f9;
+}
+
+.partner-subscription-benefit p {
+  margin: 0;
+  font-size: 10px;
+  line-height: 1.45;
+}
+
+.partner-subscription-benefit strong {
+  color: #086ad9;
+}
+
+.partner-travel-page .partner-faq button {
+  min-height: 34px;
+}
+
+.partner-travel-page .partner-contact-section {
+  padding-top: 38px;
+  padding-bottom: 46px;
+}
+
+@media (max-width: 820px) {
+  .partner-pricing-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .partner-pricing-card {
+    min-height: auto;
+  }
+
+  .partner-pricing-card.is-popular {
+    margin-top: 10px;
+  }
+}
+
+@media (max-width: 720px) {
+  .partner-travel-page .partner-shell {
+    width: min(100% - 24px, 1120px);
+  }
+
+  .partner-travel-page .partner-section {
+    padding-top: 30px;
+    padding-bottom: 30px;
+  }
+
+  .partner-pricing-price strong {
+    font-size: 24px;
+  }
+}
+/* ==========================================================
+   PARTNER TRAVEL V4 — PREMIUM VISUAL REFINEMENT
+   ========================================================== */
+
+.partner-travel-page {
+  background:
+    linear-gradient(
+      180deg,
+      #ffffff 0%,
+      #ffffff 36%,
+      #fbfdff 100%
+    );
+}
+
+/* SECTION RHYTHM */
+
+.partner-travel-page .partner-section {
+  padding-top: 46px;
+  padding-bottom: 46px;
+}
+
+.partner-travel-page .partner-section-heading {
+  margin-bottom: 22px;
+}
+
+.partner-travel-page .partner-section-heading h2 {
+  font-size: 22px;
+  line-height: 1.2;
+  letter-spacing: -.025em;
+}
+
+.partner-travel-page .partner-section-heading p {
+  margin-top: 6px;
+  max-width: 680px;
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+/* CARDS */
+
+.partner-travel-page .partner-image-card,
+.partner-travel-page .partner-feature-card,
+.partner-travel-page .partner-audience-card {
+  overflow: hidden;
+  border: 1px solid rgba(214, 226, 239, .88);
+  border-radius: 13px;
+  background: #fff;
+  box-shadow:
+    0 5px 18px rgba(31, 67, 105, .055),
+    0 1px 2px rgba(31, 67, 105, .035);
+  transition:
+    transform .22s ease,
+    box-shadow .22s ease,
+    border-color .22s ease;
+}
+
+.partner-travel-page .partner-image-card:hover,
+.partner-travel-page .partner-feature-card:hover,
+.partner-travel-page .partner-audience-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(67, 150, 241, .34);
+  box-shadow:
+    0 14px 30px rgba(31, 67, 105, .10),
+    0 3px 8px rgba(31, 67, 105, .04);
+}
+
+.partner-travel-page .partner-image-card-media {
+  height: 128px;
+}
+
+.partner-travel-page .partner-image-card-media img {
+  transition: transform .35s ease;
+}
+
+.partner-travel-page .partner-image-card:hover img {
+  transform: scale(1.035);
+}
+
+.partner-travel-page .partner-image-card-body {
+  min-height: 88px;
+  padding: 15px 16px;
+}
+
+.partner-travel-page .partner-feature-card {
+  min-height: 105px;
+  padding: 18px;
+}
+
+.partner-travel-page .partner-audience-visual {
+  height: 128px;
+}
+
+.partner-travel-page .partner-audience-body {
+  min-height: 78px;
+  padding: 14px 16px;
+}
+
+/* STEPS */
+
+.partner-travel-page .partner-steps {
+  margin-top: 28px;
+  margin-bottom: 26px;
+}
+
+.partner-travel-page .partner-registration-cta {
+  border: 1px solid #dce8f5;
+  border-radius: 12px;
+  padding: 17px 20px;
+  background:
+    linear-gradient(
+      100deg,
+      #ffffff 0%,
+      #f7fbff 58%,
+      #eef8ff 100%
+    );
+  box-shadow: 0 7px 22px rgba(23, 76, 127, .05);
+}
+
+/* ==========================================================
+   PRICING
+   ========================================================== */
+
+.partner-pricing-section {
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(
+      circle at 50% 30%,
+      rgba(24, 135, 255, .055),
+      transparent 34%
+    ),
+    linear-gradient(
+      180deg,
+      #ffffff 0%,
+      #f8fbff 100%
+    );
+}
+
+.partner-pricing-section::before {
+  content: "";
+  position: absolute;
+  width: 440px;
+  height: 440px;
+  top: -270px;
+  right: -180px;
+  border-radius: 50%;
+  background: rgba(50, 154, 255, .045);
+  pointer-events: none;
+}
+
+.partner-pricing-grid {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 22px;
+  align-items: stretch;
+  padding-top: 12px;
+}
+
+.partner-pricing-card {
+  position: relative;
+  min-height: 430px;
+  padding: 27px 25px 22px;
+  overflow: visible;
+  border: 1px solid #dce7f2;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  background:
+    linear-gradient(
+      180deg,
+      #ffffff 0%,
+      #ffffff 100%
+    );
+  box-shadow:
+    0 10px 30px rgba(27, 68, 108, .065),
+    0 2px 6px rgba(27, 68, 108, .035);
+  transition:
+    transform .24s ease,
+    box-shadow .24s ease;
+}
+
+.partner-pricing-card:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 18px 40px rgba(27, 68, 108, .105),
+    0 4px 10px rgba(27, 68, 108, .04);
+}
+
+.partner-pricing-card.is-popular {
+  z-index: 2;
+  transform: translateY(-10px);
+  border: 2px solid #0a7cff;
+  background:
+    linear-gradient(
+      180deg,
+      #f2f8ff 0%,
+      #ffffff 25%,
+      #ffffff 100%
+    );
+  box-shadow:
+    0 22px 50px rgba(0, 113, 238, .16),
+    0 5px 12px rgba(0, 113, 238, .07);
+}
+
+.partner-pricing-card.is-popular:hover {
+  transform: translateY(-15px);
+}
+
+.partner-pricing-popular {
+  top: -15px;
+  min-width: 118px;
+  padding: 7px 16px;
+  border-radius: 999px;
+  background:
+    linear-gradient(
+      135deg,
+      #1288ff,
+      #0069e8
+    );
+  box-shadow: 0 7px 17px rgba(0, 113, 238, .23);
+  font-size: 10px;
+  letter-spacing: .01em;
+}
+
+/* PLAN HEADER */
+
+.partner-pricing-heading {
+  gap: 13px;
+  min-height: 54px;
+}
+
+.partner-pricing-heading > svg {
+  width: 37px;
+  height: 37px;
+  padding: 8px;
+  border-radius: 10px;
+  background: #edf7ff;
+  color: #0879f9;
+  stroke-width: 2.2;
+}
+
+.partner-pricing-card.is-popular
+.partner-pricing-heading > svg {
+  background:
+    linear-gradient(
+      135deg,
+      #0c86ff,
+      #006be8
+    );
+  color: #fff;
+  box-shadow: 0 7px 16px rgba(8, 119, 249, .18);
+}
+
+.partner-pricing-heading h3 {
+  font-size: 19px;
+  letter-spacing: -.02em;
+}
+
+.partner-pricing-heading p {
+  margin-top: 5px;
+  font-size: 10.5px;
+  line-height: 1.45;
+}
+
+/* PRICE */
+
+.partner-pricing-price {
+  margin-top: 21px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid #edf2f7;
+}
+
+.partner-pricing-price strong {
+  font-size: 30px;
+  letter-spacing: -.045em;
+}
+
+.partner-pricing-card.is-popular
+.partner-pricing-price strong {
+  color: #006ce8;
+}
+
+/* GROWTH BENEFITS */
+
+.partner-growth-highlights {
+  margin-top: 15px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.partner-growth-highlights span {
+  min-height: 25px;
+  padding: 5px 8px;
+  border: 1px solid #cbe5ff;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: #eef8ff;
+  color: #0870df;
+  font-size: 9px;
+  font-weight: 750;
+  white-space: nowrap;
+}
+
+.partner-growth-highlights svg {
+  stroke-width: 3;
+}
+
+/* FEATURE LIST */
+
+.partner-pricing-card ul {
+  margin: 19px 0 23px;
+  gap: 10px;
+}
+
+.partner-pricing-card li {
+  gap: 9px;
+  font-size: 10.5px;
+  line-height: 1.45;
+}
+
+.partner-pricing-card li svg {
+  width: 17px;
+  height: 17px;
+  padding: 3px;
+  border-radius: 50%;
+  background: #eaf6ff;
+  color: #0576ef;
+  stroke-width: 3.2;
+}
+
+/* CTA */
+
+.partner-pricing-button {
+  min-height: 44px;
+  border-radius: 9px;
+  font-size: 11px;
+  transition:
+    transform .18s ease,
+    background .18s ease,
+    box-shadow .18s ease;
+}
+
+.partner-pricing-button:hover {
+  transform: translateY(-1px);
+  background: #f2f8ff;
+}
+
+.partner-pricing-button.primary {
+  border: 0;
+  background:
+    linear-gradient(
+      135deg,
+      #1088ff,
+      #0067e7
+    );
+  box-shadow: 0 9px 20px rgba(0, 110, 235, .22);
+}
+
+.partner-pricing-button.primary:hover {
+  background:
+    linear-gradient(
+      135deg,
+      #087ff5,
+      #005fdb
+    );
+  box-shadow: 0 12px 25px rgba(0, 110, 235, .27);
+}
+
+/* BENEFIT STRIP */
+
+.partner-subscription-benefit {
+  min-height: 50px;
+  margin-top: 23px;
+  padding: 12px 17px;
+  border-radius: 10px;
+  background:
+    linear-gradient(
+      90deg,
+      #eaf7ff,
+      #f6fbff
+    );
+}
+
+.partner-subscription-benefit p {
+  font-size: 10.5px;
+}
+
+/* FAQ */
+
+.partner-travel-page .partner-faq-list {
+  overflow: hidden;
+  border: 1px solid #e0e9f2;
+  border-radius: 11px;
+  background: #fff;
+  box-shadow: 0 6px 20px rgba(27, 68, 108, .04);
+}
+
+.partner-travel-page .partner-faq {
+  background: #fff;
+}
+
+.partner-travel-page .partner-faq button {
+  min-height: 39px;
+  padding-left: 14px;
+  padding-right: 14px;
+}
+
+/* CONTACT */
+
+.partner-travel-page .partner-contact-section {
+  padding-top: 52px;
+  padding-bottom: 58px;
+  background:
+    linear-gradient(
+      100deg,
+      #ffffff 0%,
+      #ffffff 57%,
+      #f0f9ff 100%
+    );
+}
+
+/* RTL */
+
+html[dir="rtl"] .partner-pricing-heading,
+html[dir="rtl"] .partner-pricing-card li,
+html[dir="rtl"] .partner-growth-highlights,
+html[dir="rtl"] .partner-subscription-benefit {
+  text-align: right;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 820px) {
+  .partner-pricing-grid {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .partner-pricing-card {
+    min-height: auto;
+  }
+
+  .partner-pricing-card.is-popular {
+    margin-top: 14px;
+    margin-bottom: 5px;
+    transform: none;
+  }
+
+  .partner-pricing-card.is-popular:hover {
+    transform: translateY(-4px);
+  }
+}
+
+@media (max-width: 720px) {
+  .partner-travel-page .partner-section {
+    padding-top: 36px;
+    padding-bottom: 36px;
+  }
+
+  .partner-travel-page .partner-section-heading h2 {
+    font-size: 20px;
+  }
+
+  .partner-pricing-card {
+    padding: 24px 20px 20px;
+    border-radius: 14px;
+  }
+
+  .partner-pricing-price strong {
+    font-size: 28px;
+  }
+
+  .partner-growth-highlights {
+    gap: 5px;
+  }
+}
+/* ==========================================================
+   PARTNER TRAVEL V5
+   Hero CTA removed + secondary navigation moved to bottom
+   ========================================================== */
+
+/*
+ * Hero tidak lagi membutuhkan ruang vertikal untuk dua CTA.
+ * Benefit langsung mengikuti deskripsi agar komposisi lebih bersih.
+ */
+.partner-travel-page .partner-hero-benefits {
+  margin-top: 24px;
+}
+
+/*
+ * Navigasi sekunder Partner Travel dipindahkan ke akhir halaman.
+ */
+.partner-bottom-nav {
+  position: relative;
+  z-index: 2;
+  border-top: 1px solid #e6edf5;
+  border-bottom: 1px solid #e6edf5;
+  background: #ffffff;
+}
+
+.partner-bottom-nav-inner {
+  min-height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 42px;
+}
+
+.partner-bottom-nav-inner a {
+  position: relative;
+  padding: 22px 0;
+  color: #173556;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1;
+  text-decoration: none;
+  white-space: nowrap;
+  transition:
+    color .18s ease,
+    transform .18s ease;
+}
+
+.partner-bottom-nav-inner a::after {
+  content: "";
+  position: absolute;
+  right: 50%;
+  bottom: 15px;
+  left: 50%;
+  height: 2px;
+  border-radius: 999px;
+  background: #087cff;
+  transition:
+    right .18s ease,
+    left .18s ease;
+}
+
+.partner-bottom-nav-inner a:hover {
+  color: #0875ef;
+  transform: translateY(-1px);
+}
+
+.partner-bottom-nav-inner a:hover::after {
+  right: 0;
+  left: 0;
+}
+
+/*
+ * CTA pendaftaran tetap menjadi CTA utama.
+ */
+.partner-travel-page .partner-registration-cta {
+  min-height: 78px;
+}
+
+.partner-travel-page .partner-registration-cta button,
+.partner-travel-page .partner-registration-cta a {
+  min-width: 168px;
+}
+
+/* RTL */
+
+html[dir="rtl"] .partner-bottom-nav-inner {
+  direction: rtl;
+}
+
+/* Tablet */
+
+@media (max-width: 900px) {
+  .partner-bottom-nav-inner {
+    gap: 26px;
+  }
+}
+
+/* Mobile */
+
+@media (max-width: 720px) {
+  .partner-travel-page .partner-hero-benefits {
+    margin-top: 20px;
+  }
+
+  .partner-bottom-nav {
+    overflow: hidden;
+  }
+
+  .partner-bottom-nav .partner-shell {
+    width: 100%;
+  }
+
+  .partner-bottom-nav-inner {
+    min-height: 58px;
+    padding: 0 14px;
+    justify-content: flex-start;
+    gap: 24px;
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    scrollbar-width: none;
+  }
+
+  .partner-bottom-nav-inner::-webkit-scrollbar {
+    display: none;
+  }
+
+  .partner-bottom-nav-inner a {
+    flex: 0 0 auto;
+    padding: 21px 0;
+    font-size: 11px;
+  }
+
+  .partner-bottom-nav-inner a::after {
+    bottom: 14px;
+  }
+
+  html[dir="rtl"] .partner-bottom-nav-inner {
+    justify-content: flex-start;
+  }
+}
+/* SEGALOKA PARTNER TRAVEL V7 — VISUAL SYSTEM */
+
+/* ==========================================================
+   1. TYPOGRAPHY — SATU SISTEM
+   ========================================================== */
+
+.partner-travel-page {
+  --pt-font:
+    "Plus Jakarta Sans",
+    "Jakarta Sans",
+    Inter,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+
+  --pt-heading: #102f52;
+  --pt-body: #667d95;
+  --pt-blue: #087cf0;
+  --pt-border: #e3ebf4;
+
+  font-family: var(--pt-font);
+  color: var(--pt-heading);
+}
+
+.partner-travel-page *,
+.partner-travel-page *::before,
+.partner-travel-page *::after {
+  box-sizing: border-box;
+}
+
+.partner-travel-page h1,
+.partner-travel-page h2,
+.partner-travel-page h3,
+.partner-travel-page h4,
+.partner-travel-page p,
+.partner-travel-page span,
+.partner-travel-page a,
+.partner-travel-page button,
+.partner-travel-page li {
+  font-family: var(--pt-font);
+}
+
+.partner-travel-page h1,
+.partner-travel-page h2,
+.partner-travel-page h3,
+.partner-travel-page h4 {
+  color: var(--pt-heading);
+  letter-spacing: -0.025em;
+}
+
+.partner-travel-page .partner-section-heading h2 {
+  font-size: clamp(20px, 2vw, 25px);
+  font-weight: 750;
+  line-height: 1.2;
+}
+
+.partner-travel-page .partner-section-heading p {
+  max-width: 670px;
+  color: var(--pt-body);
+  font-size: 11px;
+  line-height: 1.65;
+}
+
+/* ==========================================================
+   2. FEATURE / EMPOWER BUSINESS CARDS
+   ========================================================== */
+
+.partner-travel-page .partner-feature-card {
+  --feature-accent: #087cf0;
+  --feature-soft: #eaf5ff;
+
+  position: relative;
+  min-height: 126px;
+  padding: 19px 42px 19px 18px;
+
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+
+  overflow: hidden;
+
+  border: 1px solid var(--pt-border);
+  border-radius: 16px;
+
+  background:
+    radial-gradient(
+      circle at 100% 0%,
+      var(--feature-soft) 0,
+      transparent 49%
+    ),
+    #ffffff;
+
+  box-shadow:
+    0 7px 22px rgba(26, 64, 103, .055);
+
+  transition:
+    transform .2s ease,
+    box-shadow .2s ease,
+    border-color .2s ease;
+}
+
+.partner-travel-page .partner-feature-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+
+  width: 62px;
+  height: 62px;
+
+  border-radius: 0 0 0 62px;
+  background: var(--feature-soft);
+  opacity: .55;
+
+  pointer-events: none;
+}
+
+.partner-travel-page .partner-feature-card:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 16px 36px rgba(26, 64, 103, .11);
+}
+
+.partner-travel-page .partner-feature-card:nth-child(1) {
+  --feature-accent: #087cf0;
+  --feature-soft: #e8f4ff;
+}
+
+.partner-travel-page .partner-feature-card:nth-child(2) {
+  --feature-accent: #ef8422;
+  --feature-soft: #fff1e4;
+}
+
+.partner-travel-page .partner-feature-card:nth-child(3) {
+  --feature-accent: #8845df;
+  --feature-soft: #f2eaff;
+}
+
+.partner-travel-page .partner-feature-card:nth-child(4) {
+  --feature-accent: #10a97c;
+  --feature-soft: #e7f8f2;
+}
+
+.partner-travel-page .partner-feature-icon {
+  position: relative;
+  z-index: 2;
+
+  width: 44px;
+  height: 44px;
+  flex: 0 0 44px;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 13px;
+
+  background: var(--feature-soft);
+  color: var(--feature-accent);
+}
+
+.partner-travel-page .partner-feature-icon svg {
+  stroke-width: 2.15;
+}
+
+.partner-travel-page .partner-feature-card > div {
+  position: relative;
+  z-index: 2;
+}
+
+.partner-travel-page .partner-feature-card h3 {
+  margin: 2px 0 6px;
+  font-size: 12px;
+  font-weight: 750;
+  line-height: 1.35;
+}
+
+.partner-travel-page .partner-feature-card p {
+  margin: 0;
+  color: var(--pt-body);
+  font-size: 9.5px;
+  line-height: 1.6;
+}
+
+.partner-travel-page .partner-feature-card .partner-card-arrow {
+  position: absolute;
+  right: 16px;
+  bottom: 17px;
+
+  color: var(--feature-accent);
+
+  transition: transform .18s ease;
+}
+
+.partner-travel-page .partner-feature-card:hover .partner-card-arrow {
+  transform: translateX(3px);
+}
+
+/* ==========================================================
+   3. AUDIENCE CARDS
+   ========================================================== */
+
+.partner-travel-page .partner-audience-card {
+  --audience-accent: #087cf0;
+  --audience-soft: #e9f4ff;
+
+  overflow: hidden;
+
+  border: 1px solid var(--pt-border);
+  border-radius: 17px;
+
+  background: #fff;
+
+  box-shadow:
+    0 8px 24px rgba(26, 64, 103, .06);
+
+  transition:
+    transform .2s ease,
+    box-shadow .2s ease;
+}
+
+.partner-travel-page .partner-audience-card:nth-child(1) {
+  --audience-accent: #087cf0;
+  --audience-soft: #e9f4ff;
+}
+
+.partner-travel-page .partner-audience-card:nth-child(2) {
+  --audience-accent: #ef8422;
+  --audience-soft: #fff1e4;
+}
+
+.partner-travel-page .partner-audience-card:nth-child(3) {
+  --audience-accent: #8845df;
+  --audience-soft: #f2eaff;
+}
+
+.partner-travel-page .partner-audience-card:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 17px 38px rgba(26, 64, 103, .11);
+}
+
+.partner-travel-page .partner-audience-visual {
+  position: relative;
+
+  height: 112px;
+
+  display: grid;
+  place-items: center;
+
+  overflow: hidden;
+
+  background:
+    radial-gradient(
+      circle at 50% 50%,
+      rgba(255,255,255,.92) 0 17%,
+      transparent 18%
+    ),
+    linear-gradient(
+      135deg,
+      #f8fbff,
+      var(--audience-soft)
+    );
+}
+
+.partner-travel-page .partner-audience-visual::before,
+.partner-travel-page .partner-audience-visual::after {
+  content: "";
+  position: absolute;
+
+  border: 1px solid
+    color-mix(
+      in srgb,
+      var(--audience-accent) 18%,
+      transparent
+    );
+
+  border-radius: 50%;
+}
+
+.partner-travel-page .partner-audience-visual::before {
+  width: 94px;
+  height: 94px;
+}
+
+.partner-travel-page .partner-audience-visual::after {
+  width: 142px;
+  height: 142px;
+}
+
+.partner-travel-page .partner-audience-visual > svg {
+  position: relative;
+  z-index: 2;
+
+  color: var(--audience-accent);
+
+  filter:
+    drop-shadow(
+      0 6px 12px
+      color-mix(
+        in srgb,
+        var(--audience-accent) 18%,
+        transparent
+      )
+    );
+}
+
+.partner-travel-page .partner-audience-body {
+  padding: 17px;
+
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.partner-travel-page .partner-audience-body .partner-feature-icon {
+  width: 38px;
+  height: 38px;
+  flex-basis: 38px;
+
+  border-radius: 11px;
+
+  background: var(--audience-soft);
+  color: var(--audience-accent);
+}
+
+.partner-travel-page .partner-audience-body h3 {
+  margin: 1px 0 5px;
+  font-size: 12px;
+  font-weight: 750;
+}
+
+.partner-travel-page .partner-audience-body p {
+  margin: 0;
+  color: var(--pt-body);
+  font-size: 9.5px;
+  line-height: 1.55;
+}
+
+/* ==========================================================
+   4. FOUR STEPS
+   ========================================================== */
+
+.partner-travel-page .partner-steps {
+  position: relative;
+  gap: 15px;
+}
+
+.partner-travel-page .partner-step {
+  --step-accent: #087cf0;
+  --step-soft: #e9f4ff;
+
+  position: relative;
+  min-height: 162px;
+
+  padding: 21px 17px 18px;
+
+  border: 1px solid var(--pt-border);
+  border-radius: 16px;
+
+  background: #fff;
+
+  box-shadow:
+    0 7px 22px rgba(26, 64, 103, .05);
+
+  transition:
+    transform .2s ease,
+    box-shadow .2s ease;
+}
+
+.partner-travel-page .partner-step:nth-of-type(2) {
+  --step-accent: #087cf0;
+  --step-soft: #e9f4ff;
+}
+
+.partner-travel-page .partner-step:nth-of-type(3) {
+  --step-accent: #10a97c;
+  --step-soft: #e7f8f2;
+}
+
+.partner-travel-page .partner-step:nth-of-type(4) {
+  --step-accent: #8845df;
+  --step-soft: #f2eaff;
+}
+
+.partner-travel-page .partner-step:nth-of-type(5) {
+  --step-accent: #ef8422;
+  --step-soft: #fff1e4;
+}
+
+.partner-travel-page .partner-step:hover {
+  transform: translateY(-3px);
+  box-shadow:
+    0 15px 34px rgba(26, 64, 103, .10);
+}
+
+.partner-travel-page .partner-step-number {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+
+  width: 25px;
+  height: 25px;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 999px;
+
+  background: var(--step-accent);
+  color: #fff;
+
+  font-size: 10px;
+  font-weight: 800;
+
+  box-shadow:
+    0 5px 12px
+    color-mix(
+      in srgb,
+      var(--step-accent) 22%,
+      transparent
+    );
+}
+
+.partner-travel-page .partner-step-icon {
+  width: 45px;
+  height: 45px;
+
+  display: grid;
+  place-items: center;
+
+  margin-bottom: 15px;
+
+  border-radius: 13px;
+
+  background: var(--step-soft);
+  color: var(--step-accent);
+}
+
+.partner-travel-page .partner-step-icon svg {
+  stroke-width: 2.15;
+}
+
+.partner-travel-page .partner-step h3 {
+  margin: 0 0 6px;
+  font-size: 12px;
+  font-weight: 750;
+}
+
+.partner-travel-page .partner-step p {
+  margin: 0;
+  color: var(--pt-body);
+  font-size: 9.5px;
+  line-height: 1.6;
+}
+
+/* ==========================================================
+   5. START FREE CTA
+   ========================================================== */
+
+.partner-travel-page .partner-registration-cta {
+  position: relative;
+
+  margin-top: 20px;
+  padding: 18px 20px;
+
+  overflow: hidden;
+
+  border: 1px solid #d7e9fb;
+  border-radius: 17px;
+
+  background:
+    radial-gradient(
+      circle at 88% 20%,
+      rgba(8,124,240,.10),
+      transparent 32%
+    ),
+    linear-gradient(
+      135deg,
+      #f8fcff,
+      #edf7ff
+    );
+
+  box-shadow:
+    0 9px 28px rgba(21, 86, 145, .07);
+}
+
+.partner-travel-page .partner-registration-cta::after {
+  content: "";
+  position: absolute;
+  right: -34px;
+  bottom: -55px;
+
+  width: 145px;
+  height: 145px;
+
+  border: 25px solid rgba(8,124,240,.045);
+  border-radius: 50%;
+
+  pointer-events: none;
+}
+
+.partner-travel-page .partner-registration-cta > * {
+  position: relative;
+  z-index: 2;
+}
+
+.partner-travel-page .partner-registration-cta > div > span {
+  display: inline-block;
+  margin-bottom: 5px;
+
+  color: var(--pt-blue);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+}
+
+.partner-travel-page .partner-registration-cta h3 {
+  margin: 0 0 5px;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.partner-travel-page .partner-registration-cta p {
+  margin: 0;
+  max-width: 620px;
+
+  color: var(--pt-body);
+  font-size: 9.5px;
+  line-height: 1.55;
+}
+
+.partner-travel-page .partner-registration-cta
+.partner-primary-button {
+  min-width: 148px;
+  min-height: 40px;
+
+  border-radius: 10px;
+
+  box-shadow:
+    0 8px 18px rgba(8,124,240,.19);
+}
+
+/* ==========================================================
+   6. PRICING — PREMIUM, TIDAK KAKU
+   ========================================================== */
+
+.partner-travel-page .partner-pricing-grid {
+  align-items: stretch;
+  gap: 16px;
+}
+
+.partner-travel-page .partner-pricing-card {
+  position: relative;
+
+  min-height: 100%;
+  padding: 21px;
+
+  display: flex;
+  flex-direction: column;
+
+  overflow: hidden;
+
+  border: 1px solid #dfe9f3;
+  border-radius: 18px;
+
+  background: #fff;
+
+  box-shadow:
+    0 9px 27px rgba(23, 62, 100, .06);
+
+  transition:
+    transform .2s ease,
+    box-shadow .2s ease,
+    border-color .2s ease;
+}
+
+.partner-travel-page .partner-pricing-card:hover {
+  transform: translateY(-4px);
+
+  box-shadow:
+    0 19px 42px rgba(23, 62, 100, .12);
+}
+
+.partner-travel-page .partner-pricing-card.is-popular {
+  border: 1.5px solid #1687f5;
+
+  background:
+    radial-gradient(
+      circle at 100% 0%,
+      rgba(8,124,240,.10),
+      transparent 34%
+    ),
+    linear-gradient(
+      180deg,
+      #fafdff,
+      #ffffff 40%
+    );
+
+  box-shadow:
+    0 16px 42px rgba(8,124,240,.13);
+
+  transform: translateY(-5px);
+}
+
+.partner-travel-page .partner-pricing-card.is-popular:hover {
+  transform: translateY(-8px);
+}
+
+.partner-travel-page .partner-pricing-popular {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+
+  padding: 6px 10px;
+
+  border-radius: 999px;
+
+  background: #087cf0;
+  color: #fff;
+
+  font-size: 8px;
+  font-weight: 800;
+  line-height: 1;
+
+  box-shadow:
+    0 6px 14px rgba(8,124,240,.18);
+}
+
+.partner-travel-page .partner-pricing-heading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  padding-right: 82px;
+}
+
+.partner-travel-page .partner-pricing-heading > svg {
+  width: 43px;
+  height: 43px;
+  padding: 10px;
+
+  flex: 0 0 43px;
+
+  border-radius: 12px;
+
+  background: #edf6ff;
+  color: #087cf0;
+}
+
+.partner-travel-page
+.partner-pricing-card:nth-child(1)
+.partner-pricing-heading > svg {
+  background: #eef5ff;
+  color: #3269db;
+}
+
+.partner-travel-page
+.partner-pricing-card:nth-child(2)
+.partner-pricing-heading > svg {
+  background: #e8f4ff;
+  color: #087cf0;
+}
+
+.partner-travel-page
+.partner-pricing-card:nth-child(3)
+.partner-pricing-heading > svg {
+  background: #f1ebff;
+  color: #8245da;
+}
+
+.partner-travel-page .partner-pricing-heading h3 {
+  margin: 0 0 3px;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.partner-travel-page .partner-pricing-heading p {
+  margin: 0;
+
+  color: var(--pt-body);
+  font-size: 9px;
+  line-height: 1.45;
+}
+
+.partner-travel-page .partner-pricing-price {
+  margin: 19px 0 15px;
+  padding-bottom: 15px;
+
+  display: flex;
+  align-items: flex-end;
+  gap: 5px;
+
+  border-bottom: 1px solid #e8eef5;
+}
+
+.partner-travel-page .partner-pricing-price strong {
+  color: #102f52;
+  font-size: 23px;
+  font-weight: 800;
+  letter-spacing: -0.045em;
+  line-height: 1;
+}
+
+.partner-travel-page .partner-pricing-price span {
+  padding-bottom: 2px;
+
+  color: #8394a7;
+  font-size: 8.5px;
+}
+
+.partner-travel-page .partner-growth-highlights {
+  margin: -2px 0 14px;
+
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.partner-travel-page .partner-growth-highlights span {
+  min-height: 27px;
+  padding: 5px 8px;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+
+  border: 1px solid #d5e9fc;
+  border-radius: 8px;
+
+  background: #eef7ff;
+  color: #126cc5;
+
+  font-size: 8px;
+  font-weight: 750;
+}
+
+.partner-travel-page .partner-pricing-card ul {
+  margin: 0 0 20px;
+  padding: 0;
+
+  display: grid;
+  gap: 9px;
+
+  list-style: none;
+}
+
+.partner-travel-page .partner-pricing-card li {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+
+  color: #536b83;
+  font-size: 9px;
+  line-height: 1.45;
+}
+
+.partner-travel-page .partner-pricing-card li svg {
+  width: 17px;
+  height: 17px;
+  padding: 3px;
+
+  flex: 0 0 17px;
+
+  border-radius: 50%;
+
+  background: #e9f7f0;
+  color: #139965;
+
+  stroke-width: 3;
+}
+
+.partner-travel-page .partner-pricing-button {
+  width: 100%;
+  min-height: 38px;
+
+  margin-top: auto;
+
+  border: 1px solid #cbd9e8;
+  border-radius: 10px;
+
+  background: #fff;
+  color: #173a5e;
+
+  font-size: 9.5px;
+  font-weight: 800;
+
+  cursor: pointer;
+
+  transition:
+    transform .18s ease,
+    box-shadow .18s ease,
+    background .18s ease;
+}
+
+.partner-travel-page .partner-pricing-button:hover {
+  transform: translateY(-1px);
+  background: #f6faff;
+}
+
+.partner-travel-page .partner-pricing-button.primary {
+  border-color: #087cf0;
+
+  background:
+    linear-gradient(
+      135deg,
+      #087cf0,
+      #0569d6
+    );
+
+  color: #fff;
+
+  box-shadow:
+    0 8px 18px rgba(8,124,240,.20);
+}
+
+.partner-travel-page .partner-subscription-benefit {
+  margin-top: 16px;
+  padding: 13px 16px;
+
+  border: 1px solid #dce9f5;
+  border-radius: 13px;
+
+  background: #f8fbfe;
+}
+
+/* ==========================================================
+   7. RTL
+   ========================================================== */
+
+html[dir="rtl"]
+.partner-travel-page
+.partner-feature-card {
+  padding-right: 18px;
+  padding-left: 42px;
+}
+
+html[dir="rtl"]
+.partner-travel-page
+.partner-feature-card
+.partner-card-arrow {
+  right: auto;
+  left: 16px;
+  transform: rotate(180deg);
+}
+
+html[dir="rtl"]
+.partner-travel-page
+.partner-feature-card:hover
+.partner-card-arrow {
+  transform: rotate(180deg) translateX(3px);
+}
+
+html[dir="rtl"]
+.partner-travel-page
+.partner-step-number {
+  right: auto;
+  left: 14px;
+}
+
+html[dir="rtl"]
+.partner-travel-page
+.partner-pricing-popular {
+  right: auto;
+  left: 14px;
+}
+
+html[dir="rtl"]
+.partner-travel-page
+.partner-pricing-heading {
+  padding-right: 0;
+  padding-left: 82px;
+}
+
+/* ==========================================================
+   8. RESPONSIVE
+   ========================================================== */
+
+@media (max-width: 900px) {
+  .partner-travel-page .partner-pricing-card.is-popular {
+    transform: none;
+  }
+
+  .partner-travel-page .partner-pricing-card.is-popular:hover {
+    transform: translateY(-4px);
+  }
+}
+
+@media (max-width: 720px) {
+  .partner-travel-page .partner-feature-card {
+    min-height: 112px;
+  }
+
+  .partner-travel-page .partner-audience-visual {
+    height: 100px;
+  }
+
+  .partner-travel-page .partner-registration-cta {
+    padding: 17px;
+  }
+
+  .partner-travel-page .partner-pricing-card {
+    padding: 18px;
+  }
+
+  .partner-travel-page .partner-pricing-heading {
+    padding-right: 74px;
+  }
+
+  html[dir="rtl"]
+  .partner-travel-page
+  .partner-pricing-heading {
+    padding-right: 0;
+    padding-left: 74px;
+  }
+}
+/* SEGALOKA PARTNER TRAVEL V8 — TYPOGRAPHY LOCK */
+
+/*
+  CANONICAL TYPE SCALE
+  Hero H1       : 42px desktop
+  Section H2    : 24px
+  Card H3       : 14px
+  Body          : 12px
+  Helper        : 11px
+  Small/meta    : 10px
+  Pricing       : 25px
+
+  Semua komponen Partner Travel wajib mengikuti scale ini.
+*/
+
+.partner-travel-page {
+  --pt-font:
+    "Plus Jakarta Sans",
+    "Jakarta Sans",
+    Inter,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+
+  --pt-text-hero: 42px;
+  --pt-text-section: 24px;
+  --pt-text-card: 14px;
+  --pt-text-body: 12px;
+  --pt-text-helper: 11px;
+  --pt-text-small: 10px;
+  --pt-text-price: 25px;
+
+  --pt-leading-hero: 1.08;
+  --pt-leading-heading: 1.25;
+  --pt-leading-body: 1.55;
+
+  font-family: var(--pt-font);
+}
+
+/* =========================================================
+   GLOBAL RESET DALAM PARTNER PAGE
+   ========================================================= */
+
+.partner-travel-page h1,
+.partner-travel-page h2,
+.partner-travel-page h3,
+.partner-travel-page h4,
+.partner-travel-page p,
+.partner-travel-page a,
+.partner-travel-page button,
+.partner-travel-page span,
+.partner-travel-page li,
+.partner-travel-page small {
+  font-family: var(--pt-font);
+}
+
+/* =========================================================
+   HERO
+   ========================================================= */
+
+.partner-travel-page .partner-kicker {
+  font-size: var(--pt-text-helper);
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.partner-travel-page .partner-hero-copy h1 {
+  max-width: 620px;
+
+  margin-top: 12px;
+  margin-bottom: 16px;
+
+  font-size: var(--pt-text-hero) !important;
+  font-weight: 750;
+  line-height: var(--pt-leading-hero);
+  letter-spacing: -0.045em;
+}
+
+.partner-travel-page .partner-hero-copy h1 strong {
+  font-size: inherit;
+  font-weight: 800;
+}
+
+.partner-travel-page .partner-hero-copy > p {
+  max-width: 610px;
+
+  font-size: var(--pt-text-body) !important;
+  font-weight: 400;
+  line-height: 1.65;
+}
+
+/* Hero benefit */
+
+.partner-travel-page .partner-hero-benefits strong {
+  display: block;
+
+  font-size: var(--pt-text-helper) !important;
+  font-weight: 750;
+  line-height: 1.35;
+}
+
+.partner-travel-page .partner-hero-benefits
+> div
+> span:last-child {
+  font-size: var(--pt-text-small) !important;
+  line-height: 1.4;
+}
+
+/* floating visual */
+
+.partner-travel-page .partner-network-card small {
+  font-size: 9px !important;
+}
+
+.partner-travel-page .partner-network-card strong {
+  font-size: var(--pt-text-small) !important;
+}
+
+.partner-travel-page .partner-floating-badge {
+  font-size: var(--pt-text-small) !important;
+  font-weight: 700;
+}
+
+/* =========================================================
+   SEMUA SECTION TITLE
+   ========================================================= */
+
+.partner-travel-page .partner-section-heading h2 {
+  margin: 0 0 5px;
+
+  font-size: var(--pt-text-section) !important;
+  font-weight: 750;
+  line-height: var(--pt-leading-heading);
+  letter-spacing: -0.035em;
+}
+
+.partner-travel-page .partner-section-heading p {
+  max-width: 720px;
+
+  margin: 0;
+
+  font-size: var(--pt-text-body) !important;
+  font-weight: 400;
+  line-height: var(--pt-leading-body);
+}
+
+/* =========================================================
+   EXPAND YOUR MARKET
+   ========================================================= */
+
+.partner-travel-page .partner-image-card-body h3,
+.partner-travel-page .partner-market-copy h3 {
+  margin: 0 0 5px;
+
+  font-size: var(--pt-text-card) !important;
+  font-weight: 750;
+  line-height: 1.35;
+}
+
+.partner-travel-page .partner-image-card-body p,
+.partner-travel-page .partner-market-copy p {
+  margin: 0;
+
+  font-size: var(--pt-text-helper) !important;
+  font-weight: 400;
+  line-height: var(--pt-leading-body);
+}
+
+/* =========================================================
+   EMPOWER YOUR BUSINESS
+   ========================================================= */
+
+.partner-travel-page .partner-feature-card h3 {
+  margin: 1px 0 5px;
+
+  font-size: var(--pt-text-card) !important;
+  font-weight: 750;
+  line-height: 1.35;
+}
+
+.partner-travel-page .partner-feature-card p {
+  margin: 0;
+
+  font-size: var(--pt-text-helper) !important;
+  font-weight: 400;
+  line-height: var(--pt-leading-body);
+}
+
+/* =========================================================
+   AUDIENCE
+   ========================================================= */
+
+.partner-travel-page .partner-audience-body h3 {
+  margin: 0 0 5px;
+
+  font-size: var(--pt-text-card) !important;
+  font-weight: 750;
+  line-height: 1.35;
+}
+
+.partner-travel-page .partner-audience-body p {
+  margin: 0;
+
+  font-size: var(--pt-text-helper) !important;
+  font-weight: 400;
+  line-height: var(--pt-leading-body);
+}
+
+/* =========================================================
+   4 STEPS
+   ========================================================= */
+
+.partner-travel-page .partner-step h3 {
+  margin: 0 0 6px;
+
+  font-size: var(--pt-text-card) !important;
+  font-weight: 750;
+  line-height: 1.35;
+}
+
+.partner-travel-page .partner-step p {
+  margin: 0;
+
+  font-size: var(--pt-text-helper) !important;
+  font-weight: 400;
+  line-height: var(--pt-leading-body);
+}
+
+.partner-travel-page .partner-step-number {
+  font-size: var(--pt-text-small) !important;
+  font-weight: 800;
+}
+
+/* =========================================================
+   REGISTRATION CTA
+   ========================================================= */
+
+.partner-travel-page
+.partner-registration-cta
+> div
+> span {
+  font-size: var(--pt-text-small) !important;
+  font-weight: 800;
+}
+
+.partner-travel-page .partner-registration-cta h3 {
+  margin: 0 0 5px;
+
+  font-size: var(--pt-text-card) !important;
+  font-weight: 800;
+  line-height: 1.35;
+}
+
+.partner-travel-page .partner-registration-cta p {
+  font-size: var(--pt-text-helper) !important;
+  font-weight: 400;
+  line-height: var(--pt-leading-body);
+}
+
+.partner-travel-page
+.partner-registration-cta
+.partner-primary-button {
+  font-size: var(--pt-text-helper) !important;
+  font-weight: 750;
+}
+
+/* =========================================================
+   PRICING
+   ========================================================= */
+
+.partner-travel-page .partner-pricing-heading h3 {
+  margin: 0 0 4px;
+
+  font-size: var(--pt-text-card) !important;
+  font-weight: 800;
+  line-height: 1.35;
+}
+
+.partner-travel-page .partner-pricing-heading p {
+  margin: 0;
+
+  font-size: var(--pt-text-helper) !important;
+  line-height: var(--pt-leading-body);
+}
+
+.partner-travel-page .partner-pricing-price strong {
+  font-size: var(--pt-text-price) !important;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+.partner-travel-page .partner-pricing-price span {
+  font-size: var(--pt-text-small) !important;
+  line-height: 1.3;
+}
+
+.partner-travel-page .partner-pricing-popular {
+  font-size: var(--pt-text-small) !important;
+  font-weight: 800;
+}
+
+.partner-travel-page .partner-growth-highlights span {
+  font-size: var(--pt-text-small) !important;
+  font-weight: 700;
+}
+
+.partner-travel-page .partner-pricing-card li {
+  font-size: var(--pt-text-helper) !important;
+  line-height: 1.45;
+}
+
+.partner-travel-page .partner-pricing-button {
+  font-size: var(--pt-text-helper) !important;
+  font-weight: 750;
+}
+
+.partner-travel-page .partner-subscription-benefit,
+.partner-travel-page .partner-subscription-benefit p,
+.partner-travel-page .partner-subscription-benefit strong {
+  font-size: var(--pt-text-helper) !important;
+  line-height: var(--pt-leading-body);
+}
+
+/* =========================================================
+   FAQ
+   ========================================================= */
+
+.partner-travel-page .partner-faq button {
+  min-height: 48px;
+
+  font-size: var(--pt-text-body) !important;
+  font-weight: 650;
+  line-height: 1.45;
+}
+
+.partner-travel-page .partner-faq-answer p {
+  font-size: var(--pt-text-helper) !important;
+  font-weight: 400;
+  line-height: 1.65;
+}
+
+/* =========================================================
+   CONTACT
+   ========================================================= */
+
+.partner-travel-page .partner-contact-section
+.partner-section-heading h2 {
+  font-size: var(--pt-text-section) !important;
+}
+
+.partner-travel-page .partner-contact-section
+.partner-section-heading p {
+  font-size: var(--pt-text-body) !important;
+}
+
+.partner-travel-page .partner-contact-link {
+  font-size: var(--pt-text-helper) !important;
+  font-weight: 700;
+}
+
+/* =========================================================
+   BOTTOM NAV
+   ========================================================= */
+
+.partner-travel-page .partner-bottom-nav-inner a {
+  font-size: var(--pt-text-helper) !important;
+  font-weight: 650;
+}
+
+/* =========================================================
+   DESKTOP — CARD HEIGHTS SUPAYA TYPOGRAPHY TIDAK SESAK
+   ========================================================= */
+
+@media (min-width: 901px) {
+
+  .partner-travel-page .partner-feature-card {
+    min-height: 136px;
+  }
+
+  .partner-travel-page .partner-step {
+    min-height: 174px;
+  }
+
+  .partner-travel-page .partner-audience-body {
+    min-height: 82px;
+  }
+}
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 900px) {
+
+  .partner-travel-page {
+    --pt-text-hero: 36px;
+    --pt-text-section: 22px;
+    --pt-text-card: 14px;
+    --pt-text-body: 12px;
+    --pt-text-helper: 11px;
+    --pt-text-small: 10px;
+    --pt-text-price: 24px;
+  }
+}
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 640px) {
+
+  .partner-travel-page {
+    --pt-text-hero: 31px;
+    --pt-text-section: 20px;
+    --pt-text-card: 14px;
+    --pt-text-body: 12px;
+    --pt-text-helper: 11px;
+    --pt-text-small: 10px;
+    --pt-text-price: 24px;
+  }
+
+  .partner-travel-page .partner-hero-copy h1 {
+    letter-spacing: -0.04em;
+  }
+
+  .partner-travel-page .partner-section-heading h2 {
+    letter-spacing: -0.025em;
+  }
+
+  .partner-travel-page .partner-faq button {
+    min-height: 52px;
+  }
+}
+/* SEGALOKA PARTNER TRAVEL V10 — MARKET FINAL */
+
+/* ==========================================================
+   PERLUAS PASAR — KHUSUS PRODUK TRAVEL
+   ========================================================== */
+
+.partner-travel-page #partner-keunggulan .partner-card-grid-four {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  align-items: stretch;
+}
+
+.partner-travel-page #partner-keunggulan .partner-image-card {
+  min-width: 0;
+  height: 100%;
+  overflow: hidden;
+  border: 1px solid #dce8f6;
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow: 0 8px 26px rgba(15, 74, 135, 0.07);
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease,
+    border-color 180ms ease;
+}
+
+.partner-travel-page #partner-keunggulan .partner-image-card:hover {
+  transform: translateY(-3px);
+  border-color: #b9d9fb;
+  box-shadow: 0 14px 34px rgba(15, 74, 135, 0.12);
+}
+
+.partner-travel-page #partner-keunggulan .partner-image-card-media {
+  width: 100%;
+  height: 190px;
+  aspect-ratio: auto;
+  overflow: hidden;
+  background: #eef6ff;
+}
+
+.partner-travel-page #partner-keunggulan .partner-image-card-media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 300ms ease;
+}
+
+.partner-travel-page #partner-keunggulan .partner-image-card:hover
+.partner-image-card-media img {
+  transform: scale(1.025);
+}
+
+.partner-travel-page #partner-keunggulan .partner-image-card-body {
+  min-height: 132px;
+  padding: 18px;
+
+  display: grid;
+  grid-template-columns: 42px minmax(0, 1fr) 20px;
+  gap: 12px;
+  align-items: start;
+}
+
+.partner-travel-page #partner-keunggulan .partner-card-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+
+  display: grid;
+  place-items: center;
+
+  background: #eaf4ff;
+  color: #087af5;
+}
+
+.partner-travel-page #partner-keunggulan
+.partner-image-card-green .partner-card-icon {
+  background: #e8f8f2;
+  color: #08a879;
+}
+
+.partner-travel-page #partner-keunggulan
+.partner-image-card-purple .partner-card-icon {
+  background: #f3eafe;
+  color: #8a3ff0;
+}
+
+.partner-travel-page #partner-keunggulan .partner-image-card-body h3 {
+  margin: 1px 0 6px;
+
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.35;
+  letter-spacing: -0.015em;
+
+  color: #082b55;
+}
+
+.partner-travel-page #partner-keunggulan .partner-image-card-body p {
+  margin: 0;
+
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.55;
+
+  color: #6f829b;
+}
+
+.partner-travel-page #partner-keunggulan .partner-card-arrow {
+  margin-top: 10px;
+  color: #087af5;
+}
+
+.partner-travel-page #partner-keunggulan
+.partner-image-card-green .partner-card-arrow {
+  color: #08a879;
+}
+
+.partner-travel-page #partner-keunggulan
+.partner-image-card-purple .partner-card-arrow {
+  color: #8a3ff0;
+}
+
+/* ==========================================================
+   FOUR STEPS — PRESISI
+   ========================================================== */
+
+.partner-travel-page .partner-steps {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
+  align-items: stretch;
+}
+
+.partner-travel-page .partner-step-line,
+.partner-travel-page .partner-step-connector {
+  display: none !important;
+}
+
+.partner-travel-page .partner-step {
+  position: relative;
+
+  min-width: 0;
+  min-height: 184px;
+
+  padding: 28px 20px 22px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  border: 1px solid #dce8f6;
+  border-radius: 16px;
+  background: #ffffff;
+
+  text-align: center;
+
+  box-shadow: 0 7px 22px rgba(15, 74, 135, 0.055);
+}
+
+.partner-travel-page .partner-step-number {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+
+  width: 27px;
+  height: 27px;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 999px;
+
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1;
+
+  color: #ffffff;
+  background: #087af5;
+
+  box-shadow: 0 5px 12px rgba(8, 122, 245, 0.22);
+}
+
+.partner-travel-page .partner-step:nth-of-type(4) .partner-step-number {
+  background: #08aa7c;
+}
+
+.partner-travel-page .partner-step:nth-of-type(5) .partner-step-number {
+  background: #8a3ff0;
+}
+
+.partner-travel-page .partner-step-icon {
+  width: 46px;
+  height: 46px;
+  flex: 0 0 46px;
+
+  margin: 0 auto 15px;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 13px;
+
+  color: #087af5;
+  background: #eaf4ff;
+}
+
+.partner-travel-page .partner-step:nth-of-type(4) .partner-step-icon {
+  color: #08aa7c;
+  background: #e8f8f2;
+}
+
+.partner-travel-page .partner-step:nth-of-type(5) .partner-step-icon {
+  color: #8a3ff0;
+  background: #f3eafe;
+}
+
+.partner-travel-page .partner-step h3 {
+  width: 100%;
+  margin: 0 0 8px;
+
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+
+  text-align: center;
+  color: #082b55;
+}
+
+.partner-travel-page .partner-step p {
+  width: 100%;
+  max-width: 235px;
+
+  margin: 0 auto;
+
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.55;
+
+  text-align: center;
+  color: #71849c;
+}
+
+/* ==========================================================
+   RESPONSIVE
+   ========================================================== */
+
+@media (max-width: 1050px) {
+
+  .partner-travel-page #partner-keunggulan .partner-card-grid-four {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .partner-travel-page .partner-steps {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+
+  .partner-travel-page #partner-keunggulan .partner-card-grid-four {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .partner-travel-page #partner-keunggulan .partner-image-card-media {
+    height: 175px;
+  }
+
+  .partner-travel-page #partner-keunggulan .partner-image-card-body {
+    min-height: 0;
+    padding: 15px;
+  }
+
+  .partner-travel-page .partner-steps {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .partner-travel-page .partner-step {
+    min-height: 0;
+    padding: 18px 54px 18px 18px;
+
+    display: grid;
+    grid-template-columns: 44px minmax(0, 1fr);
+    grid-template-rows: auto auto;
+    column-gap: 13px;
+    row-gap: 4px;
+
+    text-align: left;
+  }
+
+  .partner-travel-page .partner-step-icon {
+    grid-column: 1;
+    grid-row: 1 / 3;
+
+    width: 44px;
+    height: 44px;
+
+    margin: 0;
+  }
+
+  .partner-travel-page .partner-step h3 {
+    grid-column: 2;
+    grid-row: 1;
+
+    margin: 0;
+    text-align: left;
+  }
+
+  .partner-travel-page .partner-step p {
+    grid-column: 2;
+    grid-row: 2;
+
+    max-width: none;
+    margin: 0;
+
+    text-align: left;
+  }
+
+  html[dir="rtl"] .partner-travel-page .partner-step {
+    padding-right: 18px;
+    padding-left: 54px;
+  }
+
+  html[dir="rtl"] .partner-travel-page .partner-step h3,
+  html[dir="rtl"] .partner-travel-page .partner-step p {
+    text-align: right;
+  }
+}
+/* SEGALOKA PARTNER TRAVEL V11 — PRICING BALANCE */
+
+/* ==========================================================
+   PRICING GRID
+   ========================================================== */
+
+.partner-travel-page .partner-pricing-grid {
+  align-items: stretch;
+  gap: 18px;
+}
+
+.partner-travel-page .partner-pricing-card {
+  position: relative;
+  overflow: hidden;
+
+  min-height: 510px;
+
+  display: flex;
+  flex-direction: column;
+
+  padding: 26px 22px 20px;
+
+  border: 1px solid #dce7f3;
+  border-radius: 18px;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 10px 30px rgba(19, 62, 108, 0.055);
+
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease,
+    border-color 180ms ease;
+}
+
+.partner-travel-page .partner-pricing-card:hover {
+  transform: translateY(-3px);
+
+  box-shadow:
+    0 16px 38px rgba(19, 62, 108, 0.09);
+}
+
+/* ==========================================================
+   STARTER
+   ========================================================== */
+
+.partner-travel-page .partner-pricing-card:nth-child(1) {
+  background:
+    linear-gradient(
+      180deg,
+      #f7fbff 0,
+      #ffffff 31%
+    );
+
+  border-color: #d5e6f8;
+}
+
+.partner-travel-page .partner-pricing-card:nth-child(1)::before {
+  content: "";
+
+  position: absolute;
+  top: -65px;
+  right: -65px;
+
+  width: 170px;
+  height: 170px;
+
+  border-radius: 999px;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(8, 122, 245, 0.10) 0,
+      rgba(8, 122, 245, 0) 70%
+    );
+
+  pointer-events: none;
+}
+
+/* ==========================================================
+   GROWTH
+   ========================================================== */
+
+.partner-travel-page .partner-pricing-card.is-popular {
+  z-index: 2;
+
+  border-color: #087af5;
+
+  background:
+    linear-gradient(
+      180deg,
+      #eef7ff 0,
+      #ffffff 34%
+    );
+
+  box-shadow:
+    0 16px 42px rgba(8, 122, 245, 0.13);
+}
+
+/* ==========================================================
+   ENTERPRISE
+   ========================================================== */
+
+.partner-travel-page .partner-pricing-card:nth-child(3) {
+  background:
+    linear-gradient(
+      180deg,
+      #fbf8ff 0,
+      #ffffff 31%
+    );
+
+  border-color: #e3d8f7;
+}
+
+.partner-travel-page .partner-pricing-card:nth-child(3)::before {
+  content: "";
+
+  position: absolute;
+  top: -60px;
+  right: -60px;
+
+  width: 180px;
+  height: 180px;
+
+  border-radius: 999px;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(138, 63, 240, 0.12) 0,
+      rgba(138, 63, 240, 0) 70%
+    );
+
+  pointer-events: none;
+}
+
+/* ==========================================================
+   HEADING
+   ========================================================== */
+
+.partner-travel-page .partner-pricing-heading {
+  position: relative;
+  z-index: 1;
+
+  min-height: 64px;
+
+  display: grid;
+  grid-template-columns: 46px minmax(0, 1fr);
+  gap: 12px;
+  align-items: start;
+}
+
+.partner-travel-page .partner-pricing-heading > svg {
+  width: 46px;
+  height: 46px;
+
+  padding: 12px;
+
+  border-radius: 13px;
+
+  color: #087af5;
+  background: #eaf4ff;
+}
+
+.partner-travel-page
+.partner-pricing-card:nth-child(3)
+.partner-pricing-heading > svg {
+  color: #8a3ff0;
+  background: #f2e9ff;
+}
+
+.partner-travel-page .partner-pricing-heading h3 {
+  margin: 1px 0 5px;
+
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: -0.015em;
+
+  color: #082b55;
+}
+
+.partner-travel-page .partner-pricing-heading p {
+  margin: 0;
+
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.5;
+
+  color: #6f829b;
+}
+
+/* ==========================================================
+   PRICE
+   ========================================================== */
+
+.partner-travel-page .partner-pricing-price {
+  position: relative;
+  z-index: 1;
+
+  min-height: 72px;
+
+  margin-top: 14px;
+  padding-bottom: 16px;
+
+  display: flex;
+  align-items: flex-end;
+  gap: 5px;
+
+  border-bottom: 1px solid #e2ebf4;
+}
+
+.partner-travel-page .partner-pricing-price strong {
+  font-family: inherit;
+
+  font-size: 27px;
+  font-weight: 750;
+  line-height: 1;
+
+  letter-spacing: -0.035em;
+
+  color: #082b55;
+}
+
+.partner-travel-page
+.partner-pricing-card.is-popular
+.partner-pricing-price strong {
+  color: #087af5;
+}
+
+.partner-travel-page
+.partner-pricing-card:nth-child(3)
+.partner-pricing-price strong {
+  color: #6325bd;
+}
+
+.partner-travel-page .partner-pricing-price span {
+  padding-bottom: 2px;
+
+  font-size: 11px;
+  line-height: 1.2;
+
+  color: #8090a4;
+}
+
+/* ==========================================================
+   GROWTH HIGHLIGHTS
+   ========================================================== */
+
+.partner-travel-page .partner-growth-highlights {
+  position: relative;
+  z-index: 1;
+
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+
+  margin: 12px 0 2px;
+}
+
+.partner-travel-page .partner-growth-highlights span {
+  min-height: 28px;
+
+  padding: 5px 9px;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+
+  border: 1px solid #bcdcff;
+  border-radius: 8px;
+
+  background: #eef7ff;
+
+  font-size: 10px;
+  font-weight: 650;
+  line-height: 1;
+
+  color: #0566ca;
+}
+
+/* ==========================================================
+   FEATURE AREA
+   ========================================================== */
+
+.partner-travel-page .partner-pricing-features {
+  position: relative;
+  z-index: 1;
+
+  flex: 1;
+
+  margin: 14px 0 18px;
+  padding: 15px;
+
+  border: 1px solid #edf2f7;
+  border-radius: 13px;
+
+  background:
+    rgba(248, 251, 254, 0.72);
+}
+
+.partner-travel-page
+.partner-pricing-card:nth-child(1)
+.partner-pricing-features {
+  background: rgba(244, 250, 255, 0.78);
+}
+
+.partner-travel-page
+.partner-pricing-card.is-popular
+.partner-pricing-features {
+  background: rgba(245, 250, 255, 0.84);
+
+  border-color: #e0efff;
+}
+
+.partner-travel-page
+.partner-pricing-card:nth-child(3)
+.partner-pricing-features {
+  background: rgba(250, 247, 255, 0.82);
+
+  border-color: #eee5fb;
+}
+
+.partner-travel-page .partner-pricing-feature {
+  min-height: 27px;
+
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.45;
+
+  color: #536b86;
+}
+
+.partner-travel-page .partner-pricing-feature + .partner-pricing-feature {
+  margin-top: 3px;
+}
+
+.partner-travel-page .partner-pricing-feature svg {
+  flex: 0 0 auto;
+
+  margin-top: 1px;
+
+  padding: 3px;
+
+  border-radius: 999px;
+
+  color: #079b70;
+  background: #e4f7f0;
+}
+
+/* ==========================================================
+   BUTTON — SEMUA SEJAJAR
+   ========================================================== */
+
+.partner-travel-page .partner-pricing-card > button,
+.partner-travel-page .partner-pricing-card > a:last-child {
+  position: relative;
+  z-index: 1;
+
+  width: 100%;
+  min-height: 42px;
+
+  margin-top: auto;
+
+  border-radius: 10px;
+
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+/* Starter */
+.partner-travel-page
+.partner-pricing-card:nth-child(1)
+.partner-pricing-button {
+  border-color: #b9d7f5;
+
+  color: #0768c9;
+  background: #ffffff;
+}
+
+/* Enterprise */
+.partner-travel-page
+.partner-pricing-card:nth-child(3)
+.partner-pricing-button {
+  border-color: #d8c5f3;
+
+  color: #7028cc;
+  background: #ffffff;
+}
+
+.partner-travel-page
+.partner-pricing-card:nth-child(3)
+.partner-pricing-button:hover {
+  background: #f8f2ff;
+}
+
+/* ==========================================================
+   POPULAR BADGE
+   ========================================================== */
+
+.partner-travel-page .partner-pricing-popular {
+  top: 14px;
+
+  min-width: 168px;
+  height: 25px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 999px;
+
+  font-size: 10px;
+  font-weight: 700;
+
+  box-shadow:
+    0 6px 16px rgba(8, 122, 245, 0.16);
+}
+
+/* ==========================================================
+   SUBSCRIPTION BENEFIT STRIP
+   ========================================================== */
+
+.partner-travel-page .partner-pricing-benefit {
+  border-radius: 14px;
+
+  background:
+    linear-gradient(
+      90deg,
+      #f5faff,
+      #fbfdff
+    );
+}
+
+/* ==========================================================
+   RESPONSIVE
+   ========================================================== */
+
+@media (max-width: 900px) {
+
+  .partner-travel-page .partner-pricing-card {
+    min-height: auto;
+  }
+
+  .partner-travel-page .partner-pricing-features {
+    flex: initial;
+  }
+}
+
+@media (max-width: 640px) {
+
+  .partner-travel-page .partner-pricing-card {
+    padding: 22px 18px 18px;
+    border-radius: 16px;
+  }
+
+  .partner-travel-page .partner-pricing-price strong {
+    font-size: 25px;
+  }
+
+  .partner-travel-page .partner-pricing-heading {
+    min-height: 58px;
+  }
+}
+/* SEGALOKA V12 — POPULAR BADGE RIGHT */
+
+/* Growth menjadi anchor badge */
+.partner-travel-page .partner-pricing-card.is-popular {
+  position: relative;
+}
+
+/* Paling Populer: badge compact di kanan atas */
+.partner-travel-page .partner-pricing-card.is-popular
+.partner-pricing-popular {
+  position: absolute !important;
+
+  top: 16px !important;
+  right: 16px !important;
+  left: auto !important;
+
+  width: auto !important;
+  min-width: 0 !important;
+  height: 26px !important;
+
+  padding: 0 12px !important;
+  margin: 0 !important;
+
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 999px;
+
+  font-family: inherit;
+  font-size: 10px !important;
+  font-weight: 700;
+  line-height: 1;
+
+  white-space: nowrap;
+
+  color: #ffffff;
+  background: #087af5;
+
+  box-shadow:
+    0 5px 14px rgba(8, 122, 245, 0.20);
+
+  transform: none !important;
+
+  z-index: 5;
+}
+
+/* Beri ruang agar badge tidak bertabrakan dengan judul Growth */
+.partner-travel-page .partner-pricing-card.is-popular
+.partner-pricing-heading {
+  padding-right: 116px;
+}
+
+/* RTL: badge pindah mengikuti arah bahasa */
+html[dir="rtl"]
+.partner-travel-page
+.partner-pricing-card.is-popular
+.partner-pricing-popular {
+  right: auto !important;
+  left: 16px !important;
+}
+
+html[dir="rtl"]
+.partner-travel-page
+.partner-pricing-card.is-popular
+.partner-pricing-heading {
+  padding-right: 0;
+  padding-left: 116px;
+}
+
+/* Mobile tetap compact */
+@media (max-width: 640px) {
+
+  .partner-travel-page
+  .partner-pricing-card.is-popular
+  .partner-pricing-popular {
+    top: 14px !important;
+    right: 14px !important;
+  }
+
+  .partner-travel-page
+  .partner-pricing-card.is-popular
+  .partner-pricing-heading {
+    padding-right: 108px;
+  }
+
+  html[dir="rtl"]
+  .partner-travel-page
+  .partner-pricing-card.is-popular
+  .partner-pricing-popular {
+    right: auto !important;
+    left: 14px !important;
+  }
+
+  html[dir="rtl"]
+  .partner-travel-page
+  .partner-pricing-card.is-popular
+  .partner-pricing-heading {
+    padding-right: 0;
+    padding-left: 108px;
+  }
+}
+/* SEGALOKA V13 — REMOVE MARKET ARROWS */
+
+/* Hilangkan panah pada card Perluas Pasar Anda */
+.partner-travel-page #partner-keunggulan .partner-card-arrow {
+  display: none !important;
+}
+
+/* Karena panah hilang, body card cukup icon + content */
+.partner-travel-page #partner-keunggulan .partner-image-card-body {
+  grid-template-columns: 42px minmax(0, 1fr) !important;
+}
+
+/* SEGALOKA PARTNER TRAVEL V14 — ACTIVE LINKS */
+
+.partner-travel-page a.partner-feature-card {
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.partner-travel-page a.partner-feature-card:hover {
+  text-decoration: none;
+}
+
+.partner-travel-page a.partner-primary-button,
+.partner-travel-page a.partner-pricing-button {
+  text-decoration: none;
+}
+
+.partner-travel-page a.partner-pricing-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.partner-travel-page a.partner-primary-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+============================================================
+ALL FILES RELATED TO TRAVEL REGISTRATION
+============================================================
+src\app\partner\travel\daftar\page.tsx
+src\app\partner\travel\daftar\page.tsx.20261005-074043.bak
+src\app\partner\travel\daftar\TravelRegistrationClient.tsx
+src\app\partner\travel\partner-feature-detail.css
+
+============================================================
+CLASS REFERENCES
+============================================================
+
+CLASS: partner-feature-benefit
+src\app\partner\travel\partner-feature-detail.css:97: .partner-feature-benefits {
+src\app\partner\travel\partner-feature-detail.css:103: .partner-feature-benefit {
+src\app\partner\travel\partner-feature-detail.css:114: .partner-feature-benefit span {
+src\app\partner\travel\partner-feature-detail.css:125: .partner-feature-benefit p {
+src\app\partner\travel\partner-feature-detail.css:165: .partner-feature-benefits {
+
+CLASS: partner-feature-content
+src\app\partner\travel\partner-feature-detail.css:74: .partner-feature-content {
+src\app\partner\travel\partner-feature-detail.css:82: .partner-feature-content > p {
+src\app\partner\travel\partner-feature-detail.css:89: .partner-feature-content h2 {
+src\app\partner\travel\partner-feature-detail.css:161: .partner-feature-content {
+
+CLASS: partner-feature-cta
+src\app\partner\travel\partner-feature-detail.css:132: .partner-feature-cta {
+
+CLASS: partner-feature-detail
+src\app\partner\travel\partner-feature-detail.css:1: .partner-feature-detail {
+src\app\partner\travel\partner-feature-detail.css:10: .partner-feature-detail-shell {
+src\app\partner\travel\partner-feature-detail.css:152: .partner-feature-detail {
+
+CLASS: partner-feature-detail-shell
+src\app\partner\travel\partner-feature-detail.css:10: .partner-feature-detail-shell {
+
+CLASS: partner-feature-eyebrow
+src\app\partner\travel\partner-feature-detail.css:47: .partner-feature-eyebrow {
+
+CLASS: partner-feature-hero
+src\app\partner\travel\partner-feature-detail.css:26: .partner-feature-hero {
+src\app\partner\travel\partner-feature-detail.css:37: .partner-feature-hero-icon {
+src\app\partner\travel\partner-feature-detail.css:57: .partner-feature-hero h1 {
+src\app\partner\travel\partner-feature-detail.css:147: html[dir="rtl"] .partner-feature-hero {
+src\app\partner\travel\partner-feature-detail.css:156: .partner-feature-hero {
+
+CLASS: partner-feature-lead
+src\app\partner\travel\partner-feature-detail.css:66: .partner-feature-lead {

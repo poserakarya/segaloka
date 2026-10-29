@@ -1,0 +1,41 @@
+/*
+  SEGALOKA TRAVEL V7 — CANONICAL DATA CONTRACT
+
+  Travel does not own duplicate business datasets.
+  The following remain canonical/shared:
+
+  TRAVELS
+  PACKAGES
+  BOOKINGS
+  PAYMENTS
+  MITRA
+  AGEN
+  WITHDRAWALS
+  VPRODUCTS
+  VORDERS
+  SD_REQ
+  SD_OFF
+  REVIEWS
+  REFUNDS
+  UPLOADS
+  LETTERS
+  SD_LEDGER
+*/
+window.SEGALOKA_TRAVEL_CANONICAL_DATA = Object.freeze([
+  'TRAVELS',
+  'PACKAGES',
+  'BOOKINGS',
+  'PAYMENTS',
+  'MITRA',
+  'AGEN',
+  'WITHDRAWALS',
+  'VPRODUCTS',
+  'VORDERS',
+  'SD_REQ',
+  'SD_OFF',
+  'REVIEWS',
+  'REFUNDS',
+  'UPLOADS',
+  'LETTERS',
+  'SD_LEDGER'
+]);

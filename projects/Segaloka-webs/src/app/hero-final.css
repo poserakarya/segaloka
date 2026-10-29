@@ -1,0 +1,482 @@
+﻿/* ============================================================
+   SEGALOKA HERO — COMPACT MARKETPLACE LAYOUT
+   Inspirasi proporsi: marketplace travel desktop
+   ============================================================ */
+
+.hero-header {
+  width: min(1440px, calc(100% - 24px));
+  height: 58px;
+
+  margin: 4px auto 0;
+
+  border-radius: 16px 16px 0 0;
+}
+
+.hero-header-shell {
+  height: 57px;
+
+  padding-inline: 30px;
+
+  grid-template-columns:
+    155px
+    1fr
+    210px;
+}
+
+.hero-logo img {
+  width: 112px;
+}
+
+.hero-nav {
+  gap: 28px;
+}
+
+.hero-nav a {
+  font-size: 11px;
+}
+
+
+/* ============================================================
+   HERO HEIGHT
+   ============================================================ */
+
+.hero-reference {
+  position: relative;
+  isolation: isolate;
+
+  width: min(1440px, calc(100% - 24px));
+
+  height: 280px;
+  min-height: 280px;
+  max-height: 280px;
+
+  margin-inline: auto;
+
+  overflow: visible;
+
+  background: #e7f4ff;
+}
+
+.hero-reference-media {
+  position: absolute;
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  overflow: hidden;
+
+  z-index: -3;
+}
+
+.hero-reference-photo {
+  width: 100% !important;
+  height: 100% !important;
+
+  object-fit: cover !important;
+
+  /*
+   * Fokus sedikit ke bawah supaya Ka'bah tetap terlihat.
+   * Jika nanti gambar baru berbeda, cukup ubah angka ini.
+   */
+  object-position: center 56% !important;
+}
+
+.hero-reference-overlay {
+  position: absolute;
+  inset: 0;
+
+  z-index: -2;
+
+  pointer-events: none;
+
+  background:
+    radial-gradient(
+      ellipse at 50% 8%,
+      rgba(255,255,255,.46),
+      rgba(255,255,255,.16) 30%,
+      transparent 58%
+    );
+}
+
+
+/* ============================================================
+   COPY
+   ============================================================ */
+
+.hero-reference-shell {
+  width: 100%;
+  height: 100%;
+
+  position: relative;
+
+  padding-top: 20px;
+}
+
+.hero-reference-copy {
+  width: 610px;
+  max-width: 86%;
+
+  margin-inline: auto;
+
+  text-align: center;
+}
+
+.hero-reference-copy h1 {
+  margin: 0;
+
+  color: #062d70;
+
+  font-family:
+    var(--font-jakarta),
+    "Plus Jakarta Sans",
+    sans-serif;
+
+  font-size: 34px;
+  line-height: 1.02;
+
+  letter-spacing: -1.4px;
+
+  font-weight: 800;
+
+  text-shadow:
+    0 1px 0 rgba(255,255,255,.98),
+    0 2px 8px rgba(255,255,255,.8);
+}
+
+.hero-reference-copy p {
+  max-width: 565px;
+
+  margin: 7px auto 0;
+
+  color: #183e6d;
+
+  font-size: 10px;
+  line-height: 1.4;
+
+  font-weight: 500;
+}
+
+
+/* ============================================================
+   TABS + SEARCH OVERLAP
+   ============================================================ */
+
+.hero-controls {
+  position: absolute;
+
+  left: 50%;
+  bottom: -38px;
+
+  width: 1180px;
+  max-width: calc(100% - 54px);
+
+  transform: translateX(-50%);
+
+  z-index: 30;
+}
+
+.hero-tabs {
+  width: max-content;
+  max-width: 100%;
+
+  margin: 0 auto -10px;
+
+  padding: 7px 9px;
+
+  border: 1px solid #dce7f2;
+  border-radius: 17px;
+
+  background: rgba(255,255,255,.99);
+
+  box-shadow:
+    0 7px 18px rgba(32,76,121,.11);
+}
+
+.hero-tabs button {
+  height: 36px;
+
+  padding-inline: 11px;
+
+  gap: 6px;
+
+  border-radius: 10px;
+
+  font-size: 9px;
+  font-weight: 600;
+}
+
+.hero-tab-icon {
+  width: 24px;
+  height: 24px;
+
+  flex: 0 0 24px;
+}
+
+
+/* ============================================================
+   SEARCH CARD
+   ============================================================ */
+
+.hero-search-card {
+  width: 100%;
+
+  margin: 0;
+
+  padding:
+    25px
+    12px
+    12px;
+
+  display: grid;
+
+  grid-template-columns:
+    1fr
+    1.25fr
+    .9fr
+    .9fr
+    105px;
+
+  gap: 8px;
+
+  border: 1px solid #dce7f2;
+  border-radius: 17px;
+
+  background: #fff;
+
+  box-shadow:
+    0 11px 26px rgba(32,77,124,.16);
+}
+
+.hero-field {
+  height: 54px;
+
+  padding: 7px 9px;
+
+  border-radius: 10px;
+}
+
+.hero-field-icon {
+  width: 28px;
+  height: 28px;
+}
+
+.hero-field-content small {
+  font-size: 8px;
+}
+
+.hero-field-content strong {
+  font-size: 10px;
+}
+
+.hero-search-button {
+  border-radius: 10px;
+
+  font-size: 11px;
+  font-weight: 700;
+}
+
+
+/* ============================================================
+   BENEFIT — JANGAN MENUMPUK
+   ============================================================ */
+
+.ref-benefit {
+  width: min(1440px, calc(100% - 24px));
+
+  margin-inline: auto;
+
+  /*
+   * Search keluar 38px + tinggi sekitar 90px.
+   * Ini memberi ruang aman sebelum benefit.
+   */
+  padding:
+    92px
+    0
+    10px !important;
+
+  background: #fff;
+}
+
+.ref-benefit-grid {
+  width: 1180px;
+  max-width: calc(100% - 54px);
+
+  margin-inline: auto;
+
+  min-height: 64px;
+
+  border-radius: 13px;
+}
+
+.ref-benefit-grid article {
+  min-height: 64px;
+
+  padding: 10px 15px;
+}
+
+.ref-round-icon {
+  width: 34px;
+  height: 34px;
+
+  flex: 0 0 34px;
+}
+
+.ref-benefit-grid strong {
+  font-size: 10px;
+}
+
+.ref-benefit-grid p {
+  font-size: 8px;
+}
+
+
+/* ============================================================
+   TABLET
+   ============================================================ */
+
+@media (min-width: 701px) and (max-width: 1199px) {
+  .hero-reference {
+    height: 265px;
+    min-height: 265px;
+    max-height: 265px;
+  }
+
+  .hero-reference-copy h1 {
+    font-size: 31px;
+  }
+
+  .hero-controls {
+    width: calc(100% - 34px);
+
+    bottom: -36px;
+  }
+
+  .ref-benefit {
+    padding-top: 88px !important;
+  }
+}
+
+
+/* ============================================================
+   MOBILE
+   ============================================================ */
+
+@media (max-width: 700px) {
+  .hero-header {
+    width: calc(100% - 14px);
+    height: 56px;
+  }
+
+  .hero-reference {
+    width: calc(100% - 14px);
+
+    height: auto;
+    min-height: 600px;
+    max-height: none;
+  }
+
+  .hero-reference-media,
+  .hero-reference-overlay {
+    height: 218px;
+
+    bottom: auto;
+  }
+
+  .hero-reference-photo {
+    object-position: center 52% !important;
+  }
+
+  .hero-reference-shell {
+    padding-top: 16px;
+  }
+
+  .hero-reference-copy {
+    width: 300px;
+  }
+
+  .hero-reference-copy h1 {
+    font-size: 25px;
+  }
+
+  .hero-reference-copy p {
+    max-width: 280px;
+
+    font-size: 9px;
+  }
+
+  .hero-controls {
+    width: calc(100% - 16px);
+
+    bottom: 8px;
+  }
+
+  .hero-tabs {
+    width: 100%;
+
+    overflow-x: auto;
+
+    justify-content: flex-start;
+  }
+
+  .hero-tabs button {
+    min-width: 63px;
+    height: 49px;
+
+    padding: 3px 4px;
+
+    flex-direction: column;
+    justify-content: center;
+
+    font-size: 7px;
+  }
+
+  .hero-search-card {
+    grid-template-columns: 1fr;
+
+    padding: 18px 8px 8px;
+  }
+
+  .hero-field {
+    height: 52px;
+  }
+
+  .hero-search-button {
+    min-height: 45px;
+  }
+
+  .ref-benefit {
+    width: calc(100% - 14px);
+
+    padding-top: 15px !important;
+  }
+
+  .ref-benefit-grid {
+    width: calc(100% - 16px);
+  }
+}
+
+/* ============================================================
+   HERO TEXT COLOR — WHITE
+   ============================================================ */
+
+.hero-reference-copy h1,
+.sg-hero-title h1,
+.hero-title h1,
+.hero-copy h1 {
+  color: #ffffff !important;
+  text-shadow:
+    0 2px 10px rgba(0,0,0,.18),
+    0 6px 24px rgba(0,0,0,.24) !important;
+}
+
+.hero-reference-copy p,
+.sg-hero-title p,
+.hero-title p,
+.hero-copy p {
+  color: rgba(255,255,255,.98) !important;
+  text-shadow:
+    0 1px 8px rgba(0,0,0,.22),
+    0 3px 18px rgba(0,0,0,.26) !important;
+}
+

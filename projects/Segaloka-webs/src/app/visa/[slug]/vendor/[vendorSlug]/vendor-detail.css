@@ -1,0 +1,678 @@
+.visa-vendor-detail {
+  min-height: 100vh;
+  background: var(--color-surface-secondary, #f8fafc);
+  color: var(--color-text, #172033);
+  font-family: var(
+    --ui-font-primary,
+    "Plus Jakarta Sans",
+    system-ui,
+    sans-serif
+  );
+}
+
+.visa-vendor-detail *,
+.visa-vendor-detail *::before,
+.visa-vendor-detail *::after {
+  box-sizing: border-box;
+}
+
+.visa-vendor-detail-shell {
+  width: min(
+    var(--container-max, 1200px),
+    calc(100% - 32px)
+  );
+  margin-inline: auto;
+}
+
+.visa-vendor-detail-hero {
+  position: relative;
+  min-height: 350px;
+  overflow: hidden;
+  background:
+    url("/images/visa/countries/china.jpg")
+    center / cover no-repeat;
+}
+
+.visa-vendor-detail-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(8, 35, 73, 0.91) 0%,
+      rgba(8, 35, 73, 0.69) 48%,
+      rgba(8, 35, 73, 0.25) 100%
+    );
+}
+
+.visa-vendor-detail[dir="rtl"]
+.visa-vendor-detail-hero-overlay {
+  background:
+    linear-gradient(
+      270deg,
+      rgba(8, 35, 73, 0.91) 0%,
+      rgba(8, 35, 73, 0.69) 48%,
+      rgba(8, 35, 73, 0.25) 100%
+    );
+}
+
+.visa-vendor-detail-hero-content {
+  position: relative;
+  z-index: 1;
+  min-height: 350px;
+  padding-block: 28px 48px;
+  color: #fff;
+}
+
+.visa-vendor-back {
+  min-height: 36px;
+  padding-inline: 13px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  border: 1px solid rgba(255,255,255,.25);
+  border-radius: var(--radius-pill, 999px);
+  color: #fff;
+  background: rgba(255,255,255,.15);
+  backdrop-filter: blur(8px);
+  font: inherit;
+  font-size: var(--font-size-sm, 12px);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.visa-vendor-detail[dir="rtl"]
+.visa-vendor-back svg,
+.visa-vendor-detail[dir="rtl"]
+.visa-product-footer button svg {
+  transform: scaleX(-1);
+}
+
+.visa-vendor-identity {
+  max-width: 650px;
+  margin-top: 34px;
+}
+
+.visa-vendor-verified-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--font-size-sm, 12px);
+  font-weight: 600;
+}
+
+.visa-vendor-identity h1 {
+  margin: 8px 0 5px;
+  font-size: var(--font-size-3xl, 32px);
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+}
+
+.visa-vendor-detail-rating {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 5px;
+  font-size: var(--font-size-sm, 12px);
+}
+
+.visa-vendor-detail-rating svg {
+  color: #f59e0b;
+}
+
+.visa-vendor-identity h2 {
+  margin: 25px 0 6px;
+  font-size: var(--font-size-xl, 20px);
+  line-height: 1.3;
+}
+
+.visa-vendor-identity p {
+  max-width: 560px;
+  margin: 0;
+  color: rgba(255,255,255,.88);
+  font-size: var(--font-size-md, 14px);
+  line-height: 1.65;
+}
+
+.visa-vendor-benefits {
+  position: absolute;
+  right: 0;
+  bottom: 34px;
+  display: flex;
+  overflow: hidden;
+  color: var(--color-text, #172033);
+  background: #fff;
+  border: 1px solid rgba(255,255,255,.8);
+  border-radius: var(--radius-lg, 16px);
+  box-shadow: 0 14px 35px rgba(16,24,40,.16);
+}
+
+.visa-vendor-detail[dir="rtl"]
+.visa-vendor-benefits {
+  right: auto;
+  left: 0;
+}
+
+.visa-vendor-benefits > div {
+  min-width: 158px;
+  padding: 14px 15px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.visa-vendor-benefits > div + div {
+  border-inline-start: 1px solid
+    var(--color-border, #e4e7ec);
+}
+
+.visa-vendor-benefits svg {
+  flex: 0 0 auto;
+  color: var(--color-primary, #1473e6);
+}
+
+.visa-vendor-benefits span {
+  display: grid;
+  gap: 2px;
+}
+
+.visa-vendor-benefits strong {
+  font-size: var(--font-size-sm, 12px);
+  line-height: 1.3;
+}
+
+.visa-vendor-benefits small {
+  color: var(--color-text-secondary, #667085);
+  font-size: var(--font-size-xs, 11px);
+}
+
+.visa-vendor-products {
+  padding-bottom: 64px;
+}
+
+.visa-product-tabs {
+  position: relative;
+  z-index: 2;
+  margin-top: -22px;
+  padding: 7px;
+  display: flex;
+  gap: 7px;
+  background: #fff;
+  border: 1px solid var(--color-border, #e4e7ec);
+  border-radius: var(--radius-lg, 16px);
+  box-shadow: 0 6px 20px rgba(16,24,40,.07);
+}
+
+.visa-product-tabs button {
+  min-height: 40px;
+  padding-inline: 20px;
+  flex: 1;
+  border: 0;
+  border-radius: var(--radius-md, 8px);
+  color: var(--color-text-secondary, #667085);
+  background: var(--color-surface-secondary, #f8fafc);
+  font: inherit;
+  font-size: var(--font-size-sm, 12px);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.visa-product-tabs button.is-active {
+  color: #fff;
+  background: var(--color-primary, #1473e6);
+}
+
+.visa-product-grid {
+  margin-top: 22px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.visa-product-card {
+  min-width: 0;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border: 1px solid var(--color-border, #e4e7ec);
+  border-radius: var(--radius-lg, 16px);
+  box-shadow: 0 4px 16px rgba(16,24,40,.035);
+}
+
+.visa-product-card-top {
+  min-height: 30px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.visa-product-country,
+.visa-product-popular {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 9px;
+  border-radius: var(--radius-md, 8px);
+  font-size: var(--font-size-xs, 11px);
+  font-weight: 600;
+}
+
+.visa-product-country {
+  background: var(--color-surface-secondary, #f8fafc);
+}
+
+.visa-product-popular {
+  color: #d92d20;
+  background: #fff1f0;
+}
+
+.visa-product-card h3 {
+  margin: 14px 0 7px;
+  color: var(--color-text, #172033);
+  font-size: var(--font-size-xl, 20px);
+  line-height: 1.3;
+  letter-spacing: -0.02em;
+}
+
+.visa-product-description {
+  min-height: 67px;
+  margin: 0;
+  color: var(--color-text-secondary, #667085);
+  font-size: var(--font-size-md, 14px);
+  line-height: 1.6;
+}
+
+.visa-product-suitable {
+  margin: 13px 0 0;
+  color: var(--color-text-secondary, #667085);
+  font-size: var(--font-size-sm, 12px);
+  line-height: 1.55;
+}
+
+.visa-product-suitable strong {
+  color: var(--color-text, #172033);
+}
+
+.visa-product-facts {
+  margin-top: 16px;
+  padding-block: 15px;
+  display: grid;
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  border-top: 1px solid
+    var(--color-border, #e4e7ec);
+}
+
+.visa-product-facts > div {
+  min-width: 0;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.visa-product-facts svg {
+  flex: 0 0 auto;
+  color: var(--color-primary, #1473e6);
+}
+
+.visa-product-facts span {
+  min-width: 0;
+  display: grid;
+  gap: 2px;
+}
+
+.visa-product-facts small,
+.visa-product-price small {
+  color: var(--color-text-muted, #98a2b3);
+  font-size: var(--font-size-xs, 11px);
+}
+
+.visa-product-facts strong {
+  color: var(--color-text, #172033);
+  font-size: var(--font-size-sm, 12px);
+  line-height: 1.4;
+}
+
+.visa-product-footer {
+  margin-top: auto;
+  padding: 13px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  background: var(--color-primary-soft, #eef6ff);
+  border-radius: var(--radius-md, 8px);
+}
+
+.visa-product-price {
+  min-width: 0;
+  display: grid;
+  gap: 2px;
+}
+
+.visa-product-price strong {
+  color: var(--color-primary, #1473e6);
+  font-size: var(--font-size-xl, 20px);
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.visa-product-footer button {
+  min-height: var(--button-height-md, 44px);
+  padding-inline: 18px;
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  border: 0;
+  border-radius: var(--button-radius, 12px);
+  color: #fff;
+  background: var(--color-primary, #1473e6);
+  font: inherit;
+  font-size: var(--font-size-sm, 12px);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.visa-product-footer button:hover {
+  background: var(--color-primary-hover, #0d63cb);
+}
+
+@media (max-width: 980px) {
+  .visa-vendor-detail-hero,
+  .visa-vendor-detail-hero-content {
+    min-height: 430px;
+  }
+
+  .visa-vendor-benefits {
+    position: static;
+    width: 100%;
+    margin-top: 24px;
+  }
+
+  .visa-vendor-benefits > div {
+    min-width: 0;
+    flex: 1;
+  }
+
+  .visa-product-facts {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 720px) {
+  .visa-vendor-detail-shell {
+    width: calc(100% - 24px);
+  }
+
+  .visa-vendor-detail-hero,
+  .visa-vendor-detail-hero-content {
+    min-height: auto;
+  }
+
+  .visa-vendor-detail-hero-content {
+    padding-block: 20px 42px;
+  }
+
+  .visa-vendor-identity {
+    margin-top: 28px;
+  }
+
+  .visa-vendor-identity h1 {
+    font-size: var(--font-size-2xl, 24px);
+  }
+
+  .visa-vendor-benefits {
+    flex-direction: column;
+  }
+
+  .visa-vendor-benefits > div + div {
+    border-inline-start: 0;
+    border-top: 1px solid
+      var(--color-border, #e4e7ec);
+  }
+
+  .visa-product-tabs {
+    overflow-x: auto;
+    justify-content: flex-start;
+  }
+
+  .visa-product-tabs button {
+    min-width: max-content;
+    flex: 0 0 auto;
+  }
+
+  .visa-product-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .visa-product-card {
+    padding: 16px;
+  }
+
+  .visa-product-description {
+    min-height: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .visa-product-facts {
+    grid-template-columns: 1fr;
+  }
+
+  .visa-product-footer {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .visa-product-footer button {
+    width: 100%;
+  }
+}
+/* SEGALOKA VISA TYPOGRAPHY V1
+   Central typography normalization.
+   Layout dan struktur halaman tidak diubah.
+   ========================================================= */
+
+.visa-vendor-detail {
+  font-family: var(
+    --ui-font-primary,
+    "Plus Jakarta Sans",
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif
+  );
+  font-size: var(--font-size-md, 14px);
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+/* Form/control inherit typography */
+.visa-vendor-detail button,
+.visa-vendor-detail input,
+.visa-vendor-detail select,
+.visa-vendor-detail textarea {
+  font-family: inherit;
+}
+
+/* HERO */
+
+.visa-vendor-back {
+  font-size: var(--font-size-sm, 12px);
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.visa-vendor-verified-label {
+  font-size: var(--font-size-sm, 12px);
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.visa-vendor-identity h1 {
+  font-family: inherit;
+  font-size: var(--font-size-2xl, 24px);
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+}
+
+.visa-vendor-detail-rating {
+  font-size: var(--font-size-sm, 12px);
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.visa-vendor-identity h2 {
+  font-family: inherit;
+  font-size: var(--font-size-xl, 20px);
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: -0.015em;
+}
+
+.visa-vendor-identity p {
+  font-size: var(--font-size-md, 14px);
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+/* BENEFIT BAR */
+
+.visa-vendor-benefits strong {
+  font-size: var(--font-size-sm, 12px);
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.visa-vendor-benefits small {
+  font-size: var(--font-size-xs, 11px);
+  font-weight: 400;
+  line-height: 1.4;
+}
+
+/* TABS */
+
+.visa-product-tabs button {
+  font-family: inherit;
+  font-size: var(--font-size-sm, 12px);
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+/* BADGES */
+
+.visa-product-country,
+.visa-product-popular {
+  font-size: var(--font-size-xs, 11px);
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+/* PRODUCT TITLE */
+
+.visa-product-card h3 {
+  font-family: inherit;
+  font-size: var(--font-size-lg, 16px);
+  font-weight: 700;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+}
+
+/* PRODUCT DESCRIPTION */
+
+.visa-product-description {
+  font-size: var(--font-size-md, 14px);
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+.visa-product-suitable {
+  font-size: var(--font-size-sm, 12px);
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+.visa-product-suitable strong {
+  font-weight: 600;
+}
+
+/* PRODUCT FACTS */
+
+.visa-product-facts small {
+  font-size: var(--font-size-xs, 11px);
+  font-weight: 400;
+  line-height: 1.35;
+}
+
+.visa-product-facts strong {
+  font-size: var(--font-size-sm, 12px);
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+/* PRICE */
+
+.visa-product-price small {
+  font-size: var(--font-size-xs, 11px);
+  font-weight: 400;
+  line-height: 1.35;
+}
+
+.visa-product-price strong {
+  font-family: inherit;
+  font-size: var(--font-size-lg, 16px);
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: 0;
+}
+
+/* CTA */
+
+.visa-product-footer button {
+  font-family: inherit;
+  font-size: var(--font-size-sm, 12px);
+  font-weight: 600;
+  line-height: 1;
+}
+
+/* RTL keeps same hierarchy */
+
+.visa-vendor-detail[dir="rtl"] {
+  font-family: var(
+    --ui-font-primary,
+    "Plus Jakarta Sans",
+    system-ui,
+    sans-serif
+  );
+}
+
+/* MOBILE */
+
+@media (max-width: 720px) {
+  .visa-vendor-identity h1 {
+    font-size: var(--font-size-2xl, 24px);
+  }
+
+  .visa-vendor-identity h2 {
+    font-size: var(--font-size-xl, 20px);
+  }
+
+  .visa-product-card h3 {
+    font-size: var(--font-size-lg, 16px);
+  }
+
+  .visa-product-description {
+    font-size: var(--font-size-md, 14px);
+  }
+
+  .visa-product-price strong {
+    font-size: var(--font-size-lg, 16px);
+  }
+}

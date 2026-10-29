@@ -1,0 +1,741 @@
+﻿
+========== src\components\search\SearchEditBar.tsx [1-145] ==========
+    1: "use client";
+    2: 
+    3: import {
+    4:   CalendarDays,
+    5:   ChevronLeft,
+    6:   ChevronRight,
+    7:   MapPin,
+    8:   Minus,
+    9:   Plus,
+   10:   Search,
+   11:   UsersRound,
+   12:   X,
+   13: } from "lucide-react";
+   14: 
+   15: import {
+   16:   useEffect,
+   17:   useMemo,
+   18:   useRef,
+   19:   useState,
+   20: } from "react";
+   21: 
+   22: import { useRouter } from "next/navigation";
+   23: 
+   24: import {
+   25:   useMarketplacePreferences,
+   26: } from "@/components/providers/MarketplacePreferencesProvider";
+   27: 
+   28: type Props = {
+   29:   category: string;
+   30:   initialOrigin: string;
+   31:   initialDestination: string;
+   32:   initialTravelers: string;
+   33:   initialDate: string;
+   34: };
+   35: 
+   36: type Panel =
+   37:   | "origin"
+   38:   | "destination"
+   39:   | "traveler"
+   40:   | "date"
+   41:   | null;
+   42: 
+   43: type TravelerState = {
+   44:   adult: number;
+   45:   child: number;
+   46:   infant: number;
+   47: };
+   48: 
+   49: const origins = [
+   50:   "Jakarta",
+   51:   "Makassar",
+   52:   "Surabaya",
+   53:   "Medan",
+   54:   "Yogyakarta",
+   55:   "Bandung",
+   56:   "Semarang",
+   57:   "Balikpapan",
+   58:   "Banjarmasin",
+   59:   "Palembang",
+   60:   "Pekanbaru",
+   61:   "Padang",
+   62:   "Banda Aceh",
+   63:   "Batam",
+   64:   "Denpasar",
+   65:   "Manado",
+   66:   "Lombok",
+   67: ];
+   68: 
+   69: const categoryOptions: Record<string, string[]> = {
+   70:   Umrah: [
+   71:     "Makkah",
+   72:     "Madinah",
+   73:     "Makkah & Madinah",
+   74:   ],
+   75: 
+   76:   Haji: [
+   77:     "Makkah",
+   78:     "Madinah",
+   79:     "Makkah & Madinah",
+   80:   ],
+   81: 
+   82:   "Halal Tour": [
+   83:     "Turkiye",
+   84:     "Malaysia",
+   85:     "Singapura",
+   86:     "Jepang",
+   87:     "Korea Selatan",
+   88:     "Uni Emirat Arab",
+   89:     "Mesir",
+   90:     "Maroko",
+   91:     "Uzbekistan",
+   92:     "Yordania",
+   93:     "Eropa",
+   94:   ],
+   95: 
+   96:   "Tour Domestic": [
+   97:     "Bali",
+   98:     "Yogyakarta",
+   99:     "Bandung",
+  100:     "Lombok",
+  101:     "Labuan Bajo",
+  102:     "Raja Ampat",
+  103:     "Bromo",
+  104:     "Malang",
+  105:     "Makassar",
+  106:     "Toraja",
+  107:   ],
+  108: 
+  109:   "Tour International": [
+  110:     "Malaysia",
+  111:     "Singapura",
+  112:     "Thailand",
+  113:     "Vietnam",
+  114:     "Jepang",
+  115:     "Korea Selatan",
+  116:     "Tiongkok",
+  117:     "Hong Kong",
+  118:     "Turkiye",
+  119:     "Uni Emirat Arab",
+  120:     "Australia",
+  121:     "Eropa",
+  122:   ],
+  123: 
+  124:   SegaDeals: [
+  125:     "Umrah",
+  126:     "Haji",
+  127:     "Halal Tour",
+  128:     "Tour Domestic",
+  129:     "Tour International",
+  130:   ],
+  131: };
+  132: 
+  133: const copy = {
+  134:   ID: {
+  135:     from: "Dari",
+  136:     destination: "Tujuan",
+  137:     umrahDestination: "Tujuan Umrah",
+  138:     date: "Tanggal",
+  139:     traveler: "Traveler",
+  140:     search: "Cari",
+  141: 
+  142:     originTitle: "Pilih Kota atau Bandara",
+  143:     originPlaceholder: "Masukkan nama kota atau bandara...",
+  144:     popularDestination: "Destinasi Populer",
+  145: 
+
+========== src\components\search\SearchEditBar.tsx [400-505] ==========
+  400:   ) {
+  401:     result.push(day);
+  402:   }
+  403: 
+  404:   while (
+  405:     result.length % 7 !== 0
+  406:   ) {
+  407:     result.push(null);
+  408:   }
+  409: 
+  410:   return result;
+  411: }
+  412: 
+  413: export function SearchEditBar({
+  414:   category,
+  415:   initialOrigin,
+  416:   initialDestination,
+  417:   initialTravelers,
+  418:   initialDate,
+  419: }: Props) {
+  420:   const router = useRouter();
+  421: 
+  422:   const {
+  423:     language,
+  424:     locale,
+  425:     direction,
+  426:   } = useMarketplacePreferences();
+  427: 
+  428:   const t = copy[language];
+  429: 
+  430:   const rootRef =
+  431:     useRef<HTMLDivElement | null>(
+  432:       null,
+  433:     );
+  434: 
+  435:   const [panel, setPanel] =
+  436:     useState<Panel>(null);
+  437: 
+  438:   const [origin, setOrigin] =
+  439:     useState(
+  440:       initialOrigin || "Jakarta",
+  441:     );
+  442: 
+  443:   const [
+  444:     originQuery,
+  445:     setOriginQuery,
+  446:   ] = useState("");
+  447: 
+  448:   const [
+  449:     destination,
+  450:     setDestination,
+  451:   ] = useState(
+  452:     initialDestination || "",
+  453:   );
+  454: 
+  455:   const [
+  456:     destinationQuery,
+  457:     setDestinationQuery,
+  458:   ] = useState("");
+  459: 
+  460:   const initialTravelerTotal =
+  461:     Math.max(
+  462:       1,
+  463:       Number(
+  464:         initialTravelers || 2,
+  465:       ),
+  466:     );
+  467: 
+  468:   const [
+  469:     travelers,
+  470:     setTravelers,
+  471:   ] = useState<TravelerState>({
+  472:     adult: initialTravelerTotal,
+  473:     child: 0,
+  474:     infant: 0,
+  475:   });
+  476: 
+  477:   const [
+  478:     selectedDate,
+  479:     setSelectedDate,
+  480:   ] = useState(
+  481:     initialDate || "",
+  482:   );
+  483: 
+  484:   const parsedInitialDate =
+  485:     parseDateValue(
+  486:       initialDate,
+  487:     );
+  488: 
+  489:   const today = new Date();
+  490: 
+  491:   const [
+  492:     calendarMonth,
+  493:     setCalendarMonth,
+  494:   ] = useState(
+  495:     parsedInitialDate
+  496:       ? new Date(
+  497:           parsedInitialDate.getFullYear(),
+  498:           parsedInitialDate.getMonth(),
+  499:           1,
+  500:         )
+  501:       : new Date(
+  502:           today.getFullYear(),
+  503:           today.getMonth(),
+  504:           1,
+  505:         ),
+
+========== src\components\search\SearchEditBar.tsx [605-745] ==========
+  605:           value
+  606:             .toLowerCase()
+  607:             .includes(query),
+  608:       );
+  609:     }, [
+  610:       destinationOptions,
+  611:       destinationQuery,
+  612:     ]);
+  613: 
+  614:   const travelerTotal =
+  615:     travelers.adult +
+  616:     travelers.child +
+  617:     travelers.infant;
+  618: 
+  619:   const canSearch =
+  620:     origin.trim().length > 0 &&
+  621:     destination.trim().length > 0 &&
+  622:     travelerTotal > 0 &&
+  623:     selectedDate.length > 0;
+  624: 
+  625:   function togglePanel(
+  626:     nextPanel: Exclude<
+  627:       Panel,
+  628:       null
+  629:     >,
+  630:   ) {
+  631:     setPanel(
+  632:       panel === nextPanel
+  633:         ? null
+  634:         : nextPanel,
+  635:     );
+  636:   }
+  637: 
+  638:   function updateTraveler(
+  639:     key: keyof TravelerState,
+  640:     delta: number,
+  641:   ) {
+  642:     setTravelers(
+  643:       (current) => {
+  644:         const next = {
+  645:           ...current,
+  646:           [key]: Math.max(
+  647:             0,
+  648:             current[key] + delta,
+  649:           ),
+  650:         };
+  651: 
+  652:         if (
+  653:           next.adult +
+  654:             next.child +
+  655:             next.infant ===
+  656:           0
+  657:         ) {
+  658:           return current;
+  659:         }
+  660: 
+  661:         return next;
+  662:       },
+  663:     );
+  664:   }
+  665: 
+  666:   function formatSelectedDate() {
+  667:     if (!selectedDate) {
+  668:       return t.chooseDate;
+  669:     }
+  670: 
+  671:     const parsed =
+  672:       parseDateValue(
+  673:         selectedDate,
+  674:       );
+  675: 
+  676:     if (!parsed) {
+  677:       return selectedDate;
+  678:     }
+  679: 
+  680:     return new Intl.DateTimeFormat(
+  681:       locale,
+  682:       {
+  683:         day: "numeric",
+  684:         month: "short",
+  685:         year: "numeric",
+  686:       },
+  687:     ).format(parsed);
+  688:   }
+  689: 
+  690:   function submitSearch() {
+  691:     if (!canSearch) {
+  692:       return;
+  693:     }
+  694: 
+  695:     const params =
+  696:       new URLSearchParams();
+  697: 
+  698:     if (category) {
+  699:       params.set(
+  700:         "category",
+  701:         category,
+  702:       );
+  703:     }
+  704: 
+  705:     params.set(
+  706:       "origin",
+  707:       origin,
+  708:     );
+  709: 
+  710:     params.set(
+  711:       "destination",
+  712:       destination,
+  713:     );
+  714: 
+  715:     params.set(
+  716:       "travelers",
+  717:       String(travelerTotal),
+  718:     );
+  719: 
+  720:     params.set(
+  721:       "adult",
+  722:       String(travelers.adult),
+  723:     );
+  724: 
+  725:     params.set(
+  726:       "child",
+  727:       String(travelers.child),
+  728:     );
+  729: 
+  730:     params.set(
+  731:       "infant",
+  732:       String(travelers.infant),
+  733:     );
+  734: 
+  735:     params.set(
+  736:       "date",
+  737:       selectedDate,
+  738:     );
+  739: 
+  740:     setPanel(null);
+  741: 
+  742:     router.push(
+  743:       `/search?${params.toString()}`,
+  744:     );
+  745:   }
+
+========== src\components\search\SearchEditBar.tsx [1050-1190] ==========
+ 1050:                     className={
+ 1051:                       value ===
+ 1052:                       destination
+ 1053:                         ? "active"
+ 1054:                         : undefined
+ 1055:                     }
+ 1056:                     onClick={() => {
+ 1057:                       setDestination(
+ 1058:                         value,
+ 1059:                       );
+ 1060: 
+ 1061:                       setDestinationQuery(
+ 1062:                         "",
+ 1063:                       );
+ 1064: 
+ 1065:                       setPanel(null);
+ 1066:                     }}
+ 1067:                   >
+ 1068:                     {value}
+ 1069:                   </button>
+ 1070:                 ),
+ 1071:               )}
+ 1072:             </div>
+ 1073:           </div>
+ 1074:         )}
+ 1075:       </div>
+ 1076: 
+ 1077:       <div className="search-edit-control">
+ 1078:         <button
+ 1079:           type="button"
+ 1080:           className="search-edit-field"
+ 1081:           aria-expanded={
+ 1082:             panel === "date"
+ 1083:           }
+ 1084:           onClick={() =>
+ 1085:             togglePanel("date")
+ 1086:           }
+ 1087:         >
+ 1088:           <CalendarDays size={18} />
+ 1089: 
+ 1090:           <span>
+ 1091:             <small>
+ 1092:               {t.date}
+ 1093:             </small>
+ 1094: 
+ 1095:             <strong>
+ 1096:               {formatSelectedDate()}
+ 1097:             </strong>
+ 1098:           </span>
+ 1099:         </button>
+ 1100: 
+ 1101:         {panel === "date" && (
+ 1102:           <div className="search-edit-dropdown search-unified-dropdown search-unified-date">
+ 1103:             <div className="search-unified-dropdown-head">
+ 1104:               <strong>
+ 1105:                 {t.dateTitle}
+ 1106:               </strong>
+ 1107: 
+ 1108:               <button
+ 1109:                 type="button"
+ 1110:                 className="search-unified-close"
+ 1111:                 aria-label="Close"
+ 1112:                 onClick={() =>
+ 1113:                   setPanel(null)
+ 1114:                 }
+ 1115:               >
+ 1116:                 <X size={18} />
+ 1117:               </button>
+ 1118:             </div>
+ 1119: 
+ 1120:             <div className="search-unified-calendar-controls">
+ 1121:               <button
+ 1122:                 type="button"
+ 1123:                 aria-label="Previous month"
+ 1124:                 onClick={() =>
+ 1125:                   setCalendarMonth(
+ 1126:                     new Date(
+ 1127:                       currentYear,
+ 1128:                       currentMonth - 1,
+ 1129:                       1,
+ 1130:                     ),
+ 1131:                   )
+ 1132:                 }
+ 1133:               >
+ 1134:                 <ChevronLeft size={18} />
+ 1135:               </button>
+ 1136: 
+ 1137:               <div>
+ 1138:                 <select
+ 1139:                   value={currentMonth}
+ 1140:                   onChange={(event) =>
+ 1141:                     setCalendarMonth(
+ 1142:                       new Date(
+ 1143:                         currentYear,
+ 1144:                         Number(
+ 1145:                           event.target.value,
+ 1146:                         ),
+ 1147:                         1,
+ 1148:                       ),
+ 1149:                     )
+ 1150:                   }
+ 1151:                 >
+ 1152:                   {t.months.map(
+ 1153:                     (
+ 1154:                       month,
+ 1155:                       index,
+ 1156:                     ) => (
+ 1157:                       <option
+ 1158:                         key={month}
+ 1159:                         value={index}
+ 1160:                       >
+ 1161:                         {month}
+ 1162:                       </option>
+ 1163:                     ),
+ 1164:                   )}
+ 1165:                 </select>
+ 1166: 
+ 1167:                 <select
+ 1168:                   value={currentYear}
+ 1169:                   onChange={(event) =>
+ 1170:                     setCalendarMonth(
+ 1171:                       new Date(
+ 1172:                         Number(
+ 1173:                           event.target.value,
+ 1174:                         ),
+ 1175:                         currentMonth,
+ 1176:                         1,
+ 1177:                       ),
+ 1178:                     )
+ 1179:                   }
+ 1180:                 >
+ 1181:                   {Array.from(
+ 1182:                     {
+ 1183:                       length: 4,
+ 1184:                     },
+ 1185:                     (_, index) =>
+ 1186:                       today.getFullYear() +
+ 1187:                       index,
+ 1188:                   ).map(
+ 1189:                     (year) => (
+ 1190:                       <option
+
+========== src\components\home\Hero.tsx [1150-1195] ==========
+ 1150:     destinations,
+ 1151:     isHalalTour,
+ 1152:     isDomestic,
+ 1153:     isInternational,
+ 1154:     isSegaDeals,
+ 1155:   ]);
+ 1156: 
+ 1157: 
+ 1158:   const hajiYears = Array.from(
+ 1159:     { length: 6 },
+ 1160:     (_, index) => currentYear + index,
+ 1161:   );
+ 1162: 
+ 1163:   const isHajiYearDisabled = (year: number) => {
+ 1164:     /*
+ 1165:      * UI sementara Segaloka:
+ 1166:      * musim Haji 2026 sudah berlalu.
+ 1167:      *
+ 1168:      * Nantinya status availability / closed / sold-out
+ 1169:      * wajib berasal dari konfigurasi paket Haji Travel,
+ 1170:      * bukan hardcode di frontend.
+ 1171:      */
+ 1172:     return year === 2026;
+ 1173:   };
+ 1174: 
+ 1175: 
+ 1176:   const firstCalendarYear =
+ 1177:     calendarCursor.getFullYear();
+ 1178: 
+ 1179:   const firstCalendarMonth =
+ 1180:     calendarCursor.getMonth();
+ 1181: 
+ 1182:   const secondCalendarDate = new Date(
+ 1183:     firstCalendarYear,
+ 1184:     firstCalendarMonth + 1,
+ 1185:     1,
+ 1186:   );
+ 1187: 
+ 1188:   const todayCalendarMonth = new Date();
+ 1189: 
+ 1190:   todayCalendarMonth.setDate(1);
+ 1191:   todayCalendarMonth.setHours(0, 0, 0, 0);
+ 1192: 
+ 1193:   const canGoPrevious =
+ 1194:     calendarCursor.getTime() >
+ 1195:     todayCalendarMonth.getTime();
+
+========== src\components\home\Hero.tsx [2170-2240] ==========
+ 2170:                   ? language === "ID"
+ 2171:                     ? "Tanggal Berangkat"
+ 2172:                     : language === "EN"
+ 2173:                       ? "Departure Date"
+ 2174:                       : "ØªØ§Ø±ÙŠØ® Ø§Ù„Ù…ØºØ§Ø¯Ø±Ø©"
+ 2175:                   : t("hero.date")}
+ 2176:             </small>
+ 2177: 
+ 2178:             <strong>
+ 2179:               {isYear
+ 2180:                 ? hajiYear
+ 2181:                   ? String(hajiYear)
+ 2182:                   : t("search.selectYear")
+ 2183:                 : formatDate(selectedDate, locale, t("search.selectDate"))}
+ 2184:             </strong>
+ 2185:           </span>
+ 2186:         </button>
+ 2187: 
+ 2188: 
+ 2189:         {openPanel === "year" && isYear && (
+ 2190:           <div className="hero-popover hero-year-popover">
+ 2191:             <h3>
+ 2192:               {t("calendar.selectDepartureYear")}
+ 2193:             </h3>
+ 2194: 
+ 2195:             <div className="hero-year-options">
+ 2196:               {hajiYears.map((year) => {
+ 2197:                 const disabled =
+ 2198:                   isHajiYearDisabled(year);
+ 2199: 
+ 2200:                 return (
+ 2201:                   <button
+ 2202:                     key={year}
+ 2203:                     type="button"
+ 2204:                     disabled={disabled}
+ 2205:                     aria-disabled={disabled}
+ 2206:                     className={
+ 2207:                       [
+ 2208:                         year === hajiYear
+ 2209:                           ? "selected"
+ 2210:                           : "",
+ 2211:                         disabled
+ 2212:                           ? "disabled"
+ 2213:                           : "",
+ 2214:                       ]
+ 2215:                         .filter(Boolean)
+ 2216:                         .join(" ")
+ 2217:                     }
+ 2218:                     onClick={() => {
+ 2219:                       if (disabled) {
+ 2220:                         return;
+ 2221:                       }
+ 2222: 
+ 2223:                       setHajiYear(year);
+ 2224:                       setOpenPanel(null);
+ 2225:                     }}
+ 2226:                   >
+ 2227:                     {year}
+ 2228: 
+ 2229:                     {disabled && (
+ 2230:                       <span
+ 2231:                         className="hero-year-status"
+ 2232:                         aria-hidden="true"
+ 2233:                       >
+ 2234:                         {t("calendar.passed")}
+ 2235:                       </span>
+ 2236:                     )}
+ 2237:                   </button>
+ 2238:                 );
+ 2239:               })}
+ 2240:             </div>
+
+========== src\components\search\SearchResultsClient.tsx [1060-1090] ==========
+ 1060:             {category}
+ 1061:           </span>
+ 1062: 
+ 1063:           <h1>
+ 1064:             Temukan Paket {category}
+ 1065:             <br />
+ 1066:             Impian Anda
+ 1067:           </h1>
+ 1068: 
+ 1069:           <p>
+ 1070:             Pilih perjalanan terbaik
+ 1071:             sesuai kebutuhan Anda.
+ 1072:           </p>
+ 1073: 
+ 1074:         </div>
+ 1075: 
+ 1076:       </section>
+ 1077:       <section className="search-results-search-shell">
+ 1078: 
+ 1079:         <SearchEditBar
+ 1080:           category={category}
+ 1081:           initialOrigin={origin}
+ 1082:           initialDestination={destination}
+ 1083:           initialTravelers={travelers}
+ 1084:           initialDate={date}
+ 1085:         />
+ 1086: 
+ 1087:       </section>
+ 1088: 
+ 1089: 
+ 1090:       <div className="search-results-shell search-results-main">
+
+========== src\app\search\page.tsx [1-120] ==========
+    1: import {
+    2:   SearchResultsClient,
+    3: } from "@/components/search/SearchResultsClient";
+    4: 
+    5: type SearchPageProps = {
+    6:   searchParams: Promise<{
+    7:     category?: string;
+    8:     origin?: string;
+    9:     destination?: string;
+   10:     travelers?: string;
+   11:     adult?: string;
+   12:     child?: string;
+   13:     infant?: string;
+   14:     date?: string;
+   15:     departureDate?: string;
+   16:     returnDate?: string;
+   17:     year?: string;
+   18:   }>;
+   19: };
+   20: 
+   21: export default async function SearchPage({
+   22:   searchParams,
+   23: }: SearchPageProps) {
+   24:   const params = await searchParams;
+   25: 
+   26:   return (
+   27:     <SearchResultsClient
+   28:       category={params.category || ""}
+   29:       origin={params.origin || ""}
+   30:       destination={params.destination || ""}
+   31:       travelers={params.travelers || ""}
+   32:       adult={params.adult || ""}
+   33:       child={params.child || ""}
+   34:       infant={params.infant || ""}
+   35:       date={params.date || ""}
+   36:       departureDate={
+   37:         params.departureDate ||
+   38:         params.date ||
+   39:         ""
+   40:       }
+   41:       returnDate={params.returnDate || ""}
+   42:     />
+   43:   );
+   44: }

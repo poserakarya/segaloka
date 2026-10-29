@@ -1,0 +1,697 @@
+/*
+ * ============================================================
+ * SEGALOKA CANONICAL SEARCH
+ * ============================================================
+ *
+ * Semua visual Search harus dikelola dari file ini
+ * dan tokens.css.
+ */
+
+.segaloka-search {
+  position: relative;
+  width: 100%;
+  font-family: var(--search-font-family);
+}
+
+.segaloka-search__container {
+  display: flex;
+  align-items: stretch;
+  gap: var(--search-gap);
+
+  width: 100%;
+  padding: 12px;
+
+  background: var(--search-background);
+  border: 1px solid var(--search-border);
+  border-radius: var(--search-container-radius);
+  box-shadow: var(--ui-shadow-card);
+}
+
+.segaloka-search__field {
+  min-width: 0;
+  min-height: var(--search-height);
+
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  padding: 10px 14px;
+
+  background: var(--search-background);
+  border: 1px solid var(--search-border);
+  border-radius: var(--search-radius);
+
+  color: var(--search-value-color);
+
+  cursor: pointer;
+}
+
+.segaloka-search__field-icon {
+  width: 36px;
+  height: 36px;
+  flex: 0 0 36px;
+
+  display: grid;
+  place-items: center;
+
+  color: var(--search-icon-color);
+  background: var(--search-icon-background);
+
+  border-radius: 10px;
+}
+
+.segaloka-search__field-content {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.segaloka-search__label {
+  font-size: var(--search-label-size);
+  font-weight: var(--search-label-weight);
+  line-height: 1.2;
+  color: var(--search-label-color);
+}
+
+.segaloka-search__value {
+  overflow: hidden;
+
+  font-size: var(--search-value-size);
+  font-weight: var(--search-value-weight);
+  line-height: 1.3;
+
+  color: var(--search-value-color);
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.segaloka-search__submit {
+  min-height: var(--search-button-height);
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  padding: 0 22px;
+
+  border: 0;
+  border-radius: var(--search-button-radius);
+
+  background: var(--ui-primary);
+  color: var(--ui-text-inverse);
+
+  font: inherit;
+  font-size: var(--search-button-font-size);
+  font-weight: var(--ui-weight-semibold);
+
+  cursor: pointer;
+}
+
+.segaloka-search__submit:hover {
+  background: var(--ui-primary-hover);
+}
+
+.segaloka-search__dropdown {
+  position: absolute;
+  z-index: 80;
+
+  width: min(
+    var(--search-dropdown-width),
+    calc(100vw - 24px)
+  );
+
+  margin-top: 8px;
+  padding: 18px;
+
+  background: var(--search-dropdown-background);
+  border: 1px solid var(--ui-border);
+  border-radius: var(--search-dropdown-radius);
+  box-shadow: var(--search-dropdown-shadow);
+}
+
+.segaloka-search__calendar {
+  width: min(
+    var(--search-calendar-width),
+    calc(100vw - 24px)
+  );
+}
+
+@media (max-width: 767px) {
+  .segaloka-search__container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .segaloka-search__field {
+    min-height: var(--search-height);
+  }
+
+  .segaloka-search__submit {
+    grid-column: 1 / -1;
+    width: 100%;
+  }
+}
+
+/* SEGALOKA SEARCH LEGACY BRIDGE START */
+
+/*
+ * ============================================================
+ * LEGACY -> CENTRAL UI BRIDGE
+ * ============================================================
+ *
+ * Sementara Hero.tsx dan SearchEditBar.tsx masih menggunakan
+ * class lama, nilai visual utamanya dikendalikan dari tokens.css.
+ *
+ * Jangan menambahkan angka visual baru di blok ini.
+ * Gunakan CSS variable dari src/ui/tokens.css.
+ */
+
+/* ------------------------------------------------------------
+   HERO / BERANDA
+   ------------------------------------------------------------ */
+
+.hero-search-card,
+.search-edit-bar {
+  font-family: var(--search-font-family);
+}
+
+.hero-search-field,
+.search-unified-field {
+  min-height: var(--search-height);
+
+  padding:
+    var(--search-field-padding-y)
+    var(--search-field-padding-x);
+
+  border-width: var(--search-field-border-width);
+  border-color: var(--search-border);
+  border-radius: var(--search-radius);
+
+  background: var(--search-background);
+  color: var(--search-value-color);
+}
+
+.hero-search-field-label,
+.search-unified-label {
+  font-size: var(--search-label-size);
+  font-weight: var(--search-label-weight);
+  color: var(--search-label-color);
+}
+
+.hero-search-field-value,
+.search-unified-value {
+  font-size: var(--search-value-size);
+  font-weight: var(--search-value-weight);
+  color: var(--search-value-color);
+}
+
+.hero-search-field-icon,
+.search-unified-icon {
+  width: var(--search-icon-box-size);
+  height: var(--search-icon-box-size);
+  flex: 0 0 var(--search-icon-box-size);
+
+  color: var(--search-icon-color);
+  background: var(--search-icon-background);
+
+  border-radius: var(--search-icon-radius);
+}
+
+/* ------------------------------------------------------------
+   SEARCH BUTTON
+   ------------------------------------------------------------ */
+
+.hero-search-button,
+.search-unified-submit,
+.search-edit-submit {
+  min-height: var(--search-button-height);
+
+  padding-inline:
+    var(--search-button-padding-x);
+
+  border-radius:
+    var(--search-button-radius);
+
+  font-size:
+    var(--search-button-font-size);
+
+  font-weight:
+    var(--ui-weight-semibold);
+}
+
+/* ------------------------------------------------------------
+   DROPDOWN / POPOVER
+   ------------------------------------------------------------ */
+
+.hero-popover,
+.search-edit-dropdown,
+.search-unified-dropdown {
+  background:
+    var(--search-dropdown-background);
+
+  border-color:
+    var(--search-border);
+
+  border-radius:
+    var(--search-dropdown-radius);
+
+  box-shadow:
+    var(--search-dropdown-shadow);
+
+  font-family:
+    var(--search-font-family);
+}
+
+/* ------------------------------------------------------------
+   CALENDAR
+   ------------------------------------------------------------ */
+
+.hero-date-popover,
+.search-unified-date {
+  width: min(
+    var(--search-calendar-width),
+    calc(100vw - 24px)
+  );
+}
+
+.hero-date-header strong,
+.search-unified-dropdown-head strong {
+  font-size:
+    var(--search-calendar-title-size);
+}
+
+.hero-calendar-month-title,
+.search-unified-calendar-month-title {
+  font-size:
+    var(--search-calendar-month-size);
+}
+
+.hero-calendar-weekdays,
+.search-unified-calendar-weekdays {
+  font-size:
+    var(--search-calendar-weekday-size);
+}
+
+.hero-calendar-days button,
+.search-unified-calendar-days button {
+  font-size:
+    var(--search-calendar-date-size);
+}
+
+/* ------------------------------------------------------------
+   TRAVELER
+   ------------------------------------------------------------ */
+
+.hero-traveler-popover strong,
+.search-unified-traveler strong {
+  font-size:
+    var(--search-traveler-title-size);
+}
+
+.hero-traveler-popover span,
+.search-unified-traveler span {
+  font-size:
+    var(--search-traveler-value-size);
+}
+
+/* ------------------------------------------------------------
+   RTL
+   ------------------------------------------------------------ */
+
+[dir="rtl"] .hero-search-card,
+[dir="rtl"] .search-edit-bar {
+  direction: rtl;
+}
+
+/* ------------------------------------------------------------
+   MOBILE
+   ------------------------------------------------------------ */
+
+@media (max-width: 767px) {
+  .hero-search-field,
+  .search-unified-field {
+    min-height:
+      var(--search-height);
+  }
+
+  .hero-search-button,
+  .search-unified-submit,
+  .search-edit-submit {
+    min-height:
+      var(--search-button-height);
+  }
+
+  .hero-date-popover,
+  .search-unified-date {
+    width:
+      var(--search-calendar-width);
+  }
+}
+
+/* SEGALOKA SEARCH LEGACY BRIDGE END */
+
+/* SEGALOKA CANONICAL CALENDAR START */
+
+.segaloka-search-calendar {
+  width: min(
+    var(--search-calendar-width),
+    calc(100vw - 24px)
+  );
+
+  padding: 24px 28px 28px;
+
+  background:
+    var(--search-dropdown-background);
+
+  border:
+    1px solid
+    var(--search-border);
+
+  border-radius:
+    var(--search-dropdown-radius);
+
+  box-shadow:
+    var(--search-dropdown-shadow);
+
+  color:
+    var(--ui-text);
+
+  font-family:
+    var(--search-font-family);
+}
+
+.segaloka-search-calendar__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-bottom: 18px;
+}
+
+.segaloka-search-calendar__header > strong {
+  font-size:
+    var(--search-calendar-title-size);
+
+  font-weight:
+    var(--ui-weight-bold);
+}
+
+.segaloka-search-calendar__close,
+.segaloka-search-calendar__nav {
+  width: 38px;
+  height: 38px;
+
+  display: inline-grid;
+  place-items: center;
+
+  padding: 0;
+
+  border: 1px solid var(--ui-border);
+  border-radius: 10px;
+
+  background: var(--ui-surface);
+  color: var(--ui-text);
+
+  cursor: pointer;
+}
+
+.segaloka-search-calendar__close:hover,
+.segaloka-search-calendar__nav:hover:not(:disabled) {
+  border-color:
+    var(--ui-primary);
+
+  color:
+    var(--ui-primary);
+}
+
+.segaloka-search-calendar__nav:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.segaloka-search-calendar__navigation {
+  display: grid;
+  grid-template-columns:
+    38px
+    minmax(0, 1fr)
+    38px;
+
+  align-items: center;
+  gap: 16px;
+
+  margin-bottom: 24px;
+}
+
+.segaloka-search-calendar__selectors {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.segaloka-search-calendar__selectors select {
+  min-height: 38px;
+
+  padding: 0 34px 0 12px;
+
+  border: 1px solid var(--ui-border);
+  border-radius: 10px;
+
+  background: var(--ui-surface);
+  color: var(--ui-text);
+
+  font: inherit;
+  font-size:
+    var(--search-calendar-month-size);
+
+  font-weight:
+    var(--ui-weight-semibold);
+
+  cursor: pointer;
+}
+
+.segaloka-search-calendar__grid {
+  display: grid;
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap: 48px;
+}
+
+.segaloka-search-calendar__month {
+  min-width: 0;
+}
+
+.segaloka-search-calendar__month-title {
+  display: block;
+
+  margin-bottom: 14px;
+
+  text-align: center;
+
+  font-size:
+    var(--search-calendar-month-size);
+
+  font-weight:
+    var(--ui-weight-bold);
+}
+
+.segaloka-search-calendar__weekdays,
+.segaloka-search-calendar__days {
+  display: grid;
+  grid-template-columns:
+    repeat(7, minmax(0, 1fr));
+
+  gap: 4px;
+}
+
+.segaloka-search-calendar__weekdays {
+  margin-bottom: 6px;
+}
+
+.segaloka-search-calendar__weekdays span {
+  min-height: 28px;
+
+  display: grid;
+  place-items: center;
+
+  color:
+    var(--ui-text-muted);
+
+  font-size:
+    var(--search-calendar-weekday-size);
+
+  font-weight:
+    var(--ui-weight-semibold);
+}
+
+.segaloka-search-calendar__weekdays .is-sunday {
+  color:
+    var(--ui-danger);
+}
+
+.segaloka-search-calendar__days > span,
+.segaloka-search-calendar__days > button {
+  width:
+    var(--search-calendar-day-size);
+
+  height:
+    var(--search-calendar-day-size);
+
+  justify-self: center;
+}
+
+.segaloka-search-calendar__days > button {
+  display: grid;
+  place-items: center;
+
+  padding: 0;
+
+  border: 0;
+  border-radius: 50%;
+
+  background: transparent;
+  color: var(--ui-text);
+
+  font: inherit;
+  font-size:
+    var(--search-calendar-date-size);
+
+  cursor: pointer;
+}
+
+.segaloka-search-calendar__days > button:hover:not(:disabled) {
+  background:
+    var(--ui-primary-soft);
+
+  color:
+    var(--ui-primary);
+}
+
+.segaloka-search-calendar__days > button.is-sunday {
+  color:
+    var(--ui-danger);
+}
+
+.segaloka-search-calendar__days > button.is-selected {
+  background:
+    var(--ui-primary);
+
+  color:
+    var(--ui-text-inverse);
+}
+
+.segaloka-search-calendar__days > button:disabled {
+  color:
+    var(--ui-text-muted);
+
+  opacity: 0.38;
+  cursor: not-allowed;
+}
+
+@media (max-width: 767px) {
+  .segaloka-search-calendar {
+    width:
+      var(--search-calendar-width);
+
+    padding: 18px 16px 20px;
+  }
+
+  .segaloka-search-calendar__grid {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .segaloka-search-calendar__month:nth-child(2) {
+    display: none;
+  }
+
+  .segaloka-search-calendar__navigation {
+    gap: 8px;
+  }
+
+  .segaloka-search-calendar__selectors {
+    gap: 6px;
+  }
+
+  .segaloka-search-calendar__selectors select {
+    min-width: 0;
+    max-width: 140px;
+  }
+}
+
+/* SEGALOKA CANONICAL CALENDAR END */
+
+/* SEGALOKA MASTER SEARCH LAYOUT START */
+
+/*
+ * SINGLE SOURCE OF TRUTH:
+ *
+ * src/ui/search/Search.tsx
+ *
+ * Jangan membuat ulang grid Search pada page/component lain.
+ */
+
+.segaloka-search-master {
+  /*
+   * Geometry utama tetap mengikuti canonical Hero existing.
+   * Selector ini mengunci ownership ke Central UI.
+   */
+  width: 100%;
+}
+
+.segaloka-search-master__slot {
+  min-width: 0;
+}
+
+/*
+ * Field internal harus memenuhi track canonical.
+ */
+.segaloka-search-master__slot > .hero-field-wrap,
+.segaloka-search-master__slot > .search-edit-field-wrap,
+.segaloka-search-master__slot > * {
+  width: 100%;
+  min-width: 0;
+}
+
+/*
+ * Jangan izinkan consumer menukar urutan melalui DOM/CSS.
+ */
+.segaloka-search-master__origin {
+  order: 1;
+}
+
+.segaloka-search-master__destination {
+  order: 2;
+}
+
+.segaloka-search-master__travelers {
+  order: 3;
+}
+
+.segaloka-search-master__date {
+  order: 4;
+}
+
+.segaloka-search-master__submit {
+  order: 5;
+}
+
+/*
+ * Submit tetap mengikuti canonical Search Beranda.
+ */
+.segaloka-search-master__submit {
+  align-self: stretch;
+}
+
+/*
+ * RTL mengubah arah bahasa, bukan urutan logis Search.
+ */
+[dir="rtl"] .segaloka-search-master {
+  direction: rtl;
+}
+
+/* SEGALOKA MASTER SEARCH LAYOUT END */

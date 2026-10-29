@@ -1,0 +1,13 @@
+﻿{
+    "role":  "traveler",
+    "port":  4210,
+    "entry":  "dist-v7/index.html",
+    "assetRoot":  "dist-v7",
+    "uiSource":  "existing-v7",
+    "standalone":  true,
+    "authenticationRequired":  true,
+    "serverAuthorizationRequired":  true,
+    "publicAccessEnabled":  false,
+    "workspaceSwitching":  false,
+    "status":  "awaiting-server-integration"
+}

@@ -1,0 +1,725 @@
+"use client";
+
+import {
+  ChevronDown,
+  Globe2,
+  Menu,
+  Search,
+  X,
+} from "lucide-react";
+
+import Image from "next/image";
+import { useEffect, useState } from "react";
+
+import {
+  currencyOptions,
+  languageOptions,
+} from "@/data/preferences";
+import { useMarketplacePreferences } from "@/components/providers/MarketplacePreferencesProvider";
+import { marketplaceTranslate } from "@/lib/marketplace-i18n";
+
+
+const businessItems = [
+  {
+    labelKey: "header.registerTravel" as const,
+    href: "/partner/travel",
+  },
+  {
+    labelKey: "header.registerVendor" as const,
+    href: "/daftar-vendor",
+  },
+  {
+    labelKey: "header.affiliate" as const,
+    href: "/affiliate",
+  },
+];
+
+
+const helpItems = [
+  {
+    labelKey: "header.helpCenter" as const,
+    href: "/pusat-bantuan",
+  },
+  {
+    labelKey: "header.howToBook" as const,
+    href: "/cara-pesan",
+  },
+  {
+    labelKey: "header.contactUs" as const,
+    href: "/bantuan",
+  },
+  {
+    labelKey: "header.terms" as const,
+    href: "/syarat-ketentuan",
+  },
+];
+
+
+export function Header() {
+  const {
+    language,
+    currency,
+    setLanguage,
+    setCurrency,
+  } = useMarketplacePreferences();
+  const t = (
+    key: Parameters<typeof marketplaceTranslate>[1],
+  ) => marketplaceTranslate(language, key);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [preferencesOpen, setPreferencesOpen] = useState(false);
+
+  const [businessOpen, setBusinessOpen] = useState(false);
+  const [helpOpen, setHelpOpen] = useState(false);
+  const [authModalOpen, setAuthModalOpen] = useState(false);
+
+  // sg-auth-route-query-handler
+  useEffect(() => {
+    const url = new URL(window.location.href);
+    const auth = url.searchParams.get("auth");
+
+    if (auth !== "login" && auth !== "register") {
+      return;
+    }
+
+    setAuthModalOpen(true);
+
+    url.searchParams.delete("auth");
+
+    window.history.replaceState(
+      window.history.state,
+      "",
+      url.pathname + url.search + url.hash,
+    );
+  }, []);
+
+
+
+  function closeNavDropdowns() {
+    setBusinessOpen(false);
+    setHelpOpen(false);
+  }
+
+
+
+  function closeAuthModal() {
+    setAuthModalOpen(false);
+  }
+
+
+  useEffect(() => {
+    if (!authModalOpen) {
+      return;
+    }
+
+    const body = document.body;
+    const html = document.documentElement;
+
+    const scrollY = window.scrollY;
+
+    const previousBodyOverflow = body.style.overflow;
+    const previousBodyPosition = body.style.position;
+    const previousBodyTop = body.style.top;
+    const previousBodyWidth = body.style.width;
+
+    const previousHtmlOverflow = html.style.overflow;
+
+    body.style.overflow = "hidden";
+    html.style.overflow = "hidden";
+
+    body.style.position = "fixed";
+    body.style.top = `-${scrollY}px`;
+    body.style.width = "100%";
+
+    function handleEscape(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        setAuthModalOpen(false);
+      }
+    }
+
+    window.addEventListener(
+      "keydown",
+      handleEscape,
+    );
+
+    return () => {
+      window.removeEventListener(
+        "keydown",
+        handleEscape,
+      );
+
+      body.style.overflow = previousBodyOverflow;
+      body.style.position = previousBodyPosition;
+      body.style.top = previousBodyTop;
+      body.style.width = previousBodyWidth;
+
+      html.style.overflow = previousHtmlOverflow;
+
+      window.scrollTo(0, scrollY);
+    };
+  }, [authModalOpen]);
+  return (
+    <header className="hero-header">
+
+      <div className="hero-header-shell">
+
+        <a
+          href="/"
+          className="hero-logo"
+          aria-label="Segaloka"
+        >
+          <Image
+            src="/images/brand/segaloka-logo.png"
+            alt="Segaloka"
+            width={106}
+            height={34}
+            priority
+          />
+        </a>
+
+
+        <nav
+          className="hero-nav hero-nav-new"
+          aria-label={t("header.mainNavigation")}
+        >
+
+          <a
+            href="#promo"
+            className="hero-nav-primary"
+            onClick={closeNavDropdowns}
+          >
+            <span className="hero-nav-promo-icon">
+              %
+            </span>
+
+            {t("header.promo")}
+          </a>
+
+
+          <a
+            href="#aplikasi"
+            className="hero-nav-primary"
+            onClick={closeNavDropdowns}
+          >
+            <span className="hero-nav-download-icon">
+              ↓
+            </span>
+
+            {t("header.downloadApp")}
+          </a>
+
+
+          <div className="hero-nav-dropdown">
+
+            <button
+              type="button"
+              className="hero-nav-trigger"
+              aria-expanded={businessOpen}
+              onClick={() => {
+                setBusinessOpen(
+                  (value) => !value
+                );
+
+                setHelpOpen(false);
+              }}
+            >
+              {t("header.business")}
+
+              <ChevronDown
+                size={14}
+                className={
+                  businessOpen
+                    ? "is-open"
+                    : ""
+                }
+              />
+            </button>
+
+
+            {businessOpen && (
+              <div className="hero-nav-menu">
+
+                {businessItems.map(
+                  (item) => (
+                    <a
+                      key={t(item.labelKey)}
+                      href={item.href}
+                      onClick={() =>
+                        setBusinessOpen(false)
+                      }
+                    >
+                      {t(item.labelKey)}
+                    </a>
+                  ),
+                )}
+
+              </div>
+            )}
+
+          </div>
+
+
+          <div className="hero-nav-dropdown">
+
+            <button
+              type="button"
+              className="hero-nav-trigger"
+              aria-expanded={helpOpen}
+              onClick={() => {
+                setHelpOpen(
+                  (value) => !value
+                );
+
+                setBusinessOpen(false);
+              }}
+            >
+              {t("header.help")}
+
+              <ChevronDown
+                size={14}
+                className={
+                  helpOpen
+                    ? "is-open"
+                    : ""
+                }
+              />
+            </button>
+
+
+            {helpOpen && (
+              <div className="hero-nav-menu">
+
+                {helpItems.map(
+                  (item) => (
+                    <a
+                      key={t(item.labelKey)}
+                      href={item.href}
+                      onClick={() =>
+                        setHelpOpen(false)
+                      }
+                    >
+                      {t(item.labelKey)}
+                    </a>
+                  ),
+                )}
+
+              </div>
+            )}
+
+          </div>
+
+
+          <a
+            href="/pesanan"
+            className="hero-nav-primary"
+            onClick={closeNavDropdowns}
+          >
+            {t("header.orders")}
+          </a>
+
+        </nav>
+
+
+        <div className="hero-header-actions">
+
+          <button
+            type="button"
+            className="hero-currency"
+            aria-expanded={preferencesOpen}
+            aria-haspopup="true"
+            onClick={() => {
+              setPreferencesOpen(
+                (value) => !value
+              );
+
+              closeNavDropdowns();
+            }}
+          >
+            <Globe2 size={14} />
+
+            <span>
+              {language} · {currency}
+            </span>
+
+            <ChevronDown size={12} />
+          </button>
+
+
+          {preferencesOpen && (
+            <div
+              className="hero-preferences-menu"
+              role="menu"
+            >
+
+              <div className="hero-preferences-group">
+
+                <span className="hero-preferences-label">
+                  {t("header.language")}
+                </span>
+
+                {languageOptions.map(
+                  (option) => (
+                    <button
+                      key={option.code}
+                      type="button"
+                      role="menuitemradio"
+                      aria-checked={
+                        language === option.code
+                      }
+                      dir={option.dir}
+                      className={
+                        language === option.code
+                          ? "selected"
+                          : ""
+                      }
+                      onClick={() => {
+                        setLanguage(option.code);
+                        setPreferencesOpen(false);
+                      }}
+                    >
+                      <span>
+                        {option.code}
+                      </span>
+
+                      <small>
+                        {option.label}
+                      </small>
+                    </button>
+                  ),
+                )}
+
+              </div>
+
+
+              <div className="hero-preferences-group">
+
+                <span className="hero-preferences-label">
+                  {t("header.currency")}
+                </span>
+
+                {currencyOptions.map(
+                  (option) => (
+                    <button
+                      key={option.code}
+                      type="button"
+                      role="menuitemradio"
+                      aria-checked={
+                        currency === option.code
+                      }
+                      className={
+                        currency === option.code
+                          ? "selected"
+                          : ""
+                      }
+                      onClick={() => {
+                        setCurrency(option.code);
+                        setPreferencesOpen(false);
+                      }}
+                    >
+                      <span>
+                        {option.code}
+                      </span>
+
+                      <small>
+                        {option.label}
+                      </small>
+                    </button>
+                  ),
+                )}
+
+              </div>
+
+            </div>
+          )}
+
+
+          <button
+  type="button"
+  className="hero-login"
+  onClick={() => {
+    closeNavDropdowns();
+    setPreferencesOpen(false);
+    setMobileOpen(false);
+    setAuthModalOpen(true);
+  }}
+>
+  {t("header.login")}
+</button>
+
+
+          <button
+            type="button"
+            className="hero-register"
+            onClick={() => {
+              closeNavDropdowns();
+              setPreferencesOpen(false);
+              setAuthModalOpen(true);
+            }}
+          >
+            {t("header.register")}
+          </button>
+
+
+          <button
+            type="button"
+            className="hero-mobile-action"
+            aria-label={t("header.search")}
+          >
+            <Search size={18} />
+          </button>
+
+
+          <button
+            type="button"
+            className="hero-mobile-action"
+            aria-label={t("header.menu")}
+            onClick={() =>
+              setMobileOpen(
+                (value) => !value
+              )
+            }
+          >
+            {mobileOpen
+              ? <X size={20} />
+              : <Menu size={20} />
+            }
+          </button>
+
+        </div>
+
+      </div>
+
+
+      {mobileOpen && (
+        <div className="hero-mobile-menu">
+
+          <button
+            type="button"
+            className="hero-mobile-preferences"
+            onClick={() =>
+              setPreferencesOpen(
+                (value) => !value
+              )
+            }
+          >
+            <Globe2 size={15} />
+
+            {language} · {currency}
+
+            <ChevronDown size={13} />
+          </button>
+
+
+          <a href="#promo">
+            {t("header.promo")}
+          </a>
+
+          <a href="#aplikasi">
+            {t("header.downloadApp")}
+          </a>
+
+
+          <span className="hero-mobile-menu-label">
+            {t("header.business")}
+          </span>
+
+          {businessItems.map(
+            (item) => (
+              <a
+                href={item.href}
+                key={t(item.labelKey)}
+              >
+                {t(item.labelKey)}
+              </a>
+            ),
+          )}
+
+
+          <span className="hero-mobile-menu-label">
+            {t("header.help")}
+          </span>
+
+          {helpItems.map(
+            (item) => (
+              <a
+                href={item.href}
+                key={t(item.labelKey)}
+              >
+                {t(item.labelKey)}
+              </a>
+            ),
+          )}
+
+
+          <a href="/pesanan">
+            {t("header.orders")}
+          </a>
+
+
+          <div className="hero-mobile-auth">
+
+            <button
+  type="button"
+  className="hero-login"
+  onClick={() => {
+    closeNavDropdowns();
+    setPreferencesOpen(false);
+    setMobileOpen(false);
+    setAuthModalOpen(true);
+  }}
+>
+  {t("header.login")}
+</button>
+
+            <button
+            type="button"
+            className="hero-register"
+            onClick={() => {
+              closeNavDropdowns();
+              setPreferencesOpen(false);
+              setAuthModalOpen(true);
+            }}
+          >
+            {t("header.register")}
+          </button>
+
+          </div>
+
+        </div>
+      )}
+
+
+      {authModalOpen && (
+        <div
+          className="sg-auth-modal-backdrop"
+          role="presentation"
+          onMouseDown={(event) => {
+            if (event.currentTarget === event.target) {
+              closeAuthModal();
+            }
+          }}
+        >
+          <div
+            className="sg-auth-modal" dir={language === "AR" ? "rtl" : "ltr"} lang={language.toLowerCase()}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="sg-auth-modal-title"
+          >
+            <button
+              type="button"
+              className="sg-auth-modal-close"
+              aria-label={t("auth.close")}
+              onClick={closeAuthModal}
+            >
+              <X size={19} />
+            </button>
+
+
+            <div className="sg-auth-modal-brand">
+              <Image
+                src="/images/brand/segaloka-logo.png"
+                alt="Segaloka"
+                width={122}
+                height={39}
+                priority
+              />
+            </div>
+
+
+            <div className="sg-auth-modal-head">
+              <h2 id="sg-auth-modal-title">
+                {t("auth.title")}
+              </h2>
+              <p>{t("auth.subtitle")}</p>
+            </div>
+
+
+            <div className="sg-auth-modal-actions">
+
+  <a
+    href="https://api.segaloka.com/auth/google/start"
+    className="sg-auth-provider sg-auth-google"
+  >
+    <span
+  aria-hidden="true"
+  style={{
+    width: 34,
+    height: 34,
+    borderRadius: "50%",
+    backgroundColor: "#ffffff",
+    display: "inline-flex",
+    alignItems: "center",
+    justifyContent: "center",
+    flexShrink: 0,
+  }}
+>
+  <img
+    src="/images/auth/google.svg"
+    alt=""
+    width={22}
+    height={22}
+    style={{ objectFit: "contain" }}
+  />
+</span>
+    <strong>{t("auth.google")}</strong>
+  </a>
+
+  <a
+    href="/daftar"
+    className="sg-auth-provider sg-auth-email"
+  >
+    <img
+      src="/images/auth/phone.svg"
+      alt=""
+      width={24}
+      height={24}
+    />
+    <strong>{t("auth.phone")}</strong>
+  </a>
+
+  <a
+    href="/daftar"
+    className="sg-auth-provider sg-auth-email"
+  >
+    <img
+      src="/images/auth/email.svg"
+      alt=""
+      width={24}
+      height={24}
+    />
+    <strong>{t("auth.email")}</strong>
+  </a>
+
+</div>
+<div className="sg-auth-benefit">
+              <strong>{t("auth.benefitTitle")}</strong>
+              <p>{t("auth.benefitDescription")}</p>
+            </div>
+
+
+            <div className="sg-auth-legal">
+              {t("auth.consentPrefix")}{" "}
+              <a href="/syarat-ketentuan" target="_blank" rel="noopener noreferrer">
+                {t("auth.terms")}
+              </a>
+              {" "}{t("auth.and")}{" "}
+              <a href="/kebijakan-privasi" target="_blank" rel="noopener noreferrer">
+                {t("auth.privacy")}
+              </a>
+              {" Segaloka."}
+            </div>
+
+
+            <button
+              type="button"
+              className="sg-auth-guest"
+              onClick={closeAuthModal}
+            >
+              {t("auth.guest")}
+            </button>
+
+          </div>
+        </div>
+      )}
+    </header>
+  );
+}

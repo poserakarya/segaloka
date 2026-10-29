@@ -1,0 +1,154 @@
+import { createEmailVerificationToken } from './email-token.js';
+import { sendVerificationEmail } from './email-sender.js';
+
+const GENERIC_RESULT = Object.freeze({
+  accepted: true,
+  message: 'Jika akun memenuhi syarat, email verifikasi akan dikirim.'
+});
+
+export async function resendEmailVerification(
+  pool,
+  email,
+  { send = sendVerificationEmail } = {}
+) {
+  if (typeof email !== 'string') {
+    throw new TypeError('INVALID_EMAIL');
+  }
+
+  const normalized = email.trim().toLowerCase();
+
+  if (
+    normalized.length > 254 ||
+    !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalized)
+  ) {
+    throw new TypeError('INVALID_EMAIL');
+  }
+
+  const client = await pool.connect();
+  let deliveryData = null;
+  let transactionOpen = false;
+
+  try {
+    await client.query('BEGIN');
+    transactionOpen = true;
+
+    const result = await client.query(
+      `SELECT id, email, full_name, email_verified_at, status
+       FROM public.users
+       WHERE lower(email) = $1
+       FOR UPDATE`,
+      [normalized]
+    );
+
+    const user = result.rows[0];
+
+    if (
+      user &&
+      !user.email_verified_at &&
+      user.status === 'active'
+    ) {
+      const limits = await client.query(
+        `SELECT
+           count(*) FILTER (
+             WHERE created_at > now() - interval '24 hours'
+           )::integer AS daily_count,
+           max(created_at) AS last_created
+         FROM public.email_verifications
+         WHERE user_id = $1`,
+        [user.id]
+      );
+
+      const {
+        daily_count: dailyCount,
+        last_created: lastCreated
+      } = limits.rows[0];
+
+      const cooldownPassed =
+        !lastCreated ||
+        Date.now() - new Date(lastCreated).getTime() >= 60000;
+
+      if (dailyCount < 5 && cooldownPassed) {
+        const verification = createEmailVerificationToken();
+
+        await client.query(
+          `UPDATE public.email_verifications
+           SET consumed_at = now()
+           WHERE user_id = $1
+             AND consumed_at IS NULL`,
+          [user.id]
+        );
+
+        await client.query(
+          `INSERT INTO public.email_verifications
+             (user_id, email, token_hash, expires_at)
+           VALUES ($1, $2, $3, $4)`,
+          [
+            user.id,
+            user.email,
+            verification.tokenHash,
+            verification.expiresAt
+          ]
+        );
+
+        deliveryData = {
+          email: user.email,
+          fullName: user.full_name,
+          token: verification.token
+        };
+      }
+    }
+
+    await client.query('COMMIT');
+    transactionOpen = false;
+  } catch (error) {
+    if (transactionOpen) {
+      try {
+        await client.query('ROLLBACK');
+      } catch {
+        // Preserve the original database error.
+      }
+    }
+
+    throw error;
+  } finally {
+    client.release();
+  }
+
+  if (deliveryData) {
+    try {
+      const delivery = await Promise.race([
+        Promise.resolve().then(() => send(deliveryData)),
+        new Promise((_, reject) => {
+          setTimeout(
+            () => reject(new Error('EMAIL_SEND_TIMEOUT')),
+            8000
+          );
+        })
+      ]);
+
+      if (!delivery?.accepted) {
+        throw new Error('EMAIL_DELIVERY_NOT_ACCEPTED');
+      }
+    } catch (error) {
+      const allowedCodes = new Set([
+        'RESEND_NOT_CONFIGURED',
+        'EMAIL_DELIVERY_FAILED',
+        'EMAIL_SEND_TIMEOUT',
+        'EMAIL_DELIVERY_NOT_ACCEPTED'
+      ]);
+
+      const code = allowedCodes.has(error?.message)
+        ? error.message
+        : 'EMAIL_DELIVERY_UNKNOWN_ERROR';
+
+      console.error(
+        JSON.stringify({
+          event: 'traveler_verification_email_failed',
+          code
+        })
+      );
+    }
+  }
+
+  return { ...GENERIC_RESULT };
+}

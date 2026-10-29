@@ -1,0 +1,325 @@
+          {step === 1 && (
+            <article className="visa-booking__card visa-booking__applicant-card">
+              <header className="visa-booking__page-heading">
+                <h2>Data Pemohon</h2>
+                <p>
+                  Isi data sesuai dengan paspor dan pastikan semua informasi benar.
+                </p>
+              </header>
+
+              <section className="visa-booking__form-section">
+                <h3>Data Pribadi</h3>
+
+                <div className="visa-booking__form">
+                  <label className="full">
+                    <span>Nama Lengkap (sesuai paspor) *</span>
+                    <input
+                      value={applicant.fullName}
+                      onChange={(event) =>
+                        setApplicant({
+                          ...applicant,
+                          fullName: event.target.value,
+                        })
+                      }
+                      placeholder="Masukkan nama lengkap"
+                    />
+                  </label>
+
+                  <label>
+                    <span>Jenis Kelamin *</span>
+                    <select
+                      value={applicant.gender}
+                      onChange={(event) =>
+                        setApplicant({
+                          ...applicant,
+                          gender: event.target.value,
+                        })
+                      }
+                    >
+                      <option value="">Pilih jenis kelamin</option>
+                      <option value="male">Laki-laki</option>
+                      <option value="female">Perempuan</option>
+                    </select>
+                  </label>
+
+                  <label>
+                    <span>Tempat Lahir *</span>
+                    <input
+                      value={applicant.birthPlace}
+                      onChange={(event) =>
+                        setApplicant({
+                          ...applicant,
+                          birthPlace: event.target.value,
+                        })
+                      }
+                      placeholder="Contoh: Makassar"
+                    />
+                  </label>
+
+                  <label>
+                    <span>Tanggal Lahir *</span>
+                    <input
+                      type="date"
+                      value={applicant.birthDate}
+                      onChange={(event) =>
+                        setApplicant({
+                          ...applicant,
+                          birthDate: event.target.value,
+                        })
+                      }
+                    />
+                  </label>
+
+                  <label>
+                    <span>Kewarganegaraan *</span>
+                    <input
+                      value={applicant.nationality}
+                      onChange={(event) =>
+                        setApplicant({
+                          ...applicant,
+                          nationality: event.target.value,
+                        })
+                      }
+                    />
+                  </label>
+
+                  <label>
+                    <span>Nomor Paspor *</span>
+                    <input
+                      value={applicant.passportNumber}
+                      onChange={(event) =>
+                        setApplicant({
+                          ...applicant,
+                          passportNumber: event.target.value,
+                        })
+                      }
+                      placeholder="Masukkan nomor paspor"
+                    />
+                  </label>
+
+                  <label>
+                    <span>Tanggal Terbit Paspor *</span>
+                    <input
+                      type="date"
+                      value={applicant.passportIssueDate}
+                      onChange={(event) =>
+                        setApplicant({
+                          ...applicant,
+                          passportIssueDate: event.target.value,
+                        })
+                      }
+                    />
+                  </label>
+
+                  <label>
+                    <span>Tanggal Berlaku Paspor *</span>
+                    <input
+                      type="date"
+                      value={applicant.passportExpiryDate}
+                      onChange={(event) =>
+                        setApplicant({
+                          ...applicant,
+                          passportExpiryDate: event.target.value,
+                        })
+                      }
+                    />
+                  </label>
+                </div>
+              </section>
+
+              <section className="visa-booking__form-section">
+                <h3>Rencana Keberangkatan</h3>
+
+                <div className="visa-booking__form">
+                  <label>
+                    <span>Negara Tujuan</span>
+                    <input
+                      value={
+                        product.countrySlug
+                          .charAt(0)
+                          .toUpperCase() +
+                        product.countrySlug.slice(1)
+                      }
+                      readOnly
+                    />
+                  </label>
+
+                  <label>
+                    <span>Kota Tujuan</span>
+                    <input
+                      value={applicant.destinationCity}
+                      onChange={(event) =>
+                        setApplicant({
+                          ...applicant,
+                          destinationCity: event.target.value,
+                        })
+                      }
+                      placeholder="Contoh: Beijing"
+                    />
+                  </label>
+
+                  <label>
+                    <span>Tanggal Keberangkatan (Estimasi)</span>
+                    <input
+                      type="date"
+                      value={applicant.departureDate}
+                      onChange={(event) =>
+                        setApplicant({
+                          ...applicant,
+                          departureDate: event.target.value,
+                        })
+                      }
+                    />
+                  </label>
+
+                  <label>
+                    <span>Tanggal Kembali (Estimasi)</span>
+                    <input
+                      type="date"
+                      value={applicant.returnDate}
+                      onChange={(event) =>
+                        setApplicant({
+                          ...applicant,
+                          returnDate: event.target.value,
+                        })
+                      }
+                    />
+                  </label>
+
+                  <label className="full">
+                    <span>Tujuan Perjalanan *</span>
+                    <select
+                      value={applicant.travelPurpose}
+                      onChange={(event) =>
+                        setApplicant({
+                          ...applicant,
+                          travelPurpose: event.target.value,
+                        })
+                      }
+                    >
+                      <option value="">Pilih tujuan perjalanan</option>
+                      <option value="tourism">Wisata</option>
+                      <option value="business">Bisnis</option>
+                      <option value="visit">Kunjungan</option>
+                      <option value="other">Lainnya</option>
+                    </select>
+                  </label>
+                </div>
+
+                <div className="visa-booking__section-note">
+                  <CalendarDays size={18} />
+                  <p>
+                    Tanggal keberangkatan dan kepulangan bersifat estimasi dan
+                    digunakan untuk membantu proses pengajuan Visa.
+                  </p>
+                </div>
+              </section>
+
+              <section className="visa-booking__form-section">
+                <h3>Informasi Kontak</h3>
+
+                <div className="visa-booking__form">
+                  <label>
+                    <span>Email *</span>
+                    <input
+                      type="email"
+                      value={applicant.email}
+                      onChange={(event) =>
+                        setApplicant({
+                          ...applicant,
+                          email: event.target.value,
+                        })
+                      }
+                      placeholder="nama@email.com"
+                    />
+                  </label>
+
+                  <label>
+                    <span>Nomor Telepon *</span>
+                    <input
+                      type="tel"
+                      value={applicant.phone}
+                      onChange={(event) =>
+                        setApplicant({
+                          ...applicant,
+                          phone: event.target.value,
+                        })
+                      }
+                      placeholder="+62"
+                    />
+                  </label>
+                </div>
+
+                <div className="visa-booking__section-note">
+                  <ShieldCheck size={18} />
+                  <p>
+                    Pastikan email dan nomor telepon aktif agar informasi proses
+                    pengajuan dapat diterima dengan baik.
+                  </p>
+                </div>
+              </section>
+
+              <section className="visa-booking__form-section">
+                <h3>Alamat Domisili</h3>
+
+                <div className="visa-booking__form">
+                  <label className="full">
+                    <span>Alamat Lengkap *</span>
+                    <input
+                      value={applicant.address}
+                      onChange={(event) =>
+                        setApplicant({
+                          ...applicant,
+                          address: event.target.value,
+                        })
+                      }
+                      placeholder="Masukkan alamat lengkap"
+                    />
+                  </label>
+
+                  <label>
+                    <span>Kota *</span>
+                    <input
+                      value={applicant.city}
+                      onChange={(event) =>
+                        setApplicant({
+                          ...applicant,
+                          city: event.target.value,
+                        })
+                      }
+                      placeholder="Kota"
+                    />
+                  </label>
+
+                  <label>
+                    <span>Provinsi *</span>
+                    <input
+                      value={applicant.province}
+                      onChange={(event) =>
+                        setApplicant({
+                          ...applicant,
+                          province: event.target.value,
+                        })
+                      }
+                      placeholder="Provinsi"
+                    />
+                  </label>
+
+                  <label>
+                    <span>Kode Pos *</span>
+                    <input
+                      inputMode="numeric"
+                      value={applicant.postalCode}
+                      onChange={(event) =>
+                        setApplicant({
+                          ...applicant,
+                          postalCode: event.target.value,
+                        })
+                      }
+                      placeholder="Kode pos"
+                    />
+                  </label>
+                </div>
+              </section>
+            </article>
+          )}

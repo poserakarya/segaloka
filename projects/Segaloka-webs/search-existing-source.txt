@@ -1,0 +1,53 @@
+============================================================
+FILE: C:\Users\QiblatGo\Desktop\segaloka-app\Segaloka-webs\src\app\search\page.tsx
+============================================================
+import {
+  SearchResultsClient,
+} from "@/components/search/SearchResultsClient";
+
+
+type SearchPageProps = {
+  searchParams: Promise<{
+    category?: string;
+    origin?: string;
+    destination?: string;
+    travelers?: string;
+    date?: string;
+    year?: string;
+  }>;
+};
+
+
+export default async function SearchPage({
+  searchParams,
+}: SearchPageProps) {
+
+  const params =
+    await searchParams;
+
+  return (
+    <SearchResultsClient
+      category={
+        params.category ||
+        "Umrah"
+      }
+      origin={
+        params.origin ||
+        "Jakarta"
+      }
+      destination={
+        params.destination ||
+        "Makkah & Madinah"
+      }
+      travelers={
+        params.travelers ||
+        "2"
+      }
+      date={
+        params.date ||
+        ""
+      }
+    />
+  );
+}
+

@@ -1,0 +1,1761 @@
+.page {
+  min-height: 100vh;
+  padding: 30px 0 48px;
+  background:
+    linear-gradient(
+      180deg,
+      #f8fbff 0%,
+      #f5faff 100%
+    );
+  color: #172033;
+  font-family: var(--ui-font-primary);
+  font-size: var(--ui-text-body);
+}
+
+.container {
+  width: min(
+    1440px,
+    calc(100% - 48px)
+  );
+  margin: 0 auto;
+}
+
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 14px;
+  color: #667085;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.breadcrumb strong {
+  color: #174ea6;
+  font-weight: 700;
+}
+
+.hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 18px;
+}
+
+.heroCopy h1 {
+  margin: 0;
+  color: #102a72;
+  font-size: 30px;
+  line-height: 1.2;
+  font-weight: 700;
+  letter-spacing: -0.035em;
+}
+
+.heroCopy p {
+  margin: 6px 0 0;
+  color: #6676a8;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.paymentPending,
+.paymentConfirmed {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 50px;
+  padding: 0 18px;
+  border-radius: 16px;
+  font-size: 14px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.paymentPending {
+  color: #e65f00;
+  background: #fff3e8;
+}
+
+.paymentConfirmed {
+  color: #087f5b;
+  background: #eafbf5;
+}
+
+.progressCard {
+  margin-bottom: 18px;
+  padding: 16px 20px 14px;
+  border: 1px solid #dbe7f5;
+  border-radius: 14px;
+  background: #fff;
+}
+
+.progressTrack {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+}
+
+.progressStep {
+  min-width: 0;
+  text-align: center;
+}
+
+.progressTop {
+  display: flex;
+  align-items: center;
+}
+
+.progressCircle {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  flex: 0 0 36px;
+  width: 36px;
+  height: 36px;
+  margin-left: calc(50% - 18px);
+  place-items: center;
+  border: 2px solid #dbe4f0;
+  border-radius: 50%;
+  background: #f4f7fb;
+  color: #61718d;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.progressLine {
+  width: calc(100% - 36px);
+  height: 2px;
+  margin-left: 0;
+  background: #dce5f1;
+}
+
+.progressStep:last-child .progressTop {
+  justify-content: flex-start;
+}
+
+.progressStep strong {
+  display: block;
+  margin-top: 8px;
+  color: #3e5688;
+  font-size: 13px;
+  line-height: 1.35;
+  font-weight: 600;
+}
+
+.progressActive .progressCircle {
+  border-color: #1473e6;
+  background: #1473e6;
+  color: #fff;
+}
+
+.progressActive strong {
+  color: #102a72;
+  font-weight: 700;
+}
+
+.progressDone .progressCircle {
+  border-color: #1473e6;
+  background: #1473e6;
+  color: #fff;
+}
+
+.progressDone .progressLine {
+  background: #1473e6;
+}
+
+.workspace {
+  display: grid;
+  grid-template-columns:
+    minmax(0, 1fr)
+    minmax(310px, 360px);
+  gap: 18px;
+  align-items: start;
+}
+
+.contentColumn {
+  min-width: 0;
+}
+
+.paymentCard,
+.nextCard,
+.chatPanel,
+.securityStrip {
+  border: 1px solid #dbe7f5;
+  background: #fff;
+}
+
+.paymentCard {
+  padding: 20px;
+  border-radius: 16px;
+}
+
+.sectionHeading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 14px;
+}
+
+.sectionHeading h2,
+.nextHeading h2,
+.chatTitleRow h2 {
+  margin: 0;
+  color: #102a72;
+  font-size: 18px;
+  line-height: 1.35;
+  font-weight: 700;
+}
+
+.statusPending,
+.statusConfirmed {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 11px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.statusPending {
+  color: #1769d2;
+  background: #edf5ff;
+}
+
+.statusConfirmed {
+  color: #087f5b;
+  background: #e9faf3;
+}
+
+.paymentNotice {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 18px;
+  border: 1px solid #d9e8fa;
+  border-radius: 14px;
+  background:
+    linear-gradient(
+      90deg,
+      #f8fbff,
+      #eef7ff
+    );
+}
+
+.noticeIcon {
+  display: grid;
+  flex: 0 0 48px;
+  width: 48px;
+  height: 48px;
+  place-items: center;
+  border-radius: 50%;
+  background: #e7f2ff;
+  color: #1473e6;
+}
+
+.paymentNotice strong {
+  display: block;
+  color: #102a72;
+  font-size: 15px;
+  line-height: 1.4;
+  font-weight: 700;
+}
+
+.paymentNotice p {
+  margin: 4px 0 0;
+  color: #6676a8;
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.detailGrid {
+  display: grid;
+  grid-template-columns:
+    minmax(0, 1.15fr)
+    minmax(260px, 0.85fr);
+  gap: 14px;
+  margin-top: 14px;
+}
+
+.orderInfoCard,
+.priceCard {
+  padding: 16px;
+  border: 1px solid #e0e9f5;
+  border-radius: 14px;
+  background: #fff;
+}
+
+.infoHeading {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding-bottom: 12px;
+  color: #1473e6;
+}
+
+.infoHeading h3 {
+  margin: 0;
+  color: #102a72;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.infoRows,
+.priceRows {
+  border-top: 1px solid #edf1f6;
+}
+
+.infoRows > div,
+.priceRows > div {
+  display: grid;
+  grid-template-columns:
+    minmax(120px, 0.75fr)
+    minmax(0, 1.25fr);
+  gap: 14px;
+  padding: 11px 0;
+  border-bottom: 1px solid #edf1f6;
+}
+
+.infoRows > div:last-child,
+.priceRows > div:last-child {
+  border-bottom: 0;
+}
+
+.infoRows span,
+.priceRows span {
+  color: #78849c;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.infoRows strong,
+.priceRows strong {
+  min-width: 0;
+  color: #172033;
+  font-size: 13px;
+  line-height: 1.5;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.totalRow strong {
+  color: #1473e6;
+  font-size: 17px;
+}
+
+.nextCard {
+  margin-top: 14px;
+  padding: 16px;
+  border-radius: 14px;
+}
+
+.nextHeading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 14px;
+  color: #1473e6;
+}
+
+.nextStages {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.nextStage {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  min-width: 0;
+  padding: 12px;
+  border-radius: 12px;
+  background: #f7faff;
+}
+
+.nextStage > span {
+  display: grid;
+  flex: 0 0 30px;
+  width: 30px;
+  height: 30px;
+  place-items: center;
+  border-radius: 50%;
+  background: #e7f2ff;
+  color: #1473e6;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.nextStage strong {
+  display: block;
+  color: #183b7a;
+  font-size: 12px;
+  line-height: 1.4;
+  font-weight: 700;
+}
+
+.nextStage small {
+  display: block;
+  margin-top: 3px;
+  color: #7a879e;
+  font-size: 11px;
+  line-height: 1.4;
+}
+
+.securityStrip {
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+  margin-top: 14px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  color: #1473e6;
+  background: #eef7ff;
+}
+
+.securityStrip strong {
+  display: block;
+  color: #174ea6;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.securityStrip p {
+  margin: 3px 0 0;
+  color: #6676a8;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.backButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 14px;
+  min-height: 42px;
+  padding: 0 16px;
+  border: 1px solid #d7e1ef;
+  border-radius: 999px;
+  background: #fff;
+  color: #173d7a;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.chatColumn {
+  position: sticky;
+  top: 90px;
+}
+
+.chatPanel {
+  padding: 16px;
+  border-radius: 16px;
+}
+
+.chatTitleRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.chatTitleRow span {
+  color: #1473e6;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.chatLocked,
+.chatReady {
+  display: flex;
+  min-height: 330px;
+  padding: 28px 22px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #dce8f7;
+  border-radius: 14px;
+  text-align: center;
+  background: #fff;
+}
+
+.lockVisual,
+.chatHeroIcon {
+  position: relative;
+  display: grid;
+  width: 92px;
+  height: 92px;
+  margin-bottom: 20px;
+  place-items: center;
+  border-radius: 50%;
+  background: #edf5ff;
+  color: #9ec4f5;
+}
+
+.lockVisual span {
+  position: absolute;
+  right: -3px;
+  bottom: 4px;
+  display: grid;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  border: 5px solid #fff;
+  border-radius: 50%;
+  background: #1473e6;
+  color: #fff;
+}
+
+.chatLocked strong,
+.chatReady strong {
+  max-width: 270px;
+  color: #102a72;
+  font-size: 17px;
+  line-height: 1.45;
+  font-weight: 700;
+}
+
+.chatLocked p,
+.chatReady p {
+  max-width: 280px;
+  margin: 10px 0 0;
+  color: #6676a8;
+  font-size: 13px;
+  line-height: 1.65;
+}
+
+.waitingInfo,
+.systemMessage {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-top: 14px;
+  padding: 16px;
+  border-radius: 14px;
+}
+
+.waitingInfo {
+  color: #1473e6;
+  background: #eef7ff;
+}
+
+.systemMessage {
+  color: #087f5b;
+  background: #edfaf5;
+}
+
+.waitingInfo strong,
+.systemMessage strong {
+  display: block;
+  color: #174ea6;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.systemMessage strong {
+  color: #087f5b;
+}
+
+.waitingInfo p,
+.systemMessage p {
+  margin: 4px 0 0;
+  color: #6676a8;
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+.chatComposer {
+  display: grid;
+  grid-template-columns: 1fr 44px;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.chatComposer input {
+  min-width: 0;
+  height: 44px;
+  padding: 0 14px;
+  border: 1px solid #d5e0ee;
+  border-radius: 999px;
+  outline: none;
+  background: #fff;
+  color: #172033;
+  font: inherit;
+  font-size: 13px;
+}
+
+.chatComposer input:focus {
+  border-color: #1473e6;
+  box-shadow: 0 0 0 3px #1473e619;
+}
+
+.chatComposer button {
+  display: grid;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  background: #1473e6;
+  color: #fff;
+  cursor: pointer;
+}
+
+[dir="rtl"] .progressCircle {
+  margin-right: calc(50% - 18px);
+  margin-left: 0;
+}
+
+[dir="rtl"] .progressLine {
+  margin-right: 0;
+}
+
+[dir="rtl"] .backButton svg {
+  transform: rotate(180deg);
+}
+
+@media (max-width: 1050px) {
+  .workspace {
+    grid-template-columns: minmax(0, 1fr) 310px;
+  }
+
+  .detailGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .nextStages {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 860px) {
+  .page {
+    padding-top: 20px;
+  }
+
+  .container {
+    width: min(100% - 28px, 1440px);
+  }
+
+  .workspace {
+    grid-template-columns: 1fr;
+  }
+
+  .chatColumn {
+    position: static;
+  }
+
+  .chatPanel {
+    margin-top: 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .container {
+    width: min(100% - 24px, 1440px);
+  }
+
+  .breadcrumb {
+    gap: 7px;
+    overflow: hidden;
+    font-size: 11px;
+    white-space: nowrap;
+  }
+
+  .hero {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .heroCopy h1 {
+    font-size: 24px;
+  }
+
+  .heroCopy p {
+    font-size: 13px;
+  }
+
+  .paymentPending,
+  .paymentConfirmed {
+    min-height: 42px;
+    padding: 0 13px;
+    font-size: 12px;
+  }
+
+  .progressCard {
+    overflow-x: auto;
+    padding: 14px;
+  }
+
+  .progressTrack {
+    min-width: 610px;
+  }
+
+  .paymentCard {
+    padding: 14px;
+  }
+
+  .sectionHeading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .paymentNotice {
+    align-items: flex-start;
+    padding: 14px;
+  }
+
+  .detailGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .infoRows > div,
+  .priceRows > div {
+    grid-template-columns: 1fr;
+    gap: 3px;
+  }
+
+  .nextStages {
+    grid-template-columns: 1fr;
+  }
+
+  .chatLocked,
+  .chatReady {
+    min-height: 270px;
+  }
+}
+/* ==========================================================
+   VISA ORDER — VENDOR CHAT IDENTITY
+   Scoped only to the Visa order chat.
+   ========================================================== */
+
+.vendorAvatarButton {
+  display: grid;
+  width: 38px;
+  height: 38px;
+  flex: 0 0 38px;
+  padding: 0;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+}
+
+.vendorAvatarButton:disabled {
+  cursor: default;
+}
+
+.vendorAvatar {
+  display: grid;
+  width: 36px;
+  height: 36px;
+  place-items: center;
+  overflow: hidden;
+  border: 1px solid #cfe0f5;
+  border-radius: 50%;
+  background: #eef6ff;
+  color: #1473e6;
+  font-size: 14px;
+  line-height: 1;
+  font-weight: 700;
+  transition:
+    border-color 160ms ease,
+    box-shadow 160ms ease,
+    transform 160ms ease;
+}
+
+.vendorAvatarButton:not(:disabled):hover
+.vendorAvatar {
+  border-color: #1473e6;
+  box-shadow: 0 0 0 3px #1473e619;
+  transform: translateY(-1px);
+}
+
+.vendorAvatarButton:focus-visible {
+  outline: 3px solid #1473e633;
+  outline-offset: 2px;
+}
+/* ==========================================================
+   SEGALOKA — VISA ORDER CHAT
+   Scoped only to one Visa order conversation.
+   ========================================================== */
+
+.chatThreadTools {
+  margin-top: 14px;
+}
+
+.chatSearch {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 40px;
+  padding: 0 12px;
+  border: 1px solid #dbe7f5;
+  border-radius: 12px;
+  background: #f8fbff;
+  color: #8291aa;
+}
+
+.chatSearch:focus-within {
+  border-color: #1473e6;
+  background: #fff;
+  box-shadow: 0 0 0 3px #1473e614;
+}
+
+.chatSearch input {
+  width: 100%;
+  min-width: 0;
+  height: 38px;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: #172033;
+  font: inherit;
+  font-size: 12px;
+}
+
+.chatSearch input::placeholder {
+  color: #98a2b3;
+}
+
+.chatViewport {
+  height: 380px;
+  margin-top: 10px;
+  padding: 10px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scroll-behavior: smooth;
+  border: 1px solid #e1e9f4;
+  border-radius: 14px;
+  background: #f8fbff;
+  scrollbar-width: thin;
+  scrollbar-color: #c7d8ec transparent;
+}
+
+.chatViewport::-webkit-scrollbar {
+  width: 6px;
+}
+
+.chatViewport::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.chatViewport::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: #c7d8ec;
+}
+
+.chatMessages {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.outgoingMessage {
+  align-self: flex-end;
+  width: fit-content;
+  max-width: 88%;
+  padding: 10px 12px;
+  border-radius: 14px 14px 4px 14px;
+  background: #1473e6;
+  color: #fff;
+  box-shadow: 0 3px 10px #1473e61a;
+}
+
+.outgoingMessage p {
+  margin: 0;
+  color: inherit;
+  font-size: 12px;
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
+.messageAttachment {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  margin-top: 7px;
+  padding-top: 7px;
+  border-top: 1px solid #ffffff38;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.messageAttachment span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.noSearchResult {
+  display: grid;
+  min-height: 130px;
+  place-items: center;
+  padding: 20px;
+  color: #7b8aa5;
+  font-size: 12px;
+  line-height: 1.55;
+  text-align: center;
+}
+
+.attachmentPreview {
+  display: grid;
+  grid-template-columns: 18px minmax(0, 1fr) 30px;
+  gap: 9px;
+  align-items: center;
+  margin-top: 10px;
+  padding: 9px 10px;
+  border: 1px solid #dbe7f5;
+  border-radius: 11px;
+  background: #f4f9ff;
+  color: #1473e6;
+}
+
+.attachmentPreview > div {
+  min-width: 0;
+}
+
+.attachmentPreview strong {
+  display: block;
+  overflow: hidden;
+  color: #173d7a;
+  font-size: 11px;
+  line-height: 1.4;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.attachmentPreview span {
+  display: block;
+  margin-top: 1px;
+  color: #8291aa;
+  font-size: 10px;
+}
+
+.attachmentPreview button {
+  display: grid;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: #667085;
+  cursor: pointer;
+}
+
+.attachmentPreview button:hover {
+  background: #e5effa;
+  color: #172033;
+}
+
+.chatError {
+  margin-top: 9px;
+  padding: 9px 11px;
+  border: 1px solid #fecaca;
+  border-radius: 10px;
+  background: #fff1f2;
+  color: #b42318;
+  font-size: 11px;
+  line-height: 1.5;
+  font-weight: 600;
+}
+
+.hiddenFileInput {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+.chatComposer {
+  display: grid;
+  grid-template-columns:
+    40px
+    minmax(0, 1fr)
+    42px;
+  gap: 7px;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.chatComposer > input:not(.hiddenFileInput) {
+  width: 100%;
+  min-width: 0;
+  height: 42px;
+  padding: 0 13px;
+  border: 1px solid #d5e0ee;
+  border-radius: 12px;
+  outline: 0;
+  background: #fff;
+  color: #172033;
+  font: inherit;
+  font-size: 12px;
+}
+
+.chatComposer > input:not(.hiddenFileInput):focus {
+  border-color: #1473e6;
+  box-shadow: 0 0 0 3px #1473e614;
+}
+
+.chatComposer > input:not(.hiddenFileInput)::placeholder {
+  color: #98a2b3;
+}
+
+.attachmentButton,
+.sendButton {
+  display: grid;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  place-items: center;
+  border-radius: 11px;
+  cursor: pointer;
+}
+
+.attachmentButton {
+  border: 1px solid #d5e0ee;
+  background: #fff;
+  color: #1473e6;
+}
+
+.attachmentButton:hover {
+  border-color: #a8c9ef;
+  background: #f2f8ff;
+}
+
+.sendButton {
+  width: 42px;
+  height: 42px;
+  border: 0;
+  background: #1473e6;
+  color: #fff;
+}
+
+.sendButton:hover:not(:disabled) {
+  background: #0d63cb;
+}
+
+.sendButton:disabled {
+  background: #d5dfeb;
+  color: #fff;
+  cursor: not-allowed;
+}
+
+.attachmentButton:focus-visible,
+.sendButton:focus-visible,
+.attachmentPreview button:focus-visible {
+  outline: 3px solid #1473e633;
+  outline-offset: 2px;
+}
+
+/* Keep system notice inside the thread compact. */
+.chatViewport .systemMessage {
+  margin-top: 0;
+  padding: 11px;
+  border-radius: 11px;
+}
+
+.chatViewport .systemMessage strong {
+  font-size: 11px;
+}
+
+.chatViewport .systemMessage p {
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+/* RTL */
+[dir="rtl"] .outgoingMessage {
+  align-self: flex-end;
+  border-radius: 14px 14px 14px 4px;
+}
+
+/* Tablet / mobile */
+@media (max-width: 860px) {
+  .chatViewport {
+    height: 360px;
+  }
+}
+
+@media (max-width: 640px) {
+  .chatViewport {
+    height: 340px;
+    padding: 8px;
+  }
+
+  .outgoingMessage {
+    max-width: 92%;
+  }
+
+  .chatComposer {
+    grid-template-columns:
+      38px
+      minmax(0, 1fr)
+      40px;
+    gap: 6px;
+  }
+
+  .attachmentButton {
+    width: 38px;
+    height: 38px;
+  }
+
+  .sendButton {
+    width: 40px;
+    height: 40px;
+  }
+
+  .chatComposer > input:not(.hiddenFileInput) {
+    height: 40px;
+  }
+}
+/* =========================================================
+   VISA CHAT LIFECYCLE STATUS
+   ========================================================= */
+
+.chatLifecycleNotice {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+
+  margin: 0 16px 10px;
+  padding: 11px 12px;
+
+  border: 1px solid #dbeafe;
+  border-radius: 12px;
+
+  background: #eff6ff;
+  color: #1e40af;
+
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.chatLifecycleNotice > svg {
+  flex: 0 0 auto;
+  margin-top: 1px;
+}
+
+.chatLifecycleNotice > div {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.chatLifecycleNotice strong {
+  color: #1e3a8a;
+
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.chatLifecycleNotice span {
+  color: #475569;
+
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.45;
+}
+
+.chatLifecycleClosed {
+  border-color: #e2e8f0;
+  background: #f8fafc;
+  color: #64748b;
+}
+
+.chatLifecycleClosed strong {
+  color: #334155;
+}
+
+/* Closed state: history/search remain readable. */
+.chatPanel:has(.chatLifecycleClosed) .chatComposer {
+  background: #f8fafc;
+}
+
+.chatPanel:has(.chatLifecycleClosed) .chatComposer input[type="text"] {
+  color: #64748b;
+  background: #f1f5f9;
+  cursor: not-allowed;
+}
+
+.chatPanel:has(.chatLifecycleClosed) .attachmentButton:disabled,
+.chatPanel:has(.chatLifecycleClosed) .sendButton:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* Arabic / RTL */
+:global([dir="rtl"]) .chatLifecycleNotice {
+  text-align: right;
+}
+
+/* Mobile */
+@media (max-width: 767px) {
+  .chatLifecycleNotice {
+    margin: 0 12px 8px;
+    padding: 10px 11px;
+  }
+
+  .chatLifecycleNotice strong {
+    font-size: 11px;
+  }
+
+  .chatLifecycleNotice span {
+    font-size: 11px;
+  }
+}
+/* =========================================================
+   VISA CHAT LIFECYCLE STATUS
+   ========================================================= */
+
+.chatLifecycleNotice {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+
+  margin: 0 16px 10px;
+  padding: 11px 12px;
+
+  border: 1px solid #dbeafe;
+  border-radius: 12px;
+
+  background: #eff6ff;
+  color: #1e40af;
+
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.chatLifecycleNotice > svg {
+  flex: 0 0 auto;
+  margin-top: 1px;
+}
+
+.chatLifecycleNotice > div {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.chatLifecycleNotice strong {
+  color: #1e3a8a;
+
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.chatLifecycleNotice span {
+  color: #475569;
+
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.45;
+}
+
+.chatLifecycleClosed {
+  border-color: #e2e8f0;
+  background: #f8fafc;
+  color: #64748b;
+}
+
+.chatLifecycleClosed strong {
+  color: #334155;
+}
+
+/* Closed state: history/search remain readable. */
+.chatPanel:has(.chatLifecycleClosed) .chatComposer {
+  background: #f8fafc;
+}
+
+.chatPanel:has(.chatLifecycleClosed) .chatComposer input[type="text"] {
+  color: #64748b;
+  background: #f1f5f9;
+  cursor: not-allowed;
+}
+
+.chatPanel:has(.chatLifecycleClosed) .attachmentButton:disabled,
+.chatPanel:has(.chatLifecycleClosed) .sendButton:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* Arabic / RTL */
+:global([dir="rtl"]) .chatLifecycleNotice {
+  text-align: right;
+}
+
+/* Mobile */
+@media (max-width: 767px) {
+  .chatLifecycleNotice {
+    margin: 0 12px 8px;
+    padding: 10px 11px;
+  }
+
+  .chatLifecycleNotice strong {
+    font-size: 11px;
+  }
+
+  .chatLifecycleNotice span {
+    font-size: 11px;
+  }
+}
+/* =========================================================
+   VISA PROGRESS SINGLE ROW FIX
+   Desktop: seluruh 6 progress wajib satu baris.
+   ========================================================= */
+
+@media (min-width: 768px) {
+  .progressTrack {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    width: 100%;
+    align-items: start;
+  }
+
+  .progressStep {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .progressTop {
+    width: 100%;
+  }
+
+  .progressCircle {
+    flex: 0 0 auto;
+  }
+
+  .progressStep h3,
+  .progressStep strong,
+  .progressStep span,
+  .progressStep p {
+    max-width: 100%;
+    overflow-wrap: normal;
+    word-break: normal;
+  }
+
+  /* Next Stages: step 2-6 juga satu baris */
+  .nextStagesGrid {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    width: 100%;
+  }
+
+  .nextStageItem {
+    min-width: 0;
+    width: 100%;
+  }
+}
+
+/*
+ * Tablet/mobile boleh horizontal-scroll agar tahapan tidak
+ * ditumpuk dan urutan tetap terbaca dari kiri ke kanan.
+ */
+@media (max-width: 767px) {
+  .progressCard {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .progressTrack {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(120px, 1fr));
+    min-width: 720px;
+    width: 100%;
+  }
+
+  .progressStep {
+    min-width: 0;
+  }
+
+  .nextStagesGrid {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(150px, 1fr));
+    min-width: 750px;
+  }
+}
+/* =========================================================
+   VISA NEXT STAGES ACTUAL CLASS FIX
+   ========================================================= */
+
+@media (min-width: 768px) {
+  .nextStages {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 10px;
+    width: 100%;
+  }
+
+  .nextStage {
+    min-width: 0;
+    width: 100%;
+  }
+}
+
+@media (max-width: 767px) {
+  .nextCard {
+    overflow: hidden;
+  }
+
+  .nextStages {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(150px, 1fr));
+    gap: 8px;
+
+    width: 100%;
+    min-width: 750px;
+  }
+}
+/* =========================================================
+   VISA NEXT STAGE STATUS COLORS
+   done    = hijau
+   active  = biru
+   waiting = netral
+   ========================================================= */
+
+.nextStageDone {
+  border-color: #bbf7d0;
+  background: #f0fdf4;
+}
+
+.nextStageDone > span {
+  color: #047857;
+  background: #dcfce7;
+}
+
+.nextStageDone strong {
+  color: #065f46;
+}
+
+.nextStageDone small {
+  color: #059669;
+  font-weight: 600;
+}
+
+.nextStageActive {
+  border-color: #bfdbfe;
+  background: #eff6ff;
+}
+
+.nextStageActive > span {
+  color: #ffffff;
+  background: #1473e6;
+}
+
+.nextStageActive strong {
+  color: #1d4ed8;
+}
+
+.nextStageActive small {
+  color: #1473e6;
+  font-weight: 600;
+}
+
+.nextStageWaiting {
+  border-color: #e2e8f0;
+  background: #f8fafc;
+}
+
+.nextStageWaiting > span {
+  color: #64748b;
+  background: #eef2f6;
+}
+
+.nextStageWaiting strong {
+  color: #475569;
+}
+
+.nextStageWaiting small {
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+/* Segaloka Visa Chat — vendor identity */
+.chatVendorIdentity {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  min-width: 0;
+}
+
+.chatVendorDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.chatVendorDetails strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--foreground, #172033);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.chatVendorStatus {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--success, #16803d);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.chatOnlineDot {
+  width: 7px;
+  height: 7px;
+  flex: 0 0 7px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.chatDateSummary {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 12px;
+  padding: 8px 0;
+  border-block: 1px solid var(--border, #e2e8f0);
+  color: var(--muted-foreground, #64748b);
+  font-size: 11px;
+}
+
+@media (max-width: 480px) {
+  .chatDateSummary {
+    flex-wrap: wrap;
+  }
+}
+
+/* SEGALOKA VISA CHAT LAYOUT FIX V1 */
+
+.chatPanel {
+  min-width: 0;
+  padding: 16px;
+  overflow: hidden;
+}
+
+.chatTitleRow {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.chatVendorIdentity {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-width: 0;
+}
+
+.chatVendorIdentity .vendorAvatarButton {
+  display: grid;
+  flex: 0 0 42px;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+}
+
+.chatVendorIdentity .vendorAvatar {
+  display: grid;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+}
+
+.chatVendorDetails {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+  gap: 4px;
+}
+
+.chatVendorDetails strong {
+  display: block;
+  color: var(--foreground, #102a72);
+  font-size: 14px;
+  line-height: 1.4;
+  font-weight: 700;
+}
+
+.chatDateSummary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  width: 100%;
+  padding: 10px 0;
+  margin: 0 0 12px;
+  border-top: 1px solid var(--border, #e2e8f0);
+  border-bottom: 1px solid var(--border, #e2e8f0);
+  color: var(--muted-foreground, #64748b);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.chatDateSummary span {
+  display: inline-block;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.chatThreadTools {
+  margin-top: 0;
+  margin-bottom: 12px;
+}
+
+.chatViewport {
+  min-width: 0;
+  min-height: 300px;
+  max-height: 440px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.chatMessages {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.outgoingMessage {
+  max-width: 85%;
+  overflow-wrap: anywhere;
+}
+
+.chatComposer {
+  display: grid;
+  grid-template-columns: 42px minmax(0, 1fr) 42px;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  margin-top: 12px;
+}
+
+@media (max-width: 767px) {
+  .chatPanel {
+    padding: 12px;
+  }
+
+  .chatVendorDetails strong {
+    font-size: 13px;
+  }
+
+  .chatDateSummary {
+    font-size: 11px;
+  }
+
+  .chatViewport {
+    min-height: 260px;
+    max-height: 380px;
+  }
+
+  .chatComposer {
+    grid-template-columns: 40px minmax(0, 1fr) 40px;
+    gap: 6px;
+  }
+}
+
+/* SEGALOKA VISA CHAT BUBBLES V1 */
+
+.incomingMessage {
+  align-self: flex-start;
+  width: fit-content;
+  max-width: 85%;
+  padding: 10px 12px;
+  border-radius: 14px 14px 14px 4px;
+  background: var(--surface, #ffffff);
+  color: var(--foreground, #172033);
+  border: 1px solid var(--border, #e2e8f0);
+  overflow-wrap: anywhere;
+}
+
+.incomingMessage p {
+  margin: 0;
+  color: inherit;
+  font-size: 13px;
+  line-height: 1.55;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.outgoingMessage p {
+  font-size: 13px;
+}
+
+[dir="rtl"] .incomingMessage {
+  border-radius: 14px 14px 4px 14px;
+}
+
+@media (max-width: 640px) {
+  .incomingMessage {
+    max-width: 92%;
+  }
+}
+
+/* SEGALOKA VISA CHAT TIMESTAMPS V1 */
+
+.chatMessageGroup {
+  display: contents;
+}
+
+.chatDateDivider {
+  display: flex;
+  justify-content: center;
+  margin: 12px 0 8px;
+}
+
+.chatDateDivider span {
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: var(--surface, #ffffff);
+  border: 1px solid var(--border, #e2e8f0);
+  color: var(--muted-foreground, #64748b);
+  font-size: 11px;
+  line-height: 1.4;
+  text-align: center;
+}
+
+.chatMessageTime {
+  display: block;
+  margin-top: 5px;
+  font-size: 10px;
+  line-height: 1.3;
+  opacity: 0.75;
+  text-align: end;
+  font-variant-numeric: tabular-nums;
+}

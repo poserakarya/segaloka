@@ -1,0 +1,960 @@
+"use client";
+
+import {
+  ArrowLeft,
+  ArrowRight,
+  CalendarDays,
+  Check,
+  CircleCheck,
+  FileText,
+  MapPin,
+  ReceiptText,
+  ShieldCheck,
+  UserRound,
+  UsersRound,
+} from "lucide-react";
+import {
+  FormEvent,
+  useMemo,
+  useState,
+} from "react";
+
+import styles from "./AccommodationBooking.module.css";
+
+type Props = {
+  slug: string;
+  adult: number;
+  child: number;
+  infant: number;
+};
+
+type PaymentPlan =
+  | "full"
+  | "dp"
+  | "installment";
+
+type PaymentMethod =
+  | "qris"
+  | "virtual-account"
+  | "bank-transfer"
+  | "ewallet";
+
+type Purchaser = {
+  fullName: string;
+  email: string;
+  phone: string;
+  country: string;
+  city: string;
+  address: string;
+};
+
+const PRODUCT = {
+  title: "Land Arrangement Makkah & Madinah 9 Hari",
+  destination: "Makkah & Madinah",
+  country: "Arab Saudi",
+  duration: "9 Hari",
+  startDate: "10 Desember 2026",
+  endDate: "18 Desember 2026",
+
+  /*
+   * Nantinya berasal dari snapshot periode Travel/Vendor.
+   * Bukan konfigurasi global.
+   */
+  travelerDeadlineDays: 30,
+
+  /*
+   * UI sementara sampai pricing snapshot detail LA
+   * menjadi sumber canonical.
+   */
+  unitPrice: 6450000,
+};
+
+function rupiah(value: number) {
+  return new Intl.NumberFormat("id-ID", {
+    style: "currency",
+    currency: "IDR",
+    maximumFractionDigits: 0,
+  }).format(value);
+}
+
+export function AccommodationBookingClient({
+  slug,
+  adult,
+  child,
+  infant,
+}: Props) {
+  const [step, setStep] = useState(1);
+
+  const [purchaser, setPurchaser] =
+    useState<Purchaser>({
+      fullName: "",
+      email: "",
+      phone: "",
+      country: "Indonesia",
+      city: "",
+      address: "",
+    });
+
+  const [accepted, setAccepted] =
+    useState(false);
+
+  const [paymentPlan, setPaymentPlan] =
+    useState<PaymentPlan>("full");
+
+  const [
+    paymentMethod,
+    setPaymentMethod,
+  ] =
+    useState<PaymentMethod>("qris");
+
+  const travelerTotal =
+    adult + child + infant;
+
+  const estimatedTotal =
+    PRODUCT.unitPrice * travelerTotal;
+
+  const paymentNow =
+    paymentPlan === "full"
+      ? estimatedTotal
+      : paymentPlan === "dp"
+        ? Math.ceil(estimatedTotal * 0.3)
+        : Math.ceil(estimatedTotal * 0.25);
+
+  const remainingPayment =
+    Math.max(
+      0,
+      estimatedTotal - paymentNow,
+    );
+
+  const purchaserValid =
+    Boolean(
+      purchaser.fullName.trim() &&
+        purchaser.email.trim() &&
+        purchaser.phone.trim() &&
+        purchaser.country.trim(),
+    );
+
+  const steps = useMemo(
+    () => [
+      {
+        number: 1,
+        title: "Pemesan",
+      },
+      {
+        number: 2,
+        title: "Review",
+      },
+      {
+        number: 3,
+        title: "Pembayaran",
+      },
+    ],
+    [],
+  );
+
+  function nextStep() {
+    if (step === 1 && !purchaserValid) {
+      return;
+    }
+
+    if (step === 2 && !accepted) {
+      return;
+    }
+
+    setStep((current) =>
+      Math.min(3, current + 1),
+    );
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }
+
+  function previousStep() {
+    setStep((current) =>
+      Math.max(1, current - 1),
+    );
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }
+
+  function submitBooking(
+    event: FormEvent,
+  ) {
+    event.preventDefault();
+
+    if (!accepted) {
+      return;
+    }
+
+    alert(
+      [
+        "Simulasi transaksi Segaloka",
+        `Metode: ${paymentMethod}`,
+        `Bayar sekarang: ${rupiah(paymentNow)}`,
+        "",
+        "Setelah pembayaran dikonfirmasi:",
+        `• Invoice tersedia`,
+        `• Data traveler dibuka`,
+        `• Batas kelengkapan traveler H-${PRODUCT.travelerDeadlineDays}`,
+        `• Paket Info tersedia sesuai operasional`,
+        `• Confirmation Letter (CL) diterbitkan sesuai status transaksi`,
+      ].join("\n"),
+    );
+  }
+
+  return (
+    <main className={styles.page}>
+      <div className={styles.shell}>
+        <nav className={styles.breadcrumb}>
+          <a href="/">
+            Beranda
+          </a>
+
+          <span>/</span>
+
+          <a href={`/akomodasi/${slug}`}>
+            Detail Akomodasi
+          </a>
+
+          <span>/</span>
+
+          <strong>
+            Pemesanan
+          </strong>
+        </nav>
+
+        <section className={styles.heading}>
+          <div>
+            <span className={styles.badge}>
+              LAND ARRANGEMENT
+            </span>
+
+            <h1>
+              Lengkapi data pemesanan
+            </h1>
+
+            <p>
+              Data traveler tidak perlu
+              dilengkapi saat checkout.
+              Lengkapi data pemesan,
+              periksa pesanan, lalu
+              selesaikan pembayaran.
+            </p>
+          </div>
+
+          <div className={styles.secure}>
+            <ShieldCheck size={20} />
+
+            <div>
+              <strong>
+                Transaksi Segaloka
+              </strong>
+
+              <small>
+                Data traveler dilengkapi
+                setelah transaksi
+              </small>
+            </div>
+          </div>
+        </section>
+
+        <div className={styles.stepper}>
+          {steps.map((item) => {
+            const active =
+              step === item.number;
+
+            const done =
+              step > item.number;
+
+            return (
+              <div
+                key={item.number}
+                className={[
+                  styles.step,
+                  active
+                    ? styles.stepActive
+                    : "",
+                  done
+                    ? styles.stepDone
+                    : "",
+                ].join(" ")}
+              >
+                <span>
+                  {done ? (
+                    <Check size={16} />
+                  ) : (
+                    item.number
+                  )}
+                </span>
+
+                <strong>
+                  {item.title}
+                </strong>
+              </div>
+            );
+          })}
+        </div>
+
+        <form
+          className={styles.layout}
+          onSubmit={submitBooking}
+        >
+          <div className={styles.main}>
+            {step === 1 && (
+              <>
+                <article className={styles.card}>
+                  <div className={styles.cardHeading}>
+                    <UserRound size={21} />
+
+                    <div>
+                      <h2>
+                        Data Pemesan
+                      </h2>
+
+                      <p>
+                        Orang yang melakukan
+                        transaksi dan menerima
+                        informasi booking,
+                        pembayaran, invoice,
+                        serta pemberitahuan
+                        perjalanan.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className={styles.formGrid}>
+                    <label className={styles.full}>
+                      <span>
+                        Nama lengkap *
+                      </span>
+
+                      <input
+                        value={
+                          purchaser.fullName
+                        }
+                        onChange={(event) =>
+                          setPurchaser({
+                            ...purchaser,
+                            fullName:
+                              event.target.value,
+                          })
+                        }
+                        placeholder="Nama lengkap pemesan"
+                      />
+                    </label>
+
+                    <label>
+                      <span>
+                        Email *
+                      </span>
+
+                      <input
+                        type="email"
+                        value={purchaser.email}
+                        onChange={(event) =>
+                          setPurchaser({
+                            ...purchaser,
+                            email:
+                              event.target.value,
+                          })
+                        }
+                        placeholder="nama@email.com"
+                      />
+                    </label>
+
+                    <label>
+                      <span>
+                        Nomor WhatsApp / Telepon *
+                      </span>
+
+                      <input
+                        type="tel"
+                        value={purchaser.phone}
+                        onChange={(event) =>
+                          setPurchaser({
+                            ...purchaser,
+                            phone:
+                              event.target.value,
+                          })
+                        }
+                        placeholder="+62..."
+                      />
+                    </label>
+
+                    <label>
+                      <span>
+                        Negara *
+                      </span>
+
+                      <input
+                        value={purchaser.country}
+                        onChange={(event) =>
+                          setPurchaser({
+                            ...purchaser,
+                            country:
+                              event.target.value,
+                          })
+                        }
+                      />
+                    </label>
+
+                    <label>
+                      <span>
+                        Kota
+                      </span>
+
+                      <input
+                        value={purchaser.city}
+                        onChange={(event) =>
+                          setPurchaser({
+                            ...purchaser,
+                            city:
+                              event.target.value,
+                          })
+                        }
+                        placeholder="Kota domisili"
+                      />
+                    </label>
+
+                    <label className={styles.full}>
+                      <span>
+                        Alamat
+                      </span>
+
+                      <textarea
+                        rows={3}
+                        value={purchaser.address}
+                        onChange={(event) =>
+                          setPurchaser({
+                            ...purchaser,
+                            address:
+                              event.target.value,
+                          })
+                        }
+                        placeholder="Alamat pemesan"
+                      />
+                    </label>
+                  </div>
+                </article>
+
+                <article className={styles.infoCard}>
+                  <CalendarDays size={21} />
+
+                  <div>
+                    <strong>
+                      Data traveler diisi setelah transaksi
+                    </strong>
+
+                    <p>
+                      Setelah pembayaran
+                      dikonfirmasi, pemesan
+                      dapat melengkapi data
+                      seluruh traveler dan
+                      paspor melalui Detail
+                      Pesanan.
+                    </p>
+
+                    <b>
+                      Batas default periode ini:
+                      H-{PRODUCT.travelerDeadlineDays}
+                      sebelum keberangkatan.
+                    </b>
+                  </div>
+                </article>
+              </>
+            )}
+
+            {step === 2 && (
+              <>
+                <article className={styles.card}>
+                  <div className={styles.cardHeading}>
+                    <CircleCheck size={21} />
+
+                    <div>
+                      <h2>
+                        Review Pemesanan
+                      </h2>
+
+                      <p>
+                        Pastikan data pemesan
+                        dan detail transaksi
+                        sudah benar.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className={styles.review}>
+                    <div>
+                      <span>
+                        Pemesan
+                      </span>
+                      <strong>
+                        {purchaser.fullName}
+                      </strong>
+                    </div>
+
+                    <div>
+                      <span>
+                        Email
+                      </span>
+                      <strong>
+                        {purchaser.email}
+                      </strong>
+                    </div>
+
+                    <div>
+                      <span>
+                        WhatsApp / Telepon
+                      </span>
+                      <strong>
+                        {purchaser.phone}
+                      </strong>
+                    </div>
+
+                    <div>
+                      <span>
+                        Jumlah traveler
+                      </span>
+                      <strong>
+                        {travelerTotal} orang
+                      </strong>
+                    </div>
+
+                    <div>
+                      <span>
+                        Periode
+                      </span>
+                      <strong>
+                        {PRODUCT.startDate}
+                        {" – "}
+                        {PRODUCT.endDate}
+                      </strong>
+                    </div>
+
+                    <div>
+                      <span>
+                        Destinasi
+                      </span>
+                      <strong>
+                        {PRODUCT.destination}
+                      </strong>
+                    </div>
+                  </div>
+                </article>
+
+                <article className={styles.documentFlow}>
+                  <h2>
+                    Setelah transaksi dikonfirmasi
+                  </h2>
+
+                  <div className={styles.documentGrid}>
+                    <div>
+                      <ReceiptText size={20} />
+                      <strong>
+                        Invoice
+                      </strong>
+                      <span>
+                        Dokumen transaksi dan
+                        pembayaran.
+                      </span>
+                    </div>
+
+                    <div>
+                      <UsersRound size={20} />
+                      <strong>
+                        Data Traveler
+                      </strong>
+                      <span>
+                        Lengkapi seluruh data
+                        traveler dan paspor.
+                      </span>
+                    </div>
+
+                    <div>
+                      <FileText size={20} />
+                      <strong>
+                        Paket Info
+                      </strong>
+                      <span>
+                        Informasi operasional
+                        perjalanan dari
+                        Travel/Vendor.
+                      </span>
+                    </div>
+
+                    <div>
+                      <CircleCheck size={20} />
+                      <strong>
+                        Confirmation Letter (CL)
+                      </strong>
+                      <span>
+                        Diterbitkan sesuai
+                        status booking.
+                      </span>
+                    </div>
+                  </div>
+                </article>
+
+                <label className={styles.agreement}>
+                  <input
+                    type="checkbox"
+                    checked={accepted}
+                    onChange={(event) =>
+                      setAccepted(
+                        event.target.checked,
+                      )
+                    }
+                  />
+
+                  <span>
+                    Saya memastikan data
+                    pemesan dan detail
+                    transaksi sudah benar
+                    serta memahami data
+                    traveler wajib dilengkapi
+                    sebelum batas waktu
+                    periode perjalanan.
+                  </span>
+                </label>
+              </>
+            )}
+
+            {step === 3 && (
+              <>
+                <article className={styles.card}>
+                  <div className={styles.cardHeading}>
+                    <ReceiptText size={21} />
+
+                    <div>
+                      <h2>
+                        Pembayaran
+                      </h2>
+
+                      <p>
+                        Pilih skema pembayaran
+                        yang tersedia untuk
+                        transaksi ini.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className={styles.paymentGrid}>
+                    <button
+                      type="button"
+                      className={
+                        paymentPlan === "full"
+                          ? styles.selected
+                          : ""
+                      }
+                      onClick={() =>
+                        setPaymentPlan("full")
+                      }
+                    >
+                      <strong>
+                        Bayar Lunas
+                      </strong>
+                      <span>
+                        Bayar seluruh nilai transaksi.
+                      </span>
+                      <b>
+                        {rupiah(estimatedTotal)}
+                      </b>
+                    </button>
+
+                    <button
+                      type="button"
+                      className={
+                        paymentPlan === "dp"
+                          ? styles.selected
+                          : ""
+                      }
+                      onClick={() =>
+                        setPaymentPlan("dp")
+                      }
+                    >
+                      <strong>
+                        DP
+                      </strong>
+                      <span>
+                        Pembayaran awal 30%.
+                      </span>
+                      <b>
+                        {rupiah(
+                          Math.ceil(
+                            estimatedTotal * 0.3,
+                          ),
+                        )}
+                      </b>
+                    </button>
+
+                    <button
+                      type="button"
+                      className={
+                        paymentPlan ===
+                        "installment"
+                          ? styles.selected
+                          : ""
+                      }
+                      onClick={() =>
+                        setPaymentPlan(
+                          "installment",
+                        )
+                      }
+                    >
+                      <strong>
+                        Cicilan
+                      </strong>
+                      <span>
+                        Pembayaran awal 25%.
+                      </span>
+                      <b>
+                        {rupiah(
+                          Math.ceil(
+                            estimatedTotal * 0.25,
+                          ),
+                        )}
+                      </b>
+                    </button>
+                  </div>
+                </article>
+
+                <article className={styles.card}>
+                  <h2>
+                    Metode Pembayaran
+                  </h2>
+
+                  <div className={styles.paymentMethods}>
+                    {[
+                      [
+                        "qris",
+                        "QRIS",
+                      ],
+                      [
+                        "virtual-account",
+                        "Virtual Account",
+                      ],
+                      [
+                        "bank-transfer",
+                        "Transfer Bank",
+                      ],
+                      [
+                        "ewallet",
+                        "E-Wallet",
+                      ],
+                    ].map(([value, label]) => (
+                      <button
+                        type="button"
+                        key={value}
+                        className={
+                          paymentMethod === value
+                            ? styles.selected
+                            : ""
+                        }
+                        onClick={() =>
+                          setPaymentMethod(
+                            value as PaymentMethod,
+                          )
+                        }
+                      >
+                        <strong>
+                          {label}
+                        </strong>
+                      </button>
+                    ))}
+                  </div>
+                </article>
+
+                <article className={styles.invoicePreview}>
+                  <div>
+                    <span>
+                      Total transaksi
+                    </span>
+                    <strong>
+                      {rupiah(estimatedTotal)}
+                    </strong>
+                  </div>
+
+                  <div>
+                    <span>
+                      Bayar sekarang
+                    </span>
+                    <strong>
+                      {rupiah(paymentNow)}
+                    </strong>
+                  </div>
+
+                  <div>
+                    <span>
+                      Sisa pembayaran
+                    </span>
+                    <strong>
+                      {rupiah(
+                        remainingPayment,
+                      )}
+                    </strong>
+                  </div>
+                </article>
+              </>
+            )}
+
+            <div className={styles.navigation}>
+              {step > 1 ? (
+                <button
+                  type="button"
+                  className={styles.backButton}
+                  onClick={previousStep}
+                >
+                  <ArrowLeft size={17} />
+                  Kembali
+                </button>
+              ) : (
+                <a
+                  className={styles.backButton}
+                  href={`/akomodasi/${slug}`}
+                >
+                  <ArrowLeft size={17} />
+                  Detail Akomodasi
+                </a>
+              )}
+
+              {step < 3 ? (
+                <button
+                  type="button"
+                  className={styles.nextButton}
+                  disabled={
+                    (step === 1 &&
+                      !purchaserValid) ||
+                    (step === 2 &&
+                      !accepted)
+                  }
+                  onClick={nextStep}
+                >
+                  {step === 2
+                    ? "Lanjut ke Pembayaran"
+                    : "Lanjutkan"}
+
+                  <ArrowRight size={17} />
+                </button>
+              ) : (
+                <button
+                  type="submit"
+                  className={styles.nextButton}
+                >
+                  Bayar Sekarang
+                  <ArrowRight size={17} />
+                </button>
+              )}
+            </div>
+          </div>
+
+          <aside className={styles.sidebar}>
+            <div className={styles.summary}>
+              <span className={styles.summaryBadge}>
+                Land Arrangement
+              </span>
+
+              <h2>
+                {PRODUCT.title}
+              </h2>
+
+              <div className={styles.meta}>
+                <span>
+                  <MapPin size={15} />
+                  {PRODUCT.destination}
+                </span>
+
+                <span>
+                  <CalendarDays size={15} />
+                  {PRODUCT.startDate}
+                  {" – "}
+                  {PRODUCT.endDate}
+                </span>
+
+                <span>
+                  <UsersRound size={15} />
+                  {travelerTotal} traveler
+                </span>
+              </div>
+
+              <hr />
+
+              <div className={styles.travelers}>
+                <span>
+                  Dewasa
+                  <strong>
+                    {adult}
+                  </strong>
+                </span>
+
+                <span>
+                  Anak
+                  <strong>
+                    {child}
+                  </strong>
+                </span>
+
+                <span>
+                  Bayi
+                  <strong>
+                    {infant}
+                  </strong>
+                </span>
+              </div>
+
+              <hr />
+
+              <div className={styles.total}>
+                <span>
+                  Estimasi total
+                </span>
+
+                <strong>
+                  {rupiah(estimatedTotal)}
+                </strong>
+              </div>
+            </div>
+
+            <div className={styles.deadline}>
+              <CalendarDays size={19} />
+
+              <div>
+                <strong>
+                  Batas Data Traveler
+                </strong>
+
+                <p>
+                  Wajib lengkap paling lambat
+                  H-{PRODUCT.travelerDeadlineDays}
+                  sebelum keberangkatan,
+                  termasuk data paspor.
+                </p>
+              </div>
+            </div>
+
+            <div className={styles.help}>
+              <ShieldCheck size={19} />
+
+              <div>
+                <strong>
+                  Dokumen setelah transaksi
+                </strong>
+
+                <p>
+                  Invoice, Paket Info, dan
+                  Confirmation Letter (CL)
+                  tersedia mengikuti status
+                  transaksi.
+                </p>
+              </div>
+            </div>
+          </aside>
+        </form>
+      </div>
+    </main>
+  );
+}

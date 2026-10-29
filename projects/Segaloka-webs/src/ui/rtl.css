@@ -1,0 +1,6 @@
+﻿[dir="rtl"] .segaloka-search,
+[dir="rtl"] .segaloka-card,
+[dir="rtl"] .segaloka-package-card,
+[dir="rtl"] .segaloka-package-detail {
+  text-align: right;
+}

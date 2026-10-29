@@ -1,0 +1,363 @@
+import { randomBytes } from 'node:crypto';
+import { createSessionAuth } from '../security/session-auth.js';
+import { isTestDataOrganization } from '../security/test-data-policy.js';
+
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+const isUuid = value => typeof value === 'string' && UUID.test(value);
+
+async function travelAccess(client, userId, organizationId) {
+  const result = await client.query(
+    `SELECT 1
+     FROM public.memberships m
+     JOIN public.roles r ON r.id = m.role_id
+     JOIN public.organizations o ON o.id = m.organization_id
+     WHERE m.user_id = $1
+       AND m.organization_id = $2
+       AND r.code = 'travel'
+       AND o.organization_type = 'travel'
+       AND o.status = 'active'
+     LIMIT 1`,
+    [userId, organizationId]
+  );
+
+  return result.rows.length > 0;
+}
+
+async function transaction(pool, request, reply, work) {
+  let client;
+
+  try {
+    client = await pool.connect();
+    await client.query('BEGIN');
+
+    const response = await work(client);
+
+    if (response.status >= 400) {
+      await client.query('ROLLBACK');
+      return reply.code(response.status).send(response.body);
+    }
+
+    await client.query('COMMIT');
+    return reply.code(response.status).send(response.body);
+  } catch (error) {
+    if (client) {
+      try {
+        await client.query('ROLLBACK');
+      } catch (rollbackError) {
+        request.log.error({ err: rollbackError }, 'Rollback failed');
+      }
+    }
+
+    request.log.error({ err: error }, 'Travel booking operation failed');
+
+    return reply.code(500).send({
+      code: 'TRAVEL_BOOKING_OPERATION_FAILED'
+    });
+  } finally {
+    if (client) client.release();
+  }
+}
+
+const fail = (status, code) => ({
+  status,
+  body: { code }
+});
+
+async function audit(client, actor, organization, action, type, id) {
+  await client.query(
+    `INSERT INTO public.audit_logs (
+       actor_user_id, organization_id, action, entity_type, entity_id
+     ) VALUES ($1, $2, $3, $4, $5)`,
+    [actor, organization, action, type, id]
+  );
+}
+
+export async function registerBookingRoutes(app, pool) {
+  const requireSession = createSessionAuth(pool);
+
+  app.post('/travel/bookings', {
+    preHandler: requireSession
+  }, async (request, reply) => {
+    reply.header('Cache-Control', 'no-store');
+
+    const body = request.body;
+
+    if (
+      !body || typeof body !== 'object' || Array.isArray(body) ||
+      !isUuid(body.departureId)
+    ) {
+      return reply.code(400).send({ code: 'INVALID_BOOKING_INPUT' });
+    }
+
+    return transaction(pool, request, reply, async client => {
+      const found = await client.query(
+        `SELECT
+           d.id,
+           d.travel_organization_id,
+           d.status
+         FROM public.travel_departures d
+         JOIN public.organizations o
+           ON o.id = d.travel_organization_id
+         WHERE d.id = $1
+           AND o.status = 'active'
+         FOR UPDATE OF d`,
+        [body.departureId]
+      );
+
+      const departure = found.rows[0];
+
+      if (!departure || departure.status !== 'scheduled') {
+        return fail(409, 'DEPARTURE_NOT_AVAILABLE');
+      }
+
+      if (await isTestDataOrganization(client, departure.travel_organization_id)) {
+        return fail(409, 'TEST_DATA_BOOKING_NOT_ALLOWED');
+      }
+
+      const bookingNumber =
+        'SLK-BKG-' + randomBytes(12).toString('hex').toUpperCase();
+
+      const inserted = await client.query(
+        `INSERT INTO public.travel_bookings (
+           departure_id, booking_user_id, booking_number
+         )
+         VALUES ($1, $2, $3)
+         RETURNING id, departure_id, booking_user_id,
+                   booking_number, status, created_at`,
+        [departure.id, request.auth.userId, bookingNumber]
+      );
+
+      const booking = inserted.rows[0];
+
+      await audit(
+        client,
+        request.auth.userId,
+        departure.travel_organization_id,
+        'travel.booking.created',
+        'travel_booking',
+        booking.id
+      );
+
+      return { status: 201, body: { booking } };
+    });
+  });
+
+  app.post('/travel/bookings/:id/participants', {
+    preHandler: requireSession
+  }, async (request, reply) => {
+    reply.header('Cache-Control', 'no-store');
+
+    const bookingId = request.params.id;
+    const body = request.body;
+
+    if (
+      !isUuid(bookingId) ||
+      !body || typeof body !== 'object' || Array.isArray(body) ||
+      typeof body.fullName !== 'string' ||
+      !body.fullName.trim() ||
+      body.fullName.trim().length > 200 ||
+      (body.userId !== undefined &&
+       body.userId !== null &&
+       !isUuid(body.userId))
+    ) {
+      return reply.code(400).send({ code: 'INVALID_PARTICIPANT_INPUT' });
+    }
+
+    return transaction(pool, request, reply, async client => {
+      const found = await client.query(
+        `SELECT
+           b.id, b.status, b.booking_user_id,
+           d.travel_organization_id,
+           d.status AS departure_status
+         FROM public.travel_bookings b
+         JOIN public.travel_departures d ON d.id = b.departure_id
+         WHERE b.id = $1
+         FOR UPDATE OF b`,
+        [bookingId]
+      );
+
+      const booking = found.rows[0];
+      if (!booking) return fail(404, 'BOOKING_NOT_FOUND');
+
+      if (await isTestDataOrganization(client, booking.travel_organization_id)) {
+        return fail(409, 'TEST_DATA_BOOKING_NOT_ALLOWED');
+      }
+
+      const staff = await travelAccess(
+        client, request.auth.userId, booking.travel_organization_id
+      );
+
+      if (!staff && booking.booking_user_id !== request.auth.userId) {
+        return fail(403, 'BOOKING_ACCESS_DENIED');
+      }
+
+      if (
+        !['pending', 'confirmed'].includes(booking.status) ||
+        booking.departure_status !== 'scheduled'
+      ) {
+        return fail(409, 'BOOKING_NOT_EDITABLE');
+      }
+
+      const userId = body.userId ?? null;
+
+      if (!staff && userId !== null && userId !== request.auth.userId) {
+        return fail(403, 'PARTICIPANT_USER_ACCESS_DENIED');
+      }
+
+      const inserted = await client.query(
+        `INSERT INTO public.travel_booking_participants (
+           booking_id, user_id, full_name
+         )
+         VALUES ($1, $2, $3)
+         RETURNING id, booking_id, user_id, full_name,
+                   departure_status, created_at`,
+        [bookingId, userId, body.fullName.trim()]
+      );
+
+      const participant = inserted.rows[0];
+
+      await audit(
+        client,
+        request.auth.userId,
+        booking.travel_organization_id,
+        'travel.participant.created',
+        'travel_booking_participant',
+        participant.id
+      );
+
+      return { status: 201, body: { participant } };
+    });
+  });
+
+  app.get('/travel/bookings/:id', {
+    preHandler: requireSession
+  }, async (request, reply) => {
+    reply.header('Cache-Control', 'no-store');
+
+    const bookingId = request.params.id;
+
+    if (!isUuid(bookingId)) {
+      return reply.code(400).send({ code: 'INVALID_BOOKING_ID' });
+    }
+
+    return transaction(pool, request, reply, async client => {
+      const found = await client.query(
+        `SELECT
+           b.id, b.booking_number, b.status,
+           b.booking_user_id, b.created_at,
+           d.id AS departure_id,
+           d.title, d.destination,
+           d.departure_date, d.return_date,
+           d.travel_organization_id
+         FROM public.travel_bookings b
+         JOIN public.travel_departures d ON d.id = b.departure_id
+         WHERE b.id = $1`,
+        [bookingId]
+      );
+
+      const booking = found.rows[0];
+      if (!booking) return fail(404, 'BOOKING_NOT_FOUND');
+
+      const staff = await travelAccess(
+        client, request.auth.userId, booking.travel_organization_id
+      );
+
+      if (!staff && booking.booking_user_id !== request.auth.userId) {
+        return fail(404, 'BOOKING_NOT_FOUND');
+      }
+
+      const participants = await client.query(
+        `SELECT id, full_name, user_id, departure_status
+         FROM public.travel_booking_participants
+         WHERE booking_id = $1
+         ORDER BY created_at, id`,
+        [bookingId]
+      );
+
+      return {
+        status: 200,
+        body: { booking, participants: participants.rows }
+      };
+    });
+  });
+
+  app.post('/travel/participants/:id/verify-departure', {
+    preHandler: requireSession
+  }, async (request, reply) => {
+    reply.header('Cache-Control', 'no-store');
+
+    const participantId = request.params.id;
+
+    if (!isUuid(participantId)) {
+      return reply.code(400).send({ code: 'INVALID_PARTICIPANT_ID' });
+    }
+
+    return transaction(pool, request, reply, async client => {
+      const found = await client.query(
+        `SELECT
+           p.id,
+           p.departure_status,
+           b.status AS booking_status,
+           d.status AS departure_status_record,
+           d.departure_date,
+           d.travel_organization_id
+         FROM public.travel_booking_participants p
+         JOIN public.travel_bookings b ON b.id = p.booking_id
+         JOIN public.travel_departures d ON d.id = b.departure_id
+         WHERE p.id = $1
+         FOR UPDATE OF p`,
+        [participantId]
+      );
+
+      const participant = found.rows[0];
+      if (!participant) return fail(404, 'PARTICIPANT_NOT_FOUND');
+
+      const staff = await travelAccess(
+        client, request.auth.userId, participant.travel_organization_id
+      );
+
+      if (!staff) return fail(403, 'TRAVEL_ACCESS_DENIED');
+
+      if (
+        !['confirmed', 'completed'].includes(participant.booking_status) ||
+        !['departed', 'completed'].includes(
+          participant.departure_status_record
+        ) ||
+        participant.departure_status !== 'not_verified'
+      ) {
+        return fail(409, 'DEPARTURE_VERIFICATION_NOT_ALLOWED');
+      }
+
+      const updated = await client.query(
+        `UPDATE public.travel_booking_participants
+         SET departure_status = 'departed',
+             departure_verified_by = $2,
+             departure_verified_at = now(),
+             updated_at = now()
+         WHERE id = $1
+           AND departure_status = 'not_verified'
+           AND departure_verified_at IS NULL
+         RETURNING id, departure_status, departure_verified_at`,
+        [participantId, request.auth.userId]
+      );
+
+      if (updated.rows.length !== 1) {
+        return fail(409, 'DEPARTURE_VERIFICATION_CONFLICT');
+      }
+
+      await audit(
+        client,
+        request.auth.userId,
+        participant.travel_organization_id,
+        'travel.participant.departure_verified',
+        'travel_booking_participant',
+        participantId
+      );
+
+      return {
+        status: 200,
+        body: { participant: updated.rows[0] }
+      };
+    });
+  });
+}

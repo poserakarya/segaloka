@@ -1,0 +1,2341 @@
+"use client";
+
+import {
+  Banknote,
+  Building2,
+  CalendarDays,
+  ChevronLeft,
+  ChevronRight,
+  CircleMinus,
+  CirclePlus,
+  Globe2,
+  Info,
+  MapPin,
+  Search,
+  Sparkles,
+  Ticket,
+  UsersRound,
+  X,
+} from "lucide-react";
+
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+
+
+const categories = [
+  { label: "Umrah", icon: Building2 },
+  { label: "Haji", icon: Sparkles },
+  { label: "Halal Tour", icon: Globe2 },
+  { label: "Tour Domestic", icon: MapPin },
+  { label: "Tour International", icon: Globe2 },
+  { label: "SegaDeals", icon: Ticket },
+] as const;
+
+
+const indonesiaCities = [
+  "Jakarta",
+  "Makassar",
+  "Surabaya",
+  "Medan",
+  "Yogyakarta",
+  "Bandung",
+  "Semarang",
+  "Balikpapan",
+  "Banjarmasin",
+  "Palembang",
+  "Pekanbaru",
+  "Padang",
+  "Banda Aceh",
+  "Batam",
+  "Denpasar",
+  "Manado",
+  "Lombok",
+];
+
+
+const umrahDestinations = [
+  "Makkah",
+  "Madinah",
+  "Makkah & Madinah",
+];
+
+
+const hajiDestinations = [
+  "Makkah",
+  "Madinah",
+];
+
+
+const halalTourCountries = [
+  "Indonesia",
+  "Malaysia",
+  "Singapura",
+  "Jepang",
+  "Korea Selatan",
+  "Turki",
+  "Uni Emirat Arab",
+  "Thailand",
+  "Vietnam",
+  "Brunei Darussalam",
+  "Mesir",
+  "Maroko",
+  "Uzbekistan",
+  "Kazakhstan",
+  "Qatar",
+  "Oman",
+  "Yordania",
+  "Inggris",
+  "Prancis",
+  "Italia",
+  "Spanyol",
+  "Swiss",
+  "Jerman",
+  "Belanda",
+  "Austria",
+  "Bosnia & Herzegovina",
+  "Albania",
+];
+
+
+const halalTourPopularCountries = [
+  "Indonesia",
+  "Malaysia",
+  "Singapura",
+  "Jepang",
+  "Korea Selatan",
+  "Turki",
+  "Uni Emirat Arab",
+];
+
+
+const domesticCities = [
+  "Jakarta",
+  "Bandung",
+  "Bogor",
+  "Bekasi",
+  "Depok",
+  "Tangerang",
+  "Serang",
+  "Cirebon",
+  "Tasikmalaya",
+  "Sukabumi",
+  "Yogyakarta",
+  "Solo",
+  "Semarang",
+  "Magelang",
+  "Purwokerto",
+  "Surabaya",
+  "Malang",
+  "Batu",
+  "Kediri",
+  "Madiun",
+  "Jember",
+  "Banyuwangi",
+  "Denpasar",
+  "Ubud",
+  "Kuta",
+  "Nusa Dua",
+  "Mataram",
+  "Lombok",
+  "Bima",
+  "Labuan Bajo",
+  "Medan",
+  "Berastagi",
+  "Parapat",
+  "Banda Aceh",
+  "Sabang",
+  "Padang",
+  "Bukittinggi",
+  "Pekanbaru",
+  "Batam",
+  "Tanjung Pinang",
+  "Palembang",
+  "Bengkulu",
+  "Bandar Lampung",
+  "Pontianak",
+  "Singkawang",
+  "Palangka Raya",
+  "Banjarmasin",
+  "Samarinda",
+  "Balikpapan",
+  "Tarakan",
+  "Makassar",
+  "Parepare",
+  "Palopo",
+  "Bulukumba",
+  "Manado",
+  "Tomohon",
+  "Gorontalo",
+  "Palu",
+  "Kendari",
+  "Ambon",
+  "Ternate",
+  "Jayapura",
+  "Sorong",
+  "Manokwari",
+];
+
+
+const domesticPopularCities = [
+  "Jakarta",
+  "Denpasar",
+  "Yogyakarta",
+  "Bandung",
+  "Surabaya",
+  "Makassar",
+  "Lombok",
+  "Labuan Bajo",
+];
+
+
+const internationalCountries = [
+  "Malaysia",
+  "Singapura",
+  "Brunei Darussalam",
+  "Thailand",
+  "Vietnam",
+  "Filipina",
+  "Kamboja",
+  "Laos",
+  "Myanmar",
+  "Timor-Leste",
+  "Jepang",
+  "Korea Selatan",
+  "Tiongkok",
+  "Hong Kong",
+  "Makau",
+  "Taiwan",
+  "Mongolia",
+  "India",
+  "Pakistan",
+  "Bangladesh",
+  "Sri Lanka",
+  "Maladewa",
+  "Nepal",
+  "Bhutan",
+  "Turki",
+  "Uni Emirat Arab",
+  "Qatar",
+  "Oman",
+  "Bahrain",
+  "Kuwait",
+  "Yordania",
+  "Lebanon",
+  "Mesir",
+  "Maroko",
+  "Tunisia",
+  "Aljazair",
+  "Afrika Selatan",
+  "Kenya",
+  "Tanzania",
+  "Mauritius",
+  "Seychelles",
+  "Uzbekistan",
+  "Kazakhstan",
+  "Kyrgyzstan",
+  "Azerbaijan",
+  "Georgia",
+  "Armenia",
+  "Inggris",
+  "Prancis",
+  "Italia",
+  "Spanyol",
+  "Portugal",
+  "Swiss",
+  "Jerman",
+  "Belanda",
+  "Belgia",
+  "Austria",
+  "Republik Ceko",
+  "Hungaria",
+  "Polandia",
+  "Yunani",
+  "Kroasia",
+  "Bosnia & Herzegovina",
+  "Albania",
+  "Serbia",
+  "Rumania",
+  "Bulgaria",
+  "Norwegia",
+  "Swedia",
+  "Finlandia",
+  "Denmark",
+  "Islandia",
+  "Irlandia",
+  "Amerika Serikat",
+  "Kanada",
+  "Meksiko",
+  "Brasil",
+  "Argentina",
+  "Chile",
+  "Peru",
+  "Kolombia",
+  "Australia",
+  "Selandia Baru",
+  "Fiji",
+];
+
+
+const internationalPopularCountries = [
+  "Malaysia",
+  "Singapura",
+  "Jepang",
+  "Korea Selatan",
+  "Turki",
+  "Uni Emirat Arab",
+  "Thailand",
+  "Vietnam",
+  "Mesir",
+  "Maroko",
+  "Inggris",
+  "Prancis",
+];
+
+
+const segaDealsDestinations = [
+  ...domesticCities,
+  ...internationalCountries,
+];
+
+
+const segaDealsPopularDestinations = [
+  "Bali",
+  "Lombok",
+  "Labuan Bajo",
+  "Yogyakarta",
+  "Jepang",
+  "Korea Selatan",
+  "Turki",
+  "Malaysia",
+];
+
+
+/*
+ * Negara asal SegaDeals.
+ * Kota tidak di-hardcode.
+ * User cukup mengetik kota keberangkatan.
+ */
+const segaDealsOriginCountries = [
+  "Indonesia",
+  "Malaysia",
+  "Singapura",
+  "Brunei Darussalam",
+  "Thailand",
+  "Vietnam",
+  "Filipina",
+  "Jepang",
+  "Korea Selatan",
+  "Tiongkok",
+  "Hong Kong",
+  "Taiwan",
+  "India",
+  "Pakistan",
+  "Bangladesh",
+  "Sri Lanka",
+  "Maladewa",
+  "Nepal",
+  "Turki",
+  "Uni Emirat Arab",
+  "Arab Saudi",
+  "Qatar",
+  "Oman",
+  "Bahrain",
+  "Kuwait",
+  "Yordania",
+  "Mesir",
+  "Maroko",
+  "Afrika Selatan",
+  "Uzbekistan",
+  "Kazakhstan",
+  "Azerbaijan",
+  "Inggris",
+  "Prancis",
+  "Italia",
+  "Spanyol",
+  "Portugal",
+  "Swiss",
+  "Jerman",
+  "Belanda",
+  "Belgia",
+  "Austria",
+  "Yunani",
+  "Norwegia",
+  "Swedia",
+  "Finlandia",
+  "Denmark",
+  "Amerika Serikat",
+  "Kanada",
+  "Meksiko",
+  "Brasil",
+  "Argentina",
+  "Australia",
+  "Selandia Baru",
+];
+
+
+const segaDealsPopularOrigins = [
+  "Indonesia",
+  "Malaysia",
+  "Singapura",
+  "Jepang",
+  "Uni Emirat Arab",
+  "Turki",
+  "Australia",
+  "Inggris",
+];
+
+
+const segaDealsCitiesByCountry: Record<string, string[]> = {
+  Indonesia: [
+    "Jakarta",
+    "Makassar",
+    "Surabaya",
+    "Medan",
+    "Denpasar",
+    "Yogyakarta",
+    "Bandung",
+    "Semarang",
+    "Balikpapan",
+    "Banjarmasin",
+    "Pekanbaru",
+    "Palembang",
+    "Padang",
+    "Banda Aceh",
+    "Batam",
+    "Manado",
+    "Lombok",
+  ],
+
+  Malaysia: [
+    "Kuala Lumpur",
+    "Johor Bahru",
+    "Penang",
+    "Kota Kinabalu",
+    "Kuching",
+    "Langkawi",
+    "Malaka",
+  ],
+
+  Singapura: [
+    "Singapore",
+  ],
+
+  Jepang: [
+    "Tokyo",
+    "Osaka",
+    "Kyoto",
+    "Nagoya",
+    "Fukuoka",
+    "Sapporo",
+    "Okinawa",
+  ],
+
+  "Uni Emirat Arab": [
+    "Dubai",
+    "Abu Dhabi",
+    "Sharjah",
+    "Ajman",
+    "Ras Al Khaimah",
+  ],
+
+  Turki: [
+    "Istanbul",
+    "Ankara",
+    "Antalya",
+    "Izmir",
+    "Bursa",
+    "Cappadocia",
+  ],
+
+  Australia: [
+    "Sydney",
+    "Melbourne",
+    "Brisbane",
+    "Perth",
+    "Adelaide",
+    "Gold Coast",
+  ],
+
+  Inggris: [
+    "London",
+    "Manchester",
+    "Birmingham",
+    "Liverpool",
+    "Leeds",
+    "Edinburgh",
+  ],
+
+  "Korea Selatan": [
+    "Seoul",
+    "Busan",
+    "Incheon",
+    "Jeju",
+    "Daegu",
+  ],
+
+  Thailand: [
+    "Bangkok",
+    "Phuket",
+    "Chiang Mai",
+    "Pattaya",
+    "Krabi",
+  ],
+
+  Vietnam: [
+    "Ho Chi Minh City",
+    "Hanoi",
+    "Da Nang",
+    "Nha Trang",
+  ],
+
+  "Amerika Serikat": [
+    "New York",
+    "Los Angeles",
+    "San Francisco",
+    "Chicago",
+    "Miami",
+    "Seattle",
+  ],
+
+  Kanada: [
+    "Toronto",
+    "Vancouver",
+    "Montreal",
+    "Calgary",
+    "Ottawa",
+  ],
+
+  Prancis: [
+    "Paris",
+    "Nice",
+    "Lyon",
+    "Marseille",
+  ],
+
+  Italia: [
+    "Rome",
+    "Milan",
+    "Venice",
+    "Florence",
+    "Naples",
+  ],
+
+  Spanyol: [
+    "Madrid",
+    "Barcelona",
+    "Seville",
+    "Valencia",
+  ],
+
+  Swiss: [
+    "Zurich",
+    "Geneva",
+    "Bern",
+    "Lucerne",
+  ],
+
+  Jerman: [
+    "Berlin",
+    "Frankfurt",
+    "Munich",
+    "Hamburg",
+  ],
+
+  Belanda: [
+    "Amsterdam",
+    "Rotterdam",
+    "The Hague",
+    "Utrecht",
+  ],
+
+  Mesir: [
+    "Cairo",
+    "Alexandria",
+    "Luxor",
+    "Sharm El Sheikh",
+  ],
+
+  Maroko: [
+    "Casablanca",
+    "Marrakesh",
+    "Rabat",
+    "Fez",
+  ],
+
+  Qatar: [
+    "Doha",
+  ],
+
+  Oman: [
+    "Muscat",
+    "Salalah",
+  ],
+
+  "Arab Saudi": [
+    "Riyadh",
+    "Jeddah",
+    "Makkah",
+    "Madinah",
+    "Dammam",
+  ],
+};
+
+
+const umrahClasses = [
+  "Hemat",
+  "Regular",
+  "Plus",
+  "First",
+];
+
+
+const hajiClasses = [
+  "Plus",
+  "Plus VVIP",
+];
+
+
+const monthNames = [
+  "Januari",
+  "Februari",
+  "Maret",
+  "April",
+  "Mei",
+  "Juni",
+  "Juli",
+  "Agustus",
+  "September",
+  "Oktober",
+  "November",
+  "Desember",
+];
+
+
+const dayNames = [
+  "Min",
+  "Sen",
+  "Sel",
+  "Rab",
+  "Kam",
+  "Jum",
+  "Sab",
+];
+
+
+type OpenPanel =
+  | "origin"
+  | "destination"
+  | "traveler"
+  | "budget"
+  | "date"
+  | "year"
+  | null;
+
+
+function rupiah(value: number) {
+  return new Intl.NumberFormat("id-ID", {
+    style: "currency",
+    currency: "IDR",
+    maximumFractionDigits: 0,
+  }).format(value);
+}
+
+
+function formatDate(date: Date | null) {
+  if (!date) {
+    return "Pilih tanggal";
+  }
+
+  return new Intl.DateTimeFormat("id-ID", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  }).format(date);
+}
+
+
+function getCalendarDays(year: number, month: number) {
+  const firstDay = new Date(year, month, 1).getDay();
+  const numberOfDays = new Date(
+    year,
+    month + 1,
+    0,
+  ).getDate();
+
+  const result: Array<number | null> = [];
+
+  for (let index = 0; index < firstDay; index += 1) {
+    result.push(null);
+  }
+
+  for (let day = 1; day <= numberOfDays; day += 1) {
+    result.push(day);
+  }
+
+  while (result.length % 7 !== 0) {
+    result.push(null);
+  }
+
+  return result;
+}
+
+
+function CalendarMonth({
+  year,
+  month,
+  selectedDate,
+  onSelect,
+}: {
+  year: number;
+  month: number;
+  selectedDate: Date | null;
+  onSelect: (date: Date) => void;
+}) {
+  const days = getCalendarDays(year, month);
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  return (
+    <div className="hero-calendar-month">
+      <h4>
+        {monthNames[month]} {year}
+      </h4>
+
+      <div className="hero-calendar-weekdays">
+        {dayNames.map((name, index) => (
+          <span
+            key={name}
+            className={index === 0 ? "sunday" : ""}
+          >
+            {name}
+          </span>
+        ))}
+      </div>
+
+      <div className="hero-calendar-days">
+        {days.map((day, index) => {
+          if (!day) {
+            return (
+              <span
+                key={`empty-${index}`}
+                className="empty"
+              />
+            );
+          }
+
+          const candidate = new Date(
+            year,
+            month,
+            day,
+          );
+
+          candidate.setHours(0, 0, 0, 0);
+
+          const disabled = candidate < today;
+
+          const selected =
+            selectedDate &&
+            candidate.getFullYear() ===
+              selectedDate.getFullYear() &&
+            candidate.getMonth() ===
+              selectedDate.getMonth() &&
+            candidate.getDate() ===
+              selectedDate.getDate();
+
+          return (
+            <button
+              key={day}
+              type="button"
+              disabled={disabled}
+              className={selected ? "selected" : ""}
+              onClick={() => {
+                if (!disabled) {
+                  onSelect(candidate);
+                }
+              }}
+            >
+              {day}
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+
+export function Hero() {
+  const router = useRouter();
+  const [active, setActive] = useState("Umrah");
+
+  const [adult, setAdult] = useState(2);
+  const [child, setChild] = useState(0);
+  const [infant, setInfant] = useState(0);
+
+  const [travelClass, setTravelClass] =
+    useState("Hemat");
+
+  const [origin, setOrigin] =
+    useState("Jakarta");
+
+  const [originQuery, setOriginQuery] =
+    useState("");
+
+  const [destination, setDestination] =
+    useState("");
+
+  const [destinationQuery, setDestinationQuery] =
+    useState("");
+
+  const [budget, setBudget] =
+    useState("");
+
+  const [hotelStars, setHotelStars] =
+    useState<number | null>(null);
+
+  const [segaOriginCountry, setSegaOriginCountry] =
+    useState("Indonesia");
+
+  const [segaOriginCountryQuery, setSegaOriginCountryQuery] =
+    useState("");
+
+  const [segaOriginCity, setSegaOriginCity] =
+    useState("Jakarta");
+
+  const [segaOriginCityQuery, setSegaOriginCityQuery] =
+    useState("");
+
+  const [selectedDate, setSelectedDate] =
+    useState<Date | null>(null);
+
+  const [calendarCursor, setCalendarCursor] =
+    useState(() => {
+      const now = new Date();
+
+      return new Date(
+        now.getFullYear(),
+        now.getMonth(),
+        1,
+      );
+    });
+
+  const currentYear = new Date().getFullYear();
+
+  const [hajiYear, setHajiYear] =
+    useState<number | null>(null);
+
+  const [openPanel, setOpenPanel] =
+    useState<OpenPanel>(null);
+
+  const [showSegaDealsInfo, setShowSegaDealsInfo] =
+    useState(false);
+
+  const controlsRef = useRef<HTMLDivElement>(null);
+
+
+  const isHaji = active === "Haji";
+  const isUmrah = active === "Umrah";
+  const isHalalTour = active === "Halal Tour";
+  const isDomestic = active === "Tour Domestic";
+  const isInternational =
+    active === "Tour International";
+  const isSegaDeals = active === "SegaDeals";
+
+
+  const totalTraveler =
+    adult + child + infant;
+
+
+  const availableClasses =
+    isHaji
+      ? hajiClasses
+      : umrahClasses;
+
+
+  const filteredOrigins = useMemo(() => {
+    const query =
+      originQuery.trim().toLowerCase();
+
+    if (!query) {
+      return indonesiaCities;
+    }
+
+    return indonesiaCities.filter((city) =>
+      city.toLowerCase().includes(query),
+    );
+  }, [originQuery]);
+
+
+  const filteredSegaOriginCountries =
+    useMemo(() => {
+      const query =
+        segaOriginCountryQuery
+          .trim()
+          .toLowerCase();
+
+      if (!query) {
+        return segaDealsPopularOrigins;
+      }
+
+      return segaDealsOriginCountries.filter(
+        (country) =>
+          country
+            .toLowerCase()
+            .includes(query),
+      );
+    }, [segaOriginCountryQuery]);
+
+
+  const segaOriginCities =
+    segaDealsCitiesByCountry[
+      segaOriginCountry
+    ] ?? [];
+
+
+  const filteredSegaOriginCities =
+    useMemo(() => {
+      const query =
+        segaOriginCityQuery
+          .trim()
+          .toLowerCase();
+
+      if (!query) {
+        return segaOriginCities;
+      }
+
+      return segaOriginCities.filter(
+        (city) =>
+          city
+            .toLowerCase()
+            .includes(query),
+      );
+    }, [
+      segaOriginCityQuery,
+      segaOriginCities,
+    ]);
+
+
+  const destinations = useMemo(() => {
+    if (isHaji) {
+      return hajiDestinations;
+    }
+
+    if (isHalalTour) {
+      return halalTourCountries;
+    }
+
+    if (isDomestic) {
+      return domesticCities;
+    }
+
+    if (isInternational) {
+      return internationalCountries;
+    }
+
+    if (isSegaDeals) {
+      return segaDealsDestinations;
+    }
+
+    return umrahDestinations;
+  }, [
+    isHaji,
+    isHalalTour,
+    isDomestic,
+    isInternational,
+    isSegaDeals,
+  ]);
+
+
+  const filteredDestinations = useMemo(() => {
+    const query =
+      destinationQuery
+        .trim()
+        .toLowerCase();
+
+    if (!query) {
+      if (isHalalTour) {
+        return halalTourPopularCountries;
+      }
+
+      if (isDomestic) {
+        return domesticPopularCities;
+      }
+
+      if (isInternational) {
+        return internationalPopularCountries;
+      }
+
+      if (isSegaDeals) {
+        return segaDealsPopularDestinations;
+      }
+
+      return destinations;
+    }
+
+    return destinations.filter((item) =>
+      item.toLowerCase().includes(query),
+    );
+  }, [
+    destinationQuery,
+    destinations,
+    isHalalTour,
+    isDomestic,
+    isInternational,
+    isSegaDeals,
+  ]);
+
+
+  const hajiYears = Array.from(
+    { length: 6 },
+    (_, index) => currentYear + 1 + index,
+  );
+
+
+  const firstCalendarYear =
+    calendarCursor.getFullYear();
+
+  const firstCalendarMonth =
+    calendarCursor.getMonth();
+
+  const secondCalendarDate = new Date(
+    firstCalendarYear,
+    firstCalendarMonth + 1,
+    1,
+  );
+
+  const todayCalendarMonth = new Date();
+
+  todayCalendarMonth.setDate(1);
+  todayCalendarMonth.setHours(0, 0, 0, 0);
+
+  const canGoPrevious =
+    calendarCursor.getTime() >
+    todayCalendarMonth.getTime();
+
+  const calendarYears = Array.from(
+    { length: 7 },
+    (_, index) =>
+      todayCalendarMonth.getFullYear() + index,
+  );
+
+
+  function moveCalendarMonth(offset: number) {
+    setCalendarCursor((current) => {
+      const candidate = new Date(
+        current.getFullYear(),
+        current.getMonth() + offset,
+        1,
+      );
+
+      if (
+        candidate.getTime() <
+        todayCalendarMonth.getTime()
+      ) {
+        return new Date(
+          todayCalendarMonth.getFullYear(),
+          todayCalendarMonth.getMonth(),
+          1,
+        );
+      }
+
+      return candidate;
+    });
+  }
+
+
+  function changeCalendarMonth(month: number) {
+    setCalendarCursor((current) => {
+      const candidate = new Date(
+        current.getFullYear(),
+        month,
+        1,
+      );
+
+      if (
+        candidate.getTime() <
+        todayCalendarMonth.getTime()
+      ) {
+        return new Date(
+          todayCalendarMonth.getFullYear(),
+          todayCalendarMonth.getMonth(),
+          1,
+        );
+      }
+
+      return candidate;
+    });
+  }
+
+
+  function changeCalendarYear(year: number) {
+    setCalendarCursor((current) => {
+      let month = current.getMonth();
+
+      if (
+        year === todayCalendarMonth.getFullYear() &&
+        month < todayCalendarMonth.getMonth()
+      ) {
+        month = todayCalendarMonth.getMonth();
+      }
+
+      return new Date(
+        year,
+        month,
+        1,
+      );
+    });
+  }
+
+
+  useEffect(() => {
+    function handlePointerDown(event: PointerEvent) {
+      if (
+        controlsRef.current &&
+        !controlsRef.current.contains(
+          event.target as Node,
+        )
+      ) {
+        setOpenPanel(null);
+      }
+    }
+
+    document.addEventListener(
+      "pointerdown",
+      handlePointerDown,
+    );
+
+    return () => {
+      document.removeEventListener(
+        "pointerdown",
+        handlePointerDown,
+      );
+    };
+  }, []);
+
+
+  function changeCategory(category: string) {
+    setActive(category);
+    setOpenPanel(null);
+    setDestination("");
+    setDestinationQuery("");
+    setBudget("");
+
+    if (category === "Haji") {
+      setSelectedDate(null);
+
+      if (
+        travelClass !== "Plus" &&
+        travelClass !== "Plus VVIP"
+      ) {
+        setTravelClass("Plus");
+      }
+    } else {
+      setHajiYear(null);
+
+      if (travelClass === "Plus VVIP") {
+        setTravelClass("Hemat");
+      }
+    }
+
+    if (category === "SegaDeals") {
+      setShowSegaDealsInfo(true);
+    }
+  }
+
+
+  function DestinationField() {
+    return (
+      <div className="hero-field-wrap">
+        <button
+          type="button"
+          className="hero-field"
+          onClick={() =>
+            setOpenPanel(
+              openPanel === "destination"
+                ? null
+                : "destination",
+            )
+          }
+        >
+          <span className="hero-field-icon">
+            <Globe2 size={19} />
+          </span>
+
+          <span className="hero-field-content">
+            <small>
+              {isHaji
+                ? "Tujuan Masuk"
+                : "Tujuan"}
+            </small>
+
+            <strong>
+              {destination ||
+                (isHaji
+                  ? "Pilih tujuan masuk"
+                  : isUmrah
+                    ? "Pilih tujuan Umrah"
+                    : isDomestic
+                      ? "Pilih kota tujuan"
+                      : "Pilih negara tujuan")}
+            </strong>
+          </span>
+        </button>
+
+
+        {openPanel === "destination" && (
+          <div className="hero-popover hero-destination-popover">
+            <h3>
+              {isHaji
+                ? "Tujuan Masuk"
+                : isDomestic
+                  ? "Pilih Kota Tujuan"
+                  : "Pilih Tujuan"}
+            </h3>
+
+            {!isHaji && (
+              <label className="hero-popover-search">
+                <Search size={20} />
+
+                <input
+                  type="text"
+                  value={destinationQuery}
+                  placeholder={
+                    isDomestic
+                      ? "Cari kota di Indonesia..."
+                      : "Cari negara tujuan..."
+                  }
+                  onChange={(event) =>
+                    setDestinationQuery(
+                      event.target.value,
+                    )
+                  }
+                  autoFocus
+                />
+              </label>
+            )}
+
+            <h4>
+              {destinationQuery
+                ? "Hasil Pencarian"
+                : isDomestic
+                  ? "Destinasi Populer"
+                  : isHaji
+                    ? "Pilih Kota"
+                    : "Destinasi Populer"}
+            </h4>
+
+            <div className="hero-location-options">
+              {filteredDestinations.map((item) => (
+                <button
+                  key={item}
+                  type="button"
+                  className={
+                    destination === item
+                      ? "selected"
+                      : ""
+                  }
+                  onClick={() => {
+                    setDestination(item);
+                    setDestinationQuery("");
+                    setOpenPanel(null);
+                  }}
+                >
+                  {item}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  }
+
+
+  function OriginField() {
+    if (isSegaDeals) {
+      return (
+        <div className="hero-field-wrap">
+          <button
+            type="button"
+            className="hero-field"
+            onClick={() =>
+              setOpenPanel(
+                openPanel === "origin"
+                  ? null
+                  : "origin",
+              )
+            }
+          >
+            <span className="hero-field-icon">
+              <Building2 size={19} />
+            </span>
+
+            <span className="hero-field-content">
+              <small>Dari</small>
+
+              <strong>
+                {segaOriginCity.trim()
+                  ? `${segaOriginCity.trim()}, ${segaOriginCountry}`
+                  : segaOriginCountry}
+              </strong>
+            </span>
+          </button>
+
+
+          {openPanel === "origin" && (
+            <div className="hero-popover hero-segadeals-origin-popover">
+              <h3>Dari Mana?</h3>
+
+              <div className="hero-sega-origin-section">
+                <label className="hero-sega-field-label">
+                  Negara
+                </label>
+
+                <label className="hero-popover-search">
+                  <Search size={20} />
+
+                  <input
+                    type="text"
+                    value={segaOriginCountryQuery}
+                    placeholder="Cari negara..."
+                    onChange={(event) =>
+                      setSegaOriginCountryQuery(
+                        event.target.value,
+                      )
+                    }
+                  />
+                </label>
+
+                <div className="hero-location-options">
+                  {filteredSegaOriginCountries.map(
+                    (country) => (
+                      <button
+                        key={country}
+                        type="button"
+                        className={
+                          country ===
+                          segaOriginCountry
+                            ? "selected"
+                            : ""
+                        }
+                        onClick={() => {
+                          setSegaOriginCountry(
+                            country,
+                          );
+
+                          setSegaOriginCountryQuery(
+                            "",
+                          );
+
+                          const cities =
+                            segaDealsCitiesByCountry[
+                              country
+                            ] ?? [];
+
+                          setSegaOriginCity(
+                            cities[0] ?? "",
+                          );
+
+                          setSegaOriginCityQuery("");
+                        }}
+                      >
+                        {country}
+                      </button>
+                    ),
+                  )}
+                </div>
+              </div>
+
+
+              <div className="hero-sega-origin-section">
+                <label className="hero-sega-field-label">
+                  Kota keberangkatan
+                </label>
+
+                <label className="hero-popover-search">
+                  <Search size={20} />
+
+                  <input
+                    type="text"
+                    value={segaOriginCityQuery}
+                    placeholder={`Cari kota di ${segaOriginCountry}...`}
+                    onChange={(event) =>
+                      setSegaOriginCityQuery(
+                        event.target.value,
+                      )
+                    }
+                  />
+                </label>
+
+                {segaOriginCities.length > 0 ? (
+                  <div className="hero-location-options hero-sega-city-options">
+                    {filteredSegaOriginCities.map(
+                      (city) => (
+                        <button
+                          key={city}
+                          type="button"
+                          className={
+                            city === segaOriginCity
+                              ? "selected"
+                              : ""
+                          }
+                          onClick={() => {
+                            setSegaOriginCity(city);
+                            setSegaOriginCityQuery("");
+                          }}
+                        >
+                          {city}
+                        </button>
+                      ),
+                    )}
+                  </div>
+                ) : (
+                  <div className="hero-sega-city-empty">
+                    <input
+                      type="text"
+                      className="hero-sega-text-input"
+                      value={segaOriginCity}
+                      placeholder="Ketik nama kota keberangkatan..."
+                      onChange={(event) =>
+                        setSegaOriginCity(
+                          event.target.value,
+                        )
+                      }
+                    />
+                  </div>
+                )}
+              </div>
+
+
+              <button
+                type="button"
+                className="hero-traveler-done"
+                disabled={!segaOriginCity.trim()}
+                onClick={handleSearch}
+              >
+                Gunakan Lokasi
+              </button>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+
+    return (
+      <div className="hero-field-wrap">
+        <button
+          type="button"
+          className="hero-field"
+          onClick={() =>
+            setOpenPanel(
+              openPanel === "origin"
+                ? null
+                : "origin",
+            )
+          }
+        >
+          <span className="hero-field-icon">
+            <Building2 size={19} />
+          </span>
+
+          <span className="hero-field-content">
+            <small>Dari</small>
+            <strong>{origin}</strong>
+          </span>
+        </button>
+
+        {openPanel === "origin" && (
+          <div className="hero-popover hero-location-popover">
+            <h3>
+              Pilih Kota atau Bandara
+            </h3>
+
+            <label className="hero-popover-search">
+              <Search size={20} />
+
+              <input
+                type="text"
+                value={originQuery}
+                placeholder="Masukkan nama kota atau bandara..."
+                onChange={(event) =>
+                  setOriginQuery(
+                    event.target.value,
+                  )
+                }
+                autoFocus
+              />
+            </label>
+
+            <h4>Destinasi Populer</h4>
+
+            <div className="hero-location-options">
+              {filteredOrigins.map((city) => (
+                <button
+                  key={city}
+                  type="button"
+                  className={
+                    city === origin
+                      ? "selected"
+                      : ""
+                  }
+                  onClick={() => {
+                    setOrigin(city);
+                    setOriginQuery("");
+                    setOpenPanel(null);
+                  }}
+                >
+                  {city}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  }
+
+
+  function TravelerField() {
+    return (
+      <div className="hero-field-wrap">
+        <button
+          type="button"
+          className="hero-field hero-traveler"
+          onClick={() =>
+            setOpenPanel(
+              openPanel === "traveler"
+                ? null
+                : "traveler",
+            )
+          }
+        >
+          <span className="hero-field-icon">
+            <UsersRound size={19} />
+          </span>
+
+          <span className="hero-field-content">
+            <small>Traveler</small>
+
+            <strong>
+              {totalTraveler} orang
+              {!isSegaDeals &&
+                ` · ${travelClass}`}
+            </strong>
+          </span>
+        </button>
+
+
+        {openPanel === "traveler" && (
+          <div className="hero-popover hero-traveler-popover">
+            <h3>
+              {isSegaDeals
+                ? "Atur Traveler"
+                : "Atur Traveler & Kelas"}
+            </h3>
+
+            <div className="hero-traveler-rows">
+
+              <div className="hero-traveler-row">
+                <div>
+                  <strong>Dewasa</strong>
+                  <small>12 tahun ke atas</small>
+                </div>
+
+                <div className="hero-traveler-stepper">
+                  <button
+                    type="button"
+                    disabled={adult <= 1}
+                    onClick={() =>
+                      setAdult((value) =>
+                        Math.max(
+                          1,
+                          value - 1,
+                        ),
+                      )
+                    }
+                  >
+                    <CircleMinus size={24} />
+                  </button>
+
+                  <strong>{adult}</strong>
+
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setAdult((value) =>
+                        Math.min(
+                          20,
+                          value + 1,
+                        ),
+                      )
+                    }
+                  >
+                    <CirclePlus size={24} />
+                  </button>
+                </div>
+              </div>
+
+
+              <div className="hero-traveler-row">
+                <div>
+                  <strong>Anak</strong>
+                  <small>2 - 11 tahun</small>
+                </div>
+
+                <div className="hero-traveler-stepper">
+                  <button
+                    type="button"
+                    disabled={child <= 0}
+                    onClick={() =>
+                      setChild((value) =>
+                        Math.max(
+                          0,
+                          value - 1,
+                        ),
+                      )
+                    }
+                  >
+                    <CircleMinus size={24} />
+                  </button>
+
+                  <strong>{child}</strong>
+
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setChild((value) =>
+                        Math.min(
+                          20,
+                          value + 1,
+                        ),
+                      )
+                    }
+                  >
+                    <CirclePlus size={24} />
+                  </button>
+                </div>
+              </div>
+
+
+              <div className="hero-traveler-row">
+                <div>
+                  <strong>Bayi</strong>
+                  <small>di bawah 2 tahun</small>
+                </div>
+
+                <div className="hero-traveler-stepper">
+                  <button
+                    type="button"
+                    disabled={infant <= 0}
+                    onClick={() =>
+                      setInfant((value) =>
+                        Math.max(
+                          0,
+                          value - 1,
+                        ),
+                      )
+                    }
+                  >
+                    <CircleMinus size={24} />
+                  </button>
+
+                  <strong>{infant}</strong>
+
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setInfant((value) =>
+                        Math.min(
+                          10,
+                          value + 1,
+                        ),
+                      )
+                    }
+                  >
+                    <CirclePlus size={24} />
+                  </button>
+                </div>
+              </div>
+
+            </div>
+
+
+            {!isSegaDeals && (
+              <div className="hero-class-section">
+                <h4>
+                  {isHaji
+                    ? "Kelas Haji"
+                    : "Kelas Umrah"}
+                </h4>
+
+                <div className="hero-class-options">
+                  {availableClasses.map((item) => (
+                    <button
+                      key={item}
+                      type="button"
+                      className={
+                        travelClass === item
+                          ? "selected"
+                          : ""
+                      }
+                      onClick={() =>
+                        setTravelClass(item)
+                      }
+                    >
+                      {item}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+
+            <button
+              type="button"
+              className="hero-traveler-done"
+              onClick={() =>
+                setOpenPanel(null)
+              }
+            >
+              Selesai
+            </button>
+          </div>
+        )}
+      </div>
+    );
+  }
+
+
+  function BudgetField() {
+    function formatBudgetInput(value: string) {
+      const digits =
+        value.replace(/\D/g, "");
+
+      if (!digits) {
+        return "";
+      }
+
+      return new Intl.NumberFormat(
+        "id-ID",
+      ).format(Number(digits));
+    }
+
+
+    return (
+      <div className="hero-field-wrap">
+        <button
+          type="button"
+          className="hero-field"
+          onClick={() =>
+            setOpenPanel(
+              openPanel === "budget"
+                ? null
+                : "budget",
+            )
+          }
+        >
+          <span className="hero-field-icon">
+            <Banknote size={19} />
+          </span>
+
+          <span className="hero-field-content">
+            <small>Budget</small>
+
+            <strong>
+              {budget
+                ? `Rp${budget}${
+                    hotelStars
+                      ? ` · ${hotelStars}★`
+                      : ""
+                  }`
+                : "Masukkan budget"}
+            </strong>
+          </span>
+        </button>
+
+
+        {openPanel === "budget" && (
+          <div className="hero-popover hero-budget-popover">
+            <h3>
+              Budget & Preferensi Hotel
+            </h3>
+
+
+            <div className="hero-budget-input-section">
+              <label className="hero-sega-field-label">
+                Budget per Pax
+              </label>
+
+              <div className="hero-budget-input-wrap">
+                <span>Rp</span>
+
+                <input
+                  type="text"
+                  inputMode="numeric"
+                  value={budget}
+                  placeholder="Contoh: 10.000.000"
+                  onChange={(event) =>
+                    setBudget(
+                      formatBudgetInput(
+                        event.target.value,
+                      ),
+                    )
+                  }
+                />
+              </div>
+
+              <small className="hero-sega-helper">
+                Masukkan budget maksimal per traveler.
+              </small>
+            </div>
+
+
+            <div className="hero-hotel-star-section">
+              <label className="hero-sega-field-label">
+                Preferensi Hotel
+              </label>
+
+              <div className="hero-hotel-star-options">
+                {[3, 4, 5].map((stars) => (
+                  <button
+                    key={stars}
+                    type="button"
+                    className={
+                      hotelStars === stars
+                        ? "selected"
+                        : ""
+                    }
+                    onClick={() =>
+                      setHotelStars(stars)
+                    }
+                  >
+                    <span>
+                      {"★".repeat(stars)}
+                    </span>
+
+                    <strong>
+                      Bintang {stars}
+                    </strong>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+
+            <button
+              type="button"
+              className="hero-traveler-done"
+              disabled={!budget}
+              onClick={() =>
+                setOpenPanel(null)
+              }
+            >
+              Terapkan
+            </button>
+          </div>
+        )}
+      </div>
+    );
+  }
+
+
+  function DateYearField() {
+    const isYear = isHaji;
+
+    return (
+      <div className="hero-field-wrap">
+        <button
+          type="button"
+          className="hero-field"
+          onClick={() =>
+            setOpenPanel(
+              isYear
+                ? openPanel === "year"
+                  ? null
+                  : "year"
+                : openPanel === "date"
+                  ? null
+                  : "date",
+            )
+          }
+        >
+          <span className="hero-field-icon">
+            <CalendarDays size={19} />
+          </span>
+
+          <span className="hero-field-content">
+            <small>
+              {isYear ? "Tahun" : "Tanggal"}
+            </small>
+
+            <strong>
+              {isYear
+                ? hajiYear
+                  ? String(hajiYear)
+                  : "Pilih tahun"
+                : formatDate(selectedDate)}
+            </strong>
+          </span>
+        </button>
+
+
+        {openPanel === "year" && isYear && (
+          <div className="hero-popover hero-year-popover">
+            <h3>
+              Pilih Tahun Keberangkatan
+            </h3>
+
+            <div className="hero-year-options">
+              {hajiYears.map((year) => (
+                <button
+                  key={year}
+                  type="button"
+                  className={
+                    year === hajiYear
+                      ? "selected"
+                      : ""
+                  }
+                  onClick={() => {
+                    setHajiYear(year);
+                    setOpenPanel(null);
+                  }}
+                >
+                  {year}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+
+        {openPanel === "date" && !isYear && (
+          <div className="hero-popover hero-date-popover">
+            <div className="hero-date-header">
+              <h3>Atur Tanggal</h3>
+
+              <button
+                type="button"
+                className="hero-popover-close"
+                onClick={handleSearch}
+              >
+                <X size={22} />
+              </button>
+            </div>
+
+
+            <div className="hero-calendar-navigation">
+
+              <button
+                type="button"
+                className="hero-calendar-nav-button"
+                aria-label="Bulan sebelumnya"
+                disabled={!canGoPrevious}
+                onClick={() =>
+                  moveCalendarMonth(-1)
+                }
+              >
+                <ChevronLeft size={19} />
+              </button>
+
+
+              <div className="hero-calendar-selectors">
+
+                <select
+                  aria-label="Pilih bulan"
+                  value={firstCalendarMonth}
+                  onChange={(event) =>
+                    changeCalendarMonth(
+                      Number(event.target.value),
+                    )
+                  }
+                >
+                  {monthNames.map(
+                    (monthName, monthIndex) => {
+                      const disabled =
+                        firstCalendarYear ===
+                          todayCalendarMonth.getFullYear() &&
+                        monthIndex <
+                          todayCalendarMonth.getMonth();
+
+                      return (
+                        <option
+                          key={monthName}
+                          value={monthIndex}
+                          disabled={disabled}
+                        >
+                          {monthName}
+                        </option>
+                      );
+                    },
+                  )}
+                </select>
+
+
+                <select
+                  aria-label="Pilih tahun"
+                  value={firstCalendarYear}
+                  onChange={(event) =>
+                    changeCalendarYear(
+                      Number(event.target.value),
+                    )
+                  }
+                >
+                  {calendarYears.map((year) => (
+                    <option
+                      key={year}
+                      value={year}
+                    >
+                      {year}
+                    </option>
+                  ))}
+                </select>
+
+              </div>
+
+
+              <button
+                type="button"
+                className="hero-calendar-nav-button"
+                aria-label="Bulan berikutnya"
+                onClick={() =>
+                  moveCalendarMonth(1)
+                }
+              >
+                <ChevronRight size={19} />
+              </button>
+
+            </div>
+
+
+            <div className="hero-calendar-grid">
+              <CalendarMonth
+                year={firstCalendarYear}
+                month={firstCalendarMonth}
+                selectedDate={selectedDate}
+                onSelect={(date) => {
+                  setSelectedDate(date);
+                  setOpenPanel(null);
+                }}
+              />
+
+              <CalendarMonth
+                year={
+                  secondCalendarDate.getFullYear()
+                }
+                month={
+                  secondCalendarDate.getMonth()
+                }
+                selectedDate={selectedDate}
+                onSelect={(date) => {
+                  setSelectedDate(date);
+                  setOpenPanel(null);
+                }}
+              />
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  }
+
+
+
+  const searchOrigin =
+    isSegaDeals
+      ? segaOriginCity.trim()
+      : origin.trim();
+
+  const travelerTotal =
+    adult +
+    child +
+    infant;
+
+  const canSearch =
+    searchOrigin.length > 0 &&
+    destination.trim().length > 0 &&
+    travelerTotal > 0 &&
+    selectedDate !== null;
+
+  function handleSearch() {
+    if (!canSearch) {
+      return;
+    }
+    
+
+    const params =
+      new URLSearchParams();
+
+    params.set(
+      "category",
+      active,
+    );
+
+    params.set(
+      "origin",
+      isSegaDeals
+        ? segaOriginCity
+        : origin,
+    );
+
+    if (destination) {
+      params.set(
+        "destination",
+        destination,
+      );
+    }
+
+    params.set(
+      "travelers",
+      String(travelerTotal),
+    );
+
+    params.set(
+      "adult",
+      String(adult),
+    );
+
+    params.set(
+      "child",
+      String(child),
+    );
+
+    params.set(
+      "infant",
+      String(infant),
+    );
+
+    if (selectedDate) {
+      const year =
+        selectedDate.getFullYear();
+
+      const month =
+        String(
+          selectedDate.getMonth() + 1,
+        ).padStart(2, "0");
+
+      const day =
+        String(
+          selectedDate.getDate(),
+        ).padStart(2, "0");
+
+      params.set(
+        "date",
+        `${year}-${month}-${day}`,
+      );
+    }
+
+    if (isHaji && hajiYear) {
+      params.set(
+        "year",
+        String(hajiYear),
+      );
+    }
+
+    if (budget) {
+      params.set(
+        "budget",
+        budget,
+      );
+    }
+
+    setOpenPanel(null);
+
+    router.push(
+      `/search?${params.toString()}`,
+    );
+  }
+  return (
+    <>
+      <section className="hero-reference">
+        <div className="hero-reference-media">
+          <Image
+            src="/images/hero/hero-segaloka.png"
+            alt="Destinasi perjalanan Segaloka"
+            fill
+            priority
+            sizes="100vw"
+            className="hero-reference-photo"
+          />
+        </div>
+
+        <div className="hero-reference-overlay" />
+
+        <div className="hero-reference-shell">
+
+          <div className="hero-reference-copy">
+            <h1>
+              Jelajahi Dunia
+              <br />
+              dengan Ibadah dan Liburan
+            </h1>
+
+            <p>
+              Temukan paket Umrah, Haji,
+              Halal Tour, Tour Domestic dan
+              International dengan mudah,
+              aman, dan terpercaya.
+            </p>
+          </div>
+
+
+          <div
+            ref={controlsRef}
+            className="hero-controls"
+          >
+            <div className="hero-tabs">
+              {categories.map(
+                ({ label, icon: Icon }) => (
+                  <button
+                    key={label}
+                    type="button"
+                    className={
+                      active === label
+                        ? "active"
+                        : ""
+                    }
+                    onClick={() =>
+                      changeCategory(label)
+                    }
+                  >
+                    <span className="hero-tab-icon">
+                      <Icon
+                        size={17}
+                        strokeWidth={2}
+                      />
+                    </span>
+
+                    <span>
+                      {label}
+                    </span>
+                  </button>
+                ),
+              )}
+            </div>
+
+
+            <div
+              className={[
+                "hero-search-card",
+                isSegaDeals
+                  ? "hero-search-card-segadeals"
+                  : "",
+              ].join(" ")}
+            >
+              {isSegaDeals ? (
+                <>
+                  <DestinationField />
+                  <OriginField />
+                  <TravelerField />
+                  <BudgetField />
+                  <DateYearField />
+                </>
+              ) : (
+                <>
+                  <OriginField />
+                  <DestinationField />
+                  <TravelerField />
+                  <DateYearField />
+                </>
+              )}
+
+              <button
+                type="button"
+                className="hero-search-button"
+                onClick={handleSearch}
+               disabled={!canSearch} aria-disabled={!canSearch}>
+                <Search size={19} />
+                <span>Cari</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      {showSegaDealsInfo && (
+        <div
+          className="segadeals-info-overlay"
+          role="presentation"
+          onMouseDown={() =>
+            setShowSegaDealsInfo(false)
+          }
+        >
+          <div
+            className="segadeals-info-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="segadeals-title"
+            onMouseDown={(event) =>
+              event.stopPropagation()
+            }
+          >
+            <button
+              type="button"
+              className="segadeals-info-close"
+              aria-label="Tutup"
+              onClick={() =>
+                setShowSegaDealsInfo(false)
+              }
+            >
+              <X size={21} />
+            </button>
+
+            <div className="segadeals-info-icon">
+              <Ticket size={25} />
+            </div>
+
+            <h2 id="segadeals-title">
+              Apa itu SegaDeals?
+            </h2>
+
+            <p>
+              SegaDeals adalah fitur pencarian
+              penawaran perjalanan berdasarkan
+              tujuan, kota keberangkatan,
+              jumlah traveler, budget, dan
+              tanggal perjalanan Anda.
+            </p>
+
+            <div className="segadeals-fee-info">
+              <Info size={18} />
+
+              <div>
+                <strong>
+                  Biaya layanan SegaDeals
+                </strong>
+
+                <p>
+                  Biaya layanan berlaku untuk setiap
+                  traveler.
+                  <strong> Rp500.000/pax</strong>.
+                  Promo atau diskon dapat tersedia
+                  pada periode tertentu.
+                </p>
+              </div>
+            </div>
+
+            <button
+              type="button"
+              className="segadeals-info-action"
+              onClick={() =>
+                setShowSegaDealsInfo(false)
+              }
+            >
+              Mulai Cari SegaDeals
+            </button>
+          </div>
+        </div>
+      )}
+    </>
+  );
+}
+
+

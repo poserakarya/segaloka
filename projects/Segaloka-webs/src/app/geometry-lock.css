@@ -1,0 +1,404 @@
+﻿/* ============================================================
+   SEGALOKA — GLOBAL GEOMETRY LOCK
+   IMPORT PALING AKHIR
+   Jangan lagi mengatur width section di file lain.
+   ============================================================ */
+
+:root {
+  --sg-shell: 1180px;
+  --sg-page-gutter: 32px;
+
+  --sg-space-xs: 8px;
+  --sg-space-sm: 12px;
+  --sg-space-md: 16px;
+  --sg-space-lg: 24px;
+  --sg-space-xl: 32px;
+}
+
+
+/* ============================================================
+   PAGE SAFETY
+   ============================================================ */
+
+html,
+body {
+  width: 100%;
+  max-width: 100%;
+
+  margin: 0;
+
+  overflow-x: clip;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+
+/* ============================================================
+   SATU-SATUNYA DESKTOP SHELL
+   ============================================================ */
+
+.hero-controls,
+
+.ref-benefit-grid,
+
+.reference-coupon-shell,
+
+.reference-main-banner-shell,
+
+.reference-running-shell,
+
+.ref-section > .container,
+
+.ref-bottom-columns,
+
+.ref-app-banner > .container,
+
+.footer-grid,
+
+.footer-bottom {
+  width: min(
+    var(--sg-shell),
+    calc(100% - var(--sg-page-gutter))
+  ) !important;
+
+  max-width: none !important;
+
+  margin-left: auto !important;
+  margin-right: auto !important;
+
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+
+/* ============================================================
+   HERO
+   ============================================================ */
+
+.hero-reference {
+  width: 100% !important;
+  max-width: 100% !important;
+
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+
+  border-left: 0 !important;
+  border-right: 0 !important;
+}
+
+.hero-reference-media,
+.hero-reference-photo {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+.hero-reference-photo {
+  height: 100% !important;
+
+  object-fit: cover !important;
+  object-position: center 57% !important;
+}
+
+
+/* ============================================================
+   SEARCH
+   ============================================================ */
+
+.hero-controls {
+  left: 50% !important;
+  right: auto !important;
+
+  transform: translateX(-50%) !important;
+}
+
+.hero-tabs {
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+.hero-search-card {
+  width: 100% !important;
+  max-width: none !important;
+
+  margin: 0 !important;
+}
+
+
+/* ============================================================
+   HERO -> BENEFIT
+   ============================================================ */
+
+/*
+ * Search absolute memang keluar dari hero.
+ * Reserve space di hero dibuat konsisten.
+ */
+
+.hero-reference {
+  margin-bottom: 96px !important;
+}
+
+.hero-controls {
+  bottom: -80px !important;
+}
+
+
+/* ============================================================
+   BENEFIT
+   ============================================================ */
+
+.ref-benefit {
+  width: 100% !important;
+
+  margin: 0 !important;
+
+  padding:
+    0
+    0
+    var(--sg-space-md) !important;
+
+  border: 0 !important;
+}
+
+.ref-benefit-grid {
+  min-height: 68px !important;
+
+  border-radius: 14px !important;
+
+  overflow: hidden !important;
+}
+
+.ref-benefit-grid article {
+  min-height: 68px !important;
+
+  margin: 0 !important;
+}
+
+
+/* ============================================================
+   COUPON
+   ============================================================ */
+
+.reference-coupon {
+  width: 100% !important;
+
+  margin: 0 !important;
+
+  padding:
+    0
+    0
+    var(--sg-space-md) !important;
+}
+
+.reference-coupon-shell {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+
+  padding:
+    12px
+    14px !important;
+
+  border-radius: 14px !important;
+}
+
+
+/* ============================================================
+   MAIN BANNER
+   ============================================================ */
+
+.reference-main-banner {
+  width: 100% !important;
+
+  margin: 0 !important;
+
+  padding:
+    0
+    0
+    var(--sg-space-lg) !important;
+}
+
+.reference-main-banner-shell {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+.reference-main-banner-shell img {
+  display: block;
+
+  width: 100% !important;
+
+  margin: 0 !important;
+}
+
+
+/* ============================================================
+   RUNNING PROMO
+   ============================================================ */
+
+.reference-running-promo {
+  width: 100% !important;
+
+  margin: 0 !important;
+
+  padding:
+    0
+    0
+    var(--sg-space-lg) !important;
+}
+
+
+/* ============================================================
+   SEMUA CONTENT SECTION
+   ============================================================ */
+
+.ref-section {
+  width: 100% !important;
+
+  margin: 0 !important;
+
+  padding:
+    var(--sg-space-lg)
+    0 !important;
+}
+
+.ref-section > .container {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+
+/* heading dan grid menggunakan shell yang sama */
+
+.ref-section-title {
+  width: 100% !important;
+
+  margin:
+    0
+    0
+    var(--sg-space-sm) !important;
+}
+
+.ref-package-grid,
+.ref-hotel-grid,
+.ref-attraction-grid,
+.ref-tip-grid {
+  width: 100% !important;
+
+  margin: 0 !important;
+
+  gap: var(--sg-space-sm) !important;
+}
+
+
+/* ============================================================
+   BOTTOM CONTENT
+   ============================================================ */
+
+.ref-bottom-grid {
+  width: 100% !important;
+
+  margin: 0 !important;
+
+  padding:
+    var(--sg-space-lg)
+    0 !important;
+}
+
+.ref-bottom-columns {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+
+/* ============================================================
+   APP BANNER
+   ============================================================ */
+
+.ref-app-banner {
+  width: 100% !important;
+
+  margin: 0 !important;
+
+  padding:
+    var(--sg-space-lg)
+    0 !important;
+}
+
+.ref-app-banner > .container {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+
+.footer {
+  width: 100% !important;
+}
+
+.footer-grid,
+.footer-bottom {
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+
+/* ============================================================
+   TABLET
+   ============================================================ */
+
+@media (min-width: 701px) and (max-width: 1199px) {
+  :root {
+    --sg-page-gutter: 24px;
+  }
+
+  .hero-reference {
+    margin-bottom: 92px !important;
+  }
+
+  .hero-controls {
+    bottom: -76px !important;
+  }
+}
+
+
+/* ============================================================
+   MOBILE
+   ============================================================ */
+
+@media (max-width: 700px) {
+  :root {
+    --sg-page-gutter: 16px;
+
+    --sg-space-md: 12px;
+    --sg-space-lg: 16px;
+  }
+
+  .hero-reference {
+    margin-bottom: 16px !important;
+  }
+
+  .hero-controls {
+    width: calc(100% - 16px) !important;
+
+    bottom: 8px !important;
+  }
+
+  .ref-benefit-grid,
+  .reference-coupon-shell,
+  .reference-main-banner-shell,
+  .reference-running-shell,
+  .ref-section > .container,
+  .ref-bottom-columns,
+  .ref-app-banner > .container,
+  .footer-grid,
+  .footer-bottom {
+    width: calc(100% - 16px) !important;
+  }
+}
+

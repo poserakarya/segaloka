@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>Segaloka · Traveler Dashboard</title>
+
+  <!--
+    V7 visual parity source.
+    Business/runtime modules remain reference-only.
+  -->
+  <link rel="stylesheet" href="./runtime/styles.css">
+  <link rel="stylesheet" href="./traveler.css">
+  <link rel="stylesheet" href="/shared/v7-presentational.css">
+</head>
+
+<body data-segaloka-app="traveler">
+
+  <div id="traveler-app" class="app traveler-app">
+
+    <aside
+      id="traveler-sidebar"
+      class="side traveler-sidebar"
+      aria-label="Navigasi Traveler"
+    >
+      <div class="traveler-brand">
+        <div class="traveler-brand-mark" aria-hidden="true">S</div>
+
+        <div class="traveler-brand-copy">
+          <strong>Segaloka</strong>
+          <span>Traveler Dashboard</span>
+        </div>
+
+        <button
+          id="traveler-sidebar-close"
+          class="traveler-icon-button traveler-mobile-only"
+          type="button"
+          aria-label="Tutup navigasi"
+        >
+          ×
+        </button>
+      </div>
+
+      <div class="traveler-tenant">
+        <div class="traveler-tenant-icon" aria-hidden="true">T</div>
+
+        <div>
+          <strong>Traveler</strong>
+          <span>Dashboard</span>
+        </div>
+      </div>
+
+      <nav
+        id="traveler-navigation"
+        class="traveler-navigation"
+        aria-label="Menu Traveler"
+      ></nav>
+
+      <div class="traveler-sidebar-footer">
+        <div class="traveler-boundary-label">
+          Dashboard Traveler
+        </div>
+
+        <div class="traveler-boundary-status">
+          Independent boundary
+        </div>
+      </div>
+    </aside>
+
+    <div
+      id="traveler-sidebar-overlay"
+      class="traveler-sidebar-overlay"
+      hidden
+    ></div>
+
+    <div class="main traveler-main">
+
+      <header class="top traveler-topbar">
+
+        <div class="traveler-topbar-start">
+          <button
+            id="traveler-sidebar-open"
+            class="traveler-icon-button traveler-mobile-only"
+            type="button"
+            aria-label="Buka navigasi"
+          >
+            ☰
+          </button>
+
+          <div>
+            <div class="traveler-topbar-eyebrow">
+              SEGALOKA
+            </div>
+
+            <div
+              id="traveler-page-title"
+              class="traveler-page-title"
+            >
+              Beranda
+            </div>
+          </div>
+        </div>
+
+        <div class="traveler-topbar-end">
+
+          <div
+            class="traveler-runtime-indicator"
+            title="Runtime Traveler masih dalam tahap ekstraksi"
+          >
+            <span
+              class="traveler-runtime-dot"
+              aria-hidden="true"
+            ></span>
+
+            <span>Traveler</span>
+          </div>
+
+          <button
+            id="traveler-account-button"
+            class="traveler-account"
+            type="button"
+            disabled
+            aria-label="Akun Traveler belum diaktifkan"
+          >
+            <span
+              class="traveler-account-avatar"
+              aria-hidden="true"
+            >
+              T
+            </span>
+
+            <span class="traveler-account-copy">
+              <strong>Traveler</strong>
+              <small>Auth belum diaktifkan</small>
+            </span>
+          </button>
+
+        </div>
+      </header>
+
+      <main
+        id="traveler-content"
+        class="work traveler-content"
+        tabindex="-1"
+      ></main>
+
+    </div>
+  </div>
+
+  <!-- Contracts are executable metadata only. -->
+  <script src="./contracts/app.contract.js"></script>
+  <script src="./contracts/auth.contract.js"></script>
+  <script src="./contracts/data.contract.js"></script>
+  <script src="./contracts/services.contract.js"></script>
+  <script src="./contracts/navigation.contract.js"></script>
+
+  <!--
+    IMPORTANT:
+    runtime/core.js
+    runtime/data.js
+    runtime/portals.js
+    runtime/gateway.js
+    runtime/notify.js
+    runtime/sync.js
+    and other V7 runtime modules are NOT loaded here.
+  -->
+  <script src="./ui/traveler-ui.js"></script>
+<script src="./renderers/traveler-renderers.js"></script>
+<script src="./traveler-bootstrap.js"></script>
+</body>
+</html>

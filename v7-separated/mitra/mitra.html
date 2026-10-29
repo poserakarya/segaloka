@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+
+  <title>Segaloka · Mitra Dashboard</title>
+
+  <!--
+    V7 visual parity source.
+    Business/runtime modules remain reference-only.
+  -->
+  <link rel="stylesheet" href="./runtime/styles.css">
+  <link rel="stylesheet" href="./mitra.css">
+</head>
+
+<body data-segaloka-app="mitra">
+
+  <div id="mitra-app" class="mitra-app">
+
+    <aside
+      id="mitra-sidebar"
+      class="mitra-sidebar"
+      aria-label="Navigasi Mitra"
+    >
+      <div class="mitra-brand">
+        <div class="mitra-brand-mark" aria-hidden="true">S</div>
+
+        <div class="mitra-brand-copy">
+          <strong>Segaloka</strong>
+          <span>Mitra Dashboard</span>
+        </div>
+
+        <button
+          id="mitra-sidebar-close"
+          class="mitra-icon-button mitra-mobile-only"
+          type="button"
+          aria-label="Tutup navigasi"
+        >
+          ×
+        </button>
+      </div>
+
+      <div class="mitra-tenant">
+        <div class="mitra-tenant-icon" aria-hidden="true">T</div>
+
+        <div>
+          <strong>Mitra</strong>
+          <span>Dashboard</span>
+        </div>
+      </div>
+
+      <nav
+        id="mitra-navigation"
+        class="mitra-navigation"
+        aria-label="Menu Mitra"
+      ></nav>
+
+      <div class="mitra-sidebar-footer">
+        <div class="mitra-boundary-label">
+          Dashboard Mitra
+        </div>
+
+        <div class="mitra-boundary-status">
+          Independent boundary
+        </div>
+      </div>
+    </aside>
+
+    <div
+      id="mitra-sidebar-overlay"
+      class="mitra-sidebar-overlay"
+      hidden
+    ></div>
+
+    <div class="mitra-main">
+
+      <header class="mitra-topbar">
+
+        <div class="mitra-topbar-start">
+          <button
+            id="mitra-sidebar-open"
+            class="mitra-icon-button mitra-mobile-only"
+            type="button"
+            aria-label="Buka navigasi"
+          >
+            ☰
+          </button>
+
+          <div>
+            <div class="mitra-topbar-eyebrow">
+              SEGALOKA
+            </div>
+
+            <div
+              id="mitra-page-title"
+              class="mitra-page-title"
+            >
+              Beranda
+            </div>
+          </div>
+        </div>
+
+        <div class="mitra-topbar-end">
+
+          <div
+            class="mitra-runtime-indicator"
+            title="Runtime Mitra masih dalam tahap ekstraksi"
+          >
+            <span
+              class="mitra-runtime-dot"
+              aria-hidden="true"
+            ></span>
+
+            <span>Mitra</span>
+          </div>
+
+          <button
+            id="mitra-account-button"
+            class="mitra-account"
+            type="button"
+            disabled
+            aria-label="Akun Mitra belum diaktifkan"
+          >
+            <span
+              class="mitra-account-avatar"
+              aria-hidden="true"
+            >
+              T
+            </span>
+
+            <span class="mitra-account-copy">
+              <strong>Mitra</strong>
+              <small>Auth belum diaktifkan</small>
+            </span>
+          </button>
+
+        </div>
+      </header>
+
+      <main
+        id="mitra-content"
+        class="mitra-content"
+        tabindex="-1"
+      ></main>
+
+    </div>
+  </div>
+
+  <!-- Contracts are executable metadata only. -->
+  <script src="./contracts/app.contract.js"></script>
+  <script src="./contracts/auth.contract.js"></script>
+  <script src="./contracts/data.contract.js"></script>
+  <script src="./contracts/services.contract.js"></script>
+  <script src="./contracts/navigation.contract.js"></script>
+
+  <!--
+    IMPORTANT:
+    runtime/core.js
+    runtime/data.js
+    runtime/portals.js
+    runtime/gateway.js
+    runtime/notify.js
+    runtime/sync.js
+    and other V7 runtime modules are NOT loaded here.
+  -->
+  <script src="./ui/mitra-ui.js"></script>
+<script src="./renderers/mitra-renderers.js"></script>
+<script src="./mitra-bootstrap.js"></script>
+</body>
+</html>

@@ -1,0 +1,88 @@
+{
+    "version":  1,
+    "serverRoot":  "D:\\Server-Segaloka",
+    "architecture":  "separate-dashboard-runtimes",
+    "authentication":  "server-authoritative",
+    "database":  "central-postgresql",
+    "api":  {
+                "localOrigin":  "http://127.0.0.1:4192",
+                "accessEndpoint":  "/dashboard/access"
+            },
+    "existingDomains":  {
+                            "website":  "segaloka.com",
+                            "developmentWebsite":  "dev.segaloka.com",
+                            "developmentDashboard":  "dev.dashboard.segaloka.com"
+                        },
+    "dashboards":  [
+                       {
+                           "id":  "control-center",
+                           "role":  "super_admin",
+                           "scope":  "platform",
+                           "application":  "apps/control-center",
+                           "isolatedRuntime":  true,
+                           "workspaceSwitching":  false,
+                           "apiAccessEndpoint":  "/dashboard/access",
+                           "implementationStatus":  "pending-runtime"
+                       },
+                       {
+                           "id":  "travel",
+                           "role":  "travel",
+                           "scope":  "organization",
+                           "application":  "apps/travel-dashboard",
+                           "isolatedRuntime":  true,
+                           "workspaceSwitching":  false,
+                           "apiAccessEndpoint":  "/dashboard/access",
+                           "implementationStatus":  "existing-runtime"
+                       },
+                       {
+                           "id":  "vendor",
+                           "role":  "vendor",
+                           "scope":  "organization",
+                           "application":  "apps/vendor-dashboard",
+                           "isolatedRuntime":  true,
+                           "workspaceSwitching":  false,
+                           "apiAccessEndpoint":  "/dashboard/access",
+                           "implementationStatus":  "pending-runtime"
+                       },
+                       {
+                           "id":  "affiliate",
+                           "role":  "affiliate",
+                           "scope":  "user",
+                           "application":  "apps/affiliate-dashboard",
+                           "isolatedRuntime":  true,
+                           "workspaceSwitching":  false,
+                           "apiAccessEndpoint":  "/dashboard/access",
+                           "implementationStatus":  "pending-runtime"
+                       },
+                       {
+                           "id":  "mitra",
+                           "role":  "mitra",
+                           "scope":  "travel_relationship",
+                           "application":  "apps/mitra-dashboard",
+                           "isolatedRuntime":  true,
+                           "workspaceSwitching":  false,
+                           "apiAccessEndpoint":  "/dashboard/access",
+                           "implementationStatus":  "pending-runtime"
+                       },
+                       {
+                           "id":  "agen",
+                           "role":  "agen",
+                           "scope":  "travel_relationship",
+                           "application":  "apps/agen-dashboard",
+                           "isolatedRuntime":  true,
+                           "workspaceSwitching":  false,
+                           "apiAccessEndpoint":  "/dashboard/access",
+                           "implementationStatus":  "pending-runtime"
+                       },
+                       {
+                           "id":  "traveler",
+                           "role":  "traveler",
+                           "scope":  "user",
+                           "application":  "apps/traveler-portal",
+                           "isolatedRuntime":  true,
+                           "workspaceSwitching":  false,
+                           "apiAccessEndpoint":  "/dashboard/access",
+                           "implementationStatus":  "pending-runtime"
+                       }
+                   ]
+}

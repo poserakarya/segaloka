@@ -1,0 +1,2231 @@
+"use client";
+
+import {
+  ArrowLeft,
+  ArrowRight,
+  BriefcaseBusiness,
+  CalendarDays,
+  Check,
+  ChevronLeft,
+  CircleCheck,
+  FileText,
+  HeartPulse,
+  IdCard,
+  MapPin,
+  Minus,
+  BookOpenCheck,
+  Plus,
+  ShieldCheck,
+  UserRound,
+  UsersRound,
+} from "lucide-react";
+
+import {
+  useMemo,
+  useState,
+  type FormEvent,
+} from "react";
+
+import styles from "./BookingForm.module.css";
+
+import {
+  featuredPackages,
+} from "@/data/home";
+
+
+type PackageType =
+  | "umrah"
+  | "haji"
+  | "halal-tour"
+  | "tour-international"
+  | "tour-domestic"
+  | "segadeals";
+
+
+type TravelerMode =
+  | "same"
+  | "now"
+  | "later";
+
+type PaymentPlan =
+  | "full"
+  | "dp"
+  | "installment";
+
+
+type PaymentMethod =
+  | "qris"
+  | "virtual-account"
+  | "bank-transfer"
+  | "ewallet";
+
+
+type PackageRule = {
+  label: string;
+  passportAssistance: boolean;
+  vaccineRecommendation: boolean;
+  leaveLetter: boolean;
+  travelerLater: boolean;
+  documentMessage: string;
+};
+
+
+const packageRules: Record<
+  PackageType,
+  PackageRule
+> = {
+  umrah: {
+    label: "Umrah",
+    passportAssistance: true,
+    vaccineRecommendation: true,
+    leaveLetter: true,
+    travelerLater: true,
+    documentMessage:
+      "Data dan dokumen jamaah dapat dilengkapi kemudian. Target kelengkapan final H-30 sebelum keberangkatan atau mengikuti batas waktu Travel.",
+  },
+
+  haji: {
+    label: "Haji",
+    passportAssistance: true,
+    vaccineRecommendation: true,
+    leaveLetter: true,
+    travelerLater: true,
+    documentMessage:
+      "Tahapan dokumen Haji mengikuti program dan jadwal Travel. Segaloka menampilkan kebutuhan dokumen sesuai paket yang dipilih.",
+  },
+
+  "halal-tour": {
+    label: "Halal Tour",
+    passportAssistance: true,
+    vaccineRecommendation: false,
+    leaveLetter: true,
+    travelerLater: true,
+    documentMessage:
+      "Data traveler internasional dapat dilengkapi kemudian sebelum batas penerbitan tiket, visa, atau dokumen perjalanan.",
+  },
+
+  "tour-international": {
+    label: "Tour International",
+    passportAssistance: true,
+    vaccineRecommendation: false,
+    leaveLetter: true,
+    travelerLater: true,
+    documentMessage:
+      "Nama traveler dan dokumen perjalanan dapat dilengkapi sesuai tenggat tiket, visa, dan kebijakan paket.",
+  },
+
+  "tour-domestic": {
+    label: "Tour Domestic",
+    passportAssistance: false,
+    vaccineRecommendation: false,
+    leaveLetter: true,
+    travelerLater: true,
+    documentMessage:
+      "Data traveler dapat dilengkapi kemudian sesuai batas waktu operasional Travel.",
+  },
+
+  segadeals: {
+    label: "SegaDeals",
+    passportAssistance: false,
+    vaccineRecommendation: false,
+    leaveLetter: false,
+    travelerLater: true,
+    documentMessage:
+      "Persyaratan traveler mengikuti produk utama yang dibeli melalui SegaDeals.",
+  },
+};
+
+
+function detectPackageType(
+  slug: string,
+): PackageType {
+
+  const value =
+    slug.toLowerCase();
+
+  if (value.includes("umrah")) {
+    return "umrah";
+  }
+
+  if (value.includes("haji")) {
+    return "haji";
+  }
+
+  if (
+    value.includes("halal-tour") ||
+    value.includes("halal")
+  ) {
+    return "halal-tour";
+  }
+
+  if (
+    value.includes("domestic") ||
+    value.includes("domestik")
+  ) {
+    return "tour-domestic";
+  }
+
+  if (
+    value.includes("international") ||
+    value.includes("internasional")
+  ) {
+    return "tour-international";
+  }
+
+  if (value.includes("segadeal")) {
+    return "segadeals";
+  }
+
+  return "tour-international";
+}
+
+
+function titleFromSlug(
+  slug: string,
+) {
+  return slug
+    .split("-")
+    .filter(Boolean)
+    .map(
+      (part) =>
+        part.charAt(0).toUpperCase() +
+        part.slice(1),
+    )
+    .join(" ");
+}
+
+function formatRupiah(
+  value: number,
+) {
+  return new Intl.NumberFormat(
+    "id-ID",
+    {
+      style: "currency",
+      currency: "IDR",
+      maximumFractionDigits: 0,
+    },
+  ).format(value);
+}
+
+
+type CounterProps = {
+  label: string;
+  description: string;
+  value: number;
+  minimum?: number;
+  onChange: (value: number) => void;
+};
+
+
+function Counter({
+  label,
+  description,
+  value,
+  minimum = 0,
+  onChange,
+}: CounterProps) {
+
+  return (
+    <div className={styles.counterRow}>
+
+      <div>
+        <strong>{label}</strong>
+        <span>{description}</span>
+      </div>
+
+      <div className={styles.counter}>
+
+        <button
+          type="button"
+          disabled={value <= minimum}
+          onClick={() =>
+            onChange(
+              Math.max(
+                minimum,
+                value - 1,
+              ),
+            )
+          }
+        >
+          <Minus size={14} />
+        </button>
+
+        <strong>
+          {value}
+        </strong>
+
+        <button
+          type="button"
+          onClick={() =>
+            onChange(value + 1)
+          }
+        >
+          <Plus size={14} />
+        </button>
+
+      </div>
+
+    </div>
+  );
+}
+
+
+type OptionCardProps = {
+  active: boolean;
+  title: string;
+  description: string;
+  onClick: () => void;
+};
+
+
+function OptionCard({
+  active,
+  title,
+  description,
+  onClick,
+}: OptionCardProps) {
+
+  return (
+    <button
+      type="button"
+      className={[
+        styles.optionCard,
+        active
+          ? styles.optionCardActive
+          : "",
+      ].join(" ")}
+      onClick={onClick}
+    >
+
+      <span
+        className={
+          styles.optionRadio
+        }
+      >
+        {active && (
+          <Check size={13} />
+        )}
+      </span>
+
+      <span>
+        <strong>
+          {title}
+        </strong>
+
+        <small>
+          {description}
+        </small>
+      </span>
+
+    </button>
+  );
+}
+
+
+export function BookingFormClient({
+  slug,
+  adult,
+  child,
+  infant,
+}: {
+  slug: string;
+  adult: number;
+  child: number;
+  infant: number;
+}) {
+
+  const packageType =
+    detectPackageType(slug);
+
+  const rule =
+    packageRules[packageType];
+
+  const packageTitle =
+    titleFromSlug(slug);
+
+  const packageData =
+    featuredPackages.find(
+      (item) =>
+        item.id === slug,
+    );
+
+  const unitPrice =
+    packageData?.price ?? 0;
+
+
+  const [
+    step,
+    setStep,
+  ] =
+    useState(1);
+
+
+const travelerTotal =
+    adult +
+    child +
+    infant;
+
+  /*
+   * UI sementara:
+   * nominal exact per anak/bayi/room nantinya mengikuti
+   * pricing snapshot dari detail paket.
+   */
+  const [
+    paymentPlan,
+    setPaymentPlan,
+  ] =
+    useState<PaymentPlan>(
+      "full",
+    );
+
+  const [
+    paymentMethod,
+    setPaymentMethod,
+  ] =
+    useState<PaymentMethod>(
+      "qris",
+    );
+
+  const estimatedTotal =
+    unitPrice > 0
+      ? unitPrice * travelerTotal
+      : 0;
+
+
+  const paymentNow =
+    paymentPlan === "full"
+      ? estimatedTotal
+      : paymentPlan === "dp"
+        ? Math.ceil(
+            estimatedTotal * 0.3,
+          )
+        : Math.ceil(
+            estimatedTotal * 0.25,
+          );
+
+
+  const remainingPayment =
+    Math.max(
+      0,
+      estimatedTotal -
+        paymentNow,
+    );
+
+
+  const [
+    purchaser,
+    setPurchaser,
+  ] =
+    useState({
+      fullName: "",
+      email: "",
+      phone: "",
+      city: "",
+    });
+
+
+  const [
+    travelerMode,
+    setTravelerMode,
+  ] =
+    useState<TravelerMode>(
+      "same",
+    );
+
+
+  const [
+    traveler,
+    setTraveler,
+  ] =
+    useState({
+      fullName: "",
+      birthDate: "",
+      gender: "",
+      identityNumber: "",
+    });
+
+
+  const [
+    passportHelp,
+    setPassportHelp,
+  ] =
+    useState(false);
+
+  const [
+    vaccineHelp,
+    setVaccineHelp,
+  ] =
+    useState(false);
+
+  const [
+    leaveLetter,
+    setLeaveLetter,
+  ] =
+    useState(false);
+
+
+  const [
+    passportForm,
+    setPassportForm,
+  ] =
+    useState({
+      ktpName: "",
+      nik: "",
+      birthPlace: "",
+      birthDate: "",
+      immigrationCity: "",
+      immigrationOffice: "",
+    });
+
+
+  const [
+    leaveForm,
+    setLeaveForm,
+  ] =
+    useState({
+      companyName: "",
+      position: "",
+      leaveStart: "",
+      leaveEnd: "",
+    });
+
+
+  const [
+    accepted,
+    setAccepted,
+  ] =
+    useState(false);
+
+
+const steps =
+    useMemo(
+      () => [
+        {
+          number: 1,
+          title: "Pemesan",
+        },
+        {
+          number: 2,
+          title: "Traveler",
+        },
+        {
+          number: 3,
+          title: "Layanan & Dokumen",
+        },
+        {
+          number: 4,
+          title: "Review",
+        },
+        {
+          number: 5,
+          title: "Pembayaran",
+        },
+      ],
+      [],
+    );
+
+
+  const purchaserValid =
+    Boolean(
+      purchaser.fullName.trim() &&
+      purchaser.email.trim() &&
+      purchaser.phone.trim(),
+    );
+
+
+  const travelerValid =
+    travelerMode !== "now" ||
+    Boolean(
+      traveler.fullName.trim() &&
+      traveler.birthDate,
+    );
+
+
+  function nextStep() {
+
+    if (
+      step === 1 &&
+      !purchaserValid
+    ) {
+      return;
+    }
+
+    if (
+      step === 2 &&
+      !travelerValid
+    ) {
+      return;
+    }
+
+    if (
+      step === 4 &&
+      !accepted
+    ) {
+      return;
+    }
+
+    setStep(
+      (current) =>
+        Math.min(
+          5,
+          current + 1,
+        ),
+    );
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }
+
+
+  function previousStep() {
+
+    setStep(
+      (current) =>
+        Math.max(
+          1,
+          current - 1,
+        ),
+    );
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }
+
+
+  function submitBooking(
+    event: FormEvent,
+  ) {
+
+    event.preventDefault();
+
+    if (!accepted) {
+      return;
+    }
+
+    alert(
+      `Simulasi pembayaran Segaloka\nMetode: ${paymentMethod}\nBayar sekarang: ${formatRupiah(paymentNow)}`,
+    );
+  }
+
+
+  return (
+    <main className={styles.page}>
+
+      <div className={styles.shell}>
+
+        <nav className={styles.breadcrumb}>
+          <a href="/">
+            Beranda
+          </a>
+
+          <span>/</span>
+
+          <a
+            href={`/paket/${slug}`}
+          >
+            Detail Paket
+          </a>
+
+          <span>/</span>
+
+          <strong>
+            Data Pemesanan
+          </strong>
+        </nav>
+
+
+        <div className={styles.heading}>
+
+          <div>
+            <span
+              className={
+                styles.packageBadge
+              }
+            >
+              {rule.label}
+            </span>
+
+            <h1>
+              Lengkapi data pemesanan
+            </h1>
+
+            <p>
+              Isi data utama sekarang.
+              Data traveler dan dokumen
+              dapat disesuaikan dengan
+              kebutuhan paket.
+            </p>
+          </div>
+
+          <div
+            className={
+              styles.secureBadge
+            }
+          >
+            <ShieldCheck size={18} />
+
+            <span>
+              <strong>
+                Data pemesanan
+              </strong>
+
+              <small>
+                Tahap UI/UX lokal
+              </small>
+            </span>
+          </div>
+
+        </div>
+
+
+        <div className={styles.stepper}>
+
+          {steps.map(
+            (item) => {
+
+              const done =
+                step >
+                item.number;
+
+              const active =
+                step ===
+                item.number;
+
+              return (
+                <div
+                  key={item.number}
+                  className={[
+                    styles.step,
+                    active
+                      ? styles.stepActive
+                      : "",
+                    done
+                      ? styles.stepDone
+                      : "",
+                  ].join(" ")}
+                >
+
+                  <span>
+                    {done
+                      ? (
+                        <Check size={14} />
+                      )
+                      : item.number}
+                  </span>
+
+                  <strong>
+                    {item.title}
+                  </strong>
+
+                </div>
+              );
+            },
+          )}
+
+        </div>
+
+
+        <form
+          className={styles.layout}
+          onSubmit={submitBooking}
+        >
+
+          <section
+            className={
+              styles.content
+            }
+          >
+
+            {step === 1 && (
+              <>
+                <article
+                  className={
+                    styles.card
+                  }
+                >
+
+                  <div
+                    className={
+                      styles.cardHeading
+                    }
+                  >
+                    <UserRound size={20} />
+
+                    <div>
+                      <h2>
+                        Data Pemesan
+                      </h2>
+
+                      <p>
+                        Orang yang melakukan
+                        pemesanan dan akan
+                        menerima informasi
+                        transaksi.
+                      </p>
+                    </div>
+                  </div>
+
+
+                  <div
+                    className={
+                      styles.formGrid
+                    }
+                  >
+
+                    <label
+                      className={
+                        styles.full
+                      }
+                    >
+                      <span>
+                        Nama lengkap
+                      </span>
+
+                      <input
+                        value={
+                          purchaser.fullName
+                        }
+                        onChange={(event) =>
+                          setPurchaser({
+                            ...purchaser,
+                            fullName:
+                              event.target.value,
+                          })
+                        }
+                        placeholder="Sesuai identitas"
+                      />
+                    </label>
+
+
+                    <label>
+                      <span>
+                        Email
+                      </span>
+
+                      <input
+                        type="email"
+                        value={
+                          purchaser.email
+                        }
+                        onChange={(event) =>
+                          setPurchaser({
+                            ...purchaser,
+                            email:
+                              event.target.value,
+                          })
+                        }
+                        placeholder="nama@email.com"
+                      />
+                    </label>
+
+
+                    <label>
+                      <span>
+                        Nomor WhatsApp
+                      </span>
+
+                      <input
+                        type="tel"
+                        value={
+                          purchaser.phone
+                        }
+                        onChange={(event) =>
+                          setPurchaser({
+                            ...purchaser,
+                            phone:
+                              event.target.value,
+                          })
+                        }
+                        placeholder="08xxxxxxxxxx"
+                      />
+                    </label>
+
+
+                    <label
+                      className={
+                        styles.full
+                      }
+                    >
+                      <span>
+                        Kota domisili
+                      </span>
+
+                      <input
+                        value={
+                          purchaser.city
+                        }
+                        onChange={(event) =>
+                          setPurchaser({
+                            ...purchaser,
+                            city:
+                              event.target.value,
+                          })
+                        }
+                        placeholder="Contoh: Makassar"
+                      />
+                    </label>
+
+                  </div>
+
+                </article>
+
+
+                
+              </>
+            )}
+
+
+            {step === 2 && (
+              <article
+                className={
+                  styles.card
+                }
+              >
+
+                <div
+                  className={
+                    styles.cardHeading
+                  }
+                >
+                  <UsersRound size={20} />
+
+                  <div>
+                    <h2>
+                      Data Traveler
+                    </h2>
+
+                    <p>
+                      Pilih kapan data
+                      traveler akan
+                      dilengkapi.
+                    </p>
+                  </div>
+                </div>
+
+
+                <div
+                  className={
+                    styles.optionList
+                  }
+                >
+
+                  <OptionCard
+                    active={
+                      travelerMode ===
+                      "same"
+                    }
+                    title="Traveler utama sama dengan Pemesan"
+                    description={
+                      travelerTotal > 1
+                        ? "Data pemesan digunakan sebagai traveler pertama. Traveler lainnya dapat dilengkapi kemudian."
+                        : "Gunakan data pemesan sebagai traveler utama."
+                    }
+                    onClick={() =>
+                      setTravelerMode(
+                        "same",
+                      )
+                    }
+                  />
+
+
+                  <OptionCard
+                    active={
+                      travelerMode ===
+                      "now"
+                    }
+                    title="Isi data traveler sekarang"
+                    description="Masukkan identitas traveler utama pada tahap ini."
+                    onClick={() =>
+                      setTravelerMode(
+                        "now",
+                      )
+                    }
+                  />
+
+
+                  {rule.travelerLater && (
+                    <OptionCard
+                      active={
+                        travelerMode ===
+                        "later"
+                      }
+                      title="Isi data traveler nanti"
+                      description="Selesaikan booking dengan data pemesan lebih dulu. Data traveler final dilengkapi sebelum batas dokumen."
+                      onClick={() =>
+                        setTravelerMode(
+                          "later",
+                        )
+                      }
+                    />
+                  )}
+
+                </div>
+
+
+                {travelerMode ===
+                  "now" && (
+
+                  <div
+                    className={
+                      styles.subForm
+                    }
+                  >
+
+                    <h3>
+                      Traveler Utama
+                    </h3>
+
+
+                    <div
+                      className={
+                        styles.formGrid
+                      }
+                    >
+
+                      <label
+                        className={
+                          styles.full
+                        }
+                      >
+                        <span>
+                          Nama lengkap
+                        </span>
+
+                        <input
+                          value={
+                            traveler.fullName
+                          }
+                          onChange={(event) =>
+                            setTraveler({
+                              ...traveler,
+                              fullName:
+                                event.target.value,
+                            })
+                          }
+                          placeholder="Sesuai identitas perjalanan"
+                        />
+                      </label>
+
+
+                      <label>
+                        <span>
+                          Tanggal lahir
+                        </span>
+
+                        <input
+                          type="date"
+                          value={
+                            traveler.birthDate
+                          }
+                          onChange={(event) =>
+                            setTraveler({
+                              ...traveler,
+                              birthDate:
+                                event.target.value,
+                            })
+                          }
+                        />
+                      </label>
+
+
+                      <label>
+                        <span>
+                          Jenis kelamin
+                        </span>
+
+                        <select
+                          value={
+                            traveler.gender
+                          }
+                          onChange={(event) =>
+                            setTraveler({
+                              ...traveler,
+                              gender:
+                                event.target.value,
+                            })
+                          }
+                        >
+                          <option value="">
+                            Pilih
+                          </option>
+
+                          <option value="male">
+                            Laki-laki
+                          </option>
+
+                          <option value="female">
+                            Perempuan
+                          </option>
+                        </select>
+                      </label>
+
+                    </div>
+
+                  </div>
+                )}
+
+
+                {travelerMode ===
+                  "later" && (
+
+                  <div
+                    className={
+                      styles.notice
+                    }
+                  >
+                    <CalendarDays size={18} />
+
+                    <div>
+                      <strong>
+                        Lengkapi traveler
+                        kemudian
+                      </strong>
+
+                      <p>
+                        {rule.documentMessage}
+                      </p>
+                    </div>
+                  </div>
+                )}
+
+              </article>
+            )}
+
+
+            {step === 3 && (
+              <>
+                <article
+                  className={
+                    styles.card
+                  }
+                >
+
+                  <div
+                    className={
+                      styles.cardHeading
+                    }
+                  >
+                    <FileText size={20} />
+
+                    <div>
+                      <h2>
+                        Layanan Dokumen
+                      </h2>
+
+                      <p>
+                        Pilih bantuan yang
+                        dibutuhkan sebelum
+                        keberangkatan.
+                      </p>
+                    </div>
+                  </div>
+
+
+                  <div
+                    className={
+                      styles.serviceGrid
+                    }
+                  >
+
+                    {rule.passportAssistance && (
+                      <button
+                        type="button"
+                        className={[
+                          styles.serviceCard,
+                          passportHelp
+                            ? styles.serviceActive
+                            : "",
+                        ].join(" ")}
+                        onClick={() =>
+                          setPassportHelp(
+                            !passportHelp,
+                          )
+                        }
+                      >
+                        <BookOpenCheck size={23} />
+
+                        <span>
+                          <strong>
+                            Rekomendasi Paspor
+                          </strong>
+
+                          <small>
+                            Bantuan persiapan
+                            pengajuan paspor dan
+                            rencana kantor
+                            imigrasi.
+                          </small>
+                        </span>
+
+                        <CircleCheck
+                          size={18}
+                        />
+                      </button>
+                    )}
+
+
+                    {rule.vaccineRecommendation && (
+                      <button
+                        type="button"
+                        className={[
+                          styles.serviceCard,
+                          vaccineHelp
+                            ? styles.serviceActive
+                            : "",
+                        ].join(" ")}
+                        onClick={() =>
+                          setVaccineHelp(
+                            !vaccineHelp,
+                          )
+                        }
+                      >
+                        <HeartPulse size={23} />
+
+                        <span>
+                          <strong>
+                            Rekomendasi Vaksin
+                          </strong>
+
+                          <small>
+                            Permintaan informasi
+                            layanan vaksin sesuai
+                            ketentuan perjalanan.
+                          </small>
+                        </span>
+
+                        <CircleCheck
+                          size={18}
+                        />
+                      </button>
+                    )}
+
+
+                    {rule.leaveLetter && (
+                      <button
+                        type="button"
+                        className={[
+                          styles.serviceCard,
+                          leaveLetter
+                            ? styles.serviceActive
+                            : "",
+                        ].join(" ")}
+                        onClick={() =>
+                          setLeaveLetter(
+                            !leaveLetter,
+                          )
+                        }
+                      >
+                        <BriefcaseBusiness
+                          size={23}
+                        />
+
+                        <span>
+                          <strong>
+                            Surat Cuti
+                          </strong>
+
+                          <small>
+                            Ajukan kebutuhan surat
+                            perjalanan/cuti untuk
+                            perusahaan.
+                          </small>
+                        </span>
+
+                        <CircleCheck
+                          size={18}
+                        />
+                      </button>
+                    )}
+
+                  </div>
+
+                </article>
+
+
+                {passportHelp && (
+                  <article
+                    className={
+                      styles.card
+                    }
+                  >
+
+                    <div
+                      className={
+                        styles.cardHeading
+                      }
+                    >
+                      <IdCard size={20} />
+
+                      <div>
+                        <h2>
+                          Data Rekomendasi Paspor
+                        </h2>
+
+                        <p>
+                          Isi berdasarkan data
+                          KTP untuk membantu
+                          proses persiapan.
+                        </p>
+                      </div>
+                    </div>
+
+
+                    <div
+                      className={
+                        styles.formGrid
+                      }
+                    >
+
+                      <label
+                        className={
+                          styles.full
+                        }
+                      >
+                        <span>
+                          Nama sesuai KTP
+                        </span>
+
+                        <input
+                          value={
+                            passportForm.ktpName
+                          }
+                          onChange={(event) =>
+                            setPassportForm({
+                              ...passportForm,
+                              ktpName:
+                                event.target.value,
+                            })
+                          }
+                        />
+                      </label>
+
+
+                      <label>
+                        <span>
+                          NIK
+                        </span>
+
+                        <input
+                          inputMode="numeric"
+                          value={
+                            passportForm.nik
+                          }
+                          onChange={(event) =>
+                            setPassportForm({
+                              ...passportForm,
+                              nik:
+                                event.target.value,
+                            })
+                          }
+                          placeholder="16 digit"
+                        />
+                      </label>
+
+
+                      <label>
+                        <span>
+                          Tanggal lahir
+                        </span>
+
+                        <input
+                          type="date"
+                          value={
+                            passportForm.birthDate
+                          }
+                          onChange={(event) =>
+                            setPassportForm({
+                              ...passportForm,
+                              birthDate:
+                                event.target.value,
+                            })
+                          }
+                        />
+                      </label>
+
+
+                      <label>
+                        <span>
+                          Kota rencana imigrasi
+                        </span>
+
+                        <input
+                          value={
+                            passportForm.immigrationCity
+                          }
+                          onChange={(event) =>
+                            setPassportForm({
+                              ...passportForm,
+                              immigrationCity:
+                                event.target.value,
+                            })
+                          }
+                          placeholder="Contoh: Makassar"
+                        />
+                      </label>
+
+
+                      <label>
+                        <span>
+                          Kantor Imigrasi
+                        </span>
+
+                        <input
+                          value={
+                            passportForm.immigrationOffice
+                          }
+                          onChange={(event) =>
+                            setPassportForm({
+                              ...passportForm,
+                              immigrationOffice:
+                                event.target.value,
+                            })
+                          }
+                          placeholder="Pilih/isi rencana kantor"
+                        />
+                      </label>
+
+                    </div>
+
+
+                    <div
+                      className={
+                        styles.privacyNote
+                      }
+                    >
+                      <ShieldCheck size={16} />
+
+                      <p>
+                        Pada tahap UI/UX ini
+                        data identitas belum
+                        dikirim ke backend.
+                        Penyimpanan aman akan
+                        dibuat saat integrasi
+                        sistem.
+                      </p>
+                    </div>
+
+                  </article>
+                )}
+
+
+                {vaccineHelp && (
+                  <article
+                    className={
+                      styles.notice
+                    }
+                  >
+                    <HeartPulse size={18} />
+
+                    <div>
+                      <strong>
+                        Permintaan rekomendasi
+                        vaksin dicatat
+                      </strong>
+
+                      <p>
+                        Jenis vaksin, jadwal,
+                        kelayakan, dan persyaratan
+                        mengikuti ketentuan
+                        destinasi serta penyedia
+                        layanan kesehatan.
+                      </p>
+                    </div>
+                  </article>
+                )}
+
+
+                {leaveLetter && (
+                  <article
+                    className={
+                      styles.card
+                    }
+                  >
+
+                    <div
+                      className={
+                        styles.cardHeading
+                      }
+                    >
+                      <BriefcaseBusiness
+                        size={20}
+                      />
+
+                      <div>
+                        <h2>
+                          Data Surat Cuti
+                        </h2>
+
+                        <p>
+                          Isi informasi dasar
+                          untuk kebutuhan surat.
+                        </p>
+                      </div>
+                    </div>
+
+
+                    <div
+                      className={
+                        styles.formGrid
+                      }
+                    >
+
+                      <label>
+                        <span>
+                          Nama perusahaan
+                        </span>
+
+                        <input
+                          value={
+                            leaveForm.companyName
+                          }
+                          onChange={(event) =>
+                            setLeaveForm({
+                              ...leaveForm,
+                              companyName:
+                                event.target.value,
+                            })
+                          }
+                        />
+                      </label>
+
+
+                      <label>
+                        <span>
+                          Jabatan
+                        </span>
+
+                        <input
+                          value={
+                            leaveForm.position
+                          }
+                          onChange={(event) =>
+                            setLeaveForm({
+                              ...leaveForm,
+                              position:
+                                event.target.value,
+                            })
+                          }
+                        />
+                      </label>
+
+
+                      <label>
+                        <span>
+                          Mulai cuti
+                        </span>
+
+                        <input
+                          type="date"
+                          value={
+                            leaveForm.leaveStart
+                          }
+                          onChange={(event) =>
+                            setLeaveForm({
+                              ...leaveForm,
+                              leaveStart:
+                                event.target.value,
+                            })
+                          }
+                        />
+                      </label>
+
+
+                      <label>
+                        <span>
+                          Selesai cuti
+                        </span>
+
+                        <input
+                          type="date"
+                          value={
+                            leaveForm.leaveEnd
+                          }
+                          onChange={(event) =>
+                            setLeaveForm({
+                              ...leaveForm,
+                              leaveEnd:
+                                event.target.value,
+                            })
+                          }
+                        />
+                      </label>
+
+                    </div>
+
+                  </article>
+                )}
+              </>
+            )}
+
+
+            {step === 4 && (
+              <>
+                <article
+                  className={
+                    styles.card
+                  }
+                >
+
+                  <div
+                    className={
+                      styles.cardHeading
+                    }
+                  >
+                    <CircleCheck size={20} />
+
+                    <div>
+                      <h2>
+                        Review Pemesanan
+                      </h2>
+
+                      <p>
+                        Periksa data sebelum
+                        melanjutkan ke tahap
+                        pembayaran.
+                      </p>
+                    </div>
+                  </div>
+
+
+                  <div
+                    className={
+                      styles.reviewList
+                    }
+                  >
+
+                    <div>
+                      <span>
+                        Pemesan
+                      </span>
+
+                      <strong>
+                        {purchaser.fullName ||
+                          "-"}
+                      </strong>
+                    </div>
+
+                    <div>
+                      <span>
+                        Kontak
+                      </span>
+
+                      <strong>
+                        {purchaser.phone ||
+                          "-"}
+                      </strong>
+                    </div>
+
+                    <div>
+                      <span>
+                        Jumlah traveler
+                      </span>
+
+                      <strong>
+                        {travelerTotal} orang
+                      </strong>
+                    </div>
+
+                    <div>
+                      <span>
+                        Data traveler
+                      </span>
+
+                      <strong>
+                        {travelerMode ===
+                        "same"
+                          ? "Pemesan sebagai traveler utama"
+                          : travelerMode ===
+                            "now"
+                            ? "Diisi sekarang"
+                            : "Dilengkapi kemudian"}
+                      </strong>
+                    </div>
+
+                  </div>
+
+                </article>
+
+
+                <article
+                  className={
+                    styles.card
+                  }
+                >
+                  <h2>
+                    Layanan tambahan
+                  </h2>
+
+                  <div
+                    className={
+                      styles.checkList
+                    }
+                  >
+
+                    {passportHelp && (
+                      <span>
+                        <Check size={14} />
+                        Rekomendasi paspor
+                      </span>
+                    )}
+
+                    {vaccineHelp && (
+                      <span>
+                        <Check size={14} />
+                        Rekomendasi vaksin
+                      </span>
+                    )}
+
+                    {leaveLetter && (
+                      <span>
+                        <Check size={14} />
+                        Surat cuti
+                      </span>
+                    )}
+
+                    {!passportHelp &&
+                      !vaccineHelp &&
+                      !leaveLetter && (
+                        <small>
+                          Tidak ada layanan
+                          tambahan.
+                        </small>
+                      )}
+
+                  </div>
+
+
+                  <label
+                    className={
+                      styles.agreement
+                    }
+                  >
+                    <input
+                      type="checkbox"
+                      checked={accepted}
+                      onChange={(event) =>
+                        setAccepted(
+                          event.target.checked,
+                        )
+                      }
+                    />
+
+                    <span>
+                      Saya memastikan data yang
+                      diisi benar dan memahami
+                      dokumen traveler dapat
+                      memiliki batas waktu
+                      berbeda sesuai jenis paket
+                      dan kebijakan Travel.
+                    </span>
+                  </label>
+
+                </article>
+              </>
+            )}
+
+
+            {step === 5 && (
+              <>
+                <article
+                  className={
+                    styles.card
+                  }
+                >
+                  <div
+                    className={
+                      styles.cardHeading
+                    }
+                  >
+                    <ShieldCheck size={20} />
+
+                    <div>
+                      <h2>
+                        Pembayaran
+                      </h2>
+
+                      <p>
+                        Pilih skema pembayaran
+                        dan metode yang akan
+                        digunakan.
+                      </p>
+                    </div>
+                  </div>
+
+
+                  <div
+                    className={
+                      styles.paymentPlans
+                    }
+                  >
+
+                    <button
+                      type="button"
+                      className={[
+                        styles.paymentPlan,
+                        paymentPlan === "full"
+                          ? styles.paymentPlanActive
+                          : "",
+                      ].join(" ")}
+                      onClick={() =>
+                        setPaymentPlan(
+                          "full",
+                        )
+                      }
+                    >
+                      <strong>
+                        Lunas
+                      </strong>
+
+                      <span>
+                        Bayar seluruh tagihan
+                        sekarang.
+                      </span>
+
+                      <b>
+                        {formatRupiah(
+                          estimatedTotal,
+                        )}
+                      </b>
+                    </button>
+
+
+                    <button
+                      type="button"
+                      className={[
+                        styles.paymentPlan,
+                        paymentPlan === "dp"
+                          ? styles.paymentPlanActive
+                          : "",
+                      ].join(" ")}
+                      onClick={() =>
+                        setPaymentPlan(
+                          "dp",
+                        )
+                      }
+                    >
+                      <strong>
+                        DP 30%
+                      </strong>
+
+                      <span>
+                        Bayar uang muka,
+                        sisa mengikuti jatuh
+                        tempo paket.
+                      </span>
+
+                      <b>
+                        {formatRupiah(
+                          Math.ceil(
+                            estimatedTotal *
+                              0.3,
+                          ),
+                        )}
+                      </b>
+                    </button>
+
+
+                    <button
+                      type="button"
+                      className={[
+                        styles.paymentPlan,
+                        paymentPlan ===
+                        "installment"
+                          ? styles.paymentPlanActive
+                          : "",
+                      ].join(" ")}
+                      onClick={() =>
+                        setPaymentPlan(
+                          "installment",
+                        )
+                      }
+                    >
+                      <strong>
+                        Cicilan
+                      </strong>
+
+                      <span>
+                        Pembayaran bertahap
+                        sesuai jadwal paket.
+                      </span>
+
+                      <b>
+                        Mulai{" "}
+                        {formatRupiah(
+                          Math.ceil(
+                            estimatedTotal *
+                              0.25,
+                          ),
+                        )}
+                      </b>
+                    </button>
+
+                  </div>
+                </article>
+
+
+                <article
+                  className={
+                    styles.card
+                  }
+                >
+                  <h2>
+                    Metode Pembayaran
+                  </h2>
+
+                  <div
+                    className={
+                      styles.paymentMethods
+                    }
+                  >
+
+                    {[
+                      [
+                        "qris",
+                        "QRIS",
+                        "Scan QR dari aplikasi bank atau e-wallet.",
+                      ],
+                      [
+                        "virtual-account",
+                        "Virtual Account",
+                        "Pembayaran melalui nomor VA bank.",
+                      ],
+                      [
+                        "bank-transfer",
+                        "Transfer Bank",
+                        "Transfer melalui rekening pembayaran.",
+                      ],
+                      [
+                        "ewallet",
+                        "E-Wallet",
+                        "Pembayaran melalui dompet digital.",
+                      ],
+                    ].map(
+                      ([
+                        value,
+                        title,
+                        description,
+                      ]) => (
+                        <button
+                          key={value}
+                          type="button"
+                          className={[
+                            styles.paymentMethod,
+                            paymentMethod ===
+                            value
+                              ? styles.paymentMethodActive
+                              : "",
+                          ].join(" ")}
+                          onClick={() =>
+                            setPaymentMethod(
+                              value as PaymentMethod,
+                            )
+                          }
+                        >
+                          <span
+                            className={
+                              styles.optionRadio
+                            }
+                          >
+                            {paymentMethod ===
+                              value && (
+                              <Check
+                                size={13}
+                              />
+                            )}
+                          </span>
+
+                          <span>
+                            <strong>
+                              {title}
+                            </strong>
+
+                            <small>
+                              {description}
+                            </small>
+                          </span>
+                        </button>
+                      ),
+                    )}
+
+                  </div>
+                </article>
+
+
+                <article
+                  className={
+                    styles.paymentSummary
+                  }
+                >
+                  <div>
+                    <span>
+                      Estimasi total booking
+                    </span>
+
+                    <strong>
+                      {estimatedTotal > 0
+                        ? formatRupiah(
+                            estimatedTotal,
+                          )
+                        : "Mengikuti harga paket"}
+                    </strong>
+                  </div>
+
+                  <div>
+                    <span>
+                      Skema
+                    </span>
+
+                    <strong>
+                      {paymentPlan === "full"
+                        ? "Lunas"
+                        : paymentPlan === "dp"
+                          ? "DP 30%"
+                          : "Cicilan"}
+                    </strong>
+                  </div>
+
+                  <div>
+                    <span>
+                      Bayar sekarang
+                    </span>
+
+                    <strong
+                      className={
+                        styles.paymentGrandTotal
+                      }
+                    >
+                      {paymentNow > 0
+                        ? formatRupiah(
+                            paymentNow,
+                          )
+                        : "-"}
+                    </strong>
+                  </div>
+
+                  {paymentPlan !==
+                    "full" && (
+                    <div>
+                      <span>
+                        Sisa tagihan
+                      </span>
+
+                      <strong>
+                        {remainingPayment > 0
+                          ? formatRupiah(
+                              remainingPayment,
+                            )
+                          : "-"}
+                      </strong>
+                    </div>
+                  )}
+
+                  <p>
+                    Nominal anak, bayi,
+                    tipe kamar, diskon,
+                    promo, fee pembayaran,
+                    dan jadwal cicilan
+                    nantinya menggunakan
+                    pricing snapshot dari
+                    booking asli.
+                  </p>
+                </article>
+              </>
+            )}
+
+            <div
+              className={
+                styles.navigation
+              }
+            >
+
+              {step > 1 ? (
+                <button
+                  type="button"
+                  className={
+                    styles.backButton
+                  }
+                  onClick={
+                    previousStep
+                  }
+                >
+                  <ChevronLeft size={17} />
+                  Kembali
+                </button>
+              ) : (
+                <a
+                  className={
+                    styles.backButton
+                  }
+                  href={`/paket/${slug}`}
+                >
+                  <ArrowLeft size={17} />
+                  Detail Paket
+                </a>
+              )}
+
+
+              {step < 5 ? (
+                <button
+                  type="button"
+                  className={
+                    styles.nextButton
+                  }
+                  disabled={
+                    (step === 1 &&
+                      !purchaserValid) ||
+                    (step === 2 &&
+                      !travelerValid)
+                  }
+                  onClick={nextStep}
+                >
+                  {step === 4
+                    ? "Lanjut ke Pembayaran"
+                    : "Lanjutkan"}
+                  <ArrowRight size={17} />
+                </button>
+              ) : (
+                <button
+                  type="submit"
+                  className={
+                    styles.nextButton
+                  }
+                  disabled={!accepted}
+                >
+                  Bayar Sekarang
+                  <ArrowRight size={17} />
+                </button>
+              )}
+
+            </div>
+
+          </section>
+
+
+          <aside
+            className={
+              styles.summary
+            }
+          >
+
+            <div
+              className={
+                styles.summaryCard
+              }
+            >
+
+              <span
+                className={
+                  styles.summaryEyebrow
+                }
+              >
+                {rule.label}
+              </span>
+
+              <h2>
+                {packageTitle}
+              </h2>
+
+              <div
+                className={
+                  styles.summaryMeta
+                }
+              >
+                <span>
+                  <UsersRound size={15} />
+                  {travelerTotal} traveler
+                </span>
+
+                <span>
+                  <MapPin size={15} />
+                  Paket perjalanan
+                </span>
+              </div>
+
+
+              <hr />
+
+
+              <div
+                className={
+                  styles.summaryTravelers
+                }
+              >
+
+                <span>
+                  Dewasa
+                  <strong>
+                    {adult}
+                  </strong>
+                </span>
+
+                <span>
+                  Anak
+                  <strong>
+                    {child}
+                  </strong>
+                </span>
+
+                <span>
+                  Bayi
+                  <strong>
+                    {infant}
+                  </strong>
+                </span>
+
+              </div>
+
+
+              <div
+                className={
+                  styles.deadlineBox
+                }
+              >
+                <CalendarDays size={18} />
+
+                <div>
+                  <strong>
+                    Kelengkapan dokumen
+                  </strong>
+
+                  <p>
+                    {rule.documentMessage}
+                  </p>
+                </div>
+              </div>
+
+            </div>
+
+
+            <div
+              className={
+                styles.helpCard
+              }
+            >
+              <ShieldCheck size={19} />
+
+              <div>
+                <strong>
+                  Data sensitif
+                </strong>
+
+                <p>
+                  Tahap ini hanya UI/UX.
+                  NIK dan dokumen belum
+                  disimpan ke database.
+                </p>
+              </div>
+            </div>
+
+          </aside>
+
+        </form>
+
+      </div>
+
+    </main>
+  );
+}

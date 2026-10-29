@@ -1,0 +1,77 @@
+/*
+ * Segaloka Travel — Phase 2E bootstrap only.
+ *
+ * This file is NOT the final Travel UI.
+ * Existing V7 UI/UX remains the parity source.
+ */
+
+.travel-bootstrap {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 32px;
+  background: var(--bg, #ffffff);
+  color: var(--ink, #111827);
+}
+
+.travel-bootstrap-card {
+  width: min(680px, 100%);
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 20px;
+  align-items: start;
+  padding: 28px;
+  border: 1px solid var(--line, #e5e7eb);
+  border-radius: 20px;
+  background: var(--surface, #ffffff);
+}
+
+.travel-bootstrap-mark {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  background: var(--accent, #2563eb);
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.travel-bootstrap-eyebrow {
+  margin-bottom: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .12em;
+}
+
+.travel-bootstrap h1 {
+  margin: 0 0 10px;
+  font-size: clamp(24px, 4vw, 36px);
+  line-height: 1.15;
+}
+
+.travel-bootstrap p {
+  margin: 0;
+  max-width: 58ch;
+  line-height: 1.65;
+  color: var(--ink-2, #4b5563);
+}
+
+.travel-bootstrap-status {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line, #e5e7eb);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+@media (max-width: 640px) {
+  .travel-bootstrap {
+    padding: 18px;
+  }
+
+  .travel-bootstrap-card {
+    grid-template-columns: 1fr;
+    padding: 22px;
+  }
+}

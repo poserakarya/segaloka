@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Masuk Control Center</title>
+  <style>
+    :root{font-family:Arial,sans-serif;color:#172033;background:#f5f7fb}
+    body{margin:0;min-height:100vh;display:grid;place-items:center}
+    main{width:min(420px,calc(100% - 32px));background:#fff;padding:32px;border-radius:16px;box-shadow:0 12px 40px #17203318}
+    h1{margin:0 0 8px;font-size:24px} p{color:#5b6475;line-height:1.5}
+    label{display:block;margin:18px 0 6px;font-weight:600} input{box-sizing:border-box;width:100%;padding:12px;border:1px solid #cfd5df;border-radius:8px;font:inherit}
+    button{width:100%;margin-top:22px;padding:12px;border:0;border-radius:8px;background:#166534;color:#fff;font-weight:700;cursor:pointer} button:disabled{opacity:.6}
+    [role=alert]{color:#b42318;margin-top:16px}
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Masuk Control Center</h1>
+    <p>Gunakan akun administrator resmi Segaloka.</p>
+    <form id="login-form" novalidate>
+      <label for="email">Email</label>
+      <input id="email" name="email" type="email" autocomplete="username" required>
+      <label for="password">Kata sandi</label>
+      <input id="password" name="password" type="password" autocomplete="current-password" required>
+      <section id="otp-channel-section" hidden>
+        <label for="otp-channel">Metode verifikasi</label>
+        <select id="otp-channel" style="box-sizing:border-box;width:100%;padding:12px;border:1px solid #cfd5df;border-radius:8px;font:inherit"></select>
+        <button id="send-otp" type="button">Kirim Kode Verifikasi</button>
+      </section>
+      <section id="otp-code-section" hidden>
+        <label for="otp-code">Kode verifikasi 6 digit</label>
+        <input id="otp-code" type="text" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" autocomplete="one-time-code">
+        <button id="verify-otp" type="button">Verifikasi dan Masuk</button>
+      </section>
+      <p id="error" role="alert" hidden></p>
+      <button id="submit" type="submit">Masuk</button>
+    </form>
+  </main>
+  <script>
+    const form = document.getElementById('login-form');
+    const error = document.getElementById('error');
+    const submit = document.getElementById('submit');
+    const channelSection = document.getElementById('otp-channel-section');
+    const codeSection = document.getElementById('otp-code-section');
+    const channelSelect = document.getElementById('otp-channel');
+    const sendOtp = document.getElementById('send-otp');
+    const verifyOtp = document.getElementById('verify-otp');
+    const otpCode = document.getElementById('otp-code');
+
+    let preAuthTicket = null;
+    let challengeId = null;
+
+    function showError(message) {
+      error.textContent = message;
+      error.hidden = false;
+    }
+
+    async function postJson(path, payload) {
+      const response = await fetch(path, {
+        method: 'POST',
+        credentials: 'same-origin',
+        cache: 'no-store',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(payload)
+      });
+
+      const data = await response.json().catch(() => ({}));
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Permintaan gagal diproses.');
+      }
+
+      return data;
+    }
+
+    async function enterDashboard() {
+      const response = await fetch('/bff/dashboard/access', {
+        credentials: 'same-origin',
+        cache: 'no-store'
+      });
+
+      const access = await response.json().catch(() => ({}));
+
+      const allowed =
+        response.ok &&
+        access.authenticated === true &&
+        access.workspaceSwitching === false &&
+        Array.isArray(access.dashboards) &&
+        access.dashboards.some(item =>
+          item &&
+          item.dashboard === 'control-center' &&
+          item.role === 'super_admin' &&
+          item.organizationId === null
+        );
+
+      if (!allowed) {
+        await fetch('/bff/logout', {
+          method: 'POST',
+          credentials: 'same-origin'
+        });
+
+        throw new Error('Akses Control Center tidak tersedia.');
+      }
+
+      window.location.replace('/dashboard#/travel');
+    }
+
+    form.addEventListener('submit', async event => {
+      event.preventDefault();
+
+      if (preAuthTicket || challengeId) return;
+
+      error.hidden = true;
+      submit.disabled = true;
+
+      try {
+        const data = await postJson('/bff/login', {
+          email: document.getElementById('email').value.trim(),
+          password: document.getElementById('password').value
+        });
+
+        document.getElementById('password').value = '';
+
+        if (data.authenticated === true) {
+          await enterDashboard();
+          return;
+        }
+
+        if (
+          data.code !== 'OTP_CHANNEL_REQUIRED' ||
+          !/^[0-9a-f]{64}$/.test(data.preAuthTicket)
+        ) {
+          throw new Error('Respons autentikasi tidak valid.');
+        }
+
+        const methods = Array.isArray(data.availableMethods)
+          ? data.availableMethods.filter(method =>
+              ['email', 'whatsapp'].includes(method)
+            )
+          : [];
+
+        if (!methods.length) {
+          throw new Error('Metode verifikasi belum tersedia.');
+        }
+
+        preAuthTicket = data.preAuthTicket;
+        channelSelect.replaceChildren();
+
+        for (const method of methods) {
+          const option = document.createElement('option');
+          option.value = method;
+          option.textContent = method === 'email'
+            ? 'Email'
+            : 'WhatsApp';
+          channelSelect.appendChild(option);
+        }
+
+        channelSection.hidden = false;
+        submit.hidden = true;
+      } catch (err) {
+        document.getElementById('password').value = '';
+        showError(err.message || 'Login gagal.');
+        submit.disabled = false;
+      }
+    });
+
+    sendOtp.addEventListener('click', async () => {
+      if (!preAuthTicket) return;
+
+      error.hidden = true;
+      sendOtp.disabled = true;
+
+      try {
+        const data = await postJson(
+          '/bff/login/select-channel',
+          {
+            preAuthTicket,
+            channel: channelSelect.value
+          }
+        );
+
+        if (
+          data.code !== 'OTP_REQUIRED' ||
+          typeof data.challengeId !== 'string'
+        ) {
+          throw new Error('Challenge OTP tidak valid.');
+        }
+
+        challengeId = data.challengeId;
+        preAuthTicket = null;
+
+        channelSection.hidden = true;
+        codeSection.hidden = false;
+        otpCode.focus();
+      } catch (err) {
+        showError(err.message || 'Pengiriman OTP gagal.');
+        sendOtp.disabled = false;
+      }
+    });
+
+    verifyOtp.addEventListener('click', async () => {
+      if (!challengeId) return;
+
+      const code = otpCode.value.trim();
+
+      if (!/^[0-9]{6}$/.test(code)) {
+        showError('Masukkan kode verifikasi 6 digit.');
+        return;
+      }
+
+      error.hidden = true;
+      verifyOtp.disabled = true;
+
+      try {
+        const data = await postJson(
+          '/bff/login/verify-otp',
+          {challengeId, code}
+        );
+
+        if (data.authenticated !== true) {
+          throw new Error('Verifikasi gagal.');
+        }
+
+        challengeId = null;
+        otpCode.value = '';
+
+        await enterDashboard();
+      } catch (err) {
+        showError(err.message || 'Kode OTP tidak valid.');
+        verifyOtp.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>

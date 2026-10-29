@@ -1,0 +1,47 @@
+﻿{
+    "version":  1,
+    "policy":  "server-authoritative",
+    "workspace_switching":  false,
+    "dashboards":  [
+                       {
+                           "scope":  "platform",
+                           "id":  "control-center",
+                           "role":  "super_admin"
+                       },
+                       {
+                           "scope":  "organization",
+                           "id":  "travel",
+                           "role":  "travel"
+                       },
+                       {
+                           "scope":  "organization",
+                           "id":  "vendor",
+                           "role":  "vendor"
+                       },
+                       {
+                           "scope":  "user",
+                           "id":  "affiliate",
+                           "role":  "affiliate"
+                       },
+                       {
+                           "scope":  "travel_relationship",
+                           "id":  "mitra",
+                           "role":  "mitra"
+                       },
+                       {
+                           "scope":  "travel_relationship",
+                           "id":  "agen",
+                           "role":  "agen"
+                       },
+                       {
+                           "scope":  "user",
+                           "id":  "traveler",
+                           "role":  "traveler"
+                       }
+                   ],
+    "clients":  {
+                    "dashboard":  "Dashboard-v7",
+                    "marketplace":  "Segaloka-webs",
+                    "mobile":  "Segaloka-Aplikasi"
+                }
+}

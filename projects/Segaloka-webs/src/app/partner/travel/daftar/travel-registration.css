@@ -1,0 +1,989 @@
+/*
+ * Segaloka Travel Registration
+ * Scope khusus /partner/travel/daftar
+ *
+ * Typography, warna, radius, shadow, form dan button
+ * menggunakan token global Segaloka.
+ */
+
+.travel-registration-page {
+  min-height: calc(100vh - var(--header-height));
+  padding: var(--ui-space-8) 0 var(--ui-space-12);
+  background:
+    radial-gradient(
+      circle at 88% 0%,
+      color-mix(in srgb, var(--ui-primary) 7%, transparent),
+      transparent 28%
+    ),
+    var(--ui-surface-soft);
+  color: var(--ui-text);
+  font-family: var(--ui-font-primary);
+  font-size: var(--ui-font-md);
+}
+
+.travel-registration-page *,
+.travel-registration-page *::before,
+.travel-registration-page *::after {
+  box-sizing: border-box;
+}
+
+.travel-registration-shell {
+  width: min(
+    var(--ui-container-max),
+    calc(100% - (var(--ui-container-padding) * 2))
+  );
+  margin-inline: auto;
+}
+
+/* ----------------------------------------------------------
+   BACK
+   ---------------------------------------------------------- */
+
+.travel-registration-back {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ui-space-2);
+  margin-bottom: var(--ui-space-6);
+  color: var(--ui-text-secondary);
+  font-size: var(--ui-font-sm);
+  font-weight: var(--ui-weight-semibold);
+  line-height: var(--ui-line-normal);
+  text-decoration: none;
+  transition: color 160ms ease;
+}
+
+.travel-registration-back:hover {
+  color: var(--ui-primary);
+}
+
+/* ----------------------------------------------------------
+   HEADER
+   ---------------------------------------------------------- */
+
+.travel-registration-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--ui-space-8);
+  margin-bottom: var(--ui-space-7);
+}
+
+.travel-registration-header-copy {
+  min-width: 0;
+}
+
+.travel-registration-eyebrow {
+  display: block;
+  margin-bottom: var(--ui-space-2);
+  color: var(--ui-primary);
+  font-size: var(--ui-font-xs);
+  font-weight: var(--ui-weight-bold);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.travel-registration-header h1 {
+  margin: 0;
+  color: var(--ui-text);
+  font-family: var(--ui-font-primary);
+  font-size: var(--ui-font-3xl);
+  font-weight: var(--ui-weight-bold);
+  line-height: var(--ui-line-tight);
+  letter-spacing: -0.035em;
+}
+
+.travel-registration-header p {
+  max-width: 720px;
+  margin: var(--ui-space-3) 0 0;
+  color: var(--ui-text-secondary);
+  font-size: var(--ui-font-md);
+  line-height: var(--ui-line-relaxed);
+}
+
+.travel-registration-plan {
+  flex: 0 0 auto;
+  min-width: 180px;
+  padding: var(--ui-space-3) var(--ui-space-4);
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius-md);
+  background: var(--ui-surface);
+  box-shadow: var(--ui-shadow-sm);
+}
+
+.travel-registration-plan span {
+  display: block;
+  color: var(--ui-text-muted);
+  font-size: var(--ui-font-xs);
+  font-weight: var(--ui-weight-medium);
+}
+
+.travel-registration-plan strong {
+  display: block;
+  margin-top: var(--ui-space-1);
+  color: var(--ui-primary);
+  font-size: var(--ui-font-md);
+  font-weight: var(--ui-weight-bold);
+}
+
+/* ----------------------------------------------------------
+   STEPPER
+   ---------------------------------------------------------- */
+
+.travel-registration-steps {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  overflow: hidden;
+  margin-bottom: var(--ui-space-5);
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius-lg);
+  background: var(--ui-surface);
+  box-shadow: var(--ui-shadow-sm);
+}
+
+.travel-registration-step {
+  position: relative;
+  min-width: 0;
+  min-height: 84px;
+  display: flex;
+  align-items: center;
+  gap: var(--ui-space-3);
+  padding: var(--ui-space-4) var(--ui-space-5);
+  border-inline-end: 1px solid var(--ui-border);
+}
+
+.travel-registration-step:last-child {
+  border-inline-end: 0;
+}
+
+.travel-registration-step::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  height: 3px;
+  background: transparent;
+}
+
+.travel-registration-step.is-active::after {
+  background: var(--ui-primary);
+}
+
+.travel-registration-step-icon {
+  width: 40px;
+  height: 40px;
+  flex: 0 0 40px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--ui-radius-md);
+  background: var(--ui-surface-muted);
+  color: var(--ui-text-muted);
+}
+
+.travel-registration-step.is-active
+.travel-registration-step-icon {
+  background: var(--ui-primary-soft);
+  color: var(--ui-primary);
+}
+
+.travel-registration-step.is-completed
+.travel-registration-step-icon {
+  background: color-mix(
+    in srgb,
+    var(--ui-success) 11%,
+    var(--ui-surface)
+  );
+  color: var(--ui-success);
+}
+
+.travel-registration-step small {
+  display: block;
+  margin-bottom: 3px;
+  color: var(--ui-text-muted);
+  font-size: var(--ui-font-xs);
+  font-weight: var(--ui-weight-medium);
+}
+
+.travel-registration-step strong {
+  display: block;
+  overflow: hidden;
+  color: var(--ui-text-secondary);
+  font-size: var(--ui-font-md);
+  font-weight: var(--ui-weight-semibold);
+  line-height: var(--ui-line-normal);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.travel-registration-step.is-active strong {
+  color: var(--ui-text);
+}
+
+.mobile-step-label {
+  display: none !important;
+}
+
+/* ----------------------------------------------------------
+   MAIN LAYOUT
+   ---------------------------------------------------------- */
+
+.travel-registration-layout {
+  display: grid;
+  grid-template-columns:
+    minmax(0, 1fr)
+    minmax(280px, 300px);
+  align-items: start;
+  gap: var(--ui-space-5);
+}
+
+.travel-registration-card {
+  min-width: 0;
+  padding: var(--ui-space-7);
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius-lg);
+  background: var(--ui-surface);
+  box-shadow: var(--ui-shadow-card);
+}
+
+.travel-registration-form-message { margin: var(--ui-space-4) 0 0; padding: 10px 12px; border: 1px solid color-mix(in srgb, var(--ui-danger) 30%, var(--ui-border)); border-radius: var(--ui-radius-md); color: var(--ui-danger); background: color-mix(in srgb, var(--ui-danger) 7%, var(--ui-surface)); }
+
+/* ----------------------------------------------------------
+   SECTION HEADING
+   ---------------------------------------------------------- */
+
+.travel-registration-section-heading {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--ui-space-3);
+  padding-bottom: var(--ui-space-5);
+  border-bottom: 1px solid var(--ui-border);
+}
+
+.travel-registration-heading-icon {
+  width: 44px;
+  height: 44px;
+  flex: 0 0 44px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--ui-radius-md);
+  background: var(--ui-primary-soft);
+  color: var(--ui-primary);
+}
+
+.travel-registration-section-heading h2 {
+  margin: 0;
+  color: var(--ui-text);
+  font-family: var(--ui-font-primary);
+  font-size: var(--ui-font-xl);
+  font-weight: var(--ui-weight-bold);
+  line-height: var(--ui-line-tight);
+}
+
+.travel-registration-section-heading p {
+  margin: var(--ui-space-1) 0 0;
+  color: var(--ui-text-secondary);
+  font-size: var(--ui-font-sm);
+  line-height: var(--ui-line-normal);
+}
+
+/* ----------------------------------------------------------
+   FORM
+   ---------------------------------------------------------- */
+
+.travel-registration-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--ui-space-5);
+  margin-top: var(--ui-space-6);
+}
+
+.travel-registration-location-grid { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--ui-space-5); min-width: 0; }
+
+.travel-registration-field {
+  min-width: 0;
+  display: block;
+}
+
+.travel-registration-field-full {
+  grid-column: 1 / -1;
+}
+
+.travel-registration-field-label {
+  display: block;
+  margin-bottom: var(--ui-space-2);
+  color: var(--ui-text);
+  font-size: var(--ui-font-sm);
+  font-weight: var(--ui-weight-semibold);
+  line-height: var(--ui-line-normal);
+}
+
+.travel-registration-field-label b {
+  margin-inline-start: 3px;
+  color: var(--ui-danger);
+}
+
+.travel-registration-field input,
+.travel-registration-field textarea,
+.travel-registration-field select {
+  width: 100%;
+  min-width: 0;
+  border: 1px solid var(--ui-border-strong);
+  border-radius: var(--form-radius);
+  outline: none;
+  background: var(--ui-surface);
+  color: var(--ui-text);
+  font-family: var(--ui-font-primary);
+  font-size: var(--form-font-size);
+  font-weight: var(--ui-weight-normal);
+  line-height: var(--ui-line-normal);
+  transition:
+    border-color 160ms ease,
+    box-shadow 160ms ease,
+    background 160ms ease;
+}
+
+.travel-registration-field input,
+.travel-registration-field select {
+  height: var(--form-height);
+  padding-inline: var(--ui-space-4);
+}
+
+.travel-registration-field textarea {
+  min-height: 112px;
+  resize: vertical;
+  padding: var(--ui-space-3) var(--ui-space-4);
+}
+
+.travel-registration-field input::placeholder,
+.travel-registration-field textarea::placeholder {
+  color: var(--ui-text-muted);
+}
+
+.travel-registration-field input:hover,
+.travel-registration-field textarea:hover,
+.travel-registration-field select:hover {
+  border-color: color-mix(
+    in srgb,
+    var(--ui-primary) 45%,
+    var(--ui-border-strong)
+  );
+}
+
+.travel-registration-field input:focus,
+.travel-registration-field textarea:focus,
+.travel-registration-field select:focus {
+  border-color: var(--ui-primary);
+  box-shadow: 0 0 0 3px
+    color-mix(in srgb, var(--ui-primary) 12%, transparent);
+}
+
+.license-number-grid {
+  grid-template-columns: minmax(0, 1fr);
+  max-width: 560px;
+}
+
+/* ----------------------------------------------------------
+   LICENSE
+   ---------------------------------------------------------- */
+
+.travel-license-options {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--ui-space-3);
+  margin-top: var(--ui-space-6);
+}
+
+.travel-license-card {
+  min-width: 0;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--ui-space-3);
+  padding: var(--ui-space-4);
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius-md);
+  background: var(--ui-surface);
+  color: var(--ui-text);
+  font-family: var(--ui-font-primary);
+  text-align: start;
+  cursor: pointer;
+  transition:
+    border-color 160ms ease,
+    background 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.travel-license-card:hover {
+  border-color: color-mix(
+    in srgb,
+    var(--ui-primary) 45%,
+    var(--ui-border)
+  );
+}
+
+.travel-license-card.is-selected {
+  border-color: var(--ui-primary);
+  background: var(--ui-primary-soft);
+  box-shadow: 0 0 0 2px
+    color-mix(in srgb, var(--ui-primary) 8%, transparent);
+}
+
+.travel-license-radio {
+  width: 24px;
+  height: 24px;
+  flex: 0 0 24px;
+  display: grid;
+  place-items: center;
+  margin-top: 1px;
+  border: 1.5px solid var(--ui-border-strong);
+  border-radius: var(--ui-radius-pill);
+  color: var(--ui-text-inverse);
+}
+
+.travel-license-card.is-selected
+.travel-license-radio {
+  border-color: var(--ui-primary);
+  background: var(--ui-primary);
+}
+
+.travel-license-copy {
+  min-width: 0;
+  display: block;
+}
+
+.travel-license-copy strong {
+  display: block;
+  color: var(--ui-text);
+  font-size: var(--ui-font-md);
+  font-weight: var(--ui-weight-bold);
+}
+
+.travel-license-copy small {
+  display: block;
+  margin-top: var(--ui-space-1);
+  color: var(--ui-text-secondary);
+  font-size: var(--ui-font-xs);
+  line-height: var(--ui-line-normal);
+}
+
+.travel-license-copy p {
+  margin: var(--ui-space-2) 0 0;
+  color: var(--ui-text-secondary);
+  font-size: var(--ui-font-sm);
+  line-height: var(--ui-line-normal);
+}
+
+/* ----------------------------------------------------------
+   INFO
+   ---------------------------------------------------------- */
+
+.travel-registration-info {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--ui-space-3);
+  margin-top: var(--ui-space-5);
+  padding: var(--ui-space-4);
+  border: 1px solid
+    color-mix(in srgb, var(--ui-primary) 18%, var(--ui-border));
+  border-radius: var(--ui-radius-md);
+  background: var(--ui-primary-soft);
+  color: var(--ui-primary);
+}
+
+.travel-registration-info svg {
+  flex: 0 0 auto;
+  margin-top: 1px;
+}
+
+.travel-registration-info p {
+  margin: 0;
+  color: var(--ui-text-secondary);
+  font-size: var(--ui-font-sm);
+  line-height: var(--ui-line-relaxed);
+}
+
+/* ----------------------------------------------------------
+   DOCUMENTS
+   ---------------------------------------------------------- */
+
+.travel-document-list {
+  display: grid;
+  gap: var(--ui-space-3);
+  margin-top: var(--ui-space-6);
+}
+
+.travel-document-card {
+  display: grid;
+  grid-template-columns:
+    44px
+    minmax(0, 1fr)
+    auto;
+  align-items: center;
+  gap: var(--ui-space-3);
+  padding: var(--ui-space-4);
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius-md);
+  background: var(--ui-surface);
+}
+
+.travel-document-icon {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--ui-radius-md);
+  background: var(--ui-primary-soft);
+  color: var(--ui-primary);
+}
+
+.travel-document-copy {
+  min-width: 0;
+}
+
+.travel-document-copy strong {
+  display: flex;
+  align-items: center;
+  gap: var(--ui-space-2);
+  color: var(--ui-text);
+  font-size: var(--ui-font-md);
+  font-weight: var(--ui-weight-semibold);
+}
+
+.travel-document-copy strong small {
+  padding: 3px 7px;
+  border-radius: var(--ui-radius-pill);
+  background: var(--ui-surface-muted);
+  color: var(--ui-text-secondary);
+  font-size: var(--ui-font-xs);
+  font-weight: var(--ui-weight-medium);
+}
+
+.travel-document-copy p {
+  margin: var(--ui-space-1) 0 0;
+  color: var(--ui-text-secondary);
+  font-size: var(--ui-font-sm);
+  line-height: var(--ui-line-normal);
+}
+
+.travel-document-upload {
+  min-height: var(--button-height-md);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--ui-space-2);
+  padding-inline: var(--ui-space-4);
+  border: 1px solid var(--ui-border);
+  border-radius: var(--button-radius);
+  background: var(--ui-surface-muted);
+  color: var(--ui-text-muted);
+  font-family: var(--ui-font-primary);
+  font-size: var(--button-font-size);
+  font-weight: var(--button-font-weight);
+  cursor: not-allowed;
+}
+
+/* ----------------------------------------------------------
+   REVIEW
+   ---------------------------------------------------------- */
+
+.travel-review-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--ui-space-3);
+  margin-top: var(--ui-space-6);
+}
+
+.travel-review-item {
+  min-width: 0;
+  padding: var(--ui-space-4);
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius-md);
+  background: var(--ui-surface-soft);
+}
+
+.travel-review-item span {
+  display: block;
+  margin-bottom: var(--ui-space-1);
+  color: var(--ui-text-secondary);
+  font-size: var(--ui-font-sm);
+}
+
+.travel-review-item strong {
+  display: block;
+  overflow-wrap: anywhere;
+  color: var(--ui-text);
+  font-size: var(--ui-font-md);
+  font-weight: var(--ui-weight-semibold);
+}
+
+.travel-review-notice {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--ui-space-3);
+  margin-top: var(--ui-space-5);
+  padding: var(--ui-space-4);
+  border: 1px solid
+    color-mix(in srgb, var(--ui-warning) 25%, var(--ui-border));
+  border-radius: var(--ui-radius-md);
+  background: color-mix(
+    in srgb,
+    var(--ui-warning) 7%,
+    var(--ui-surface)
+  );
+  color: var(--ui-warning);
+}
+
+.travel-review-notice svg {
+  flex: 0 0 auto;
+}
+
+.travel-review-notice strong {
+  display: block;
+  color: var(--ui-text);
+  font-size: var(--ui-font-md);
+  font-weight: var(--ui-weight-semibold);
+}
+
+.travel-review-notice p {
+  margin: var(--ui-space-1) 0 0;
+  color: var(--ui-text-secondary);
+  font-size: var(--ui-font-sm);
+  line-height: var(--ui-line-relaxed);
+}
+
+/* ----------------------------------------------------------
+   ACTIONS
+   ---------------------------------------------------------- */
+
+.travel-registration-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ui-space-3);
+  margin-top: var(--ui-space-7);
+  padding-top: var(--ui-space-5);
+  border-top: 1px solid var(--ui-border);
+}
+
+.travel-registration-button {
+  min-height: var(--button-height-md);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--ui-space-2);
+  padding-inline: var(--ui-space-5);
+  border-radius: var(--button-radius);
+  font-family: var(--ui-font-primary);
+  font-size: var(--button-font-size);
+  font-weight: var(--button-font-weight);
+  line-height: 1;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.travel-registration-button.secondary {
+  border: 1px solid var(--ui-border-strong);
+  background: var(--ui-surface);
+  color: var(--ui-text-secondary);
+}
+
+.travel-registration-button.secondary:hover {
+  border-color: var(--ui-primary);
+  color: var(--ui-primary);
+}
+
+.travel-registration-button.primary {
+  border: 1px solid var(--ui-primary);
+  background: var(--ui-primary);
+  color: var(--ui-text-inverse);
+  box-shadow: 0 6px 16px
+    color-mix(in srgb, var(--ui-primary) 20%, transparent);
+}
+
+.travel-registration-button.primary:not(:disabled):hover {
+  border-color: var(--ui-primary-hover);
+  background: var(--ui-primary-hover);
+}
+
+.travel-registration-button:disabled {
+  border-color: var(--ui-border-strong);
+  background: var(--ui-border-strong);
+  color: var(--ui-text-inverse);
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+/* ----------------------------------------------------------
+   ASIDE
+   ---------------------------------------------------------- */
+
+.travel-registration-aside {
+  display: grid;
+  gap: var(--ui-space-3);
+}
+
+.travel-registration-aside-card,
+.travel-registration-help {
+  padding: var(--ui-space-5);
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius-lg);
+  background: var(--ui-surface);
+  box-shadow: var(--ui-shadow-sm);
+}
+
+.travel-registration-aside-icon {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  margin-bottom: var(--ui-space-3);
+  border-radius: var(--ui-radius-md);
+  background: var(--ui-primary-soft);
+  color: var(--ui-primary);
+}
+
+.travel-registration-aside-card h3 {
+  margin: 0;
+  color: var(--ui-text);
+  font-size: var(--ui-font-lg);
+  font-weight: var(--ui-weight-bold);
+  line-height: var(--ui-line-tight);
+}
+
+.travel-registration-aside-card > p {
+  margin: var(--ui-space-2) 0 0;
+  color: var(--ui-text-secondary);
+  font-size: var(--ui-font-sm);
+  line-height: var(--ui-line-relaxed);
+}
+
+.travel-registration-aside-points {
+  display: grid;
+  gap: var(--ui-space-3);
+  margin-top: var(--ui-space-4);
+  padding-top: var(--ui-space-4);
+  border-top: 1px solid var(--ui-border);
+}
+
+.travel-registration-aside-points span {
+  display: flex;
+  align-items: center;
+  gap: var(--ui-space-2);
+  color: var(--ui-text-secondary);
+  font-size: var(--ui-font-sm);
+  font-weight: var(--ui-weight-medium);
+  line-height: var(--ui-line-normal);
+}
+
+.travel-registration-aside-points svg {
+  flex: 0 0 auto;
+  color: var(--ui-success);
+}
+
+.travel-registration-help {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--ui-space-3);
+}
+
+.travel-registration-help > svg {
+  flex: 0 0 auto;
+  margin-top: 2px;
+  color: var(--ui-primary);
+}
+
+.travel-registration-help strong {
+  display: block;
+  color: var(--ui-text);
+  font-size: var(--ui-font-md);
+  font-weight: var(--ui-weight-semibold);
+}
+
+.travel-registration-help p {
+  margin: var(--ui-space-1) 0 0;
+  color: var(--ui-text-secondary);
+  font-size: var(--ui-font-sm);
+  line-height: var(--ui-line-relaxed);
+}
+
+.travel-registration-loading {
+  min-height: 360px;
+  display: grid;
+  place-items: center;
+  color: var(--ui-text-secondary);
+  font-size: var(--ui-font-md);
+}
+
+/* ----------------------------------------------------------
+   RTL
+   ---------------------------------------------------------- */
+
+.travel-registration-page[dir="rtl"] {
+  text-align: right;
+}
+
+.travel-registration-page[dir="rtl"]
+.travel-registration-back svg,
+.travel-registration-page[dir="rtl"]
+.travel-registration-button svg {
+  transform: rotate(180deg);
+}
+
+.travel-registration-page[dir="rtl"]
+.travel-license-card {
+  text-align: right;
+}
+
+/* ----------------------------------------------------------
+   TABLET
+   ---------------------------------------------------------- */
+
+@media (max-width: 980px) {
+  .travel-registration-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .travel-registration-aside {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .travel-license-options {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ----------------------------------------------------------
+   MOBILE
+   ---------------------------------------------------------- */
+
+@media (max-width: 767px) {
+  .travel-registration-location-grid { grid-template-columns: minmax(0, 1fr); gap: var(--ui-space-4); }
+  .travel-registration-page {
+    padding: var(--ui-space-6) 0 var(--ui-space-10);
+  }
+
+  .travel-registration-header {
+    display: block;
+    margin-bottom: var(--ui-space-5);
+  }
+
+  .travel-registration-header h1 {
+    font-size: var(--ui-font-2xl);
+  }
+
+  .travel-registration-header p {
+    font-size: var(--ui-font-md);
+  }
+
+  .travel-registration-plan {
+    width: 100%;
+    margin-top: var(--ui-space-4);
+  }
+
+  .travel-registration-steps {
+    grid-template-columns: repeat(4, minmax(72px, 1fr));
+    overflow-x: auto;
+  }
+
+  .travel-registration-step {
+    min-height: 76px;
+    display: grid;
+    justify-items: center;
+    gap: var(--ui-space-1);
+    padding: var(--ui-space-2);
+    text-align: center;
+  }
+
+  .travel-registration-step-icon {
+    width: 34px;
+    height: 34px;
+    flex-basis: 34px;
+  }
+
+  .travel-registration-step small {
+    display: none;
+  }
+
+  .desktop-step-label {
+    display: none !important;
+  }
+
+  .mobile-step-label {
+    display: block !important;
+    font-size: var(--ui-font-xs) !important;
+  }
+
+  .travel-registration-card {
+    padding: var(--ui-space-5) var(--ui-space-4);
+  }
+
+  .travel-registration-form-grid,
+  .travel-review-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .travel-registration-field-full {
+    grid-column: auto;
+  }
+
+  .travel-registration-aside {
+    grid-template-columns: 1fr;
+  }
+
+  .travel-document-card {
+    grid-template-columns: 44px minmax(0, 1fr);
+  }
+
+  .travel-document-upload {
+    grid-column: 1 / -1;
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .travel-registration-section-heading {
+    gap: var(--ui-space-3);
+  }
+
+  .travel-registration-heading-icon {
+    width: 40px;
+    height: 40px;
+    flex-basis: 40px;
+  }
+
+  .travel-registration-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .travel-registration-button {
+    width: 100%;
+    padding-inline: var(--ui-space-3);
+  }
+}
+.travel-registration-help-email {
+  display: inline-flex;
+  align-items: center;
+  margin-top: var(--ui-space-2);
+  color: var(--ui-primary);
+  font-family: var(--ui-font-primary);
+  font-size: var(--ui-font-sm);
+  font-weight: var(--ui-weight-semibold);
+  line-height: var(--ui-line-normal);
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+
+.travel-registration-help-email:hover {
+  color: var(--ui-primary-hover);
+  text-decoration: underline;
+}
+
+.travel-registration-help-email:focus-visible {
+  border-radius: var(--ui-radius-xs);
+  outline: 2px solid var(--ui-primary);
+  outline-offset: 3px;
+}

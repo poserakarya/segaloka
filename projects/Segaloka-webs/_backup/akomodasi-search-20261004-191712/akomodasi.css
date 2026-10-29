@@ -1,0 +1,2135 @@
+.accommodation-page {
+  min-height: 100vh;
+  background: #f7f9fc;
+  color: #172b4d;
+  font-family: "Plus Jakarta Sans", "Jakarta Sans", Arial, sans-serif;
+}
+
+.accommodation-container {
+  width: min(1180px, calc(100% - 32px));
+  margin: 0 auto;
+}
+
+.accommodation-hero {
+  position: relative;
+  min-height: 230px;
+  padding: 20px 0 54px;
+  overflow: visible;
+  border-bottom: 1px solid #e3ebf4;
+  background:
+    radial-gradient(circle at 80% 10%, rgba(86, 177, 255, .13), transparent 30%),
+    linear-gradient(120deg, #edf7ff 0%, #f7fbff 53%, #fff 100%);
+}
+
+.accommodation-hero-inner {
+  position: relative;
+}
+
+.accommodation-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 15px;
+  color: #7b8999;
+  font-size: 9px;
+  font-weight: 600;
+}
+
+.accommodation-breadcrumb span {
+  color: #29425f;
+}
+
+.accommodation-hero-copy {
+  max-width: 610px;
+}
+
+.accommodation-eyebrow {
+  display: inline-flex;
+  margin-bottom: 8px;
+  padding: 5px 8px;
+  border-radius: 999px;
+  background: #e5f2ff;
+  color: #0878f9;
+  font-size: 8px;
+  font-weight: 800;
+}
+
+.accommodation-hero-copy h1 {
+  margin: 0;
+  color: #102f55;
+  font-size: clamp(26px, 2.7vw, 38px);
+  line-height: 1.12;
+  letter-spacing: -1px;
+}
+
+.accommodation-hero-copy p {
+  margin: 9px 0 0;
+  color: #64768b;
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+.accommodation-search {
+  position: absolute;
+  z-index: 20;
+  left: 0;
+  right: 0;
+  bottom: -87px;
+  display: grid;
+  grid-template-columns: 1.35fr 1fr .95fr auto;
+  min-height: 78px;
+  padding: 10px;
+  border: 1px solid #dfe7ef;
+  border-radius: 13px;
+  background: #fff;
+  box-shadow: 0 12px 30px rgba(31, 61, 91, .12);
+}
+
+.accommodation-search-field {
+  min-width: 0;
+  padding: 6px 14px;
+  border-right: 1px solid #e6ebf0;
+}
+
+.accommodation-search-field > span {
+  display: block;
+  margin-bottom: 6px;
+  color: #77879a;
+  font-size: 8px;
+  font-weight: 700;
+}
+
+.accommodation-search-field > div {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 27px;
+  color: #0878f9;
+}
+
+.accommodation-search-field select,
+.accommodation-search-field input {
+  width: 100%;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: #203956;
+  font: inherit;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.accommodation-search-field select {
+  appearance: none;
+}
+
+.accommodation-traveler button {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 1px solid #d9e4ef;
+  border-radius: 50%;
+  background: #fff;
+  color: #0878f9;
+  cursor: pointer;
+}
+
+.accommodation-traveler strong {
+  min-width: 55px;
+  color: #203956;
+  font-size: 9px;
+  text-align: center;
+}
+
+.accommodation-search-button {
+  align-self: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 46px;
+  margin: 5px 1px 5px 10px;
+  padding: 0 20px;
+  border: 0;
+  border-radius: 9px;
+  background: #0878f9;
+  color: #fff;
+  font: inherit;
+  font-size: 10px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.accommodation-main {
+  padding: 68px 0 60px;
+}
+
+.accommodation-section-heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 11px;
+}
+
+.accommodation-section-heading h2,
+.accommodation-results-heading h2 {
+  margin: 0;
+  color: #183654;
+  font-size: 15px;
+}
+
+.accommodation-section-heading p,
+.accommodation-results-heading p {
+  margin: 3px 0 0;
+  color: #8290a0;
+  font-size: 8px;
+}
+
+.accommodation-section-heading > button {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #0878f9;
+  font: inherit;
+  font-size: 9px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.accommodation-popular-wrap {
+  position: relative;
+}
+
+.accommodation-popular-rail {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 9px;
+}
+
+.accommodation-destination-card {
+  min-width: 0;
+  padding: 0 0 8px;
+  overflow: hidden;
+  border: 1px solid #e1e8ef;
+  border-radius: 9px;
+  background: #fff;
+  color: #1c3655;
+  text-align: left;
+  cursor: pointer;
+}
+
+.accommodation-destination-image {
+  position: relative;
+  height: 73px;
+  overflow: hidden;
+  background: #e9f0f6;
+}
+
+.accommodation-destination-image img,
+.accommodation-destination-image > .accommodation-image-fallback {
+  width: 100%;
+  height: 100%;
+}
+
+.accommodation-destination-image img {
+  object-fit: cover;
+}
+
+.accommodation-destination-image > span {
+  position: absolute;
+  left: 6px;
+  bottom: 6px;
+  padding: 3px 5px;
+  border-radius: 4px;
+  background: rgba(17, 51, 82, .85);
+  color: #fff;
+  font-size: 7px;
+  font-weight: 800;
+}
+
+.accommodation-destination-card > strong {
+  display: block;
+  padding: 7px 8px 0;
+  overflow: hidden;
+  font-size: 9px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.accommodation-destination-card > small {
+  display: block;
+  padding: 2px 8px 0;
+  overflow: hidden;
+  color: #7b899a;
+  font-size: 7px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.accommodation-rail-arrow {
+  position: absolute;
+  z-index: 5;
+  top: 31px;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 1px solid #dfe7ef;
+  border-radius: 50%;
+  background: #fff;
+  color: #0878f9;
+  box-shadow: 0 3px 10px rgba(20, 49, 78, .1);
+}
+
+.accommodation-rail-arrow-left {
+  left: -14px;
+}
+
+.accommodation-rail-arrow-right {
+  right: -14px;
+}
+
+.accommodation-promo-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 84px;
+  margin: 14px 0 12px;
+  padding: 14px 25px;
+  overflow: hidden;
+  border-radius: 10px;
+  background:
+    radial-gradient(circle at 78% 10%, rgba(255,255,255,.22), transparent 27%),
+    linear-gradient(135deg, #075ecf 0%, #0878f9 56%, #0a8af5 100%);
+  color: #fff;
+  text-decoration: none;
+}
+
+.accommodation-promo-banner div > span {
+  display: block;
+  margin-bottom: 4px;
+  color: #ffd43b;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.accommodation-promo-banner strong {
+  display: block;
+  font-size: 17px;
+  line-height: 1.25;
+}
+
+.accommodation-promo-banner small {
+  display: block;
+  margin-top: 3px;
+  color: rgba(255,255,255,.84);
+  font-size: 8px;
+}
+
+.accommodation-promo-cta {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  padding: 9px 13px;
+  border-radius: 999px;
+  background: #fff;
+  color: #0878f9;
+  font-size: 8px;
+  font-weight: 800;
+}
+
+.accommodation-category-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 11px;
+  border-bottom: 1px solid #e3e9ef;
+}
+
+.accommodation-category-scroll {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.accommodation-category-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.accommodation-category-scroll button {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  padding: 9px 10px 8px;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: transparent;
+  color: #50667e;
+  font: inherit;
+  font-size: 8px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.accommodation-category-scroll button.active {
+  border-bottom-color: #0878f9;
+  color: #0878f9;
+}
+
+.accommodation-view-actions {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding-bottom: 5px;
+}
+
+.accommodation-sort {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 9px;
+  border: 1px solid #dfe6ed;
+  border-radius: 7px;
+  background: #fff;
+  color: #566b82;
+}
+
+.accommodation-sort select {
+  border: 0;
+  outline: 0;
+  appearance: none;
+  background: transparent;
+  color: #3b5169;
+  font: inherit;
+  font-size: 8px;
+  font-weight: 700;
+}
+
+.accommodation-view-switch {
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  border: 1px solid #dfe6ed;
+  border-radius: 7px;
+  background: #fff;
+}
+
+.accommodation-view-switch button {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 32px;
+  padding: 0 9px;
+  border: 0;
+  background: #fff;
+  color: #62758a;
+  font: inherit;
+  font-size: 8px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.accommodation-view-switch button.active {
+  background: #0878f9;
+  color: #fff;
+}
+
+.accommodation-layout {
+  display: grid;
+  grid-template-columns: 190px minmax(0, 1fr);
+  gap: 14px;
+  align-items: start;
+}
+
+.accommodation-sidebar {
+  padding: 12px;
+  border: 1px solid #e0e7ee;
+  border-radius: 9px;
+  background: #fff;
+}
+
+.accommodation-filter-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #edf1f5;
+}
+
+.accommodation-filter-title strong {
+  color: #203b59;
+  font-size: 10px;
+}
+
+.accommodation-filter-title button {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #0878f9;
+  font: inherit;
+  font-size: 8px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.accommodation-filter-group {
+  padding: 11px 0;
+  border-top: 1px solid #edf1f5;
+}
+
+.accommodation-filter-first {
+  border-top: 0;
+}
+
+.accommodation-filter-group > strong {
+  display: block;
+  margin-bottom: 8px;
+  color: #29425f;
+  font-size: 9px;
+}
+
+.accommodation-keyword {
+  display: flex !important;
+  align-items: center;
+  gap: 6px !important;
+  height: 31px;
+  margin: 0 0 9px !important;
+  padding: 0 8px;
+  border: 1px solid #dfe6ed;
+  border-radius: 6px;
+  color: #8795a7 !important;
+}
+
+.accommodation-keyword input {
+  width: 100%;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  color: #324a65;
+  font: inherit;
+  font-size: 8px;
+}
+
+.accommodation-filter-group label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 7px 0;
+  color: #5e7187;
+  font-size: 8px;
+  cursor: pointer;
+}
+
+.accommodation-filter-group input {
+  accent-color: #0878f9;
+}
+
+.accommodation-range {
+  width: 100%;
+}
+
+.accommodation-range-labels {
+  display: flex;
+  justify-content: space-between;
+  color: #7e8d9e;
+  font-size: 7px;
+}
+
+.accommodation-stars {
+  color: #ffb400;
+  letter-spacing: 0;
+}
+
+.accommodation-results-heading {
+  margin-bottom: 9px;
+}
+
+.accommodation-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.accommodation-card {
+  display: block;
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid #e1e8ef;
+  border-radius: 9px;
+  background: #fff;
+  color: inherit;
+  text-decoration: none;
+  transition: transform .18s ease, box-shadow .18s ease;
+}
+
+.accommodation-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px rgba(30, 60, 90, .09);
+}
+
+.accommodation-card-media {
+  position: relative;
+  height: 125px;
+  overflow: hidden;
+  background: #e9f0f6;
+}
+
+.accommodation-card-media img,
+.accommodation-card-media > .accommodation-image-fallback {
+  width: 100%;
+  height: 100%;
+}
+
+.accommodation-card-media img {
+  object-fit: cover;
+}
+
+.accommodation-image-fallback {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 12px;
+  background:
+    linear-gradient(135deg, #e8f3ff 0%, #dcecff 100%);
+  color: #3b6c9e;
+  text-align: center;
+}
+
+.accommodation-image-fallback span {
+  max-width: 160px;
+  font-size: 8px;
+  font-weight: 700;
+}
+
+.accommodation-card-badge {
+  position: absolute;
+  top: 7px;
+  left: 7px;
+  padding: 4px 7px;
+  border-radius: 999px;
+  background: #ff445f;
+  color: #fff;
+  font-size: 7px;
+  font-weight: 800;
+}
+
+.accommodation-duration {
+  position: absolute;
+  left: 7px;
+  bottom: 7px;
+  padding: 4px 6px;
+  border-radius: 4px;
+  background: rgba(13, 47, 79, .88);
+  color: #fff;
+  font-size: 7px;
+  font-weight: 800;
+}
+
+.accommodation-card-body {
+  padding: 9px;
+}
+
+.accommodation-location {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  margin-bottom: 5px;
+  color: #0878f9;
+  font-size: 7px;
+  font-weight: 700;
+}
+
+.accommodation-card-body h3 {
+  min-height: 30px;
+  margin: 0;
+  color: #1c3555;
+  font-size: 10px;
+  line-height: 1.4;
+}
+
+.accommodation-card-body > p {
+  margin: 4px 0 7px;
+  color: #7c8999;
+  font-size: 7px;
+}
+
+.accommodation-includes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  min-height: 20px;
+}
+
+.accommodation-includes span {
+  padding: 3px 5px;
+  border-radius: 4px;
+  background: #eff6ff;
+  color: #4c6783;
+  font-size: 6px;
+  font-weight: 700;
+}
+
+.accommodation-provider-row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 5px;
+  margin-top: 8px;
+  padding-top: 7px;
+  border-top: 1px solid #edf1f5;
+}
+
+.accommodation-provider-icon {
+  display: grid;
+  place-items: center;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  background: #edf6ff;
+  color: #0878f9;
+}
+
+.accommodation-provider small,
+.accommodation-provider strong {
+  display: block;
+}
+
+.accommodation-provider small {
+  color: #8996a5;
+  font-size: 6px;
+}
+
+.accommodation-provider strong {
+  overflow: hidden;
+  margin-top: 1px;
+  color: #40566e;
+  font-size: 7px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.accommodation-rating {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  color: #f5a800;
+  font-size: 7px;
+}
+
+.accommodation-rating span {
+  color: #8996a5;
+  font-size: 6px;
+}
+
+.accommodation-price-row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.accommodation-price-row small {
+  display: block;
+  margin-bottom: 1px;
+  color: #8996a5;
+  font-size: 6px;
+}
+
+.accommodation-price-row strong {
+  color: #f0444e;
+  font-size: 10px;
+}
+
+.accommodation-price-row div > span {
+  margin-left: 2px;
+  color: #8996a5;
+  font-size: 6px;
+}
+
+.accommodation-view {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  color: #0878f9;
+  font-size: 7px;
+  font-weight: 800;
+}
+
+.accommodation-grid-list {
+  grid-template-columns: 1fr;
+}
+
+.accommodation-grid-list .accommodation-card {
+  display: grid;
+  grid-template-columns: 230px minmax(0, 1fr);
+}
+
+.accommodation-grid-list .accommodation-card-media {
+  height: 100%;
+  min-height: 175px;
+}
+
+.accommodation-empty {
+  display: grid;
+  place-items: center;
+  min-height: 280px;
+  padding: 30px;
+  border: 1px solid #e1e8ef;
+  border-radius: 9px;
+  background: #fff;
+  color: #8391a3;
+  text-align: center;
+}
+
+.accommodation-empty strong {
+  margin-top: 9px;
+  color: #304a67;
+  font-size: 11px;
+}
+
+.accommodation-empty p {
+  margin: 3px 0 0;
+  font-size: 8px;
+}
+
+@media (max-width: 1000px) {
+  .accommodation-popular-rail {
+    grid-template-columns: repeat(5, minmax(130px, 1fr));
+    overflow-x: auto;
+  }
+
+  .accommodation-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 800px) {
+  .accommodation-container {
+    width: min(100% - 24px, 1180px);
+  }
+
+  .accommodation-hero {
+    min-height: 0;
+    padding: 18px 0;
+  }
+
+  .accommodation-hero-copy h1 {
+    font-size: 25px;
+  }
+
+  .accommodation-search {
+    position: relative;
+    left: auto;
+    right: auto;
+    bottom: auto;
+    grid-template-columns: 1fr;
+    margin-top: 18px;
+    padding: 8px 11px;
+  }
+
+  .accommodation-search-field {
+    padding: 10px 4px;
+    border-right: 0;
+    border-bottom: 1px solid #e6ebf0;
+  }
+
+  .accommodation-search-button {
+    width: 100%;
+    margin: 9px 0 0;
+  }
+
+  .accommodation-main {
+    padding-top: 25px;
+  }
+
+  .accommodation-popular-rail {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    scroll-snap-type: x proximity;
+  }
+
+  .accommodation-destination-card {
+    flex: 0 0 125px;
+    scroll-snap-align: start;
+  }
+
+  .accommodation-rail-arrow {
+    display: none;
+  }
+
+  .accommodation-promo-banner {
+    padding: 13px 15px;
+  }
+
+  .accommodation-promo-banner strong {
+    font-size: 14px;
+  }
+
+  .accommodation-category-bar {
+    display: block;
+  }
+
+  .accommodation-view-actions {
+    justify-content: flex-end;
+    padding: 7px 0;
+  }
+
+  .accommodation-layout {
+    display: block;
+  }
+
+  .accommodation-sidebar {
+    margin-bottom: 12px;
+  }
+
+  .accommodation-filter-group:not(.accommodation-filter-first) {
+    display: none;
+  }
+}
+
+@media (max-width: 560px) {
+  .accommodation-section-heading p {
+    display: none;
+  }
+
+  .accommodation-section-heading > button {
+    font-size: 8px;
+  }
+
+  .accommodation-promo-banner {
+    min-height: 90px;
+  }
+
+  .accommodation-promo-banner strong {
+    max-width: 230px;
+    font-size: 12px;
+  }
+
+  .accommodation-promo-banner small {
+    max-width: 220px;
+  }
+
+  .accommodation-promo-cta {
+    padding: 8px;
+    font-size: 0;
+  }
+
+  .accommodation-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .accommodation-card-media {
+    height: 185px;
+  }
+
+  .accommodation-grid-list .accommodation-card {
+    display: block;
+  }
+
+  .accommodation-grid-list .accommodation-card-media {
+    min-height: 185px;
+  }
+}
+
+/* SEGALOKA AKOMODASI TYPOGRAPHY CANONICAL START */
+
+/*
+ * Canonical typography /akomodasi
+ * Family : Plus Jakarta Sans
+ * Body   : 13px
+ * Meta   : 11px
+ * Label  : 12px
+ * Card   : 13px
+ * H2     : 18px
+ * Hero   : 32px desktop
+ */
+
+.accommodation-page,
+.accommodation-page button,
+.accommodation-page input,
+.accommodation-page select,
+.accommodation-page textarea,
+.accommodation-page a {
+  font-family: "Plus Jakarta Sans", "Jakarta Sans", Arial, sans-serif;
+}
+
+/* ---------- BASE ---------- */
+
+.accommodation-page {
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+/* ---------- HERO ---------- */
+
+.accommodation-page h1 {
+  font-size: 32px;
+  line-height: 1.12;
+  font-weight: 600;
+  letter-spacing: -0.8px;
+}
+
+.accommodation-page h2 {
+  font-size: 18px;
+  line-height: 1.3;
+  font-weight: 600;
+  letter-spacing: -0.2px;
+}
+
+.accommodation-page h3 {
+  font-size: 14px;
+  line-height: 1.35;
+  font-weight: 600;
+}
+
+.accommodation-page p {
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+/* ---------- SEARCH ---------- */
+
+.accommodation-page label,
+.accommodation-page input,
+.accommodation-page select {
+  font-size: 12px;
+}
+
+.accommodation-page input::placeholder {
+  font-size: 12px;
+}
+
+.accommodation-page button {
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* ---------- DESTINASI POPULER ---------- */
+
+.accommodation-page .destination-card,
+.accommodation-page .destination-card * {
+  font-family: "Plus Jakarta Sans", "Jakarta Sans", Arial, sans-serif;
+}
+
+.accommodation-page .destination-card strong {
+  font-size: 12px;
+  line-height: 1.3;
+  font-weight: 600;
+}
+
+.accommodation-page .destination-card small {
+  font-size: 10px;
+  line-height: 1.35;
+}
+
+/* ---------- FILTER ---------- */
+
+.accommodation-page aside {
+  font-size: 12px;
+}
+
+.accommodation-page aside h2,
+.accommodation-page aside h3,
+.accommodation-page aside strong {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.accommodation-page aside label,
+.accommodation-page aside span,
+.accommodation-page aside input {
+  font-size: 11px;
+}
+
+/* ---------- PRODUCT CARDS ---------- */
+
+.accommodation-page .accommodation-card,
+.accommodation-page .accommodation-card * {
+  font-family: "Plus Jakarta Sans", "Jakarta Sans", Arial, sans-serif;
+}
+
+.accommodation-page .accommodation-card h3 {
+  font-size: 14px;
+  line-height: 1.35;
+  font-weight: 600;
+}
+
+.accommodation-page .accommodation-card p {
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+.accommodation-page .accommodation-card small {
+  font-size: 10px;
+  line-height: 1.35;
+}
+
+.accommodation-page .accommodation-card strong {
+  font-weight: 600;
+}
+
+/* Harga */
+.accommodation-page .accommodation-card [class*="price"] {
+  font-size: 15px;
+  line-height: 1.25;
+  font-weight: 700;
+}
+
+/* ---------- BADGE / CHIP ---------- */
+
+.accommodation-page [class*="badge"],
+.accommodation-page [class*="chip"],
+.accommodation-page [class*="tag"] {
+  font-family: "Plus Jakarta Sans", "Jakarta Sans", Arial, sans-serif;
+  font-size: 10px;
+  line-height: 1.2;
+  font-weight: 600;
+}
+
+/* ---------- TAB NEGARA ---------- */
+
+.accommodation-page [class*="tab"] button,
+.accommodation-page [class*="country"] button {
+  font-size: 11px;
+}
+
+/* ---------- SORT / GRID / LIST ---------- */
+
+.accommodation-page [class*="sort"],
+.accommodation-page [class*="view"] {
+  font-size: 11px;
+}
+
+/* ---------- RESPONSIVE ---------- */
+
+@media (max-width: 1024px) {
+  .accommodation-page h1 {
+    font-size: 28px;
+  }
+
+  .accommodation-page h2 {
+    font-size: 17px;
+  }
+}
+
+@media (max-width: 640px) {
+  .accommodation-page {
+    font-size: 12px;
+  }
+
+  .accommodation-page h1 {
+    font-size: 24px;
+    line-height: 1.18;
+    letter-spacing: -0.5px;
+  }
+
+  .accommodation-page h2 {
+    font-size: 16px;
+  }
+
+  .accommodation-page h3,
+  .accommodation-page .accommodation-card h3 {
+    font-size: 13px;
+  }
+
+  .accommodation-page p {
+    font-size: 12px;
+  }
+
+  .accommodation-page button,
+  .accommodation-page input,
+  .accommodation-page select,
+  .accommodation-page label {
+    font-size: 12px;
+  }
+}
+
+/* SEGALOKA AKOMODASI TYPOGRAPHY CANONICAL END */
+
+/* SEGALOKA AKOMODASI HERO + LIST CANONICAL START */
+
+/* ==========================================================
+   HERO
+   ========================================================== */
+
+.accommodation-page .accommodation-hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+
+  background-image:
+    linear-gradient(
+      90deg,
+      rgba(238, 247, 255, 0.97) 0%,
+      rgba(238, 247, 255, 0.91) 37%,
+      rgba(238, 247, 255, 0.68) 62%,
+      rgba(238, 247, 255, 0.30) 100%
+    ),
+    url("/images/la/makkah-madinah.jpg");
+
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center 45%;
+}
+
+.accommodation-page .accommodation-hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.08) 0%,
+      rgba(235, 246, 255, 0.15) 68%,
+      rgba(235, 246, 255, 0.80) 100%
+    );
+}
+
+.accommodation-page .accommodation-hero-inner {
+  position: relative;
+  z-index: 1;
+}
+
+
+/* ==========================================================
+   LIST MODE
+   Semua card harus menggunakan geometri horizontal yang sama.
+   ========================================================== */
+
+.accommodation-page .accommodation-grid.accommodation-grid-list {
+  display: flex !important;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+.accommodation-page
+  .accommodation-grid.accommodation-grid-list
+  .accommodation-card {
+  display: grid !important;
+  grid-template-columns: 220px minmax(0, 1fr);
+  width: 100%;
+  min-width: 0;
+
+  /*
+   * Jangan menggunakan aspect-ratio gambar sebagai tinggi card.
+   * Seluruh card List memakai tinggi yang sama.
+   */
+  height: 176px !important;
+  min-height: 176px !important;
+  max-height: 176px !important;
+
+  overflow: hidden;
+  align-items: stretch;
+}
+
+.accommodation-page
+  .accommodation-grid.accommodation-grid-list
+  .accommodation-card-media {
+  position: relative;
+  width: 220px !important;
+  height: 176px !important;
+  min-height: 176px !important;
+  max-height: 176px !important;
+
+  overflow: hidden;
+  align-self: stretch;
+}
+
+.accommodation-page
+  .accommodation-grid.accommodation-grid-list
+  .accommodation-card-media > img,
+.accommodation-page
+  .accommodation-grid.accommodation-grid-list
+  .accommodation-card-media img {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 100% !important;
+  max-height: 100% !important;
+
+  object-fit: cover !important;
+  object-position: center !important;
+}
+
+.accommodation-page
+  .accommodation-grid.accommodation-grid-list
+  .accommodation-card-body {
+  display: flex;
+  flex-direction: column;
+
+  min-width: 0;
+  height: 176px !important;
+  min-height: 176px !important;
+  max-height: 176px !important;
+
+  padding: 12px 14px;
+  overflow: hidden;
+}
+
+.accommodation-page
+  .accommodation-grid.accommodation-grid-list
+  .accommodation-card-body h3 {
+  margin-top: 2px;
+  margin-bottom: 4px;
+
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.accommodation-page
+  .accommodation-grid.accommodation-grid-list
+  .accommodation-card-body > p {
+  margin-top: 0;
+  margin-bottom: 6px;
+
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.accommodation-page
+  .accommodation-grid.accommodation-grid-list
+  .accommodation-includes {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 5px;
+  margin-bottom: 7px;
+
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.accommodation-page
+  .accommodation-grid.accommodation-grid-list
+  .accommodation-provider-row {
+  margin-top: auto;
+  min-width: 0;
+}
+
+.accommodation-page
+  .accommodation-grid.accommodation-grid-list
+  .accommodation-price-row {
+  margin-top: 7px;
+  padding-top: 7px;
+}
+
+
+/* ==========================================================
+   TABLET
+   ========================================================== */
+
+@media (max-width: 1024px) {
+  .accommodation-page
+    .accommodation-grid.accommodation-grid-list
+    .accommodation-card {
+    grid-template-columns: 190px minmax(0, 1fr);
+
+    height: 168px !important;
+    min-height: 168px !important;
+    max-height: 168px !important;
+  }
+
+  .accommodation-page
+    .accommodation-grid.accommodation-grid-list
+    .accommodation-card-media {
+    width: 190px !important;
+
+    height: 168px !important;
+    min-height: 168px !important;
+    max-height: 168px !important;
+  }
+
+  .accommodation-page
+    .accommodation-grid.accommodation-grid-list
+    .accommodation-card-body {
+    height: 168px !important;
+    min-height: 168px !important;
+    max-height: 168px !important;
+  }
+}
+
+
+/* ==========================================================
+   MOBILE
+   List tidak dipaksa horizontal sempit.
+   ========================================================== */
+
+@media (max-width: 640px) {
+  .accommodation-page .accommodation-hero {
+    background-position: 62% center;
+
+    background-image:
+      linear-gradient(
+        90deg,
+        rgba(238, 247, 255, 0.96) 0%,
+        rgba(238, 247, 255, 0.88) 55%,
+        rgba(238, 247, 255, 0.58) 100%
+      ),
+      url("/images/la/makkah-madinah.jpg");
+  }
+
+  .accommodation-page
+    .accommodation-grid.accommodation-grid-list
+    .accommodation-card {
+    display: block !important;
+
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+  }
+
+  .accommodation-page
+    .accommodation-grid.accommodation-grid-list
+    .accommodation-card-media {
+    width: 100% !important;
+
+    height: 180px !important;
+    min-height: 180px !important;
+    max-height: 180px !important;
+  }
+
+  .accommodation-page
+    .accommodation-grid.accommodation-grid-list
+    .accommodation-card-body {
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+  }
+}
+
+/* SEGALOKA AKOMODASI HERO + LIST CANONICAL END */
+
+/* SEGALOKA AKOMODASI HERO SEARCH + LIST FINAL START */
+
+
+/* ==========================================================
+   1. HERO
+   Search harus menjadi bagian normal dari hero.
+   Tidak boleh menggantung / terpotong.
+   ========================================================== */
+
+.accommodation-page .accommodation-hero {
+  position: relative !important;
+
+  height: auto !important;
+  min-height: 340px !important;
+
+  padding-top: 18px !important;
+  padding-bottom: 32px !important;
+
+  overflow: hidden !important;
+}
+
+.accommodation-page .accommodation-hero-inner {
+  position: relative !important;
+
+  display: flex !important;
+  flex-direction: column !important;
+
+  min-height: 290px !important;
+  height: auto !important;
+
+  overflow: visible !important;
+}
+
+
+/* ==========================================================
+   2. SEARCH BAR
+   Batalkan positioning/translate/margin negatif dari CSS lama.
+   ========================================================== */
+
+.accommodation-page .accommodation-search {
+  position: relative !important;
+
+  top: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  left: auto !important;
+
+  transform: none !important;
+
+  width: 100% !important;
+
+  margin-top: 18px !important;
+  margin-bottom: 0 !important;
+
+  z-index: 20 !important;
+
+  flex-shrink: 0 !important;
+}
+
+
+/* Search form/container juga tidak boleh keluar dari hero */
+
+.accommodation-page .accommodation-search-form {
+  position: relative !important;
+  top: auto !important;
+  bottom: auto !important;
+
+  transform: none !important;
+
+  width: 100% !important;
+
+  margin: 0 !important;
+
+  overflow: visible !important;
+}
+
+
+/* ==========================================================
+   3. DESTINASI POPULER
+   Harus mulai setelah hero selesai.
+   ========================================================== */
+
+.accommodation-page .accommodation-popular-section {
+  position: relative !important;
+
+  top: auto !important;
+  transform: none !important;
+
+  margin-top: 0 !important;
+  padding-top: 30px !important;
+
+  z-index: 1 !important;
+}
+
+
+/* ==========================================================
+   4. LIST MODE
+   Tinggi lama 176px terlalu kecil.
+   Naikkan supaya provider + rating + harga + detail masuk semua.
+   ========================================================== */
+
+.accommodation-page
+  .accommodation-grid.accommodation-grid-list
+  .accommodation-card {
+  display: grid !important;
+
+  grid-template-columns: 230px minmax(0, 1fr) !important;
+
+  width: 100% !important;
+
+  height: 220px !important;
+  min-height: 220px !important;
+  max-height: 220px !important;
+
+  overflow: hidden !important;
+  align-items: stretch !important;
+}
+
+
+/* ==========================================================
+   5. LIST IMAGE
+   ========================================================== */
+
+.accommodation-page
+  .accommodation-grid.accommodation-grid-list
+  .accommodation-card-media {
+  position: relative !important;
+
+  width: 230px !important;
+
+  height: 220px !important;
+  min-height: 220px !important;
+  max-height: 220px !important;
+
+  overflow: hidden !important;
+}
+
+.accommodation-page
+  .accommodation-grid.accommodation-grid-list
+  .accommodation-card-media img {
+  display: block !important;
+
+  width: 100% !important;
+  height: 100% !important;
+
+  min-height: 100% !important;
+  max-height: 100% !important;
+
+  object-fit: cover !important;
+  object-position: center !important;
+}
+
+
+/* ==========================================================
+   6. LIST CONTENT
+   Jangan potong bagian bawah.
+   ========================================================== */
+
+.accommodation-page
+  .accommodation-grid.accommodation-grid-list
+  .accommodation-card-body {
+  display: flex !important;
+  flex-direction: column !important;
+
+  min-width: 0 !important;
+
+  height: 220px !important;
+  min-height: 220px !important;
+  max-height: 220px !important;
+
+  padding: 14px 16px !important;
+
+  overflow: visible !important;
+}
+
+
+/* Judul */
+
+.accommodation-page
+  .accommodation-grid.accommodation-grid-list
+  .accommodation-card-body h3 {
+  flex-shrink: 0 !important;
+
+  margin-top: 3px !important;
+  margin-bottom: 6px !important;
+}
+
+
+/* Deskripsi */
+
+.accommodation-page
+  .accommodation-grid.accommodation-grid-list
+  .accommodation-card-body > p {
+  flex-shrink: 0 !important;
+
+  margin-top: 0 !important;
+  margin-bottom: 8px !important;
+}
+
+
+/* Fasilitas */
+
+.accommodation-page
+  .accommodation-grid.accommodation-grid-list
+  .accommodation-includes {
+  flex-shrink: 0 !important;
+
+  margin-bottom: 9px !important;
+}
+
+
+/* Provider + rating */
+
+.accommodation-page
+  .accommodation-grid.accommodation-grid-list
+  .accommodation-provider-row {
+  flex-shrink: 0 !important;
+
+  margin-top: 2px !important;
+  margin-bottom: 8px !important;
+}
+
+
+/* ==========================================================
+   7. HARGA + LIHAT DETAIL
+   Selalu berada di bagian bawah card.
+   ========================================================== */
+
+.accommodation-page
+  .accommodation-grid.accommodation-grid-list
+  .accommodation-price-row {
+  position: relative !important;
+
+  display: flex !important;
+  align-items: flex-end !important;
+  justify-content: space-between !important;
+
+  width: 100% !important;
+
+  margin-top: auto !important;
+  padding-top: 9px !important;
+  padding-bottom: 1px !important;
+
+  flex-shrink: 0 !important;
+
+  overflow: visible !important;
+}
+
+.accommodation-page
+  .accommodation-grid.accommodation-grid-list
+  .accommodation-price-row a,
+.accommodation-page
+  .accommodation-grid.accommodation-grid-list
+  .accommodation-price-row button {
+  flex-shrink: 0 !important;
+
+  white-space: nowrap !important;
+
+  position: relative !important;
+  bottom: auto !important;
+}
+
+
+/* ==========================================================
+   8. TABLET
+   ========================================================== */
+
+@media (max-width: 1024px) and (min-width: 641px) {
+
+  .accommodation-page .accommodation-hero {
+    min-height: 360px !important;
+    padding-bottom: 30px !important;
+  }
+
+  .accommodation-page .accommodation-hero-inner {
+    min-height: 310px !important;
+  }
+
+  .accommodation-page
+    .accommodation-grid.accommodation-grid-list
+    .accommodation-card {
+    grid-template-columns: 205px minmax(0, 1fr) !important;
+
+    height: 215px !important;
+    min-height: 215px !important;
+    max-height: 215px !important;
+  }
+
+  .accommodation-page
+    .accommodation-grid.accommodation-grid-list
+    .accommodation-card-media {
+    width: 205px !important;
+
+    height: 215px !important;
+    min-height: 215px !important;
+    max-height: 215px !important;
+  }
+
+  .accommodation-page
+    .accommodation-grid.accommodation-grid-list
+    .accommodation-card-body {
+    height: 215px !important;
+    min-height: 215px !important;
+    max-height: 215px !important;
+  }
+}
+
+
+/* ==========================================================
+   9. MOBILE
+   ========================================================== */
+
+@media (max-width: 640px) {
+
+  .accommodation-page .accommodation-hero {
+    min-height: 0 !important;
+    height: auto !important;
+
+    padding-top: 14px !important;
+    padding-bottom: 22px !important;
+  }
+
+  .accommodation-page .accommodation-hero-inner {
+    min-height: 0 !important;
+    height: auto !important;
+  }
+
+  .accommodation-page .accommodation-search {
+    margin-top: 16px !important;
+  }
+
+  .accommodation-page .accommodation-popular-section {
+    padding-top: 22px !important;
+  }
+
+  .accommodation-page
+    .accommodation-grid.accommodation-grid-list
+    .accommodation-card {
+    display: block !important;
+
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+  }
+
+  .accommodation-page
+    .accommodation-grid.accommodation-grid-list
+    .accommodation-card-media {
+    width: 100% !important;
+
+    height: 190px !important;
+    min-height: 190px !important;
+    max-height: 190px !important;
+  }
+
+  .accommodation-page
+    .accommodation-grid.accommodation-grid-list
+    .accommodation-card-body {
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+
+    overflow: visible !important;
+  }
+}
+
+/* SEGALOKA AKOMODASI HERO SEARCH + LIST FINAL END */
+
+/* SEGALOKA AKOMODASI TYPOGRAPHY HOME SYNC START */
+
+/* ==========================================================
+   BASE
+   Sinkron dengan typography Beranda Segaloka
+   ========================================================== */
+
+.accommodation-page,
+.accommodation-page button,
+.accommodation-page input,
+.accommodation-page select {
+  font-family:
+    var(--font-jakarta),
+    "Plus Jakarta Sans",
+    Inter,
+    Arial,
+    sans-serif;
+}
+
+.accommodation-page {
+  font-size: 13px;
+  line-height: 1.45;
+  color: #10254a;
+}
+
+
+/* ==========================================================
+   HERO
+   ========================================================== */
+
+.accommodation-page .accommodation-hero h1 {
+  font-size: 32px;
+  line-height: 1.08;
+  font-weight: 800;
+  letter-spacing: -0.8px;
+}
+
+.accommodation-page .accommodation-hero p {
+  font-size: 12px;
+  line-height: 1.55;
+  font-weight: 500;
+}
+
+.accommodation-page .accommodation-search-field small,
+.accommodation-page .accommodation-search-field label {
+  font-size: 9px;
+  line-height: 1.2;
+  font-weight: 600;
+}
+
+.accommodation-page .accommodation-search-field strong,
+.accommodation-page .accommodation-search-field input,
+.accommodation-page .accommodation-search-field select {
+  font-size: 11px;
+  line-height: 1.35;
+  font-weight: 700;
+}
+
+.accommodation-page .accommodation-search-button {
+  font-size: 12px;
+  font-weight: 800;
+}
+
+
+/* ==========================================================
+   SECTION HEADING
+   Mengikuti ref-section-title Beranda
+   ========================================================== */
+
+.accommodation-page .accommodation-section-heading h2,
+.accommodation-page .accommodation-results-heading h2 {
+  margin: 0;
+  font-size: 18px;
+  line-height: 1.2;
+  font-weight: 800;
+  letter-spacing: -0.25px;
+}
+
+.accommodation-page .accommodation-section-heading p,
+.accommodation-page .accommodation-results-heading p {
+  font-size: 10px;
+  line-height: 1.45;
+  font-weight: 500;
+}
+
+
+/* ==========================================================
+   POPULAR DESTINATION
+   ========================================================== */
+
+.accommodation-page .accommodation-destination-card > strong {
+  font-size: 12px;
+  line-height: 1.3;
+  font-weight: 800;
+}
+
+.accommodation-page .accommodation-destination-card > small {
+  font-size: 9px;
+  line-height: 1.3;
+  font-weight: 500;
+}
+
+.accommodation-page .accommodation-destination-image > span {
+  font-size: 9px;
+  line-height: 1;
+  font-weight: 800;
+}
+
+
+/* ==========================================================
+   PROMO BANNER
+   ========================================================== */
+
+.accommodation-page .accommodation-promo-banner > div > span {
+  font-size: 9px;
+  line-height: 1.2;
+  font-weight: 800;
+}
+
+.accommodation-page .accommodation-promo-banner > div > strong {
+  font-size: 17px;
+  line-height: 1.2;
+  font-weight: 800;
+  letter-spacing: -0.3px;
+}
+
+.accommodation-page .accommodation-promo-banner > div > small {
+  font-size: 9px;
+  line-height: 1.4;
+  font-weight: 500;
+}
+
+.accommodation-page .accommodation-promo-cta {
+  font-size: 10px;
+  font-weight: 800;
+}
+
+
+/* ==========================================================
+   COUNTRY TABS / SORT / VIEW
+   ========================================================== */
+
+.accommodation-page .accommodation-category-scroll button,
+.accommodation-page .accommodation-view-switch button,
+.accommodation-page .accommodation-sort select {
+  font-size: 10px;
+  line-height: 1;
+  font-weight: 700;
+}
+
+
+/* ==========================================================
+   SIDEBAR FILTER
+   ========================================================== */
+
+.accommodation-page .accommodation-filter-title > strong {
+  font-size: 14px;
+  line-height: 1.3;
+  font-weight: 800;
+}
+
+.accommodation-page .accommodation-filter-title button {
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.accommodation-page .accommodation-filter-group > strong {
+  font-size: 11px;
+  line-height: 1.3;
+  font-weight: 800;
+}
+
+.accommodation-page .accommodation-filter-group label,
+.accommodation-page .accommodation-filter-group label > span {
+  font-size: 10px;
+  line-height: 1.35;
+  font-weight: 500;
+}
+
+.accommodation-page .accommodation-keyword input {
+  font-size: 10px;
+  line-height: 1.3;
+  font-weight: 500;
+}
+
+.accommodation-page .accommodation-range-labels {
+  font-size: 9px;
+  line-height: 1.3;
+  font-weight: 500;
+}
+
+.accommodation-page .accommodation-stars {
+  font-size: 10px;
+  line-height: 1;
+}
+
+
+/* ==========================================================
+   PRODUCT CARD
+   Hierarchy disamakan dengan card Beranda
+   ========================================================== */
+
+.accommodation-page .accommodation-location {
+  font-size: 9px;
+  line-height: 1.3;
+  font-weight: 600;
+}
+
+.accommodation-page .accommodation-card-body h3 {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.3;
+  font-weight: 800;
+  letter-spacing: -0.15px;
+}
+
+.accommodation-page .accommodation-card-body > p {
+  font-size: 9px;
+  line-height: 1.4;
+  font-weight: 500;
+}
+
+.accommodation-page .accommodation-card-badge,
+.accommodation-page .accommodation-duration {
+  font-size: 9px;
+  line-height: 1;
+  font-weight: 800;
+}
+
+.accommodation-page .accommodation-includes span {
+  font-size: 8px;
+  line-height: 1;
+  font-weight: 700;
+}
+
+.accommodation-page .accommodation-provider small {
+  font-size: 8px;
+  line-height: 1.2;
+  font-weight: 500;
+}
+
+.accommodation-page .accommodation-provider strong {
+  font-size: 10px;
+  line-height: 1.25;
+  font-weight: 700;
+}
+
+.accommodation-page .accommodation-rating {
+  font-size: 9px;
+  line-height: 1;
+}
+
+.accommodation-page .accommodation-rating strong {
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.accommodation-page .accommodation-rating span {
+  font-size: 8px;
+  font-weight: 500;
+}
+
+.accommodation-page .accommodation-price-row small {
+  font-size: 8px;
+  line-height: 1.2;
+  font-weight: 500;
+}
+
+.accommodation-page .accommodation-price-row strong {
+  font-size: 15px;
+  line-height: 1.15;
+  font-weight: 800;
+  letter-spacing: -0.25px;
+}
+
+.accommodation-page .accommodation-price-row > div > span {
+  font-size: 8px;
+  line-height: 1.2;
+  font-weight: 500;
+}
+
+.accommodation-page .accommodation-view {
+  font-size: 9px;
+  line-height: 1;
+  font-weight: 800;
+}
+
+
+/* ==========================================================
+   EMPTY STATE
+   ========================================================== */
+
+.accommodation-page .accommodation-empty > strong {
+  font-size: 14px;
+  line-height: 1.3;
+  font-weight: 800;
+}
+
+.accommodation-page .accommodation-empty > p {
+  font-size: 10px;
+  line-height: 1.45;
+}
+
+
+/* ==========================================================
+   MOBILE
+   ========================================================== */
+
+@media (max-width: 767px) {
+
+  .accommodation-page {
+    font-size: 12px;
+  }
+
+  .accommodation-page .accommodation-hero h1 {
+    font-size: 24px;
+    line-height: 1.1;
+    letter-spacing: -0.5px;
+  }
+
+  .accommodation-page .accommodation-hero p {
+    font-size: 11px;
+  }
+
+  .accommodation-page .accommodation-section-heading h2,
+  .accommodation-page .accommodation-results-heading h2 {
+    font-size: 16px;
+  }
+
+  .accommodation-page .accommodation-card-body h3 {
+    font-size: 13px;
+  }
+
+  .accommodation-page .accommodation-price-row strong {
+    font-size: 14px;
+  }
+
+  .accommodation-page .accommodation-promo-banner > div > strong {
+    font-size: 15px;
+  }
+}
+
+/* SEGALOKA AKOMODASI TYPOGRAPHY HOME SYNC END */

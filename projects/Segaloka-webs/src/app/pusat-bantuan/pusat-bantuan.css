@@ -1,0 +1,1938 @@
+.help-page {
+  --help-blue: #0878f9;
+  --help-blue-dark: #075fc7;
+  --help-navy: #0d2447;
+  --help-text: #17345b;
+  --help-muted: #6d83a0;
+  --help-line: #dce7f2;
+  --help-soft: #eef7ff;
+  --help-soft-2: #e4f2ff;
+
+  min-height: 100vh;
+  background: #fff;
+  color: var(--help-text);
+  font-family: inherit;
+}
+
+.help-page * {
+  box-sizing: border-box;
+}
+
+.help-page button,
+.help-page input {
+  font: inherit;
+}
+
+.help-container {
+  width: min(1180px, calc(100% - 40px));
+  margin: 0 auto;
+}
+
+/* ==========================================================
+   HERO
+   ========================================================== */
+
+.help-hero {
+  position: relative;
+  min-height: 240px;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(17, 114, 205, 0.08),
+      rgba(255, 255, 255, 0.02)
+    ),
+    url("/images/hero/hero-segaloka.png") center 45% / cover no-repeat;
+  overflow: visible;
+}
+
+.help-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.02) 0%,
+      rgba(5, 77, 150, 0.04) 58%,
+      rgba(5, 57, 118, 0.15) 100%
+    );
+}
+
+.help-hero-inner {
+  position: relative;
+  z-index: 2;
+  min-height: 240px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-top: 18px;
+}
+
+.help-search {
+  width: min(760px, 76%);
+  height: 56px;
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding: 0 20px;
+  border: 1px solid rgba(214, 228, 241, 0.95);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.97);
+  box-shadow: 0 13px 32px rgba(17, 55, 92, 0.15);
+}
+
+.help-search > svg {
+  flex: 0 0 auto;
+  color: #64809e;
+}
+
+.help-search input {
+  min-width: 0;
+  flex: 1;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--help-navy);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.help-search input::placeholder {
+  color: #7c90a8;
+}
+
+.help-search-clear {
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  border: 0;
+  border-radius: 50%;
+  background: #f0f6fc;
+  color: #54708d;
+  cursor: pointer;
+}
+
+.help-featured-nav {
+  position: absolute;
+  left: 50%;
+  bottom: -27px;
+  transform: translateX(-50%);
+  width: min(930px, calc(100% - 50px));
+  min-height: 58px;
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  align-items: center;
+  padding: 7px;
+  border: 1px solid rgba(218, 229, 240, 0.95);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.97);
+  box-shadow: 0 14px 32px rgba(24, 61, 99, 0.13);
+  backdrop-filter: blur(12px);
+}
+
+.help-featured-nav button {
+  min-width: 0;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: #203d63;
+  font-size: 12px;
+  font-weight: 650;
+  cursor: pointer;
+  white-space: nowrap;
+  transition:
+    background 160ms ease,
+    color 160ms ease,
+    transform 160ms ease;
+}
+
+.help-featured-nav button:hover {
+  background: #f2f8ff;
+}
+
+.help-featured-nav button.is-active {
+  background: #e5f2ff;
+  color: var(--help-blue);
+}
+
+.help-featured-icon {
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  color: var(--help-blue);
+  background: #e8f3ff;
+}
+
+/* ==========================================================
+   MAIN
+   ========================================================== */
+
+.help-main {
+  padding: 70px 0 90px;
+  background:
+    radial-gradient(circle at 90% 15%, rgba(72, 165, 255, 0.05), transparent 30%),
+    #fff;
+}
+
+.help-layout {
+  display: grid;
+  grid-template-columns: 280px minmax(0, 1fr);
+  gap: 34px;
+  align-items: start;
+}
+
+/* ==========================================================
+   SIDEBAR
+   ========================================================== */
+
+.help-sidebar {
+  position: sticky;
+  top: 90px;
+  padding-right: 24px;
+  border-right: 1px solid var(--help-line);
+}
+
+.help-sidebar h2 {
+  margin: 0 0 18px;
+  color: #11284a;
+  font-size: 20px;
+  font-weight: 750;
+  line-height: 1.25;
+  letter-spacing: -0.025em;
+}
+
+.help-sidebar nav {
+  display: flex;
+  flex-direction: column;
+}
+
+.help-sidebar-group-start {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid #e4edf6;
+}
+
+.help-sidebar button {
+  width: 100%;
+  min-height: 46px;
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr) 18px;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px 6px 8px;
+  border: 0;
+  border-left: 3px solid transparent;
+  border-radius: 0 10px 10px 0;
+  background: transparent;
+  color: #395574;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    background 150ms ease,
+    color 150ms ease,
+    border-color 150ms ease;
+}
+
+.help-sidebar button:hover {
+  background: #f4f9ff;
+  color: var(--help-blue);
+}
+
+.help-sidebar button.is-active {
+  border-left-color: var(--help-blue);
+  background: linear-gradient(90deg, #e4f2ff, #f2f8ff);
+  color: var(--help-blue);
+}
+
+.help-sidebar-icon {
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+}
+
+.help-sidebar button > span:nth-child(2) {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.help-sidebar-chevron {
+  justify-self: end;
+}
+
+/* ==========================================================
+   CONTENT
+   ========================================================== */
+
+.help-content {
+  min-width: 0;
+}
+
+.help-breadcrumb {
+  min-height: 24px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 20px;
+  color: #8092a7;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.help-breadcrumb strong {
+  color: #637b96;
+  font-weight: 600;
+}
+
+.help-article-header {
+  margin-bottom: 22px;
+}
+
+.help-article-header h1,
+.help-results-heading h1 {
+  margin: 0;
+  color: #0c1f40;
+  font-size: clamp(30px, 3.2vw, 42px);
+  font-weight: 780;
+  line-height: 1.08;
+  letter-spacing: -0.045em;
+}
+
+.help-article-header > p,
+.help-results-heading > div > p {
+  margin: 8px 0 0;
+  color: #8192a7;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.help-article-copy {
+  max-width: 900px;
+  margin-bottom: 26px;
+}
+
+.help-article-copy p {
+  margin: 0 0 10px;
+  color: #415d7b;
+  font-size: 14px;
+  font-weight: 450;
+  line-height: 1.7;
+}
+
+/* ==========================================================
+   PLATFORM VISUAL
+   ========================================================== */
+
+.help-platform-visual {
+  position: relative;
+  min-height: 350px;
+  margin: 28px 0 28px;
+  overflow: hidden;
+  border: 1px solid #d9e9f7;
+  border-radius: 28px;
+  background:
+    radial-gradient(circle at 83% 28%, rgba(0, 126, 255, 0.18), transparent 32%),
+    radial-gradient(circle at 23% 78%, rgba(0, 126, 255, 0.12), transparent 30%),
+    linear-gradient(135deg, #f8fcff 0%, #eaf6ff 52%, #d9efff 100%);
+}
+
+.help-platform-visual::before,
+.help-platform-visual::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  border: 28px solid rgba(29, 139, 255, 0.09);
+}
+
+.help-platform-visual::before {
+  width: 260px;
+  height: 260px;
+  left: -95px;
+  bottom: -150px;
+}
+
+.help-platform-visual::after {
+  width: 340px;
+  height: 340px;
+  right: -135px;
+  bottom: -230px;
+}
+
+.help-platform-copy {
+  position: absolute;
+  z-index: 3;
+  top: 42px;
+  left: 42px;
+  width: 280px;
+}
+
+.help-platform-copy span {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--help-blue);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+.help-platform-copy strong {
+  display: block;
+  color: #10294e;
+  font-size: 22px;
+  font-weight: 750;
+  line-height: 1.2;
+  letter-spacing: -0.035em;
+}
+
+.help-platform-copy p {
+  margin: 9px 0 0;
+  color: #607a96;
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+.help-device {
+  position: absolute;
+  z-index: 2;
+}
+
+.help-device-laptop {
+  width: 52%;
+  right: 16%;
+  bottom: 25px;
+  padding: 9px 9px 19px;
+  border: 7px solid #15283e;
+  border-bottom-width: 13px;
+  border-radius: 14px 14px 8px 8px;
+  background: #172b41;
+  box-shadow: 0 18px 34px rgba(20, 63, 105, 0.2);
+}
+
+.help-device-laptop::after {
+  content: "";
+  position: absolute;
+  left: -7%;
+  right: -7%;
+  bottom: -20px;
+  height: 12px;
+  border-radius: 0 0 16px 16px;
+  background: linear-gradient(#c9d3dd, #8f9dab);
+}
+
+.help-device-screen {
+  position: relative;
+  height: 205px;
+  overflow: hidden;
+  border-radius: 5px;
+  background: #fff;
+}
+
+.help-device-screen img {
+  width: 100%;
+  height: 72px;
+  display: block;
+  object-fit: cover;
+}
+
+.help-screen-ui {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  padding: 18px;
+}
+
+.help-screen-ui span {
+  height: 84px;
+  border-radius: 8px;
+  background:
+    linear-gradient(#e4f1fd 0 45%, #fff 45% 100%);
+  border: 1px solid #dce9f5;
+}
+
+.help-device-phone {
+  width: 126px;
+  height: 258px;
+  right: 4%;
+  bottom: 19px;
+  padding: 10px 8px;
+  border: 7px solid #15283e;
+  border-radius: 27px;
+  background: #15283e;
+  box-shadow: 0 18px 35px rgba(20, 63, 105, 0.24);
+}
+
+.help-phone-notch {
+  position: absolute;
+  z-index: 2;
+  top: 5px;
+  left: 50%;
+  width: 48px;
+  height: 9px;
+  transform: translateX(-50%);
+  border-radius: 0 0 9px 9px;
+  background: #15283e;
+}
+
+.help-phone-screen {
+  height: 100%;
+  padding: 18px 8px 9px;
+  overflow: hidden;
+  border-radius: 17px;
+  background: #fff;
+}
+
+.help-phone-screen > strong {
+  display: block;
+  margin-bottom: 10px;
+  color: #0b65cf;
+  font-size: 10px;
+}
+
+.help-phone-search {
+  height: 19px;
+  margin-bottom: 10px;
+  border-radius: 999px;
+  background: #edf5fc;
+}
+
+.help-phone-icons {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 5px;
+  margin-bottom: 12px;
+}
+
+.help-phone-icons span {
+  height: 27px;
+  border-radius: 8px;
+  background: #e5f2ff;
+}
+
+.help-phone-card {
+  height: 66px;
+  margin-bottom: 8px;
+  border: 1px solid #dce8f4;
+  border-radius: 8px;
+  background:
+    linear-gradient(#dceeff 0 42%, #fff 42% 100%);
+}
+
+.help-phone-card.short {
+  height: 47px;
+}
+
+/* ==========================================================
+   SERVICES
+   ========================================================== */
+
+.help-services {
+  margin-top: 34px;
+}
+
+.help-section-heading {
+  margin-bottom: 16px;
+}
+
+.help-section-heading h2 {
+  margin: 0;
+  color: #10284b;
+  font-size: 22px;
+  font-weight: 750;
+  line-height: 1.25;
+  letter-spacing: -0.03em;
+}
+
+.help-section-heading p {
+  margin: 4px 0 0;
+  color: #71869e;
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+.help-service-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.help-service-card {
+  min-width: 0;
+  overflow: hidden;
+  padding: 0;
+  border: 1px solid #dbe7f2;
+  border-radius: 13px;
+  background: #fff;
+  box-shadow: 0 7px 20px rgba(20, 61, 102, 0.055);
+  text-align: left;
+  cursor: pointer;
+  transition:
+    transform 160ms ease,
+    box-shadow 160ms ease,
+    border-color 160ms ease;
+}
+
+.help-service-card:hover {
+  transform: translateY(-2px);
+  border-color: #bddbfa;
+  box-shadow: 0 12px 25px rgba(20, 61, 102, 0.1);
+}
+
+.help-service-image {
+  height: 92px;
+  overflow: hidden;
+  background: #ddecf9;
+}
+
+.help-service-image img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.help-service-1 .help-service-image img {
+  object-position: 52% 45%;
+}
+
+.help-service-2 .help-service-image img {
+  object-position: 68% 44%;
+}
+
+.help-service-3 .help-service-image img {
+  object-position: 15% 45%;
+}
+
+.help-service-4 .help-service-image img {
+  object-position: 5% 50%;
+}
+
+.help-service-5 .help-service-image img {
+  object-position: 78% 50%;
+}
+
+.help-service-6 .help-service-image img {
+  object-position: 36% 50%;
+}
+
+.help-service-body {
+  min-height: 82px;
+  display: grid;
+  grid-template-columns: 36px minmax(0, 1fr) 28px;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 10px 11px;
+}
+
+.help-service-icon {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #dff0ff;
+  color: var(--help-blue);
+}
+
+.help-service-copy {
+  min-width: 0;
+}
+
+.help-service-copy strong {
+  display: block;
+  margin-bottom: 2px;
+  color: #173252;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.help-service-copy small {
+  display: block;
+  color: #6e8298;
+  font-size: 9.5px;
+  line-height: 1.4;
+}
+
+.help-service-arrow {
+  width: 26px;
+  height: 26px;
+  display: grid;
+  place-items: center;
+  border: 1px solid #d4e6f8;
+  border-radius: 50%;
+  color: var(--help-blue);
+}
+
+/* ==========================================================
+   RELATED
+   ========================================================== */
+
+.help-related {
+  min-height: 190px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 30px;
+  margin-top: 34px;
+  padding: 34px;
+  border: 1px solid #dbeaf7;
+  border-radius: 22px;
+  background:
+    radial-gradient(circle at 90% 30%, rgba(40, 143, 255, 0.15), transparent 25%),
+    #f2f9ff;
+}
+
+.help-related h2 {
+  margin: 4px 0 8px;
+  color: #112b4d;
+  font-size: 24px;
+  line-height: 1.2;
+  letter-spacing: -0.035em;
+}
+
+.help-related p {
+  max-width: 560px;
+  margin: 0;
+  color: #68819b;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.help-related > svg {
+  width: 68px;
+  height: 68px;
+  padding: 18px;
+  flex: 0 0 auto;
+  border-radius: 20px;
+  background: #fff;
+  color: var(--help-blue);
+  box-shadow: 0 10px 24px rgba(19, 71, 122, 0.1);
+}
+
+.help-overline {
+  color: var(--help-blue);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+/* ==========================================================
+   SEARCH RESULTS
+   ========================================================== */
+
+.help-results-heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+.help-results-heading > button {
+  padding: 9px 14px;
+  border: 1px solid #cfe1f2;
+  border-radius: 9px;
+  background: #fff;
+  color: #42627f;
+  font-size: 11px;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+.help-result-list {
+  display: grid;
+  gap: 10px;
+}
+
+.help-result-list > button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 18px 20px;
+  border: 1px solid #dce8f3;
+  border-radius: 14px;
+  background: #fff;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    border-color 150ms ease,
+    background 150ms ease;
+}
+
+.help-result-list > button:hover {
+  border-color: #b8d8f8;
+  background: #f8fbff;
+}
+
+.help-result-list small {
+  display: block;
+  margin-bottom: 3px;
+  color: var(--help-blue);
+  font-size: 9px;
+  font-weight: 750;
+}
+
+.help-result-list strong {
+  display: block;
+  color: #163150;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.help-result-list p {
+  margin: 4px 0 0;
+  color: #72869c;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.help-result-list svg {
+  flex: 0 0 auto;
+  color: var(--help-blue);
+}
+
+.help-empty {
+  padding: 60px 30px;
+  border: 1px dashed #cbddec;
+  border-radius: 20px;
+  background: #f7fbff;
+  text-align: center;
+}
+
+.help-empty svg {
+  color: var(--help-blue);
+}
+
+.help-empty h2 {
+  margin: 14px 0 6px;
+  color: #183655;
+  font-size: 20px;
+}
+
+.help-empty p {
+  max-width: 520px;
+  margin: 0 auto;
+  color: #71869b;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+/* ==========================================================
+   TABLET
+   ========================================================== */
+
+@media (max-width: 1024px) {
+  .help-container {
+    width: min(100% - 30px, 1000px);
+  }
+
+  .help-layout {
+    grid-template-columns: 230px minmax(0, 1fr);
+    gap: 24px;
+  }
+
+  .help-sidebar {
+    padding-right: 16px;
+  }
+
+  .help-featured-nav {
+    overflow-x: auto;
+    grid-template-columns: repeat(6, minmax(135px, 1fr));
+    justify-content: start;
+  }
+
+  .help-platform-copy {
+    width: 230px;
+    left: 26px;
+  }
+
+  .help-device-laptop {
+    width: 55%;
+    right: 14%;
+  }
+
+  .help-service-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* ==========================================================
+   MOBILE
+   ========================================================== */
+
+@media (max-width: 760px) {
+  .help-container {
+    width: min(100% - 24px, 720px);
+  }
+
+  .help-hero {
+    min-height: 210px;
+  }
+
+  .help-hero-inner {
+    min-height: 210px;
+    justify-content: center;
+    padding-bottom: 16px;
+  }
+
+  .help-search {
+    width: 100%;
+    height: 50px;
+    padding: 0 16px;
+  }
+
+  .help-featured-nav {
+    position: absolute;
+    bottom: -25px;
+    width: 100%;
+    grid-template-columns: repeat(6, 126px);
+    justify-content: start;
+    overflow-x: auto;
+    border-radius: 16px;
+    scrollbar-width: none;
+  }
+
+  .help-featured-nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .help-featured-nav button {
+    height: 42px;
+    font-size: 11px;
+  }
+
+  .help-main {
+    padding-top: 58px;
+  }
+
+  .help-layout {
+    display: block;
+  }
+
+  .help-sidebar {
+    position: static;
+    margin-bottom: 26px;
+    padding: 0;
+    border-right: 0;
+  }
+
+  .help-sidebar h2 {
+    font-size: 18px;
+  }
+
+  .help-sidebar nav {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 7px;
+  }
+
+  .help-sidebar-group-start {
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  .help-sidebar button {
+    min-height: 50px;
+    grid-template-columns: 30px minmax(0, 1fr);
+    border: 1px solid #e0eaf4;
+    border-left: 1px solid #e0eaf4;
+    border-radius: 11px;
+    background: #fff;
+  }
+
+  .help-sidebar button.is-active {
+    border-color: #a8d3ff;
+    background: #eaf5ff;
+  }
+
+  .help-sidebar-chevron {
+    display: none;
+  }
+
+  .help-sidebar button > span:nth-child(2) {
+    font-size: 11px;
+  }
+
+  .help-breadcrumb {
+    margin-bottom: 14px;
+  }
+
+  .help-article-header h1,
+  .help-results-heading h1 {
+    font-size: 29px;
+  }
+
+  .help-article-copy p {
+    font-size: 13px;
+  }
+
+  .help-platform-visual {
+    min-height: 480px;
+    border-radius: 20px;
+  }
+
+  .help-platform-copy {
+    position: relative;
+    top: auto;
+    left: auto;
+    width: auto;
+    padding: 25px 22px 0;
+  }
+
+  .help-platform-copy strong {
+    max-width: 320px;
+    font-size: 20px;
+  }
+
+  .help-device-laptop {
+    width: 75%;
+    right: auto;
+    left: 5%;
+    bottom: 38px;
+  }
+
+  .help-device-phone {
+    right: 5%;
+    bottom: 24px;
+  }
+
+  .help-service-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .help-service-image {
+    height: 120px;
+  }
+
+  .help-results-heading {
+    display: block;
+  }
+
+  .help-results-heading > button {
+    margin-top: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .help-sidebar nav {
+    grid-template-columns: 1fr;
+  }
+
+  .help-platform-visual {
+    min-height: 450px;
+  }
+
+  .help-device-laptop {
+    width: 82%;
+    left: 3%;
+    bottom: 46px;
+  }
+
+  .help-device-screen {
+    height: 170px;
+  }
+
+  .help-device-phone {
+    width: 103px;
+    height: 220px;
+    right: 2%;
+  }
+
+  .help-service-body {
+    min-height: 76px;
+  }
+}
+/* ==========================================================
+   HELP CATEGORY TOPICS
+   ========================================================== */
+
+.help-category-topics {
+  margin: 30px 0 34px;
+  padding-top: 26px;
+  border-top: 1px solid #e4edf6;
+}
+
+.help-category-topics-heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 16px;
+}
+
+.help-category-topics-heading h2 {
+  margin: 3px 0 0;
+  color: #102846;
+  font-size: 20px;
+  font-weight: 750;
+  line-height: 1.25;
+  letter-spacing: -0.025em;
+}
+
+.help-category-topics-heading p {
+  margin: 5px 0 0;
+  color: #71869c;
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+.help-topic-count {
+  min-width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  border: 1px solid #cfe4f9;
+  border-radius: 999px;
+  background: #eef7ff;
+  color: #087cf0;
+  font-size: 12px;
+  font-weight: 750;
+}
+
+.help-topic-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.help-topic-list > button {
+  width: 100%;
+  min-width: 0;
+  min-height: 92px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 15px 16px;
+  border: 1px solid #dce8f3;
+  border-radius: 13px;
+  background: #fff;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    border-color 160ms ease,
+    background 160ms ease,
+    box-shadow 160ms ease,
+    transform 160ms ease;
+}
+
+.help-topic-list > button:hover {
+  transform: translateY(-1px);
+  border-color: #b9daf9;
+  background: #fbfdff;
+  box-shadow: 0 8px 20px rgba(19, 67, 112, 0.06);
+}
+
+.help-topic-list > button.is-active {
+  border-color: #9dceff;
+  background: #f1f8ff;
+}
+
+.help-topic-main {
+  min-width: 0;
+}
+
+.help-topic-main strong {
+  display: block;
+  margin: 0;
+  color: #153150;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.help-topic-main p {
+  display: -webkit-box;
+  overflow: hidden;
+  margin: 5px 0 0;
+  color: #74889e;
+  font-size: 11px;
+  font-weight: 450;
+  line-height: 1.5;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.help-topic-action {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: 0 0 auto;
+  color: #087cf0;
+}
+
+.help-topic-action > span {
+  display: none;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+[dir="rtl"] .help-topic-list > button {
+  text-align: right;
+}
+
+[dir="rtl"] .help-topic-action svg,
+[dir="rtl"] .help-sidebar-chevron,
+[dir="rtl"] .help-breadcrumb svg {
+  transform: rotate(180deg);
+}
+
+@media (max-width: 760px) {
+  .help-category-topics {
+    margin-top: 24px;
+    padding-top: 22px;
+  }
+
+  .help-topic-list {
+    grid-template-columns: 1fr;
+  }
+
+  .help-category-topics-heading h2 {
+    font-size: 18px;
+  }
+
+  .help-topic-list > button {
+    min-height: 82px;
+    padding: 13px 14px;
+  }
+}
+/* ==========================================================
+   SEGALOKA HELP CENTER — VISUAL ARTICLE V1
+   ========================================================== */
+
+.help-article-steps {
+  max-width: 900px;
+  display: grid;
+  gap: 22px;
+  margin: 8px 0 34px;
+}
+
+.help-article-step {
+  overflow: hidden;
+  border: 1px solid #dce8f3;
+  border-radius: 20px;
+  background: #fff;
+  box-shadow: 0 10px 30px rgba(17, 54, 92, 0.055);
+}
+
+.help-article-step-copy {
+  display: grid;
+  grid-template-columns: 42px minmax(0, 1fr);
+  gap: 14px;
+  padding: 20px 22px 18px;
+}
+
+.help-article-step-number {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border-radius: 13px;
+  background: #087cf0;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.help-article-step-copy h2 {
+  margin: 1px 0 7px;
+  color: #102846;
+  font-size: 17px;
+  font-weight: 760;
+  line-height: 1.3;
+  letter-spacing: -0.02em;
+}
+
+.help-article-step-copy p {
+  margin: 0;
+  color: #526d88;
+  font-size: 13px;
+  font-weight: 450;
+  line-height: 1.7;
+}
+
+.help-article-step-visual {
+  margin: 0;
+  padding: 0 22px 22px;
+}
+
+.help-article-step-visual img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 560px;
+  object-fit: contain;
+  object-position: top center;
+  border: 1px solid #e2ebf4;
+  border-radius: 14px;
+  background: #f7faff;
+}
+
+[dir="rtl"] .help-article-step-copy {
+  text-align: right;
+}
+
+@media (max-width: 760px) {
+  .help-article-steps {
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+
+  .help-article-step {
+    border-radius: 17px;
+  }
+
+  .help-article-step-copy {
+    grid-template-columns: 36px minmax(0, 1fr);
+    gap: 11px;
+    padding: 16px 15px 14px;
+  }
+
+  .help-article-step-number {
+    width: 36px;
+    height: 36px;
+    border-radius: 11px;
+    font-size: 11px;
+  }
+
+  .help-article-step-copy h2 {
+    margin-top: 0;
+    font-size: 15px;
+  }
+
+  .help-article-step-copy p {
+    font-size: 12.5px;
+    line-height: 1.65;
+  }
+
+  .help-article-step-visual {
+    padding: 0 12px 12px;
+  }
+
+  .help-article-step-visual img {
+    max-height: none;
+    border-radius: 12px;
+  }
+}
+/* SEGALOKA HELP ARTICLE TITLE SIZE V1 */
+
+/*
+ * Judul utama artikel Pusat Bantuan.
+ * Tidak memengaruhi judul Topik Bantuan,
+ * card, sidebar, maupun hero.
+ */
+
+.help-article-header h1,
+.help-article h1 {
+  font-size: 36px !important;
+  line-height: 1.08 !important;
+  letter-spacing: -0.035em !important;
+  max-width: 900px;
+}
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .help-article-header h1,
+  .help-article h1 {
+    font-size: 32px !important;
+    line-height: 1.1 !important;
+  }
+}
+
+/* Mobile */
+@media (max-width: 760px) {
+  .help-article-header h1,
+  .help-article h1 {
+    font-size: 28px !important;
+    line-height: 1.12 !important;
+    letter-spacing: -0.025em !important;
+  }
+}
+
+/* Mobile kecil */
+@media (max-width: 480px) {
+  .help-article-header h1,
+  .help-article h1 {
+    font-size: 26px !important;
+  }
+}
+
+/* END SEGALOKA HELP ARTICLE TITLE SIZE V1 */
+
+/* SEGALOKA HELP MORE CANONICAL V3 */
+
+/*
+ * CTA akhir artikel Pusat Bantuan.
+ * Desktop/tablet sticky dan compact.
+ * Mobile non-sticky karena ada bottom navigation.
+ */
+
+.help-more,
+.help-more-card {
+  position: sticky !important;
+  bottom: 14px !important;
+  z-index: 12 !important;
+
+  width: 100% !important;
+  min-height: 0 !important;
+  height: 108px !important;
+
+  padding: 16px 28px !important;
+  margin-top: 24px !important;
+  margin-bottom: 14px !important;
+
+  box-sizing: border-box !important;
+  overflow: hidden !important;
+
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+
+  border-radius: 20px !important;
+}
+
+/* Kontainer teks */
+.help-more > div,
+.help-more-card > div {
+  min-width: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Label kategori */
+.help-more small,
+.help-more-card small,
+.help-more .help-more-label,
+.help-more-card .help-more-label {
+  display: block !important;
+
+  margin: 0 0 4px !important;
+  padding: 0 !important;
+
+  font-size: 10px !important;
+  line-height: 1.2 !important;
+}
+
+/* Judul */
+.help-more h2,
+.help-more-card h2 {
+  margin: 0 0 4px !important;
+  padding: 0 !important;
+
+  font-size: 22px !important;
+  line-height: 1.15 !important;
+  letter-spacing: -0.025em !important;
+}
+
+/* Deskripsi */
+.help-more p,
+.help-more-card p {
+  margin: 0 !important;
+  padding: 0 !important;
+
+  font-size: 12px !important;
+  line-height: 1.35 !important;
+}
+
+/* Search action */
+.help-more button,
+.help-more-card button,
+.help-more .help-more-action,
+.help-more-card .help-more-action {
+  flex: 0 0 48px !important;
+
+  width: 48px !important;
+  height: 48px !important;
+  min-width: 48px !important;
+  min-height: 48px !important;
+
+  margin: 0 0 0 22px !important;
+  padding: 0 !important;
+
+  border-radius: 15px !important;
+}
+
+/* Arabic RTL */
+[dir="rtl"] .help-more button,
+[dir="rtl"] .help-more-card button,
+[dir="rtl"] .help-more .help-more-action,
+[dir="rtl"] .help-more-card .help-more-action {
+  margin-left: 0 !important;
+  margin-right: 22px !important;
+}
+
+/* Tablet */
+@media (max-width: 1024px) {
+
+  .help-more,
+  .help-more-card {
+    bottom: 12px !important;
+    height: 102px !important;
+
+    padding: 14px 22px !important;
+    margin-top: 22px !important;
+
+    border-radius: 18px !important;
+  }
+
+  .help-more h2,
+  .help-more-card h2 {
+    font-size: 20px !important;
+  }
+
+  .help-more button,
+  .help-more-card button,
+  .help-more .help-more-action,
+  .help-more-card .help-more-action {
+    flex-basis: 46px !important;
+
+    width: 46px !important;
+    height: 46px !important;
+    min-width: 46px !important;
+    min-height: 46px !important;
+  }
+}
+
+/*
+ * Mobile:
+ * tidak sticky supaya tidak bertabrakan dengan
+ * bottom navigation marketplace.
+ */
+@media (max-width: 760px) {
+
+  .help-more,
+  .help-more-card {
+    position: relative !important;
+    bottom: auto !important;
+    z-index: auto !important;
+
+    height: auto !important;
+    min-height: 88px !important;
+
+    padding: 13px 15px !important;
+    margin-top: 20px !important;
+    margin-bottom: 14px !important;
+
+    border-radius: 16px !important;
+  }
+
+  .help-more h2,
+  .help-more-card h2 {
+    font-size: 18px !important;
+    line-height: 1.15 !important;
+  }
+
+  .help-more p,
+  .help-more-card p {
+    font-size: 11px !important;
+    line-height: 1.35 !important;
+  }
+
+  .help-more button,
+  .help-more-card button,
+  .help-more .help-more-action,
+  .help-more-card .help-more-action {
+    flex-basis: 42px !important;
+
+    width: 42px !important;
+    height: 42px !important;
+    min-width: 42px !important;
+    min-height: 42px !important;
+
+    margin-left: 12px !important;
+
+    border-radius: 13px !important;
+  }
+
+  [dir="rtl"] .help-more button,
+  [dir="rtl"] .help-more-card button,
+  [dir="rtl"] .help-more .help-more-action,
+  [dir="rtl"] .help-more-card .help-more-action {
+    margin-left: 0 !important;
+    margin-right: 12px !important;
+  }
+}
+
+/* END SEGALOKA HELP MORE CANONICAL V3 */
+
+/* SEGALOKA HELP CENTER — VISA FEATURED NAV V1 */
+
+/*
+ * Featured Help Center sekarang 7 item.
+ * Jangan memperbesar container hero.
+ * Item menyesuaikan ruang yang tersedia.
+ */
+.help-featured-nav {
+  overflow: visible;
+}
+
+.help-featured-nav > * {
+  min-width: 0;
+}
+
+@media (max-width: 1180px) {
+  .help-featured-nav {
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .help-featured-nav::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* SEGALOKA HELP CENTER — FEATURED NAV ONE ROW V1 */
+
+/*
+ * Desktop:
+ * seluruh kategori utama Help Center wajib satu baris.
+ * 7 item:
+ * Umrah, Haji, Halal Tour, Tour Domestic,
+ * Tour International, SegaDeals, Visa.
+ */
+@media (min-width: 1181px) {
+  .help-featured-nav {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 8px !important;
+    overflow: visible !important;
+  }
+
+  .help-featured-nav > * {
+    flex: 1 1 0 !important;
+    min-width: 0 !important;
+    width: auto !important;
+    max-width: none !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+  }
+
+  .help-featured-nav button,
+  .help-featured-nav a {
+    min-width: 0 !important;
+    width: 100% !important;
+    white-space: nowrap !important;
+  }
+}
+
+/*
+ * Tablet/mobile:
+ * tetap satu baris tetapi boleh horizontal scroll.
+ * Jangan dibuat dua baris.
+ */
+@media (max-width: 1180px) {
+  .help-featured-nav {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .help-featured-nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .help-featured-nav > * {
+    flex: 0 0 auto !important;
+  }
+
+  .help-featured-nav button,
+  .help-featured-nav a {
+    white-space: nowrap !important;
+  }
+}
+
+/* SEGALOKA HELP CENTER — FEATURED NAV PRECISION V2 */
+
+/*
+ * Desktop:
+ * 7 kategori = 7 kolom identik.
+ * Tidak wrap.
+ * Tidak ada item yang membesar sendiri.
+ */
+@media (min-width: 1181px) {
+  .help-featured-nav {
+    display: grid !important;
+    grid-template-columns: repeat(7, minmax(0, 1fr)) !important;
+    align-items: center !important;
+
+    width: min(1180px, calc(100% - 64px)) !important;
+    max-width: 1180px !important;
+
+    margin-left: auto !important;
+    margin-right: auto !important;
+
+    padding: 7px 8px !important;
+    gap: 4px !important;
+
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+  }
+
+  .help-featured-nav > * {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+
+    margin: 0 !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    box-sizing: border-box !important;
+  }
+
+  .help-featured-nav button,
+  .help-featured-nav a {
+    width: 100% !important;
+    min-width: 0 !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    gap: 9px !important;
+
+    margin: 0 !important;
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+
+    white-space: nowrap !important;
+    box-sizing: border-box !important;
+  }
+
+  /*
+   * Icon tidak boleh berubah ukuran karena label panjang.
+   */
+  .help-featured-nav svg {
+    flex: 0 0 auto !important;
+  }
+}
+
+/*
+ * Tablet/mobile:
+ * tetap satu baris horizontal.
+ * Jangan paksa 7 kolom sempit.
+ */
+@media (max-width: 1180px) {
+  .help-featured-nav {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+
+    justify-content: flex-start !important;
+    align-items: center !important;
+
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+
+    scrollbar-width: none !important;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .help-featured-nav::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  .help-featured-nav > * {
+    flex: 0 0 auto !important;
+    width: auto !important;
+  }
+
+  .help-featured-nav button,
+  .help-featured-nav a {
+    width: auto !important;
+    white-space: nowrap !important;
+  }
+}
+
+/* ==========================================================
+   SEGALOKA HELP CENTER — CONTACT CENTER V1
+   ========================================================== */
+
+.help-contact-center {
+  width: 100%;
+  max-width: 920px;
+  margin: 4px 0 34px;
+}
+
+.help-contact-intro {
+  max-width: 720px;
+  margin: 0 0 20px;
+  color: #52677d;
+  font-size: 15px;
+  line-height: 1.75;
+}
+
+.help-contact-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.help-contact-card {
+  min-width: 0;
+  min-height: 210px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  border: 1px solid #dce8f3;
+  border-radius: 18px;
+  background: #ffffff;
+  box-shadow: 0 8px 28px rgba(18, 55, 91, 0.055);
+}
+
+.help-contact-icon {
+  width: 44px;
+  height: 44px;
+  flex: 0 0 44px;
+  display: grid;
+  place-items: center;
+  border-radius: 14px;
+  background: #edf7ff;
+  color: #0876c9;
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.help-contact-card-copy {
+  min-width: 0;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}
+
+.help-contact-card-copy h2 {
+  margin: 0 0 8px;
+  color: #132f4c;
+  font-size: 17px;
+  font-weight: 800;
+  line-height: 1.35;
+}
+
+.help-contact-card-copy p {
+  margin: 0;
+  color: #60758a;
+  font-size: 13px;
+  line-height: 1.65;
+}
+
+.help-contact-status {
+  margin-top: auto;
+  padding-top: 16px;
+  color: #0876c9;
+  font-size: 12px;
+  font-weight: 750;
+}
+
+.help-contact-note {
+  margin-top: 16px;
+  padding: 18px 20px;
+  border: 1px solid #d8e8f5;
+  border-radius: 16px;
+  background: #f7fbff;
+}
+
+.help-contact-note strong {
+  display: block;
+  margin-bottom: 5px;
+  color: #173a5d;
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.help-contact-note p {
+  margin: 0;
+  color: #60758a;
+  font-size: 13px;
+  line-height: 1.65;
+}
+
+[dir="rtl"] .help-contact-center,
+[dir="rtl"] .help-contact-card-copy,
+[dir="rtl"] .help-contact-note {
+  text-align: right;
+}
+
+@media (max-width: 980px) {
+  .help-contact-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .help-contact-card {
+    min-height: 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .help-contact-center {
+    margin-bottom: 24px;
+  }
+
+  .help-contact-intro {
+    margin-bottom: 16px;
+    font-size: 14px;
+  }
+
+  .help-contact-card {
+    padding: 17px;
+    border-radius: 16px;
+  }
+
+  .help-contact-note {
+    padding: 16px 17px;
+  }
+}
+/* SEGALOKA HELP CONTACT LINK V1 */
+
+.help-contact-card-link {
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    border-color 160ms ease,
+    box-shadow 160ms ease,
+    transform 160ms ease;
+}
+
+.help-contact-card-link:hover {
+  border-color: #a9d5f5;
+  box-shadow: 0 12px 32px rgba(18, 74, 126, 0.10);
+  transform: translateY(-2px);
+}
+
+.help-contact-card-link:focus-visible {
+  outline: 3px solid rgba(8, 118, 201, 0.20);
+  outline-offset: 3px;
+}

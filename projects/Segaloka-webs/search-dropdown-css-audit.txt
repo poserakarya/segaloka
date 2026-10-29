@@ -1,0 +1,290 @@
+﻿
+========== src\app\hero-canonical.css [14890-14965] ==========
+14890: 
+14891:   font-weight: 800 !important;
+14892: 
+14893:   cursor: pointer !important;
+14894: }
+14895: 
+14896: 
+14897: .search-edit-submit:disabled {
+14898:   background: #acd0fa !important;
+14899: 
+14900:   cursor: not-allowed !important;
+14901: }
+14902: 
+14903: 
+14904: /* DROPDOWN */
+14905: 
+14906: .search-edit-dropdown {
+14907:   position: absolute !important;
+14908: 
+14909:   top: calc(100% + 8px) !important;
+14910: 
+14911:   left: 0 !important;
+14912: 
+14913:   z-index: 500 !important;
+14914: 
+14915:   width: 270px !important;
+14916: 
+14917:   padding: 14px !important;
+14918: 
+14919:   border: 1px solid #dce7f1 !important;
+14920: 
+14921:   border-radius: 14px !important;
+14922: 
+14923:   background: #ffffff !important;
+14924: 
+14925:   box-shadow:
+14926:     0 18px 45px
+14927:     rgba(18,52,87,.16) !important;
+14928: }
+14929: 
+14930: 
+14931: .search-edit-dropdown > strong {
+14932:   display: block !important;
+14933: 
+14934:   margin-bottom: 10px !important;
+14935: 
+14936:   color: #102e55 !important;
+14937: 
+14938:   font-size: 12px !important;
+14939: }
+14940: 
+14941: 
+14942: .search-edit-option-list {
+14943:   display: flex !important;
+14944: 
+14945:   flex-direction: column !important;
+14946: 
+14947:   gap: 4px !important;
+14948: }
+14949: 
+14950: 
+14951: .search-edit-option-list button {
+14952:   min-height: 37px !important;
+14953: 
+14954:   padding: 0 10px !important;
+14955: 
+14956:   border: 0 !important;
+14957: 
+14958:   border-radius: 8px !important;
+14959: 
+14960:   background: transparent !important;
+14961: 
+14962:   color: #516a84 !important;
+14963: 
+14964:   font-size: 10px !important;
+14965: 
+
+========== src\app\hero-canonical.css [15135-15190] ==========
+15135: 
+15136: }
+15137: 
+15138: 
+15139: /* MOBILE */
+15140: 
+15141: @media (max-width: 700px) {
+15142: 
+15143:   .search-edit-bar {
+15144:     grid-template-columns: 1fr !important;
+15145: 
+15146:     padding: 9px !important;
+15147:   }
+15148: 
+15149:   .search-edit-submit {
+15150:     grid-column: auto !important;
+15151:   }
+15152: 
+15153:   .search-edit-dropdown {
+15154:     position: fixed !important;
+15155: 
+15156:     top: 50% !important;
+15157: 
+15158:     left: 14px !important;
+15159: 
+15160:     right: 14px !important;
+15161: 
+15162:     width: auto !important;
+15163: 
+15164:     max-height: 75dvh !important;
+15165: 
+15166:     overflow-y: auto !important;
+15167: 
+15168:     transform: translateY(-50%) !important;
+15169: 
+15170:     z-index: 9900 !important;
+15171:   }
+15172: 
+15173: }
+15174: 
+15175: /* SEGALOKA SEARCH ACTIVE FINAL END */
+15176: 
+15177: 
+15178: /* SEGALOKA PROMO BLUE START */
+15179: 
+15180: /* Banner promo utama */
+15181: .reference-running-promo article,
+15182: .reference-main-banner article,
+15183: .promo-special-banner,
+15184: .promo-banner {
+15185:   background:
+15186:     linear-gradient(
+15187:       135deg,
+15188:       #0b63f6 0%,
+15189:       #0878f9 55%,
+15190:       #0b5ed7 100%
+
+========== src\app\globals.css [4040-4095] ==========
+ 4040: 
+ 4041: .search-unified-bar {
+ 4042:   position: relative;
+ 4043:   isolation: isolate;
+ 4044: }
+ 4045: 
+ 4046: .search-unified-bar .search-edit-control {
+ 4047:   position: relative;
+ 4048: }
+ 4049: 
+ 4050: .search-unified-dropdown {
+ 4051:   position: absolute;
+ 4052:   z-index: 1000;
+ 4053:   top: calc(100% + 10px);
+ 4054:   left: 0;
+ 4055:   width: 420px;
+ 4056:   max-width: min(420px, calc(100vw - 32px));
+ 4057:   padding: 22px;
+ 4058:   border: 1px solid #dbe6f2;
+ 4059:   border-radius: 20px;
+ 4060:   background: #ffffff;
+ 4061:   color: #102a4c;
+ 4062:   box-shadow:
+ 4063:     0 24px 60px rgba(15, 42, 76, 0.14),
+ 4064:     0 6px 18px rgba(15, 42, 76, 0.06);
+ 4065: }
+ 4066: 
+ 4067: [dir="rtl"] .search-unified-dropdown {
+ 4068:   left: auto;
+ 4069:   right: 0;
+ 4070: }
+ 4071: 
+ 4072: .search-unified-dropdown *,
+ 4073: .search-unified-dropdown *::before,
+ 4074: .search-unified-dropdown *::after {
+ 4075:   box-sizing: border-box;
+ 4076: }
+ 4077: 
+ 4078: .search-unified-dropdown-head {
+ 4079:   display: flex;
+ 4080:   align-items: flex-start;
+ 4081:   justify-content: space-between;
+ 4082:   gap: 16px;
+ 4083:   margin-bottom: 18px;
+ 4084: }
+ 4085: 
+ 4086: .search-unified-dropdown-head > strong,
+ 4087: .search-unified-dropdown-head > div > strong {
+ 4088:   display: block;
+ 4089:   color: #102a4c;
+ 4090:   font-size: 18px;
+ 4091:   font-weight: 750;
+ 4092:   line-height: 1.3;
+ 4093: }
+ 4094: 
+ 4095: .search-unified-dropdown-head > div > small {
+
+========== src\app\globals.css [5140-5195] ==========
+ 5140:   width: min(720px, calc(100vw - 32px)) !important;
+ 5141:   min-width: min(720px, calc(100vw - 32px)) !important;
+ 5142:   max-width: 720px !important;
+ 5143: 
+ 5144:   padding: 24px 28px 28px !important;
+ 5145: 
+ 5146:   box-sizing: border-box !important;
+ 5147: 
+ 5148:   border-radius: 20px !important;
+ 5149: 
+ 5150:   overflow: visible !important;
+ 5151: }
+ 5152: 
+ 5153: 
+ 5154: /*
+ 5155:  * Beberapa implementasi saat ini hanya memakai popover umum.
+ 5156:  * Ukuran kalender dikunci dari keberadaan calendar-grid.
+ 5157:  */
+ 5158: 
+ 5159: .search-unified-bar
+ 5160:   .search-unified-popover:has(.search-unified-calendar-grid) {
+ 5161:   width: min(720px, calc(100vw - 32px)) !important;
+ 5162:   min-width: min(720px, calc(100vw - 32px)) !important;
+ 5163:   max-width: 720px !important;
+ 5164: 
+ 5165:   padding: 24px 28px 28px !important;
+ 5166: 
+ 5167:   box-sizing: border-box !important;
+ 5168: 
+ 5169:   border-radius: 20px !important;
+ 5170: 
+ 5171:   overflow: visible !important;
+ 5172: }
+ 5173: 
+ 5174: 
+ 5175: /* ============================================================
+ 5176:    HEADER / TITLE
+ 5177:    ============================================================ */
+ 5178: 
+ 5179: .search-unified-bar
+ 5180:   .search-unified-popover:has(.search-unified-calendar-grid)
+ 5181:   > h2,
+ 5182: 
+ 5183: .search-unified-bar
+ 5184:   .search-unified-popover:has(.search-unified-calendar-grid)
+ 5185:   > h3,
+ 5186: 
+ 5187: .search-unified-bar
+ 5188:   .search-unified-popover:has(.search-unified-calendar-grid)
+ 5189:   .search-unified-popover-title {
+ 5190:   margin: 0 0 22px !important;
+ 5191: 
+ 5192:   font-size: 20px !important;
+ 5193:   line-height: 1.25 !important;
+ 5194:   font-weight: 700 !important;
+ 5195: }
+
+========== src\components\search\SearchEditBar.tsx [755-790] ==========
+  755:       currentYear,
+  756:       currentMonth + 1,
+  757:       1,
+  758:     );
+  759: 
+  760:   const monthOneDays =
+  761:     buildMonthDays(
+  762:       currentYear,
+  763:       currentMonth,
+  764:     );
+  765: 
+  766:   const monthTwoDays =
+  767:     buildMonthDays(
+  768:       nextMonth.getFullYear(),
+  769:       nextMonth.getMonth(),
+  770:     );
+  771: 
+  772:   const selectedDateObject =
+  773:     parseDateValue(
+  774:       selectedDate,
+  775:     );
+  776: 
+  777:   function renderMonth(
+  778:     year: number,
+  779:     month: number,
+  780:     days: Array<number | null>,
+  781:   ) {
+  782:     return (
+  783:       <div className="search-unified-calendar-month">
+  784:         <strong className="search-unified-calendar-month-title">
+  785:           {t.months[month]} {year}
+  786:         </strong>
+  787: 
+  788:         <div className="search-unified-calendar-weekdays">
+  789:           {t.weekdays.map(
+  790:             (weekday, index) => (

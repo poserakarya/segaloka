@@ -1,0 +1,1865 @@
+{
+  "total": 265,
+  "pages": 89,
+  "assets": 176,
+  "failed": 0,
+  "redirects": 3,
+  "queueRemaining": 0,
+  "results": [
+    {
+      "type": "PAGE",
+      "url": "http://127.0.0.1:3000/",
+      "finalUrl": "http://127.0.0.1:3000/",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "PAGE",
+      "url": "http://127.0.0.1:3000/affiliate",
+      "finalUrl": "http://127.0.0.1:3000/affiliate",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "PAGE",
+      "url": "http://127.0.0.1:3000/akomodasi",
+      "finalUrl": "http://127.0.0.1:3000/akomodasi",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "PAGE",
+      "url": "http://127.0.0.1:3000/atraksi",
+      "finalUrl": "http://127.0.0.1:3000/atraksi",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "PAGE",
+      "url": "http://127.0.0.1:3000/bantuan",
+      "finalUrl": "http://127.0.0.1:3000/pusat-bantuan?artikel=other-hubungi-kami",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "PAGE",
+      "url": "http://127.0.0.1:3000/cara-pesan",
+      "finalUrl": "http://127.0.0.1:3000/pusat-bantuan?artikel=booking-alur-pemesanan",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "PAGE",
+      "url": "http://127.0.0.1:3000/daftar",
+      "finalUrl": "http://127.0.0.1:3000/daftar",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "PAGE",
+      "url": "http://127.0.0.1:3000/daftar-travel",
+      "finalUrl": "http://127.0.0.1:3000/partner/travel/daftar",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "PAGE",
+      "url": "http://127.0.0.1:3000/daftar-vendor",
+      "finalUrl": "http://127.0.0.1:3000/daftar-vendor",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "PAGE",
+      "url": "http://127.0.0.1:3000/daftar-vendor/registrasi",
+      "finalUrl": "http://127.0.0.1:3000/daftar-vendor/registrasi",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "PAGE",
+      "url": "http://127.0.0.1:3000/destinasi",
+      "finalUrl": "http://127.0.0.1:3000/destinasi",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "PAGE",
+      "url": "http://127.0.0.1:3000/inspirasi",
+      "finalUrl": "http://127.0.0.1:3000/inspirasi",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "PAGE",
+      "url": "http://127.0.0.1:3000/karier",
+      "finalUrl": "http://127.0.0.1:3000/karier",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "PAGE",
+      "url": "http://127.0.0.1:3000/kebijakan-privasi",
+      "finalUrl": "http://127.0.0.1:3000/kebijakan-privasi",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "PAGE",
+      "url": "http://127.0.0.1:3000/masuk",
+      "finalUrl": "http://127.0.0.1:3000/masuk",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "PAGE",
+      "url": "http://127.0.0.1:3000/mitra",
+      "finalUrl": "http://127.0.0.1:3000/mitra",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "PAGE",
+      "url": "http://127.0.0.1:3000/notifikasi",
+      "finalUrl": "http://127.0.0.1:3000/notifikasi",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "PAGE",
+      "url": "http://127.0.0.1:3000/partner/travel",
+      "finalUrl": "http://127.0.0.1:3000/partner/travel",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "PAGE",
+      "url": "http://127.0.0.1:3000/partner/travel/corporate",
+      "finalUrl": "http://127.0.0.1:3000/partner/travel/corporate",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "PAGE",
+      "url": "http://127.0.0.1:3000/partner/travel/daftar",
+      "finalUrl": "http://127.0.0.1:3000/partner/travel/daftar",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "PAGE",
+      "url": "http://127.0.0.1:3000/partner/travel/enterprise",
+      "finalUrl": "http://127.0.0.1:3000/partner/travel/enterprise",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "PAGE",
+      "url": "http://127.0.0.1:3000/partner/travel/loyalty",
+      "finalUrl": "http://127.0.0.1:3000/partner/travel/loyalty",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "PAGE",
+      "url": "http://127.0.0.1:3000/partner/travel/partner-network",
+      "finalUrl": "http://127.0.0.1:3000/partner/travel/partner-network",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "PAGE",
+      "url": "http://127.0.0.1:3000/partner/travel/perjalanan",
+      "finalUrl": "http://127.0.0.1:3000/partner/travel/perjalanan",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "PAGE",
+      "url": "http://127.0.0.1:3000/partner/travel/voucher-promo",
+      "finalUrl": "http://127.0.0.1:3000/partner/travel/voucher-promo",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "PAGE",
+      "url": "http://127.0.0.1:3000/pesanan",
+      "finalUrl": "http://127.0.0.1:3000/pesanan",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "PAGE",
+      "url": "http://127.0.0.1:3000/pusat-bantuan",
+      "finalUrl": "http://127.0.0.1:3000/pusat-bantuan",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "PAGE",
+      "url": "http://127.0.0.1:3000/search",
+      "finalUrl": "http://127.0.0.1:3000/search",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "PAGE",
+      "url": "http://127.0.0.1:3000/segadeals",
+      "finalUrl": "http://127.0.0.1:3000/segadeals",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "PAGE",
+      "url": "http://127.0.0.1:3000/syarat-ketentuan",
+      "finalUrl": "http://127.0.0.1:3000/syarat-ketentuan",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "PAGE",
+      "url": "http://127.0.0.1:3000/tentang-kami",
+      "finalUrl": "http://127.0.0.1:3000/tentang-kami",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "PAGE",
+      "url": "http://127.0.0.1:3000/paket/umrah-premium-12d",
+      "finalUrl": "http://127.0.0.1:3000/paket/umrah-premium-12d",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "PAGE",
+      "url": "http://127.0.0.1:3000/paket/umrah-plus-turkiye",
+      "finalUrl": "http://127.0.0.1:3000/paket/umrah-plus-turkiye",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "PAGE",
+      "url": "http://127.0.0.1:3000/paket/halal-tour-japan",
+      "finalUrl": "http://127.0.0.1:3000/paket/halal-tour-japan",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "PAGE",
+      "url": "http://127.0.0.1:3000/paket/halal-tour-korea",
+      "finalUrl": "http://127.0.0.1:3000/paket/halal-tour-korea",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "PAGE",
+      "url": "http://127.0.0.1:3000/search?category=umrah",
+      "finalUrl": "http://127.0.0.1:3000/search?category=umrah",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "PAGE",
+      "url": "http://127.0.0.1:3000/search?category=haji",
+      "finalUrl": "http://127.0.0.1:3000/search?category=haji",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "PAGE",
+      "url": "http://127.0.0.1:3000/search?category=halal-tour",
+      "finalUrl": "http://127.0.0.1:3000/search?category=halal-tour",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "PAGE",
+      "url": "http://127.0.0.1:3000/search?category=domestic",
+      "finalUrl": "http://127.0.0.1:3000/search?category=domestic",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "PAGE",
+      "url": "http://127.0.0.1:3000/search?category=international",
+      "finalUrl": "http://127.0.0.1:3000/search?category=international",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "PAGE",
+      "url": "http://127.0.0.1:3000/search?category=visa",
+      "finalUrl": "http://127.0.0.1:3000/search?category=visa",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "PAGE",
+      "url": "http://127.0.0.1:3000/akomodasi/makkah-madinah-9d",
+      "finalUrl": "http://127.0.0.1:3000/akomodasi/makkah-madinah-9d",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "PAGE",
+      "url": "http://127.0.0.1:3000/akomodasi/istanbul-7d",
+      "finalUrl": "http://127.0.0.1:3000/akomodasi/istanbul-7d",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "PAGE",
+      "url": "http://127.0.0.1:3000/akomodasi/dubai-5d",
+      "finalUrl": "http://127.0.0.1:3000/akomodasi/dubai-5d",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "PAGE",
+      "url": "http://127.0.0.1:3000/akomodasi/cairo-6d",
+      "finalUrl": "http://127.0.0.1:3000/akomodasi/cairo-6d",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "PAGE",
+      "url": "http://127.0.0.1:3000/akomodasi/kuala-lumpur-4d",
+      "finalUrl": "http://127.0.0.1:3000/akomodasi/kuala-lumpur-4d",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "PAGE",
+      "url": "http://127.0.0.1:3000/akomodasi/pulau-nusa",
+      "finalUrl": "http://127.0.0.1:3000/akomodasi/pulau-nusa",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "PAGE",
+      "url": "http://127.0.0.1:3000/pusat-bantuan?artikel=other-hubungi-kami",
+      "finalUrl": "http://127.0.0.1:3000/pusat-bantuan?artikel=other-hubungi-kami",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "PAGE",
+      "url": "http://127.0.0.1:3000/pusat-bantuan?artikel=booking-alur-pemesanan",
+      "finalUrl": "http://127.0.0.1:3000/pusat-bantuan?artikel=booking-alur-pemesanan",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "PAGE",
+      "url": "http://127.0.0.1:3000/partner/travel/perjalanan?type=free",
+      "finalUrl": "http://127.0.0.1:3000/partner/travel/perjalanan?type=free",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "PAGE",
+      "url": "http://127.0.0.1:3000/partner/travel/perjalanan?type=starter",
+      "finalUrl": "http://127.0.0.1:3000/partner/travel/perjalanan?type=starter",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "PAGE",
+      "url": "http://127.0.0.1:3000/partner/travel/perjalanan?type=growth",
+      "finalUrl": "http://127.0.0.1:3000/partner/travel/perjalanan?type=growth",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "PAGE",
+      "url": "http://127.0.0.1:3000/partner/travel/perjalanan?type=enterprise",
+      "finalUrl": "http://127.0.0.1:3000/partner/travel/perjalanan?type=enterprise",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "PAGE",
+      "url": "http://127.0.0.1:3000/search?category=Visa&destination=China",
+      "finalUrl": "http://127.0.0.1:3000/search?category=Visa&destination=China",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "PAGE",
+      "url": "http://127.0.0.1:3000/search?category=Visa&destination=Korea+Selatan",
+      "finalUrl": "http://127.0.0.1:3000/search?category=Visa&destination=Korea+Selatan",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "PAGE",
+      "url": "http://127.0.0.1:3000/search?category=Visa&destination=Jepang",
+      "finalUrl": "http://127.0.0.1:3000/search?category=Visa&destination=Jepang",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "PAGE",
+      "url": "http://127.0.0.1:3000/search?category=Visa&destination=Belanda",
+      "finalUrl": "http://127.0.0.1:3000/search?category=Visa&destination=Belanda",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "PAGE",
+      "url": "http://127.0.0.1:3000/search?category=Visa&destination=Belgia",
+      "finalUrl": "http://127.0.0.1:3000/search?category=Visa&destination=Belgia",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "PAGE",
+      "url": "http://127.0.0.1:3000/search?category=Visa&destination=Prancis",
+      "finalUrl": "http://127.0.0.1:3000/search?category=Visa&destination=Prancis",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "PAGE",
+      "url": "http://127.0.0.1:3000/search?category=Visa&destination=Swiss",
+      "finalUrl": "http://127.0.0.1:3000/search?category=Visa&destination=Swiss",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "PAGE",
+      "url": "http://127.0.0.1:3000/search?category=Visa&destination=Italia",
+      "finalUrl": "http://127.0.0.1:3000/search?category=Visa&destination=Italia",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "PAGE",
+      "url": "http://127.0.0.1:3000/search?category=Visa&destination=Jerman",
+      "finalUrl": "http://127.0.0.1:3000/search?category=Visa&destination=Jerman",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "PAGE",
+      "url": "http://127.0.0.1:3000/search?category=Visa&destination=Austria",
+      "finalUrl": "http://127.0.0.1:3000/search?category=Visa&destination=Austria",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "PAGE",
+      "url": "http://127.0.0.1:3000/search?category=Visa&destination=Denmark",
+      "finalUrl": "http://127.0.0.1:3000/search?category=Visa&destination=Denmark",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "PAGE",
+      "url": "http://127.0.0.1:3000/search?category=Visa&destination=Islandia",
+      "finalUrl": "http://127.0.0.1:3000/search?category=Visa&destination=Islandia",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "PAGE",
+      "url": "http://127.0.0.1:3000/search?category=Visa&destination=Norwegia",
+      "finalUrl": "http://127.0.0.1:3000/search?category=Visa&destination=Norwegia",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "PAGE",
+      "url": "http://127.0.0.1:3000/search?category=Visa&destination=Finlandia",
+      "finalUrl": "http://127.0.0.1:3000/search?category=Visa&destination=Finlandia",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "PAGE",
+      "url": "http://127.0.0.1:3000/search?category=Visa&destination=Swedia",
+      "finalUrl": "http://127.0.0.1:3000/search?category=Visa&destination=Swedia",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "PAGE",
+      "url": "http://127.0.0.1:3000/search?category=Visa&destination=Yunani",
+      "finalUrl": "http://127.0.0.1:3000/search?category=Visa&destination=Yunani",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "PAGE",
+      "url": "http://127.0.0.1:3000/search?category=Visa&destination=Republik+Ceko",
+      "finalUrl": "http://127.0.0.1:3000/search?category=Visa&destination=Republik+Ceko",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "PAGE",
+      "url": "http://127.0.0.1:3000/search?category=Visa&destination=Kroasia",
+      "finalUrl": "http://127.0.0.1:3000/search?category=Visa&destination=Kroasia",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "PAGE",
+      "url": "http://127.0.0.1:3000/search?category=Visa&destination=Portugal",
+      "finalUrl": "http://127.0.0.1:3000/search?category=Visa&destination=Portugal",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "PAGE",
+      "url": "http://127.0.0.1:3000/search?category=Visa&destination=Hungaria",
+      "finalUrl": "http://127.0.0.1:3000/search?category=Visa&destination=Hungaria",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "PAGE",
+      "url": "http://127.0.0.1:3000/search?category=Visa&destination=Luksemburg",
+      "finalUrl": "http://127.0.0.1:3000/search?category=Visa&destination=Luksemburg",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "PAGE",
+      "url": "http://127.0.0.1:3000/search?category=Visa&destination=Polandia",
+      "finalUrl": "http://127.0.0.1:3000/search?category=Visa&destination=Polandia",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "PAGE",
+      "url": "http://127.0.0.1:3000/search?category=Visa&destination=Malta",
+      "finalUrl": "http://127.0.0.1:3000/search?category=Visa&destination=Malta",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "PAGE",
+      "url": "http://127.0.0.1:3000/search?category=Visa&destination=Slovenia",
+      "finalUrl": "http://127.0.0.1:3000/search?category=Visa&destination=Slovenia",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "PAGE",
+      "url": "http://127.0.0.1:3000/search?category=Visa&destination=Latvia",
+      "finalUrl": "http://127.0.0.1:3000/search?category=Visa&destination=Latvia",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "PAGE",
+      "url": "http://127.0.0.1:3000/search?category=Visa&destination=Lithuania",
+      "finalUrl": "http://127.0.0.1:3000/search?category=Visa&destination=Lithuania",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "PAGE",
+      "url": "http://127.0.0.1:3000/search?category=Visa&destination=Estonia",
+      "finalUrl": "http://127.0.0.1:3000/search?category=Visa&destination=Estonia",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "PAGE",
+      "url": "http://127.0.0.1:3000/search?category=Visa&destination=Australia",
+      "finalUrl": "http://127.0.0.1:3000/search?category=Visa&destination=Australia",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "PAGE",
+      "url": "http://127.0.0.1:3000/search?category=Visa&destination=Inggris",
+      "finalUrl": "http://127.0.0.1:3000/search?category=Visa&destination=Inggris",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "PAGE",
+      "url": "http://127.0.0.1:3000/search?category=Visa&destination=Amerika+Serikat",
+      "finalUrl": "http://127.0.0.1:3000/search?category=Visa&destination=Amerika+Serikat",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "PAGE",
+      "url": "http://127.0.0.1:3000/search?category=Visa&destination=Selandia+Baru",
+      "finalUrl": "http://127.0.0.1:3000/search?category=Visa&destination=Selandia+Baru",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "PAGE",
+      "url": "http://127.0.0.1:3000/search?category=Visa&destination=Uni+Emirat+Arab",
+      "finalUrl": "http://127.0.0.1:3000/search?category=Visa&destination=Uni+Emirat+Arab",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "PAGE",
+      "url": "http://127.0.0.1:3000/search?category=Visa&destination=Indonesia",
+      "finalUrl": "http://127.0.0.1:3000/search?category=Visa&destination=Indonesia",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "PAGE",
+      "url": "http://127.0.0.1:3000/partner/travel/daftar?plan=starter",
+      "finalUrl": "http://127.0.0.1:3000/partner/travel/daftar?plan=starter",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "PAGE",
+      "url": "http://127.0.0.1:3000/partner/travel/daftar?plan=growth",
+      "finalUrl": "http://127.0.0.1:3000/partner/travel/daftar?plan=growth",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "PAGE",
+      "url": "http://127.0.0.1:3000/search?category=Visa",
+      "finalUrl": "http://127.0.0.1:3000/search?category=Visa",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/_next/static/chunks/1jl0_next_dist_compiled_next-devtools_index_1ak7p7a.js",
+      "finalUrl": "http://127.0.0.1:3000/_next/static/chunks/1jl0_next_dist_compiled_next-devtools_index_1ak7p7a.js",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/_next/static/chunks/1jl0_next_dist_compiled_react-dom_1qomngr._.js",
+      "finalUrl": "http://127.0.0.1:3000/_next/static/chunks/1jl0_next_dist_compiled_react-dom_1qomngr._.js",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/_next/static/chunks/1jl0_next_dist_compiled_react-server-dom-turbopack_0-u0alo._.js",
+      "finalUrl": "http://127.0.0.1:3000/_next/static/chunks/1jl0_next_dist_compiled_react-server-dom-turbopack_0-u0alo._.js",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/_next/static/chunks/1jl0_next_dist_compiled_03siyui._.js",
+      "finalUrl": "http://127.0.0.1:3000/_next/static/chunks/1jl0_next_dist_compiled_03siyui._.js",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/_next/static/chunks/1jl0_next_dist_client_02g0xai._.js",
+      "finalUrl": "http://127.0.0.1:3000/_next/static/chunks/1jl0_next_dist_client_02g0xai._.js",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/_next/static/chunks/1jl0_next_dist_1j9nffg._.js",
+      "finalUrl": "http://127.0.0.1:3000/_next/static/chunks/1jl0_next_dist_1j9nffg._.js",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/_next/static/chunks/0zix_%40swc_helpers_cjs_0hi-e47._.js",
+      "finalUrl": "http://127.0.0.1:3000/_next/static/chunks/0zix_%40swc_helpers_cjs_0hi-e47._.js",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/_next/static/chunks/_1anvha4._.js",
+      "finalUrl": "http://127.0.0.1:3000/_next/static/chunks/_1anvha4._.js",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/_next/static/chunks/turbopack-_1agr8un._.js",
+      "finalUrl": "http://127.0.0.1:3000/_next/static/chunks/turbopack-_1agr8un._.js",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/_next/static/chunks/_219uq1s._.js",
+      "finalUrl": "http://127.0.0.1:3000/_next/static/chunks/_219uq1s._.js",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/_next/static/chunks/src_09_ugaf._.js",
+      "finalUrl": "http://127.0.0.1:3000/_next/static/chunks/src_09_ugaf._.js",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/_next/static/chunks/node_modules__pnpm_00fal2y._.js",
+      "finalUrl": "http://127.0.0.1:3000/_next/static/chunks/node_modules__pnpm_00fal2y._.js",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/_next/static/chunks/src_042s_2b._.js",
+      "finalUrl": "http://127.0.0.1:3000/_next/static/chunks/src_042s_2b._.js",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/_next/static/chunks/node_modules__pnpm_00u8fxh._.js",
+      "finalUrl": "http://127.0.0.1:3000/_next/static/chunks/node_modules__pnpm_00u8fxh._.js",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/_next/static/chunks/1jl0_next_dist_build_polyfills_polyfill-nomodule.js",
+      "finalUrl": "http://127.0.0.1:3000/_next/static/chunks/1jl0_next_dist_build_polyfills_polyfill-nomodule.js",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/_next/image?url=%2Fimages%2Fbrand%2Fsegaloka-logo.png&w=256&q=75",
+      "finalUrl": "http://127.0.0.1:3000/_next/image?url=%2Fimages%2Fbrand%2Fsegaloka-logo.png&w=256&q=75",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/_next/image?url=%2Fimages%2Fhero%2Fhero-segaloka.png&w=3840&q=75",
+      "finalUrl": "http://127.0.0.1:3000/_next/image?url=%2Fimages%2Fhero%2Fhero-segaloka.png&w=3840&q=75",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/images/banners/banner-promo-utama.png",
+      "finalUrl": "http://127.0.0.1:3000/images/banners/banner-promo-utama.png",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/images/travel/nuzultrip.png",
+      "finalUrl": "http://127.0.0.1:3000/images/travel/nuzultrip.png",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/images/travel/travel-placeholder.png",
+      "finalUrl": "http://127.0.0.1:3000/images/travel/travel-placeholder.png",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/images/la/makkah.jpg",
+      "finalUrl": "http://127.0.0.1:3000/images/la/makkah.jpg",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/images/la/madinah.jpg",
+      "finalUrl": "http://127.0.0.1:3000/images/la/madinah.jpg",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/images/la/bali.jpg",
+      "finalUrl": "http://127.0.0.1:3000/images/la/bali.jpg",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/images/la/pulau-nusa.jpg",
+      "finalUrl": "http://127.0.0.1:3000/images/la/pulau-nusa.jpg",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/images/attractions/ragunan-jakarta.jpg",
+      "finalUrl": "http://127.0.0.1:3000/images/attractions/ragunan-jakarta.jpg",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/images/attractions/universal-studios-japan.jpg",
+      "finalUrl": "http://127.0.0.1:3000/images/attractions/universal-studios-japan.jpg",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/images/attractions/tokyo-disneyland.jpg",
+      "finalUrl": "http://127.0.0.1:3000/images/attractions/tokyo-disneyland.jpg",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/images/brand/segaloka-logo.png",
+      "finalUrl": "http://127.0.0.1:3000/images/brand/segaloka-logo.png",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/images/footer/payment/visa.png",
+      "finalUrl": "http://127.0.0.1:3000/images/footer/payment/visa.png",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/images/footer/payment/mastercard.png",
+      "finalUrl": "http://127.0.0.1:3000/images/footer/payment/mastercard.png",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/images/footer/social/facebook.png",
+      "finalUrl": "http://127.0.0.1:3000/images/footer/social/facebook.png",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_057n1er._.js",
+      "finalUrl": "http://127.0.0.1:3000/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_057n1er._.js",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/_next/static/chunks/_05rh7kb._.js",
+      "finalUrl": "http://127.0.0.1:3000/_next/static/chunks/_05rh7kb._.js",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/_next/static/chunks/src_app_affiliate_AffiliateClient_tsx_02tq9z6._.js",
+      "finalUrl": "http://127.0.0.1:3000/_next/static/chunks/src_app_affiliate_AffiliateClient_tsx_02tq9z6._.js",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/_next/static/chunks/0g26_lucide-react_dist_esm_icons_0g0yv80._.js",
+      "finalUrl": "http://127.0.0.1:3000/_next/static/chunks/0g26_lucide-react_dist_esm_icons_0g0yv80._.js",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/_next/static/chunks/_14abg6m._.js",
+      "finalUrl": "http://127.0.0.1:3000/_next/static/chunks/_14abg6m._.js",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/_next/static/chunks/src_1-lcm-9._.js",
+      "finalUrl": "http://127.0.0.1:3000/_next/static/chunks/src_1-lcm-9._.js",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/_next/static/chunks/0g26_lucide-react_dist_esm_icons_0_sj8ha._.js",
+      "finalUrl": "http://127.0.0.1:3000/_next/static/chunks/0g26_lucide-react_dist_esm_icons_0_sj8ha._.js",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/images/la/istanbul.jpg",
+      "finalUrl": "http://127.0.0.1:3000/images/la/istanbul.jpg",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/images/la/dubai.jpg",
+      "finalUrl": "http://127.0.0.1:3000/images/la/dubai.jpg",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/images/la/cairo.jpg",
+      "finalUrl": "http://127.0.0.1:3000/images/la/cairo.jpg",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/images/la/kuala-lumpur.jpg",
+      "finalUrl": "http://127.0.0.1:3000/images/la/kuala-lumpur.jpg",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/images/la/makkah-madinah.jpg",
+      "finalUrl": "http://127.0.0.1:3000/images/la/makkah-madinah.jpg",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/_next/static/chunks/_1altk43._.js",
+      "finalUrl": "http://127.0.0.1:3000/_next/static/chunks/_1altk43._.js",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/_next/static/chunks/1jl0_next_dist_06gmfrs._.js",
+      "finalUrl": "http://127.0.0.1:3000/_next/static/chunks/1jl0_next_dist_06gmfrs._.js",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/_next/static/chunks/_0w-ujca._.js",
+      "finalUrl": "http://127.0.0.1:3000/_next/static/chunks/_0w-ujca._.js",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/_next/static/chunks/src_app_pusat-bantuan_HelpCenterClient_tsx_20d_0mq._.js",
+      "finalUrl": "http://127.0.0.1:3000/_next/static/chunks/src_app_pusat-bantuan_HelpCenterClient_tsx_20d_0mq._.js",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/_next/static/chunks/0g26_lucide-react_dist_esm_icons_0u7zr5d._.js",
+      "finalUrl": "http://127.0.0.1:3000/_next/static/chunks/0g26_lucide-react_dist_esm_icons_0u7zr5d._.js",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/_next/static/chunks/_16nb84d._.js",
+      "finalUrl": "http://127.0.0.1:3000/_next/static/chunks/_16nb84d._.js",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/_next/static/chunks/_0wih44k._.js",
+      "finalUrl": "http://127.0.0.1:3000/_next/static/chunks/_0wih44k._.js",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/_next/static/chunks/src_app_partner_travel_daftar_TravelRegistrationClient_tsx_00c6kr5._.js",
+      "finalUrl": "http://127.0.0.1:3000/_next/static/chunks/src_app_partner_travel_daftar_TravelRegistrationClient_tsx_00c6kr5._.js",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/_next/static/chunks/node_modules__pnpm_1m-pzn0._.js",
+      "finalUrl": "http://127.0.0.1:3000/_next/static/chunks/node_modules__pnpm_1m-pzn0._.js",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/_next/static/chunks/_1wh96ks._.js",
+      "finalUrl": "http://127.0.0.1:3000/_next/static/chunks/_1wh96ks._.js",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/_next/static/chunks/src_app_daftar-vendor_VendorPartnerClient_tsx_0ag2cl_._.js",
+      "finalUrl": "http://127.0.0.1:3000/_next/static/chunks/src_app_daftar-vendor_VendorPartnerClient_tsx_0ag2cl_._.js",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/_next/static/chunks/node_modules__pnpm_014vepw._.js",
+      "finalUrl": "http://127.0.0.1:3000/_next/static/chunks/node_modules__pnpm_014vepw._.js",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/_next/static/chunks/_1y1mp9o._.js",
+      "finalUrl": "http://127.0.0.1:3000/_next/static/chunks/_1y1mp9o._.js",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/_next/static/chunks/src_app_daftar-vendor_registrasi_08pt-w0._.js",
+      "finalUrl": "http://127.0.0.1:3000/_next/static/chunks/src_app_daftar-vendor_registrasi_08pt-w0._.js",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/_next/static/chunks/node_modules__pnpm_08rnntz._.js",
+      "finalUrl": "http://127.0.0.1:3000/_next/static/chunks/node_modules__pnpm_08rnntz._.js",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/_next/static/chunks/_1mhl-ow._.js",
+      "finalUrl": "http://127.0.0.1:3000/_next/static/chunks/_1mhl-ow._.js",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/_next/static/chunks/_0rkhvi-._.js",
+      "finalUrl": "http://127.0.0.1:3000/_next/static/chunks/_0rkhvi-._.js",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/_next/static/chunks/_0suklc9._.js",
+      "finalUrl": "http://127.0.0.1:3000/_next/static/chunks/_0suklc9._.js",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/_next/static/chunks/_1qdb3z_._.js",
+      "finalUrl": "http://127.0.0.1:3000/_next/static/chunks/_1qdb3z_._.js",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/images/karier/hero-team.png",
+      "finalUrl": "http://127.0.0.1:3000/images/karier/hero-team.png",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/images/karier/about-1.png",
+      "finalUrl": "http://127.0.0.1:3000/images/karier/about-1.png",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/images/karier/about-2.png",
+      "finalUrl": "http://127.0.0.1:3000/images/karier/about-2.png",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/images/karier/about-3.png",
+      "finalUrl": "http://127.0.0.1:3000/images/karier/about-3.png",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/images/karier/about-4.png",
+      "finalUrl": "http://127.0.0.1:3000/images/karier/about-4.png",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/images/karier/location-indonesia.png",
+      "finalUrl": "http://127.0.0.1:3000/images/karier/location-indonesia.png",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/images/karier/team-product.png",
+      "finalUrl": "http://127.0.0.1:3000/images/karier/team-product.png",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/images/karier/team-technology.png",
+      "finalUrl": "http://127.0.0.1:3000/images/karier/team-technology.png",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/images/karier/team-design.png",
+      "finalUrl": "http://127.0.0.1:3000/images/karier/team-design.png",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/images/karier/team-operations.png",
+      "finalUrl": "http://127.0.0.1:3000/images/karier/team-operations.png",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/images/karier/team-partnership.png",
+      "finalUrl": "http://127.0.0.1:3000/images/karier/team-partnership.png",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/images/karier/join-team.png",
+      "finalUrl": "http://127.0.0.1:3000/images/karier/join-team.png",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/_next/static/chunks/_1qgbelc._.js",
+      "finalUrl": "http://127.0.0.1:3000/_next/static/chunks/_1qgbelc._.js",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/_next/static/chunks/src_17l5r9c._.js",
+      "finalUrl": "http://127.0.0.1:3000/_next/static/chunks/src_17l5r9c._.js",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/_next/static/chunks/_049kj3m._.js",
+      "finalUrl": "http://127.0.0.1:3000/_next/static/chunks/_049kj3m._.js",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/_next/static/chunks/_1fjajn5._.js",
+      "finalUrl": "http://127.0.0.1:3000/_next/static/chunks/_1fjajn5._.js",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/_next/static/chunks/_0jugug1._.js",
+      "finalUrl": "http://127.0.0.1:3000/_next/static/chunks/_0jugug1._.js",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/_next/static/chunks/_1-0n2mf._.js",
+      "finalUrl": "http://127.0.0.1:3000/_next/static/chunks/_1-0n2mf._.js",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/_next/static/chunks/src_app_partner_travel_PartnerTravelClient_tsx_0jardyx._.js",
+      "finalUrl": "http://127.0.0.1:3000/_next/static/chunks/src_app_partner_travel_PartnerTravelClient_tsx_0jardyx._.js",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/_next/static/chunks/0g26_lucide-react_dist_esm_icons_1q6e0ek._.js",
+      "finalUrl": "http://127.0.0.1:3000/_next/static/chunks/0g26_lucide-react_dist_esm_icons_1q6e0ek._.js",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/images/hero/hero-segaloka.png",
+      "finalUrl": "http://127.0.0.1:3000/images/hero/hero-segaloka.png",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/_next/static/chunks/_0h99u1q._.js",
+      "finalUrl": "http://127.0.0.1:3000/_next/static/chunks/_0h99u1q._.js",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/_next/static/chunks/_0mb79-t._.js",
+      "finalUrl": "http://127.0.0.1:3000/_next/static/chunks/_0mb79-t._.js",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/_next/static/chunks/_0wnjth8._.js",
+      "finalUrl": "http://127.0.0.1:3000/_next/static/chunks/_0wnjth8._.js",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/_next/static/chunks/_12w337p._.js",
+      "finalUrl": "http://127.0.0.1:3000/_next/static/chunks/_12w337p._.js",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/_next/static/chunks/_2117ovi._.js",
+      "finalUrl": "http://127.0.0.1:3000/_next/static/chunks/_2117ovi._.js",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/_next/static/chunks/_0rjtd2y._.js",
+      "finalUrl": "http://127.0.0.1:3000/_next/static/chunks/_0rjtd2y._.js",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/_next/static/chunks/_0wmpysi._.js",
+      "finalUrl": "http://127.0.0.1:3000/_next/static/chunks/_0wmpysi._.js",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/_next/static/chunks/_1fsa730._.js",
+      "finalUrl": "http://127.0.0.1:3000/_next/static/chunks/_1fsa730._.js",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/_next/static/chunks/_0j5-hiu._.js",
+      "finalUrl": "http://127.0.0.1:3000/_next/static/chunks/_0j5-hiu._.js",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/_next/static/chunks/_0d0le8y._.js",
+      "finalUrl": "http://127.0.0.1:3000/_next/static/chunks/_0d0le8y._.js",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/_next/static/chunks/_09_12wr._.js",
+      "finalUrl": "http://127.0.0.1:3000/_next/static/chunks/_09_12wr._.js",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/_next/static/chunks/_20654wq._.js",
+      "finalUrl": "http://127.0.0.1:3000/_next/static/chunks/_20654wq._.js",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/_next/static/chunks/src_122usr4._.js",
+      "finalUrl": "http://127.0.0.1:3000/_next/static/chunks/src_122usr4._.js",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/_next/static/chunks/node_modules__pnpm_1pi5xeq._.js",
+      "finalUrl": "http://127.0.0.1:3000/_next/static/chunks/node_modules__pnpm_1pi5xeq._.js",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/_next/static/chunks/_1vto86w._.js",
+      "finalUrl": "http://127.0.0.1:3000/_next/static/chunks/_1vto86w._.js",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/_next/static/chunks/src_0m3w-uz._.js",
+      "finalUrl": "http://127.0.0.1:3000/_next/static/chunks/src_0m3w-uz._.js",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/_next/static/chunks/0g26_lucide-react_dist_esm_icons_1w-om7m._.js",
+      "finalUrl": "http://127.0.0.1:3000/_next/static/chunks/0g26_lucide-react_dist_esm_icons_1w-om7m._.js",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/_next/static/chunks/_1lh83jb._.js",
+      "finalUrl": "http://127.0.0.1:3000/_next/static/chunks/_1lh83jb._.js",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/_next/static/chunks/_1jpppny._.js",
+      "finalUrl": "http://127.0.0.1:3000/_next/static/chunks/_1jpppny._.js",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/_next/static/chunks/_1fwo5z0._.js",
+      "finalUrl": "http://127.0.0.1:3000/_next/static/chunks/_1fwo5z0._.js",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/_next/static/chunks/src_components_package_PackageDetailClient_tsx_14a7pdm._.js",
+      "finalUrl": "http://127.0.0.1:3000/_next/static/chunks/src_components_package_PackageDetailClient_tsx_14a7pdm._.js",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/_next/static/chunks/0g26_lucide-react_dist_esm_icons_0f1x7fi._.js",
+      "finalUrl": "http://127.0.0.1:3000/_next/static/chunks/0g26_lucide-react_dist_esm_icons_0f1x7fi._.js",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/images/packages/umrah-premium.jpg",
+      "finalUrl": "http://127.0.0.1:3000/images/packages/umrah-premium.jpg",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/images/packages/umrah-turkiye.jpg",
+      "finalUrl": "http://127.0.0.1:3000/images/packages/umrah-turkiye.jpg",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/images/visa/countries/china.jpg",
+      "finalUrl": "http://127.0.0.1:3000/images/visa/countries/china.jpg",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/images/visa/flags/china.jpg",
+      "finalUrl": "http://127.0.0.1:3000/images/visa/flags/china.jpg",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/images/visa/countries/korea-selatan.jpg",
+      "finalUrl": "http://127.0.0.1:3000/images/visa/countries/korea-selatan.jpg",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/images/visa/flags/korea-selatan.jpg",
+      "finalUrl": "http://127.0.0.1:3000/images/visa/flags/korea-selatan.jpg",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/images/visa/countries/jepang.jpg",
+      "finalUrl": "http://127.0.0.1:3000/images/visa/countries/jepang.jpg",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/images/visa/flags/jepang.jpg",
+      "finalUrl": "http://127.0.0.1:3000/images/visa/flags/jepang.jpg",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/images/visa/countries/belanda.jpg",
+      "finalUrl": "http://127.0.0.1:3000/images/visa/countries/belanda.jpg",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/images/visa/flags/belanda.jpg",
+      "finalUrl": "http://127.0.0.1:3000/images/visa/flags/belanda.jpg",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/images/visa/countries/belgia.jpg",
+      "finalUrl": "http://127.0.0.1:3000/images/visa/countries/belgia.jpg",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/images/visa/flags/belgia.jpg",
+      "finalUrl": "http://127.0.0.1:3000/images/visa/flags/belgia.jpg",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/images/visa/countries/prancis.jpg",
+      "finalUrl": "http://127.0.0.1:3000/images/visa/countries/prancis.jpg",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/images/visa/flags/prancis.jpg",
+      "finalUrl": "http://127.0.0.1:3000/images/visa/flags/prancis.jpg",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/images/visa/countries/swiss.jpg",
+      "finalUrl": "http://127.0.0.1:3000/images/visa/countries/swiss.jpg",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/images/visa/flags/swiss.jpg",
+      "finalUrl": "http://127.0.0.1:3000/images/visa/flags/swiss.jpg",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/images/visa/countries/italia.jpg",
+      "finalUrl": "http://127.0.0.1:3000/images/visa/countries/italia.jpg",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/images/visa/flags/italia.jpg",
+      "finalUrl": "http://127.0.0.1:3000/images/visa/flags/italia.jpg",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/images/visa/countries/jerman.jpg",
+      "finalUrl": "http://127.0.0.1:3000/images/visa/countries/jerman.jpg",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/images/visa/flags/jerman.jpg",
+      "finalUrl": "http://127.0.0.1:3000/images/visa/flags/jerman.jpg",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/images/visa/countries/austria.jpg",
+      "finalUrl": "http://127.0.0.1:3000/images/visa/countries/austria.jpg",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/images/visa/flags/austria.jpg",
+      "finalUrl": "http://127.0.0.1:3000/images/visa/flags/austria.jpg",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/images/visa/countries/denmark.jpg",
+      "finalUrl": "http://127.0.0.1:3000/images/visa/countries/denmark.jpg",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/images/visa/flags/denmark.jpg",
+      "finalUrl": "http://127.0.0.1:3000/images/visa/flags/denmark.jpg",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/images/visa/countries/islandia.jpg",
+      "finalUrl": "http://127.0.0.1:3000/images/visa/countries/islandia.jpg",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/images/visa/flags/islandia.jpg",
+      "finalUrl": "http://127.0.0.1:3000/images/visa/flags/islandia.jpg",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/images/visa/countries/norwegia.jpg",
+      "finalUrl": "http://127.0.0.1:3000/images/visa/countries/norwegia.jpg",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/images/visa/flags/norwegia.jpg",
+      "finalUrl": "http://127.0.0.1:3000/images/visa/flags/norwegia.jpg",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/images/visa/countries/finlandia.jpg",
+      "finalUrl": "http://127.0.0.1:3000/images/visa/countries/finlandia.jpg",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/images/visa/flags/finlandia.jpg",
+      "finalUrl": "http://127.0.0.1:3000/images/visa/flags/finlandia.jpg",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/images/visa/countries/swedia.jpg",
+      "finalUrl": "http://127.0.0.1:3000/images/visa/countries/swedia.jpg",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/images/visa/flags/swedia.jpg",
+      "finalUrl": "http://127.0.0.1:3000/images/visa/flags/swedia.jpg",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/images/visa/countries/yunani.jpg",
+      "finalUrl": "http://127.0.0.1:3000/images/visa/countries/yunani.jpg",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/images/visa/flags/yunani.jpg",
+      "finalUrl": "http://127.0.0.1:3000/images/visa/flags/yunani.jpg",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/images/visa/countries/republik-ceko.jpg",
+      "finalUrl": "http://127.0.0.1:3000/images/visa/countries/republik-ceko.jpg",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/images/visa/flags/republik-ceko.jpg",
+      "finalUrl": "http://127.0.0.1:3000/images/visa/flags/republik-ceko.jpg",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/images/visa/countries/kroasia.jpg",
+      "finalUrl": "http://127.0.0.1:3000/images/visa/countries/kroasia.jpg",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/images/visa/flags/kroasia.jpg",
+      "finalUrl": "http://127.0.0.1:3000/images/visa/flags/kroasia.jpg",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/images/visa/countries/portugal.jpg",
+      "finalUrl": "http://127.0.0.1:3000/images/visa/countries/portugal.jpg",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/images/visa/flags/portugal.jpg",
+      "finalUrl": "http://127.0.0.1:3000/images/visa/flags/portugal.jpg",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/images/visa/countries/hungaria.jpg",
+      "finalUrl": "http://127.0.0.1:3000/images/visa/countries/hungaria.jpg",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/images/visa/flags/hungaria.jpg",
+      "finalUrl": "http://127.0.0.1:3000/images/visa/flags/hungaria.jpg",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/images/visa/countries/luksemburg.jpg",
+      "finalUrl": "http://127.0.0.1:3000/images/visa/countries/luksemburg.jpg",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/images/visa/flags/luksemburg.jpg",
+      "finalUrl": "http://127.0.0.1:3000/images/visa/flags/luksemburg.jpg",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/images/visa/countries/polandia.jpg",
+      "finalUrl": "http://127.0.0.1:3000/images/visa/countries/polandia.jpg",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/images/visa/flags/polandia.jpg",
+      "finalUrl": "http://127.0.0.1:3000/images/visa/flags/polandia.jpg",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/images/visa/countries/malta.jpg",
+      "finalUrl": "http://127.0.0.1:3000/images/visa/countries/malta.jpg",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/images/visa/flags/malta.jpg",
+      "finalUrl": "http://127.0.0.1:3000/images/visa/flags/malta.jpg",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/images/visa/countries/slovenia.jpg",
+      "finalUrl": "http://127.0.0.1:3000/images/visa/countries/slovenia.jpg",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/images/visa/flags/slovenia.jpg",
+      "finalUrl": "http://127.0.0.1:3000/images/visa/flags/slovenia.jpg",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/images/visa/countries/latvia.jpg",
+      "finalUrl": "http://127.0.0.1:3000/images/visa/countries/latvia.jpg",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/images/visa/flags/latvia.jpg",
+      "finalUrl": "http://127.0.0.1:3000/images/visa/flags/latvia.jpg",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/images/visa/countries/lithuania.jpg",
+      "finalUrl": "http://127.0.0.1:3000/images/visa/countries/lithuania.jpg",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/images/visa/flags/lithuania.jpg",
+      "finalUrl": "http://127.0.0.1:3000/images/visa/flags/lithuania.jpg",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/images/visa/countries/estonia.jpg",
+      "finalUrl": "http://127.0.0.1:3000/images/visa/countries/estonia.jpg",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/images/visa/flags/estonia.jpg",
+      "finalUrl": "http://127.0.0.1:3000/images/visa/flags/estonia.jpg",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/images/visa/countries/australia.jpg",
+      "finalUrl": "http://127.0.0.1:3000/images/visa/countries/australia.jpg",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/images/visa/flags/australia.jpg",
+      "finalUrl": "http://127.0.0.1:3000/images/visa/flags/australia.jpg",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/images/visa/countries/inggris.jpg",
+      "finalUrl": "http://127.0.0.1:3000/images/visa/countries/inggris.jpg",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/images/visa/flags/inggris.jpg",
+      "finalUrl": "http://127.0.0.1:3000/images/visa/flags/inggris.jpg",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/images/visa/countries/amerika-serikat.jpg",
+      "finalUrl": "http://127.0.0.1:3000/images/visa/countries/amerika-serikat.jpg",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/images/visa/flags/amerika-serikat.jpg",
+      "finalUrl": "http://127.0.0.1:3000/images/visa/flags/amerika-serikat.jpg",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/images/visa/countries/selandia-baru.jpg",
+      "finalUrl": "http://127.0.0.1:3000/images/visa/countries/selandia-baru.jpg",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/images/visa/flags/selandia-baru.jpg",
+      "finalUrl": "http://127.0.0.1:3000/images/visa/flags/selandia-baru.jpg",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/images/visa/countries/uni-emirat-arab.jpg",
+      "finalUrl": "http://127.0.0.1:3000/images/visa/countries/uni-emirat-arab.jpg",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/images/visa/flags/uni-emirat-arab.jpg",
+      "finalUrl": "http://127.0.0.1:3000/images/visa/flags/uni-emirat-arab.jpg",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/images/visa/countries/indonesia.jpg",
+      "finalUrl": "http://127.0.0.1:3000/images/visa/countries/indonesia.jpg",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/images/visa/flags/indonesia.jpg",
+      "finalUrl": "http://127.0.0.1:3000/images/visa/flags/indonesia.jpg",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/_next/static/chunks/_0_70xzs._.js",
+      "finalUrl": "http://127.0.0.1:3000/_next/static/chunks/_0_70xzs._.js",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/_next/static/chunks/src_1p_mi-d._.js",
+      "finalUrl": "http://127.0.0.1:3000/_next/static/chunks/src_1p_mi-d._.js",
+      "status": 200,
+      "issue": "OK"
+    },
+    {
+      "type": "ASSET",
+      "url": "http://127.0.0.1:3000/_next/static/chunks/0g26_lucide-react_dist_esm_icons_0m4gus5._.js",
+      "finalUrl": "http://127.0.0.1:3000/_next/static/chunks/0g26_lucide-react_dist_esm_icons_0m4gus5._.js",
+      "status": 200,
+      "issue": "OK"
+    }
+  ]
+}

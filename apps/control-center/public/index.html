@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Control Center — Segaloka</title>
+  <style>
+    :root {
+      font-family: "Plus Jakarta Sans", "IBM Plex Sans Arabic", system-ui, sans-serif;
+      color: #14243b;
+      background: #f5f7fb;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; }
+    button, input { font: inherit; }
+    button { cursor: pointer; }
+    .hidden { display: none !important; }
+    .login-wrap {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+    }
+    .login-card {
+      width: 100%;
+      max-width: 420px;
+      padding: 32px;
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 18px;
+      box-shadow: 0 16px 45px #14243b0a;
+    }
+    .brand { font-size: 24px; font-weight: 800; }
+    .muted { color: #64748b; }
+    label { display: block; margin-top: 20px; font-weight: 600; }
+    input {
+      display: block;
+      width: 100%;
+      margin-top: 8px;
+      padding: 13px;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+    }
+    .primary {
+      width: 100%;
+      margin-top: 24px;
+      padding: 13px;
+      border: 0;
+      border-radius: 10px;
+      background: #1769d2;
+      color: white;
+      font-weight: 700;
+    }
+    .error { color: #b42318; margin-top: 16px; }
+  </style>
+</head>
+<body>
+  <section id="loading" class="login-wrap">
+    <p class="muted">Memeriksa sesi Control Center...</p>
+  </section>
+
+  <section id="access" class="login-wrap hidden">
+    <div class="login-card">
+      <div class="brand">Segaloka</div>
+      <h1>Akses Control Center diperlukan</h1>
+      <p class="muted">Control Center hanya menerima sesi resmi super_admin dari Website Segaloka.</p>
+      <p class="error" role="status">Belum ada sesi yang memenuhi akses Control Center.</p>
+    </div>
+  </section>
+
+  <script>
+    const views = ['loading', 'access'];
+
+    function show(name) {
+      for (const id of views) {
+        document.getElementById(id)
+          .classList.toggle('hidden', id !== name);
+      }
+    }
+
+    async function request(path, options = {}) {
+      const response = await fetch(path, {
+        credentials: 'same-origin',
+        cache: 'no-store',
+        ...options
+      });
+
+      const data = await response.json().catch(() => ({}));
+      return { response, data };
+    }
+
+    async function checkAccess() {
+      const { response, data } =
+        await request('/bff/dashboard/access');
+
+      const allowed = response.ok &&
+        Array.isArray(data.dashboards) &&
+        data.dashboards.some(item =>
+          item.dashboard === 'control-center' &&
+          item.role === 'super_admin' &&
+          item.organizationId === null
+        );
+
+      if (!allowed) {
+        show('access');
+        return;
+      }
+
+      window.location.replace('/dashboard');
+    }
+
+    checkAccess().catch(() => show('access'));
+  </script>
+</body>
+</html>

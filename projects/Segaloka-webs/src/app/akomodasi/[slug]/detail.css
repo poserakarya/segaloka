@@ -1,0 +1,3672 @@
+.la-detail-page {
+  min-height: 100vh;
+  padding: 22px 0 72px;
+  background: #f7f9fc;
+  color: #173453;
+  font-family: "Plus Jakarta Sans", "Jakarta Sans", Arial, sans-serif;
+}
+
+.la-detail-container {
+  width: min(1180px, calc(100% - 36px));
+  margin: 0 auto;
+}
+
+.la-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 16px;
+  color: #8190a1;
+  font-size: 10px;
+}
+
+.la-breadcrumb a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.la-breadcrumb a:hover {
+  color: #0878f9;
+}
+
+.la-breadcrumb span {
+  color: #34506e;
+  font-weight: 700;
+}
+
+.la-heading {
+  margin-bottom: 15px;
+}
+
+.la-heading-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-bottom: 7px;
+}
+
+.la-heading-meta span {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: #0878f9;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.la-heading h1 {
+  max-width: 850px;
+  margin: 0;
+  color: #153655;
+  font-size: 28px;
+  line-height: 1.22;
+  letter-spacing: -.02em;
+}
+
+.la-rating-line {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 9px;
+  color: #6e7f92;
+  font-size: 10px;
+}
+
+.la-rating-line svg {
+  color: #ffb000;
+}
+
+.la-rating-line strong {
+  color: #334c67;
+}
+
+.la-rating-line i {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: #aab4bf;
+}
+
+.la-gallery {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 7px;
+  height: 365px;
+  margin-bottom: 20px;
+  overflow: hidden;
+  border-radius: 14px;
+}
+
+.la-gallery-main,
+.la-gallery-side > div {
+  position: relative;
+  overflow: hidden;
+  background: #e7edf3;
+}
+
+.la-gallery img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform .35s ease;
+}
+
+.la-gallery-main:hover img,
+.la-gallery-side > div:hover img {
+  transform: scale(1.015);
+}
+
+.la-gallery-side {
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  gap: 7px;
+}
+
+.la-gallery-side span {
+  position: absolute;
+  right: 11px;
+  bottom: 11px;
+  padding: 8px 11px;
+  border-radius: 8px;
+  background: rgba(15, 42, 70, .84);
+  color: #fff;
+  font-size: 9px;
+  font-weight: 800;
+}
+
+.la-main-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 330px;
+  gap: 20px;
+  align-items: start;
+}
+
+.la-main-content {
+  min-width: 0;
+}
+
+.la-provider-card {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px;
+  border: 1px solid #e1e8ef;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.la-provider-icon {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #eaf5ff;
+  color: #0878f9;
+}
+
+.la-provider-card small,
+.la-provider-card strong {
+  display: block;
+}
+
+.la-provider-card small {
+  color: #8896a5;
+  font-size: 9px;
+}
+
+.la-provider-card strong {
+  margin-top: 2px;
+  color: #24425f;
+  font-size: 12px;
+}
+
+.la-provider-card > span {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: #16874b;
+  font-size: 9px;
+  font-weight: 700;
+}
+
+.la-flight-warning {
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+  margin-top: 12px;
+  padding: 13px 15px;
+  border: 1px solid #f6d9a5;
+  border-radius: 11px;
+  background: #fff9ed;
+  color: #b56a00;
+}
+
+.la-flight-warning > svg {
+  flex: 0 0 auto;
+  margin-top: 1px;
+}
+
+.la-flight-warning div {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.la-flight-warning strong {
+  color: #7d4b00;
+  font-size: 11px;
+}
+
+.la-flight-warning span {
+  color: #8b6835;
+  font-size: 9px;
+  line-height: 1.6;
+}
+
+.la-program-card,
+.la-room-section,
+.la-inclusion-box {
+  margin-top: 12px;
+  padding: 17px;
+  border: 1px solid #e1e8ef;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.la-section-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 13px;
+}
+
+.la-section-heading span {
+  display: block;
+  margin-bottom: 3px;
+  color: #0878f9;
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: .08em;
+}
+
+.la-section-heading h2 {
+  margin: 0;
+  color: #193a59;
+  font-size: 15px;
+  line-height: 1.35;
+}
+
+.la-program-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.la-program-grid > div {
+  display: flex;
+  flex-direction: column;
+  min-height: 105px;
+  padding: 12px;
+  border: 1px solid #e7edf3;
+  border-radius: 10px;
+  background: #fbfdff;
+}
+
+.la-program-grid svg {
+  width: 19px;
+  height: 19px;
+  margin-bottom: 10px;
+  color: #0878f9;
+}
+
+.la-program-grid strong {
+  color: #304d69;
+  font-size: 10px;
+}
+
+.la-program-grid span {
+  margin-top: 3px;
+  color: #8190a0;
+  font-size: 8px;
+  line-height: 1.45;
+}
+
+.la-room-options {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 9px;
+}
+
+.la-room-option {
+  position: relative;
+  min-width: 0;
+  padding: 13px;
+  border: 1px solid #dfe7ef;
+  border-radius: 11px;
+  background: #fff;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    border-color .18s ease,
+    box-shadow .18s ease,
+    transform .18s ease;
+}
+
+.la-room-option:hover {
+  border-color: #a9cef8;
+  transform: translateY(-1px);
+}
+
+.la-room-option.active {
+  border: 1.5px solid #0878f9;
+  background: #f7fbff;
+  box-shadow: 0 0 0 3px rgba(8, 120, 249, .07);
+}
+
+.la-room-option-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 28px;
+  margin-bottom: 9px;
+}
+
+.la-room-icon {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  background: #eaf5ff;
+  color: #0878f9;
+}
+
+.la-room-badge {
+  padding: 4px 6px;
+  border-radius: 999px;
+  background: #eaf8f0;
+  color: #16874b;
+  font-size: 7px;
+  font-weight: 800;
+}
+
+.la-room-option > strong,
+.la-room-option > span {
+  display: block;
+}
+
+.la-room-option > strong {
+  color: #284762;
+  font-size: 12px;
+}
+
+.la-room-option > span {
+  margin-top: 3px;
+  color: #8190a0;
+  font-size: 8px;
+}
+
+.la-room-price {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 11px;
+  padding-top: 9px;
+  border-top: 1px solid #edf1f5;
+}
+
+.la-room-price b {
+  color: #f0444e;
+  font-size: 13px;
+}
+
+.la-room-price small {
+  color: #8a98a7;
+  font-size: 7px;
+}
+
+.la-inclusion-overview {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.la-inclusion-box.included {
+  border-top: 3px solid #23a666;
+}
+
+.la-inclusion-box.excluded {
+  border-top: 3px solid #e25c64;
+}
+
+.la-overview-list {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.la-overview-list > div {
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  color: #536a81;
+  font-size: 9px;
+  line-height: 1.5;
+}
+
+.la-inclusion-box.included .la-overview-list svg {
+  flex: 0 0 auto;
+  color: #18a15e;
+}
+
+.la-inclusion-box.excluded .la-overview-list svg {
+  flex: 0 0 auto;
+  color: #e0525c;
+}
+
+.la-tabs {
+  margin-top: 12px;
+  overflow: hidden;
+  border: 1px solid #e1e8ef;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.la-tab-nav {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  overflow-x: auto;
+  padding: 0 12px;
+  border-bottom: 1px solid #e8edf2;
+}
+
+.la-tab-nav button {
+  flex: 0 0 auto;
+  padding: 13px 11px 11px;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: transparent;
+  color: #63768b;
+  font: inherit;
+  font-size: 10px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.la-tab-nav button.active {
+  border-bottom-color: #0878f9;
+  color: #0878f9;
+}
+
+.la-tab-panel {
+  min-height: 245px;
+  padding: 18px;
+}
+
+.la-tab-panel h2 {
+  margin: 0 0 10px;
+  color: #1d3d5c;
+  font-size: 14px;
+}
+
+.la-tab-panel h3 {
+  margin: 17px 0 9px;
+  color: #294966;
+  font-size: 11px;
+}
+
+.la-tab-panel p {
+  margin: 0;
+  color: #65788c;
+  font-size: 10px;
+  line-height: 1.75;
+}
+
+.la-facility-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+
+.la-facility-grid span,
+.la-include-columns section > span {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: #4d647c;
+  font-size: 10px;
+}
+
+.la-facility-grid svg,
+.la-include-columns section:first-child svg {
+  flex: 0 0 auto;
+  color: #16a05d;
+}
+
+.la-itinerary article {
+  position: relative;
+  display: grid;
+  grid-template-columns: 32px minmax(0, 1fr);
+  gap: 11px;
+  padding-bottom: 17px;
+}
+
+.la-itinerary-number {
+  display: grid;
+  place-items: center;
+  width: 29px;
+  height: 29px;
+  border-radius: 50%;
+  background: #0878f9;
+  color: #fff;
+  font-size: 9px;
+  font-weight: 800;
+}
+
+.la-itinerary small {
+  color: #0878f9;
+  font-size: 8px;
+  font-weight: 800;
+}
+
+.la-itinerary h3 {
+  margin: 2px 0 4px;
+}
+
+.la-include-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 26px;
+}
+
+.la-include-columns section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.la-include-columns section:last-child svg {
+  flex: 0 0 auto;
+  color: #e0525c;
+}
+
+.la-policy {
+  max-width: 650px;
+}
+
+.la-policy p + p {
+  margin-top: 11px;
+}
+
+.la-booking-card {
+  position: sticky;
+  top: 78px;
+  padding: 17px;
+  border: 1px solid #dfe7ef;
+  border-radius: 13px;
+  background: #fff;
+  box-shadow: 0 10px 30px rgba(26, 58, 90, .09);
+}
+
+.la-booking-price {
+  padding-bottom: 13px;
+  border-bottom: 1px solid #e9edf2;
+}
+
+.la-booking-price > small {
+  color: #8391a0;
+  font-size: 9px;
+}
+
+.la-booking-price div {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  margin-top: 3px;
+}
+
+.la-booking-price strong {
+  color: #f0444e;
+  font-size: 20px;
+  letter-spacing: -.02em;
+}
+
+.la-booking-price span {
+  color: #8492a2;
+  font-size: 9px;
+}
+
+.la-selected-room {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 0;
+  border-bottom: 1px solid #edf1f4;
+  color: #0878f9;
+}
+
+.la-selected-room div {
+  min-width: 0;
+}
+
+.la-selected-room small,
+.la-selected-room strong {
+  display: block;
+}
+
+.la-selected-room small {
+  color: #8795a5;
+  font-size: 7px;
+}
+
+.la-selected-room strong {
+  margin-top: 1px;
+  color: #304a66;
+  font-size: 10px;
+}
+
+.la-selected-room > span {
+  color: #718397;
+  font-size: 8px;
+  font-weight: 700;
+}
+
+.la-booking-field {
+  display: block;
+  padding: 12px 0;
+  border-bottom: 1px solid #edf1f4;
+}
+
+.la-booking-field > span {
+  display: block;
+  margin-bottom: 7px;
+  color: #536a82;
+  font-size: 9px;
+  font-weight: 700;
+}
+
+.la-booking-field > div {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: #0878f9;
+}
+
+.la-booking-field input {
+  width: 100%;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: #304a66;
+  font: inherit;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.la-traveler-control button {
+  display: grid;
+  place-items: center;
+  width: 27px;
+  height: 27px;
+  padding: 0;
+  border: 1px solid #dbe4ed;
+  border-radius: 50%;
+  background: #fff;
+  color: #0878f9;
+  cursor: pointer;
+}
+
+.la-traveler-control button:disabled {
+  cursor: not-allowed;
+  color: #aab7c4;
+  opacity: .55;
+}
+
+.la-traveler-control strong {
+  flex: 1;
+  color: #314a65;
+  font-size: 10px;
+  text-align: center;
+}
+
+.la-booking-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  padding: 11px 0;
+  border-bottom: 1px solid #edf1f4;
+}
+
+.la-booking-summary > div {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 7px;
+  color: #708397;
+  font-size: 8px;
+}
+
+.la-booking-summary svg {
+  color: #0878f9;
+}
+
+.la-booking-summary strong {
+  color: #314a65;
+  font-size: 8px;
+}
+
+.la-price-breakdown {
+  padding: 12px 0 9px;
+}
+
+.la-price-breakdown > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  color: #6b7d90;
+  font-size: 9px;
+}
+
+.la-price-breakdown strong {
+  color: #334d68;
+}
+
+.la-total {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding-top: 10px;
+  border-top: 1px solid #e4eaf0;
+}
+
+.la-total span {
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.la-total strong {
+  color: #0878f9;
+  font-size: 15px;
+}
+
+.la-total-note {
+  display: block;
+  margin-top: 5px;
+  color: #8a98a6;
+  font-size: 7px;
+  line-height: 1.5;
+}
+
+.la-booking-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  width: 100%;
+  height: 44px;
+  margin-top: 13px;
+  border: 0;
+  border-radius: 9px;
+  background: #0878f9;
+  color: #fff;
+  font: inherit;
+  font-size: 10px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.la-booking-button:hover:not(:disabled) {
+  background: #066bdc;
+}
+
+.la-booking-button:disabled {
+  cursor: not-allowed;
+  opacity: .45;
+}
+
+.la-date-note {
+  display: block;
+  margin-top: 7px;
+  color: #8996a5;
+  font-size: 8px;
+  text-align: center;
+}
+
+.la-booking-assurance {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  margin-top: 12px;
+  padding-top: 11px;
+  border-top: 1px solid #edf1f4;
+  color: #708397;
+  font-size: 7px;
+  line-height: 1.55;
+}
+
+.la-booking-assurance svg {
+  flex: 0 0 auto;
+  color: #16874b;
+}
+
+.la-not-found {
+  display: grid;
+  place-items: center;
+  min-height: 500px;
+  text-align: center;
+}
+
+.la-not-found h1 {
+  margin: 12px 0 5px;
+}
+
+.la-not-found p {
+  color: #74869a;
+}
+
+.la-not-found a {
+  margin-top: 10px;
+  color: #0878f9;
+  font-weight: 700;
+}
+
+@media (max-width: 900px) {
+  .la-main-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .la-booking-card {
+    position: static;
+  }
+
+  .la-gallery {
+    height: 300px;
+  }
+}
+
+@media (max-width: 700px) {
+  .la-program-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .la-room-options {
+    grid-template-columns: 1fr;
+  }
+
+  .la-inclusion-overview {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .la-detail-page {
+    padding: 14px 0 92px;
+  }
+
+  .la-detail-container {
+    width: calc(100% - 24px);
+  }
+
+  .la-breadcrumb {
+    margin-bottom: 12px;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  .la-heading-meta {
+    gap: 10px;
+  }
+
+  .la-heading h1 {
+    font-size: 21px;
+  }
+
+  .la-gallery {
+    display: block;
+    height: 230px;
+    margin-bottom: 14px;
+    border-radius: 11px;
+  }
+
+  .la-gallery-main {
+    height: 100%;
+  }
+
+  .la-gallery-side {
+    display: none;
+  }
+
+  .la-provider-card {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .la-provider-card > span {
+    grid-column: 1 / -1;
+  }
+
+  .la-flight-warning {
+    padding: 12px;
+  }
+
+  .la-program-card,
+  .la-room-section,
+  .la-inclusion-box {
+    padding: 14px;
+  }
+
+  .la-program-grid {
+    gap: 7px;
+  }
+
+  .la-program-grid > div {
+    min-height: 94px;
+  }
+
+  .la-tab-panel {
+    min-height: 0;
+    padding: 15px;
+  }
+
+  .la-include-columns {
+    grid-template-columns: 1fr;
+  }
+
+  .la-facility-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .la-booking-card {
+    padding: 15px;
+  }
+}
+
+
+/* SEGALOKA LA VENDOR PERIOD START */
+
+.la-period-field > div.la-period-options {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  width: 100%;
+}
+
+.la-period-option {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #dfe7ef;
+  border-radius: 9px;
+  background: #fff;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    border-color .18s ease,
+    background .18s ease,
+    box-shadow .18s ease;
+}
+
+.la-period-option:hover:not(:disabled) {
+  border-color: #9ac9fb;
+  background: #f8fbff;
+}
+
+.la-period-option.active {
+  border-color: #0878f9;
+  background: #f3f9ff;
+  box-shadow: 0 0 0 2px rgba(8, 120, 249, .07);
+}
+
+.la-period-option:disabled {
+  cursor: not-allowed;
+  background: #f7f8fa;
+  opacity: .58;
+}
+
+.la-period-calendar {
+  display: grid;
+  place-items: center;
+  width: 31px;
+  height: 31px;
+  border-radius: 8px;
+  background: #eaf5ff;
+  color: #0878f9;
+}
+
+.la-period-copy {
+  min-width: 0;
+}
+
+.la-period-copy strong {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 3px;
+  color: #304a66;
+  font-size: 9px;
+  line-height: 1.4;
+}
+
+.la-period-copy span {
+  display: block;
+  margin-top: 3px;
+  color: #8795a5;
+  font-size: 7px;
+  line-height: 1.4;
+}
+
+.la-period-status {
+  padding: 4px 6px;
+  border-radius: 999px;
+  background: #e9f8ef;
+  color: #16874b;
+  font-size: 7px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.la-period-status.sold-out {
+  background: #feecef;
+  color: #d74b58;
+}
+
+.la-room-stock {
+  display: block;
+  margin-top: 5px;
+  color: #16874b;
+  font-size: 7px;
+  font-weight: 700;
+}
+
+.la-room-option:disabled {
+  cursor: not-allowed;
+  opacity: .48;
+}
+
+.la-room-option:disabled .la-room-stock {
+  color: #d74b58;
+}
+
+.la-date-note-error {
+  color: #d74b58;
+}
+
+@media (max-width: 600px) {
+  .la-period-option {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .la-period-status {
+    grid-column: 2;
+    justify-self: start;
+  }
+
+  .la-period-copy strong {
+    font-size: 9px;
+  }
+}
+
+/* SEGALOKA LA VENDOR PERIOD END */
+
+
+/* SEGALOKA LA REFERENCE UI FINAL START */
+
+/* ==========================================================
+   PAGE / CONTAINER
+   ========================================================== */
+
+.la-detail-page {
+  padding-top: 28px !important;
+  padding-bottom: 48px !important;
+  background: #f7f9fc !important;
+}
+
+.la-detail-container {
+  width: min(1320px, calc(100% - 48px)) !important;
+}
+
+
+/* ==========================================================
+   BREADCRUMB
+   ========================================================== */
+
+.la-breadcrumb {
+  margin-bottom: 18px !important;
+  gap: 7px !important;
+  font-size: 12px !important;
+}
+
+.la-breadcrumb span {
+  font-size: 12px !important;
+}
+
+
+/* ==========================================================
+   TITLE
+   ========================================================== */
+
+.la-heading {
+  margin-bottom: 18px !important;
+}
+
+.la-heading-meta {
+  margin-bottom: 8px !important;
+}
+
+.la-heading-meta span {
+  font-size: 13px !important;
+}
+
+.la-heading h1 {
+  max-width: 980px !important;
+  font-size: 36px !important;
+  line-height: 1.16 !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.035em !important;
+}
+
+.la-rating-line {
+  margin-top: 10px !important;
+  font-size: 12px !important;
+}
+
+
+/* ==========================================================
+   GALLERY
+   Reference: foto utama besar + dua foto kanan
+   ========================================================== */
+
+.la-gallery {
+  grid-template-columns: minmax(0, 1.65fr) minmax(300px, .95fr) !important;
+  gap: 8px !important;
+  height: 440px !important;
+  margin-bottom: 22px !important;
+  border-radius: 16px !important;
+}
+
+.la-gallery-side {
+  gap: 8px !important;
+}
+
+.la-gallery-side span {
+  right: 14px !important;
+  bottom: 14px !important;
+  padding: 10px 14px !important;
+  border-radius: 9px !important;
+  font-size: 11px !important;
+}
+
+
+/* ==========================================================
+   MAIN CONTENT + BOOKING SIDEBAR
+   ========================================================== */
+
+.la-main-grid {
+  grid-template-columns: minmax(0, 1fr) 390px !important;
+  gap: 22px !important;
+}
+
+
+/* ==========================================================
+   PROVIDER
+   ========================================================== */
+
+.la-provider-card {
+  min-height: 76px !important;
+  padding: 15px 18px !important;
+  border-radius: 14px !important;
+}
+
+.la-provider-icon {
+  width: 44px !important;
+  height: 44px !important;
+}
+
+.la-provider-card small {
+  font-size: 11px !important;
+}
+
+.la-provider-card strong {
+  font-size: 14px !important;
+}
+
+.la-provider-card > span {
+  font-size: 11px !important;
+}
+
+
+/* ==========================================================
+   WARNING
+   ========================================================== */
+
+.la-flight-warning {
+  gap: 12px !important;
+  margin-top: 14px !important;
+  padding: 15px 17px !important;
+  border-radius: 12px !important;
+}
+
+.la-flight-warning strong {
+  font-size: 13px !important;
+}
+
+.la-flight-warning span {
+  font-size: 11px !important;
+  line-height: 1.55 !important;
+}
+
+
+/* ==========================================================
+   SECTION CARDS
+   ========================================================== */
+
+.la-program-card,
+.la-room-section,
+.la-inclusion-box {
+  margin-top: 14px !important;
+  padding: 20px !important;
+  border-radius: 14px !important;
+}
+
+.la-section-heading {
+  margin-bottom: 16px !important;
+}
+
+.la-section-heading span {
+  margin-bottom: 4px !important;
+  font-size: 10px !important;
+}
+
+.la-section-heading h2 {
+  font-size: 19px !important;
+  line-height: 1.3 !important;
+}
+
+
+/* ==========================================================
+   RINGKASAN PROGRAM
+   ========================================================== */
+
+.la-program-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  gap: 10px !important;
+}
+
+.la-program-grid > div {
+  min-height: 120px !important;
+  padding: 15px !important;
+  border-radius: 11px !important;
+}
+
+.la-program-grid svg {
+  width: 23px !important;
+  height: 23px !important;
+  margin-bottom: 12px !important;
+}
+
+.la-program-grid strong {
+  font-size: 13px !important;
+}
+
+.la-program-grid span {
+  margin-top: 4px !important;
+  font-size: 10px !important;
+  line-height: 1.5 !important;
+}
+
+
+/* ==========================================================
+   ROOM OPTIONS
+   ========================================================== */
+
+.la-room-options {
+  gap: 12px !important;
+}
+
+.la-room-option {
+  min-height: 170px !important;
+  padding: 16px !important;
+  border-radius: 12px !important;
+}
+
+.la-room-option-top {
+  min-height: 34px !important;
+  margin-bottom: 12px !important;
+}
+
+.la-room-icon {
+  width: 36px !important;
+  height: 36px !important;
+}
+
+.la-room-badge {
+  padding: 5px 8px !important;
+  font-size: 9px !important;
+}
+
+.la-room-option > strong {
+  font-size: 15px !important;
+}
+
+.la-room-option > span {
+  margin-top: 4px !important;
+  font-size: 11px !important;
+}
+
+.la-room-stock {
+  margin-top: 7px !important;
+  font-size: 10px !important;
+}
+
+.la-room-price {
+  margin-top: 13px !important;
+  padding-top: 11px !important;
+}
+
+.la-room-price b {
+  font-size: 17px !important;
+}
+
+.la-room-price small {
+  font-size: 10px !important;
+}
+
+
+/* ==========================================================
+   INCLUDED / EXCLUDED
+   ========================================================== */
+
+.la-inclusion-overview {
+  gap: 14px !important;
+}
+
+.la-overview-list {
+  gap: 11px !important;
+}
+
+.la-overview-list > div {
+  gap: 8px !important;
+  font-size: 11px !important;
+  line-height: 1.5 !important;
+}
+
+
+/* ==========================================================
+   TABS
+   ========================================================== */
+
+.la-tabs {
+  margin-top: 14px !important;
+  border-radius: 14px !important;
+}
+
+.la-tab-nav {
+  min-height: 50px !important;
+  padding: 0 16px !important;
+  gap: 5px !important;
+}
+
+.la-tab-nav button {
+  padding: 16px 14px 13px !important;
+  font-size: 12px !important;
+}
+
+.la-tab-panel {
+  min-height: 260px !important;
+  padding: 22px !important;
+}
+
+.la-tab-panel h2 {
+  margin-bottom: 12px !important;
+  font-size: 18px !important;
+}
+
+.la-tab-panel h3 {
+  font-size: 14px !important;
+}
+
+.la-tab-panel p {
+  font-size: 12px !important;
+  line-height: 1.7 !important;
+}
+
+.la-facility-grid {
+  gap: 10px 18px !important;
+}
+
+.la-facility-grid span,
+.la-include-columns section > span {
+  font-size: 12px !important;
+}
+
+
+/* ==========================================================
+   ITINERARY
+   ========================================================== */
+
+.la-itinerary article {
+  grid-template-columns: 38px minmax(0, 1fr) !important;
+  gap: 13px !important;
+  padding-bottom: 20px !important;
+}
+
+.la-itinerary-number {
+  width: 34px !important;
+  height: 34px !important;
+  font-size: 11px !important;
+}
+
+.la-itinerary small {
+  font-size: 10px !important;
+}
+
+
+/* ==========================================================
+   BOOKING CARD
+   ========================================================== */
+
+.la-booking-card {
+  top: 84px !important;
+  padding: 20px !important;
+  border-radius: 15px !important;
+  box-shadow: 0 14px 38px rgba(26, 58, 90, .11) !important;
+}
+
+.la-booking-price {
+  padding-bottom: 16px !important;
+}
+
+.la-booking-price > small {
+  font-size: 11px !important;
+}
+
+.la-booking-price div {
+  margin-top: 4px !important;
+}
+
+.la-booking-price strong {
+  font-size: 28px !important;
+}
+
+.la-booking-price span {
+  font-size: 11px !important;
+}
+
+
+/* ==========================================================
+   SELECTED ROOM
+   ========================================================== */
+
+.la-selected-room {
+  gap: 10px !important;
+  padding: 14px 0 !important;
+}
+
+.la-selected-room small {
+  font-size: 9px !important;
+}
+
+.la-selected-room strong {
+  font-size: 12px !important;
+}
+
+.la-selected-room > span {
+  font-size: 10px !important;
+}
+
+
+/* ==========================================================
+   VENDOR PERIOD
+   ========================================================== */
+
+.la-booking-field {
+  padding: 14px 0 !important;
+}
+
+.la-booking-field > span {
+  margin-bottom: 9px !important;
+  font-size: 11px !important;
+}
+
+.la-period-field > div.la-period-options {
+  gap: 9px !important;
+}
+
+.la-period-option {
+  gap: 10px !important;
+  padding: 12px !important;
+  border-radius: 10px !important;
+}
+
+.la-period-calendar {
+  width: 36px !important;
+  height: 36px !important;
+}
+
+.la-period-copy strong {
+  gap: 4px !important;
+  font-size: 11px !important;
+}
+
+.la-period-copy span {
+  margin-top: 4px !important;
+  font-size: 9px !important;
+}
+
+.la-period-status {
+  padding: 5px 8px !important;
+  font-size: 9px !important;
+}
+
+
+/* ==========================================================
+   JUMLAH KAMAR
+   ========================================================== */
+
+.la-traveler-control {
+  width: 100% !important;
+}
+
+.la-traveler-control button {
+  width: 32px !important;
+  height: 32px !important;
+}
+
+.la-traveler-control strong {
+  font-size: 12px !important;
+}
+
+
+/* ==========================================================
+   BOOKING SUMMARY
+   ========================================================== */
+
+.la-booking-summary {
+  gap: 9px !important;
+  padding: 13px 0 !important;
+}
+
+.la-booking-summary > div {
+  gap: 8px !important;
+  font-size: 10px !important;
+}
+
+.la-booking-summary strong {
+  font-size: 10px !important;
+  text-align: right !important;
+}
+
+
+/* ==========================================================
+   PRICE
+   ========================================================== */
+
+.la-price-breakdown {
+  padding: 14px 0 11px !important;
+}
+
+.la-price-breakdown > div {
+  font-size: 11px !important;
+}
+
+.la-total {
+  padding-top: 12px !important;
+}
+
+.la-total span {
+  font-size: 13px !important;
+}
+
+.la-total strong {
+  font-size: 20px !important;
+}
+
+.la-total-note {
+  margin-top: 7px !important;
+  font-size: 9px !important;
+}
+
+
+/* ==========================================================
+   CTA
+   ========================================================== */
+
+.la-booking-button {
+  height: 50px !important;
+  margin-top: 16px !important;
+  border-radius: 10px !important;
+  font-size: 13px !important;
+}
+
+.la-date-note {
+  margin-top: 8px !important;
+  font-size: 10px !important;
+}
+
+.la-booking-assurance {
+  gap: 8px !important;
+  margin-top: 14px !important;
+  padding-top: 13px !important;
+  font-size: 9px !important;
+}
+
+
+/* ==========================================================
+   DESKTOP LARGE
+   ========================================================== */
+
+@media (min-width: 1440px) {
+  .la-detail-container {
+    width: min(1380px, calc(100% - 64px)) !important;
+  }
+
+  .la-main-grid {
+    grid-template-columns: minmax(0, 1fr) 410px !important;
+    gap: 24px !important;
+  }
+
+  .la-gallery {
+    height: 455px !important;
+  }
+}
+
+
+/* ==========================================================
+   TABLET
+   ========================================================== */
+
+@media (max-width: 1100px) {
+  .la-detail-container {
+    width: calc(100% - 32px) !important;
+  }
+
+  .la-main-grid {
+    grid-template-columns: minmax(0, 1fr) 340px !important;
+    gap: 16px !important;
+  }
+
+  .la-heading h1 {
+    font-size: 31px !important;
+  }
+
+  .la-gallery {
+    height: 380px !important;
+  }
+}
+
+
+/* ==========================================================
+   MOBILE / SMALL TABLET
+   ========================================================== */
+
+@media (max-width: 900px) {
+  .la-main-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .la-booking-card {
+    position: static !important;
+    order: -1;
+  }
+
+  .la-gallery {
+    height: 340px !important;
+  }
+}
+
+
+/* ==========================================================
+   MOBILE
+   ========================================================== */
+
+@media (max-width: 600px) {
+  .la-detail-page {
+    padding: 14px 0 90px !important;
+  }
+
+  .la-detail-container {
+    width: calc(100% - 24px) !important;
+  }
+
+  .la-breadcrumb {
+    margin-bottom: 12px !important;
+    font-size: 10px !important;
+  }
+
+  .la-heading {
+    margin-bottom: 14px !important;
+  }
+
+  .la-heading-meta span {
+    font-size: 11px !important;
+  }
+
+  .la-heading h1 {
+    font-size: 25px !important;
+    line-height: 1.2 !important;
+  }
+
+  .la-rating-line {
+    font-size: 10px !important;
+  }
+
+  .la-gallery {
+    display: block !important;
+    height: 260px !important;
+    margin-bottom: 14px !important;
+    border-radius: 12px !important;
+  }
+
+  .la-gallery-main {
+    height: 100% !important;
+  }
+
+  .la-gallery-side {
+    display: none !important;
+  }
+
+  .la-provider-card {
+    min-height: 0 !important;
+    padding: 13px !important;
+  }
+
+  .la-provider-card small {
+    font-size: 10px !important;
+  }
+
+  .la-provider-card strong {
+    font-size: 13px !important;
+  }
+
+  .la-flight-warning strong {
+    font-size: 12px !important;
+  }
+
+  .la-flight-warning span {
+    font-size: 10px !important;
+  }
+
+  .la-program-card,
+  .la-room-section,
+  .la-inclusion-box {
+    padding: 15px !important;
+  }
+
+  .la-section-heading h2 {
+    font-size: 17px !important;
+  }
+
+  .la-program-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .la-program-grid > div {
+    min-height: 105px !important;
+    padding: 12px !important;
+  }
+
+  .la-room-options {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 6px !important;
+  }
+
+  .la-room-option {
+    min-height: 150px !important;
+    padding: 10px !important;
+  }
+
+  .la-room-icon {
+    width: 30px !important;
+    height: 30px !important;
+  }
+
+  .la-room-badge {
+    display: none !important;
+  }
+
+  .la-room-option > strong {
+    font-size: 12px !important;
+  }
+
+  .la-room-option > span {
+    font-size: 9px !important;
+  }
+
+  .la-room-stock {
+    font-size: 8px !important;
+  }
+
+  .la-room-price b {
+    font-size: 12px !important;
+  }
+
+  .la-room-price small {
+    font-size: 8px !important;
+  }
+
+  .la-inclusion-overview {
+    grid-template-columns: 1fr !important;
+  }
+
+  .la-tab-nav {
+    padding: 0 8px !important;
+  }
+
+  .la-tab-nav button {
+    padding: 14px 10px 12px !important;
+    font-size: 10px !important;
+  }
+
+  .la-tab-panel {
+    padding: 16px !important;
+  }
+
+  .la-tab-panel h2 {
+    font-size: 16px !important;
+  }
+
+  .la-tab-panel p,
+  .la-facility-grid span,
+  .la-include-columns section > span {
+    font-size: 11px !important;
+  }
+
+  .la-booking-card {
+    padding: 16px !important;
+  }
+
+  .la-booking-price strong {
+    font-size: 25px !important;
+  }
+
+  .la-period-option {
+    grid-template-columns: auto minmax(0, 1fr) !important;
+  }
+
+  .la-period-status {
+    grid-column: 2 !important;
+    justify-self: start !important;
+  }
+
+  .la-period-copy strong {
+    font-size: 10px !important;
+  }
+
+  .la-booking-button {
+    height: 48px !important;
+    font-size: 12px !important;
+  }
+}
+
+/* SEGALOKA LA REFERENCE UI FINAL END */
+
+
+/* SEGALOKA LA DESKTOP WIDTH FIX START */
+
+/*
+ * Desktop detail LA dibuat lebih padat seperti referensi.
+ * Patch ini hanya mengatur geometry/lebar.
+ * Tidak mengubah business logic.
+ */
+
+@media (min-width: 1101px) {
+
+  .la-detail-container {
+    width: min(1180px, calc(100% - 48px)) !important;
+  }
+
+  .la-main-grid {
+    grid-template-columns:
+      minmax(0, 1fr)
+      340px !important;
+
+    gap: 18px !important;
+  }
+
+  .la-gallery {
+    grid-template-columns:
+      minmax(0, 1.7fr)
+      minmax(260px, .9fr) !important;
+
+    height: 390px !important;
+  }
+
+  .la-booking-card {
+    width: 100% !important;
+    max-width: 340px !important;
+  }
+
+}
+
+
+/* Laptop */
+@media (min-width: 901px) and (max-width: 1100px) {
+
+  .la-detail-container {
+    width: min(1080px, calc(100% - 36px)) !important;
+  }
+
+  .la-main-grid {
+    grid-template-columns:
+      minmax(0, 1fr)
+      320px !important;
+
+    gap: 16px !important;
+  }
+
+  .la-gallery {
+    height: 360px !important;
+  }
+
+  .la-booking-card {
+    width: 100% !important;
+    max-width: 320px !important;
+  }
+
+}
+
+
+/*
+ * Jangan biarkan rule desktop-large lama
+ * melebarkan container kembali.
+ */
+@media (min-width: 1440px) {
+
+  .la-detail-container {
+    width: min(1180px, calc(100% - 64px)) !important;
+  }
+
+  .la-main-grid {
+    grid-template-columns:
+      minmax(0, 1fr)
+      340px !important;
+
+    gap: 18px !important;
+  }
+
+  .la-gallery {
+    height: 390px !important;
+  }
+
+  .la-booking-card {
+    max-width: 340px !important;
+  }
+
+}
+
+
+/* Tablet/mobile tetap satu kolom */
+@media (max-width: 900px) {
+
+  .la-detail-container {
+    width: calc(100% - 32px) !important;
+  }
+
+  .la-main-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .la-booking-card {
+    width: 100% !important;
+    max-width: none !important;
+  }
+
+}
+
+
+@media (max-width: 600px) {
+
+  .la-detail-container {
+    width: calc(100% - 24px) !important;
+  }
+
+}
+
+/* SEGALOKA LA DESKTOP WIDTH FIX END */
+
+
+/* SEGALOKA LA BOOKING REFERENCE V2 START */
+
+/* ==========================================================
+   PAGE
+   ========================================================== */
+
+.la-detail-page {
+  padding: 22px 0 36px !important;
+  background:
+    linear-gradient(
+      180deg,
+      #f8fbff 0,
+      #f7f9fc 420px,
+      #f7f9fc 100%
+    ) !important;
+}
+
+.la-detail-container {
+  width: min(1180px, calc(100% - 40px)) !important;
+}
+
+
+/* ==========================================================
+   BREADCRUMB
+   ========================================================== */
+
+.la-breadcrumb {
+  margin-bottom: 13px !important;
+  gap: 7px !important;
+  font-size: 11px !important;
+}
+
+
+/* ==========================================================
+   HEADING
+   ========================================================== */
+
+.la-heading {
+  margin-bottom: 16px !important;
+}
+
+.la-heading-meta {
+  display: none !important;
+}
+
+.la-heading h1 {
+  max-width: none !important;
+  margin: 0 !important;
+  color: #102f55 !important;
+  font-size: 30px !important;
+  font-weight: 800 !important;
+  line-height: 1.18 !important;
+  letter-spacing: -.035em !important;
+}
+
+.la-rating-line {
+  margin-top: 7px !important;
+  gap: 6px !important;
+  color: #71849a !important;
+  font-size: 11px !important;
+}
+
+
+/* ==========================================================
+   GALLERY
+   ========================================================== */
+
+.la-gallery {
+  display: grid !important;
+  grid-template-columns:
+    minmax(0, 2.08fr)
+    minmax(0, 1fr) !important;
+
+  height: 355px !important;
+  gap: 7px !important;
+  margin-bottom: 16px !important;
+  border-radius: 13px !important;
+}
+
+.la-gallery-main,
+.la-gallery-side > div {
+  border-radius: 10px !important;
+}
+
+.la-gallery-main {
+  border-radius: 13px 0 0 13px !important;
+}
+
+.la-gallery-side {
+  gap: 7px !important;
+}
+
+.la-gallery-side > div:first-child {
+  border-radius: 0 13px 0 0 !important;
+}
+
+.la-gallery-side > div:last-child {
+  border-radius: 0 0 13px 0 !important;
+}
+
+.la-gallery-side span {
+  right: 10px !important;
+  bottom: 10px !important;
+  padding: 7px 10px !important;
+  border-radius: 7px !important;
+  font-size: 10px !important;
+}
+
+
+/* ==========================================================
+   MAIN GRID
+   ========================================================== */
+
+.la-main-grid {
+  display: grid !important;
+  grid-template-columns:
+    minmax(0, 1fr)
+    350px !important;
+
+  align-items: start !important;
+  gap: 18px !important;
+}
+
+
+/* ==========================================================
+   PROVIDER
+   Dibuat compact, bukan elemen dominan.
+   ========================================================== */
+
+.la-provider-card {
+  min-height: 56px !important;
+  padding: 10px 13px !important;
+  border-radius: 11px !important;
+}
+
+.la-provider-icon {
+  width: 34px !important;
+  height: 34px !important;
+}
+
+.la-provider-card small {
+  font-size: 9px !important;
+}
+
+.la-provider-card strong {
+  font-size: 11px !important;
+}
+
+.la-provider-card > span {
+  font-size: 9px !important;
+}
+
+
+/* ==========================================================
+   WARNING
+   ========================================================== */
+
+.la-flight-warning {
+  margin-top: 9px !important;
+  padding: 10px 13px !important;
+  border-radius: 10px !important;
+}
+
+.la-flight-warning strong {
+  font-size: 11px !important;
+}
+
+.la-flight-warning span {
+  font-size: 9px !important;
+}
+
+
+/* ==========================================================
+   PROGRAM SUMMARY
+   ========================================================== */
+
+.la-program-card {
+  margin-top: 10px !important;
+  padding: 14px !important;
+  border-radius: 11px !important;
+}
+
+.la-section-heading {
+  margin-bottom: 11px !important;
+}
+
+.la-section-heading span {
+  margin-bottom: 3px !important;
+  font-size: 8px !important;
+}
+
+.la-section-heading h2 {
+  color: #17395d !important;
+  font-size: 15px !important;
+}
+
+.la-program-grid {
+  grid-template-columns:
+    repeat(4, minmax(0, 1fr)) !important;
+
+  gap: 7px !important;
+}
+
+.la-program-grid > div {
+  min-height: 82px !important;
+  padding: 10px !important;
+  border-radius: 9px !important;
+}
+
+.la-program-grid svg {
+  width: 18px !important;
+  height: 18px !important;
+  margin-bottom: 7px !important;
+}
+
+.la-program-grid strong {
+  font-size: 10px !important;
+}
+
+.la-program-grid span {
+  margin-top: 2px !important;
+  font-size: 8px !important;
+}
+
+
+/* ==========================================================
+   ROOM SECTION
+   ========================================================== */
+
+.la-room-section {
+  margin-top: 10px !important;
+  padding: 14px !important;
+  border-radius: 11px !important;
+}
+
+.la-room-options {
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr)) !important;
+
+  gap: 8px !important;
+}
+
+.la-room-option {
+  min-height: 132px !important;
+  padding: 11px !important;
+  border-radius: 10px !important;
+}
+
+.la-room-option-top {
+  min-height: 27px !important;
+  margin-bottom: 8px !important;
+}
+
+.la-room-icon {
+  width: 29px !important;
+  height: 29px !important;
+}
+
+.la-room-badge {
+  padding: 3px 6px !important;
+  font-size: 7px !important;
+}
+
+.la-room-option > strong {
+  font-size: 12px !important;
+}
+
+.la-room-option > span {
+  margin-top: 2px !important;
+  font-size: 9px !important;
+}
+
+.la-room-stock {
+  margin-top: 4px !important;
+  font-size: 8px !important;
+}
+
+.la-room-price {
+  margin-top: 8px !important;
+  padding-top: 7px !important;
+}
+
+.la-room-price b {
+  font-size: 13px !important;
+}
+
+.la-room-price small {
+  font-size: 8px !important;
+}
+
+
+/* ==========================================================
+   INCLUDED / EXCLUDED
+   ========================================================== */
+
+.la-inclusion-overview {
+  grid-template-columns: 1fr 1fr !important;
+  gap: 10px !important;
+}
+
+.la-inclusion-box {
+  margin-top: 10px !important;
+  padding: 14px !important;
+  border-radius: 11px !important;
+}
+
+.la-overview-list {
+  gap: 7px !important;
+}
+
+.la-overview-list > div {
+  gap: 6px !important;
+  font-size: 9px !important;
+  line-height: 1.45 !important;
+}
+
+
+/* ==========================================================
+   DETAIL / TENTANG PAKET
+   ========================================================== */
+
+.la-tabs {
+  margin-top: 10px !important;
+  border-radius: 11px !important;
+}
+
+.la-tab-nav {
+  min-height: 38px !important;
+  padding: 0 10px !important;
+}
+
+.la-tab-nav button {
+  padding: 11px 10px 9px !important;
+  font-size: 9px !important;
+}
+
+.la-tab-panel {
+  min-height: 190px !important;
+  padding: 15px !important;
+}
+
+.la-tab-panel h2 {
+  margin-bottom: 8px !important;
+  font-size: 14px !important;
+}
+
+.la-tab-panel h3 {
+  margin: 13px 0 7px !important;
+  font-size: 11px !important;
+}
+
+.la-tab-panel p {
+  font-size: 9px !important;
+  line-height: 1.65 !important;
+}
+
+.la-facility-grid {
+  gap: 7px 14px !important;
+}
+
+.la-facility-grid span,
+.la-include-columns section > span {
+  font-size: 9px !important;
+}
+
+
+/* ==========================================================
+   BOOKING CARD
+   ========================================================== */
+
+.la-booking-card {
+  position: sticky !important;
+  top: 76px !important;
+
+  width: 100% !important;
+  max-width: none !important;
+
+  padding: 16px !important;
+
+  border: 1px solid #dfe7ef !important;
+  border-radius: 13px !important;
+
+  box-shadow:
+    0 10px 28px rgba(28, 62, 96, .09) !important;
+}
+
+
+/* ==========================================================
+   PRICE
+   ========================================================== */
+
+.la-booking-price {
+  padding-bottom: 12px !important;
+}
+
+.la-booking-price > small {
+  font-size: 9px !important;
+}
+
+.la-booking-price div {
+  margin-top: 2px !important;
+}
+
+.la-booking-price strong {
+  color: #ff4354 !important;
+  font-size: 25px !important;
+  font-weight: 800 !important;
+}
+
+.la-booking-price span {
+  font-size: 9px !important;
+}
+
+
+/* ==========================================================
+   SELECTED ROOM
+   ========================================================== */
+
+.la-selected-room {
+  gap: 7px !important;
+  padding: 10px 0 !important;
+}
+
+.la-selected-room small {
+  font-size: 7px !important;
+}
+
+.la-selected-room strong {
+  font-size: 10px !important;
+}
+
+.la-selected-room > span {
+  font-size: 8px !important;
+}
+
+
+/* ==========================================================
+   PERIOD
+   ========================================================== */
+
+.la-booking-field {
+  padding: 11px 0 !important;
+}
+
+.la-booking-field > span {
+  margin-bottom: 7px !important;
+  font-size: 9px !important;
+}
+
+.la-period-field > div.la-period-options {
+  gap: 6px !important;
+}
+
+.la-period-option {
+  grid-template-columns:
+    auto minmax(0, 1fr) auto !important;
+
+  gap: 7px !important;
+  padding: 8px !important;
+  border-radius: 8px !important;
+}
+
+.la-period-calendar {
+  width: 29px !important;
+  height: 29px !important;
+  border-radius: 7px !important;
+}
+
+.la-period-calendar svg {
+  width: 15px !important;
+  height: 15px !important;
+}
+
+.la-period-copy strong {
+  gap: 3px !important;
+  font-size: 9px !important;
+}
+
+.la-period-copy span {
+  margin-top: 2px !important;
+  font-size: 7px !important;
+}
+
+.la-period-status {
+  padding: 4px 6px !important;
+  font-size: 7px !important;
+}
+
+
+/* ==========================================================
+   ROOM COUNTER
+   ========================================================== */
+
+.la-traveler-control button {
+  width: 27px !important;
+  height: 27px !important;
+}
+
+.la-traveler-control strong {
+  font-size: 10px !important;
+}
+
+
+/* ==========================================================
+   BOOKING SUMMARY
+   ========================================================== */
+
+.la-booking-summary {
+  gap: 6px !important;
+  padding: 9px 0 !important;
+}
+
+.la-booking-summary > div {
+  gap: 6px !important;
+  font-size: 8px !important;
+}
+
+.la-booking-summary strong {
+  font-size: 8px !important;
+}
+
+
+/* ==========================================================
+   TOTAL
+   ========================================================== */
+
+.la-price-breakdown {
+  padding: 9px 0 7px !important;
+}
+
+.la-price-breakdown > div {
+  font-size: 8px !important;
+}
+
+.la-total {
+  padding-top: 9px !important;
+}
+
+.la-total span {
+  font-size: 10px !important;
+}
+
+.la-total strong {
+  color: #0878f9 !important;
+  font-size: 18px !important;
+}
+
+.la-total-note {
+  margin-top: 4px !important;
+  font-size: 7px !important;
+}
+
+
+/* ==========================================================
+   CTA
+   ========================================================== */
+
+.la-booking-button {
+  height: 43px !important;
+  margin-top: 11px !important;
+  border-radius: 8px !important;
+  font-size: 10px !important;
+}
+
+.la-date-note {
+  margin-top: 6px !important;
+  font-size: 7px !important;
+}
+
+.la-booking-assurance {
+  gap: 5px !important;
+  margin-top: 10px !important;
+  padding-top: 9px !important;
+  font-size: 7px !important;
+}
+
+
+/* ==========================================================
+   DESKTOP LARGE
+   Jangan melebar walau monitor besar.
+   ========================================================== */
+
+@media (min-width: 1440px) {
+
+  .la-detail-container {
+    width: min(1180px, calc(100% - 48px)) !important;
+  }
+
+  .la-main-grid {
+    grid-template-columns:
+      minmax(0, 1fr)
+      350px !important;
+
+    gap: 18px !important;
+  }
+
+  .la-gallery {
+    height: 355px !important;
+  }
+
+}
+
+
+/* ==========================================================
+   LAPTOP
+   ========================================================== */
+
+@media (min-width: 901px) and (max-width: 1199px) {
+
+  .la-detail-container {
+    width: min(1080px, calc(100% - 32px)) !important;
+  }
+
+  .la-main-grid {
+    grid-template-columns:
+      minmax(0, 1fr)
+      330px !important;
+
+    gap: 15px !important;
+  }
+
+  .la-gallery {
+    height: 330px !important;
+  }
+
+}
+
+
+/* ==========================================================
+   TABLET
+   ========================================================== */
+
+@media (max-width: 900px) {
+
+  .la-main-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .la-booking-card {
+    position: static !important;
+    max-width: none !important;
+  }
+
+}
+
+
+/* ==========================================================
+   MOBILE
+   ========================================================== */
+
+@media (max-width: 600px) {
+
+  .la-detail-page {
+    padding: 12px 0 88px !important;
+  }
+
+  .la-detail-container {
+    width: calc(100% - 20px) !important;
+  }
+
+  .la-breadcrumb {
+    margin-bottom: 10px !important;
+    font-size: 9px !important;
+  }
+
+  .la-heading h1 {
+    font-size: 22px !important;
+  }
+
+  .la-rating-line {
+    font-size: 9px !important;
+  }
+
+  .la-gallery {
+    display: block !important;
+    height: 245px !important;
+    margin-bottom: 10px !important;
+  }
+
+  .la-gallery-main {
+    height: 100% !important;
+    border-radius: 11px !important;
+  }
+
+  .la-gallery-side {
+    display: none !important;
+  }
+
+  .la-provider-card {
+    padding: 10px !important;
+  }
+
+  .la-flight-warning {
+    padding: 10px !important;
+  }
+
+  .la-program-card,
+  .la-room-section,
+  .la-inclusion-box {
+    padding: 12px !important;
+  }
+
+  .la-program-grid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .la-room-options {
+    grid-template-columns:
+      repeat(3, minmax(0, 1fr)) !important;
+
+    gap: 5px !important;
+  }
+
+  .la-room-option {
+    min-height: 125px !important;
+    padding: 8px !important;
+  }
+
+  .la-room-badge {
+    display: none !important;
+  }
+
+  .la-room-price b {
+    font-size: 11px !important;
+  }
+
+  .la-inclusion-overview {
+    grid-template-columns: 1fr !important;
+  }
+
+  .la-booking-card {
+    padding: 14px !important;
+  }
+
+  .la-booking-price strong {
+    font-size: 23px !important;
+  }
+
+  .la-period-option {
+    grid-template-columns:
+      auto minmax(0, 1fr) !important;
+  }
+
+  .la-period-status {
+    grid-column: 2 !important;
+    justify-self: start !important;
+  }
+
+}
+
+/* SEGALOKA LA BOOKING REFERENCE V2 END */
+
+
+/* SEGALOKA LA TYPOGRAPHY FINAL START */
+
+/*
+ * TYPOGRAPHY SCALE DETAIL LA
+ *
+ * Desktop baseline:
+ * micro       10-11px
+ * secondary   12px
+ * body        13px
+ * important   14px
+ * section     17px
+ * page title  30px
+ *
+ * Geometry/layout TIDAK diubah.
+ */
+
+
+/* ==========================================================
+   GLOBAL DETAIL
+   ========================================================== */
+
+.la-detail-page {
+  font-size: 13px !important;
+  line-height: 1.5 !important;
+}
+
+
+/* ==========================================================
+   BREADCRUMB
+   ========================================================== */
+
+.la-breadcrumb,
+.la-breadcrumb a,
+.la-breadcrumb span {
+  font-size: 11px !important;
+  line-height: 1.4 !important;
+}
+
+
+/* ==========================================================
+   PAGE TITLE
+   ========================================================== */
+
+.la-heading h1 {
+  font-size: 30px !important;
+  line-height: 1.18 !important;
+  font-weight: 800 !important;
+}
+
+.la-rating-line {
+  font-size: 11px !important;
+  line-height: 1.4 !important;
+}
+
+.la-rating-line strong {
+  font-size: 11px !important;
+}
+
+
+/* ==========================================================
+   GALLERY
+   ========================================================== */
+
+.la-gallery-side span {
+  font-size: 11px !important;
+  line-height: 1.3 !important;
+}
+
+
+/* ==========================================================
+   PROVIDER
+   ========================================================== */
+
+.la-provider-card small {
+  font-size: 10px !important;
+  line-height: 1.35 !important;
+}
+
+.la-provider-card strong {
+  font-size: 13px !important;
+  line-height: 1.35 !important;
+}
+
+.la-provider-card > span {
+  font-size: 10px !important;
+  line-height: 1.35 !important;
+}
+
+
+/* ==========================================================
+   WARNING
+   ========================================================== */
+
+.la-flight-warning strong {
+  font-size: 13px !important;
+  line-height: 1.4 !important;
+}
+
+.la-flight-warning span {
+  font-size: 11px !important;
+  line-height: 1.55 !important;
+}
+
+
+/* ==========================================================
+   SECTION HEADING
+   ========================================================== */
+
+.la-section-heading span {
+  font-size: 10px !important;
+  line-height: 1.3 !important;
+  letter-spacing: .06em !important;
+}
+
+.la-section-heading h2 {
+  font-size: 17px !important;
+  line-height: 1.3 !important;
+  font-weight: 700 !important;
+}
+
+
+/* ==========================================================
+   RINGKASAN PROGRAM
+   ========================================================== */
+
+.la-program-grid strong {
+  font-size: 12px !important;
+  line-height: 1.35 !important;
+}
+
+.la-program-grid span {
+  font-size: 10px !important;
+  line-height: 1.45 !important;
+}
+
+
+/* ==========================================================
+   ROOM CARDS
+   ========================================================== */
+
+.la-room-badge {
+  font-size: 9px !important;
+  line-height: 1.2 !important;
+}
+
+.la-room-option > strong {
+  font-size: 14px !important;
+  line-height: 1.35 !important;
+}
+
+.la-room-option > span {
+  font-size: 11px !important;
+  line-height: 1.4 !important;
+}
+
+.la-room-stock {
+  font-size: 10px !important;
+  line-height: 1.35 !important;
+}
+
+.la-room-price b {
+  font-size: 17px !important;
+  line-height: 1.25 !important;
+}
+
+.la-room-price small {
+  font-size: 10px !important;
+  line-height: 1.3 !important;
+}
+
+
+/* ==========================================================
+   INCLUDED / EXCLUDED
+   ========================================================== */
+
+.la-overview-list > div {
+  font-size: 11px !important;
+  line-height: 1.5 !important;
+}
+
+
+/* ==========================================================
+   TAB NAVIGATION
+   ========================================================== */
+
+.la-tab-nav button {
+  font-size: 11px !important;
+  line-height: 1.35 !important;
+  font-weight: 700 !important;
+}
+
+
+/* ==========================================================
+   TAB CONTENT
+   ========================================================== */
+
+.la-tab-panel h2 {
+  font-size: 17px !important;
+  line-height: 1.35 !important;
+}
+
+.la-tab-panel h3 {
+  font-size: 14px !important;
+  line-height: 1.4 !important;
+}
+
+.la-tab-panel p {
+  font-size: 12px !important;
+  line-height: 1.65 !important;
+}
+
+.la-facility-grid span,
+.la-include-columns section > span {
+  font-size: 12px !important;
+  line-height: 1.45 !important;
+}
+
+
+/* ==========================================================
+   ITINERARY
+   ========================================================== */
+
+.la-itinerary-number {
+  font-size: 11px !important;
+}
+
+.la-itinerary small {
+  font-size: 10px !important;
+}
+
+.la-itinerary h3 {
+  font-size: 14px !important;
+}
+
+.la-itinerary p {
+  font-size: 12px !important;
+}
+
+
+/* ==========================================================
+   BOOKING CARD - PRICE
+   ========================================================== */
+
+.la-booking-price > small {
+  font-size: 11px !important;
+  line-height: 1.35 !important;
+}
+
+.la-booking-price strong {
+  font-size: 26px !important;
+  line-height: 1.15 !important;
+  font-weight: 800 !important;
+}
+
+.la-booking-price span {
+  font-size: 11px !important;
+}
+
+
+/* ==========================================================
+   SELECTED ROOM
+   ========================================================== */
+
+.la-selected-room small {
+  font-size: 9px !important;
+  line-height: 1.3 !important;
+}
+
+.la-selected-room strong {
+  font-size: 12px !important;
+  line-height: 1.35 !important;
+}
+
+.la-selected-room > span {
+  font-size: 10px !important;
+  line-height: 1.35 !important;
+}
+
+
+/* ==========================================================
+   BOOKING FIELD LABELS
+   ========================================================== */
+
+.la-booking-field > span {
+  font-size: 11px !important;
+  line-height: 1.35 !important;
+  font-weight: 700 !important;
+}
+
+
+/* ==========================================================
+   PERIOD VENDOR
+   ========================================================== */
+
+.la-period-copy strong {
+  font-size: 11px !important;
+  line-height: 1.4 !important;
+}
+
+.la-period-copy span {
+  font-size: 9px !important;
+  line-height: 1.4 !important;
+}
+
+.la-period-status {
+  font-size: 9px !important;
+  line-height: 1.2 !important;
+  font-weight: 800 !important;
+}
+
+
+/* ==========================================================
+   ROOM COUNTER
+   ========================================================== */
+
+.la-traveler-control strong {
+  font-size: 12px !important;
+  line-height: 1.35 !important;
+}
+
+
+/* ==========================================================
+   BOOKING SUMMARY
+   ========================================================== */
+
+.la-booking-summary > div {
+  font-size: 10px !important;
+  line-height: 1.4 !important;
+}
+
+.la-booking-summary strong {
+  font-size: 10px !important;
+  line-height: 1.4 !important;
+}
+
+
+/* ==========================================================
+   PRICE BREAKDOWN
+   ========================================================== */
+
+.la-price-breakdown > div {
+  font-size: 10px !important;
+  line-height: 1.4 !important;
+}
+
+.la-price-breakdown strong {
+  font-size: 10px !important;
+}
+
+
+/* ==========================================================
+   TOTAL
+   ========================================================== */
+
+.la-total span {
+  font-size: 13px !important;
+  line-height: 1.3 !important;
+}
+
+.la-total strong {
+  font-size: 21px !important;
+  line-height: 1.2 !important;
+  font-weight: 800 !important;
+}
+
+.la-total-note {
+  font-size: 9px !important;
+  line-height: 1.45 !important;
+}
+
+
+/* ==========================================================
+   CTA
+   ========================================================== */
+
+.la-booking-button {
+  font-size: 12px !important;
+  line-height: 1 !important;
+  font-weight: 800 !important;
+}
+
+.la-date-note {
+  font-size: 9px !important;
+  line-height: 1.4 !important;
+}
+
+.la-booking-assurance {
+  font-size: 9px !important;
+  line-height: 1.45 !important;
+}
+
+
+/* ==========================================================
+   MOBILE TYPOGRAPHY
+   ========================================================== */
+
+@media (max-width: 600px) {
+
+  .la-detail-page {
+    font-size: 12px !important;
+  }
+
+  .la-breadcrumb,
+  .la-breadcrumb a,
+  .la-breadcrumb span {
+    font-size: 10px !important;
+  }
+
+  .la-heading h1 {
+    font-size: 23px !important;
+    line-height: 1.2 !important;
+  }
+
+  .la-rating-line {
+    font-size: 10px !important;
+  }
+
+  .la-provider-card small {
+    font-size: 9px !important;
+  }
+
+  .la-provider-card strong {
+    font-size: 12px !important;
+  }
+
+  .la-provider-card > span {
+    font-size: 9px !important;
+  }
+
+  .la-flight-warning strong {
+    font-size: 12px !important;
+  }
+
+  .la-flight-warning span {
+    font-size: 10px !important;
+  }
+
+  .la-section-heading span {
+    font-size: 9px !important;
+  }
+
+  .la-section-heading h2 {
+    font-size: 16px !important;
+  }
+
+  .la-program-grid strong {
+    font-size: 11px !important;
+  }
+
+  .la-program-grid span {
+    font-size: 9px !important;
+  }
+
+  .la-room-option > strong {
+    font-size: 12px !important;
+  }
+
+  .la-room-option > span {
+    font-size: 9px !important;
+  }
+
+  .la-room-stock {
+    font-size: 8px !important;
+  }
+
+  .la-room-price b {
+    font-size: 12px !important;
+  }
+
+  .la-room-price small {
+    font-size: 8px !important;
+  }
+
+  .la-overview-list > div {
+    font-size: 10px !important;
+  }
+
+  .la-tab-nav button {
+    font-size: 10px !important;
+  }
+
+  .la-tab-panel h2 {
+    font-size: 16px !important;
+  }
+
+  .la-tab-panel h3 {
+    font-size: 13px !important;
+  }
+
+  .la-tab-panel p,
+  .la-facility-grid span,
+  .la-include-columns section > span {
+    font-size: 11px !important;
+  }
+
+  .la-booking-price > small {
+    font-size: 10px !important;
+  }
+
+  .la-booking-price strong {
+    font-size: 24px !important;
+  }
+
+  .la-booking-price span {
+    font-size: 10px !important;
+  }
+
+  .la-selected-room strong {
+    font-size: 11px !important;
+  }
+
+  .la-booking-field > span {
+    font-size: 10px !important;
+  }
+
+  .la-period-copy strong {
+    font-size: 10px !important;
+  }
+
+  .la-period-copy span {
+    font-size: 8px !important;
+  }
+
+  .la-period-status {
+    font-size: 8px !important;
+  }
+
+  .la-booking-summary > div,
+  .la-booking-summary strong,
+  .la-price-breakdown > div {
+    font-size: 9px !important;
+  }
+
+  .la-total span {
+    font-size: 12px !important;
+  }
+
+  .la-total strong {
+    font-size: 19px !important;
+  }
+
+  .la-booking-button {
+    font-size: 12px !important;
+  }
+
+}
+
+/* SEGALOKA LA TYPOGRAPHY FINAL END */
+
+/* SEGALOKA ACCOMMODATION DETAIL CANONICAL VISUAL V1 */
+
+.la-title-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.la-title-row > h1 {
+  min-width: 0;
+  margin: 0;
+}
+
+.la-title-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 0 0 auto;
+}
+
+.la-title-actions button {
+  min-height: 36px;
+  padding: 0 13px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  border: 1px solid #e4e7ec;
+  border-radius: 999px;
+  background: #ffffff;
+  color: #344054;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    border-color 160ms ease,
+    background-color 160ms ease,
+    color 160ms ease;
+}
+
+.la-title-actions button:hover {
+  border-color: #b9d7fb;
+  background: #f8fbff;
+  color: #1473e6;
+}
+
+.la-gallery {
+  overflow: hidden;
+}
+
+.la-gallery-main img,
+.la-gallery-side img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+@media (min-width: 900px) {
+  .la-gallery {
+    display: grid;
+    grid-template-columns: minmax(0, 1.7fr) minmax(300px, 1fr);
+    gap: 8px;
+  }
+
+  .la-gallery-main {
+    min-height: 360px;
+  }
+
+  .la-gallery-side {
+    min-height: 360px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .la-gallery-main,
+  .la-gallery-main img {
+    border-radius: 14px 0 0 14px;
+  }
+
+  .la-gallery-side > * {
+    min-width: 0;
+    min-height: 0;
+  }
+
+  .la-gallery-side > :nth-child(1),
+  .la-gallery-side > :nth-child(1) img {
+    border-radius: 0 14px 0 0;
+  }
+
+  .la-gallery-side > :last-child,
+  .la-gallery-side > :last-child img {
+    border-radius: 0 0 14px 0;
+  }
+}
+
+@media (max-width: 899px) {
+  .la-title-row {
+    display: block;
+  }
+
+  .la-title-actions {
+    margin-top: 12px;
+  }
+
+  .la-title-actions button {
+    min-height: 34px;
+    padding-inline: 11px;
+  }
+
+  .la-gallery {
+    display: block;
+  }
+}
+
+@media (max-width: 520px) {
+  .la-title-actions span {
+    display: none;
+  }
+
+  .la-title-actions button {
+    width: 36px;
+    padding: 0;
+  }
+}
+/* SEGALOKA ACCOMMODATION DETAIL BODY V2 */
+
+/* ------------------------------------------------------------
+   Gallery
+------------------------------------------------------------ */
+
+@media (min-width: 900px) {
+  .la-gallery {
+    grid-template-columns:
+      minmax(0, 2.05fr)
+      minmax(320px, 1fr) !important;
+    gap: 8px !important;
+  }
+
+  .la-gallery-main,
+  .la-gallery-side {
+    height: 370px !important;
+    min-height: 370px !important;
+  }
+
+  .la-gallery-main img,
+  .la-gallery-side img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+  }
+
+  .la-gallery-side {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    grid-template-rows: repeat(2, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+  }
+}
+
+/* ------------------------------------------------------------
+   Program summary
+------------------------------------------------------------ */
+
+.la-program-card {
+  width: 100%;
+}
+
+.la-program-grid {
+  width: 100%;
+  display: grid !important;
+  grid-template-columns:
+    repeat(auto-fit, minmax(135px, 1fr)) !important;
+  gap: 8px !important;
+}
+
+.la-program-grid > * {
+  min-width: 0;
+  height: 100%;
+}
+
+/* ------------------------------------------------------------
+   Room cards
+   Disabled = tidak bookable, tetapi informasinya tetap terbaca.
+------------------------------------------------------------ */
+
+.la-room-options {
+  display: grid !important;
+  grid-template-columns:
+    repeat(auto-fit, minmax(170px, 1fr)) !important;
+  gap: 8px !important;
+}
+
+.la-room-option {
+  min-width: 0;
+  opacity: 1 !important;
+  filter: none !important;
+}
+
+.la-room-option:disabled,
+.la-room-option[aria-disabled="true"] {
+  opacity: 1 !important;
+  filter: none !important;
+  cursor: not-allowed !important;
+  background: #ffffff !important;
+  border-color: #e4e7ec !important;
+}
+
+.la-room-option:disabled .la-room-icon,
+.la-room-option[aria-disabled="true"] .la-room-icon {
+  opacity: 0.7 !important;
+}
+
+.la-room-option:disabled .la-room-price,
+.la-room-option[aria-disabled="true"] .la-room-price {
+  opacity: 0.72 !important;
+}
+
+.la-room-option.active {
+  border-color: #69aef7 !important;
+  box-shadow: 0 0 0 1px #69aef7 !important;
+}
+
+/* ------------------------------------------------------------
+   Facilities / itinerary
+------------------------------------------------------------ */
+
+.la-facility-section,
+.la-facilities-section {
+  width: 100%;
+}
+
+.la-facility-grid,
+.la-facilities-grid {
+  display: grid !important;
+  grid-template-columns:
+    repeat(auto-fit, minmax(150px, 1fr)) !important;
+  gap: 8px !important;
+}
+
+/*
+  Bila layout induk mempunyai dua kolom tetapi itinerary kosong,
+  facilities tidak boleh hanya memakai setengah halaman.
+*/
+.la-content-grid:has(.la-facility-section:only-child),
+.la-content-grid:has(.la-facilities-section:only-child) {
+  grid-template-columns: minmax(0, 1fr) !important;
+}
+
+.la-content-grid > :only-child {
+  grid-column: 1 / -1 !important;
+}
+
+/* ------------------------------------------------------------
+   Included / excluded semantics
+------------------------------------------------------------ */
+
+.la-semantic-included {
+  color: #172033 !important;
+}
+
+.la-semantic-excluded {
+  color: #172033 !important;
+}
+
+/*
+  Included harus hijau.
+*/
+.la-include-columns > div:first-child svg,
+.la-include-columns > section:first-child svg,
+.la-include-columns > article:first-child svg {
+  color: #18a15e !important;
+  stroke: #18a15e !important;
+}
+
+.la-include-columns > div:first-child li::marker,
+.la-include-columns > section:first-child li::marker {
+  color: #18a15e !important;
+}
+
+/*
+  Excluded hanya merah apabila kolom kedua memang ada.
+*/
+.la-include-columns > div:nth-child(2) svg,
+.la-include-columns > section:nth-child(2) svg,
+.la-include-columns > article:nth-child(2) svg {
+  color: #e25c64 !important;
+  stroke: #e25c64 !important;
+}
+
+/* ------------------------------------------------------------
+   Tabs
+------------------------------------------------------------ */
+
+.la-tabs {
+  width: 100%;
+}
+
+.la-tabs button {
+  white-space: nowrap;
+}
+
+.la-tab-content,
+.la-tabs-content {
+  min-height: 0 !important;
+}
+
+/* ------------------------------------------------------------
+   Main layout
+------------------------------------------------------------ */
+
+@media (min-width: 1024px) {
+  .la-detail-layout,
+  .la-main-grid,
+  .la-content-layout {
+    align-items: start !important;
+  }
+
+  .la-booking-card {
+    position: sticky;
+    top: 88px;
+  }
+}
+
+/* ------------------------------------------------------------
+   Mobile
+------------------------------------------------------------ */
+
+@media (max-width: 899px) {
+  .la-gallery-main,
+  .la-gallery-side {
+    height: auto !important;
+    min-height: 0 !important;
+  }
+
+  .la-program-grid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .la-room-options {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 520px) {
+  .la-program-grid,
+  .la-room-options,
+  .la-facility-grid,
+  .la-facilities-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .la-tabs {
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .la-tabs::-webkit-scrollbar {
+    display: none;
+  }
+}

@@ -1,0 +1,48 @@
+﻿{
+    "dashboards":  [
+                       {
+                           "port":  4202,
+                           "app":  "control-center",
+                           "source":  "apps/control-center/frontend/control-center.html",
+                           "role":  "super_admin"
+                       },
+                       {
+                           "port":  4200,
+                           "app":  "travel-dashboard",
+                           "source":  "apps/travel-dashboard/original-v7/travel.html",
+                           "role":  "travel"
+                       },
+                       {
+                           "port":  4204,
+                           "app":  "vendor-dashboard",
+                           "source":  "apps/vendor-dashboard/original-v7/vendor.html",
+                           "role":  "vendor"
+                       },
+                       {
+                           "port":  4210,
+                           "app":  "traveler-portal",
+                           "source":  "apps/traveler-portal/original-v7/traveler.html",
+                           "role":  "traveler"
+                       },
+                       {
+                           "port":  4212,
+                           "app":  "affiliate-dashboard",
+                           "source":  "apps/affiliate-dashboard/original-v7/affiliate.html",
+                           "role":  "affiliate"
+                       },
+                       {
+                           "port":  4214,
+                           "app":  "mitra-dashboard",
+                           "source":  "apps/mitra-dashboard/original-v7/mitra.html",
+                           "role":  "mitra"
+                       },
+                       {
+                           "port":  4216,
+                           "app":  "agen-dashboard",
+                           "source":  "apps/agen-dashboard/original-v7/agen.html",
+                           "role":  "agen"
+                       }
+                   ],
+    "source":  "existing-v7",
+    "version":  1
+}
