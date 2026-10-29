@@ -3629,3 +3629,45 @@ applyTheme(); applyLang(); renderShell(); render();
 /* SEGALOKA_CC_LEGACY_CONNECT_DISABLED_V1 */
 
 
+
+/* SEGALOKA_CC_ACTION_POLICY_V1: aksi bisnis yang belum persisten ditolak dengan
+   pesan yang jujur; 20 aksi cc-* yang membaca API, navigasi, dan modal tetap
+   berjalan. Dihasilkan dari apps/shared/runtime/v7-action-policy.mjs. */
+A.signout = async () => {
+  closeOverlays();
+  try {
+    const response = await fetch('/bff/logout', {
+      method: 'POST',
+      credentials: 'same-origin',
+      cache: 'no-store'
+    });
+    if (!response.ok) throw new Error('LOGOUT_FAILED');
+    window.location.replace('/');
+  } catch (error) {
+    toast('bad', L3(['Logout gagal', 'Logout failed', 'فشل تسجيل الخروج']), L3(['Koneksi ke server tidak tersedia.', 'The server connection is unavailable.', 'الخادم غير متاح.']));
+  }
+};
+(() => {
+  const allowedActions = new Set(["ap-back","attr-model","close","cmd-go","cmd-scope","collapse","copy","csv-copy","ctx-toggle","drawer","lang","mf-apply","mf-reset","nav","ncat","notif-go","omni-back","omni-copy","omni-tab","rec-pick","search","tbl-clear","tbl-colt","tbl-f","tbl-pg","tbl-reset","tbl-sel","tbl-selall","tbl-sort","tg-group","tg-mod","theme","toast-x","u-cat","wz-go","wz-set","wz-toggle","acct","add-branch","add-travel","ag-new","al-new","audit-diff","doc-prev","lead-new","lt-issue","lt-leave","lt-pass","ma-reg","more-filter","notif","pg-edit","preview-data","reg-cfg","reg-set","reg-trpct","res-edit","res-new","res-open","row-menu","rv-new","rv-reply","sd-cfg","sd-trfee","tbl-cols","tm-new","to-new","tp-edit","tp-new","vp-new","wd-req","wd-view","wizard","cc-audit-next","cc-audit-prev","cc-audit-refresh","cc-booking-refresh","cc-branches-next","cc-branches-prev","cc-branches-refresh","cc-summary-refresh","cc-travel-apply-filter","cc-travel-columns","cc-travel-export","cc-travel-filter","cc-travel-more-filter","cc-travel-next","cc-travel-prev","cc-travel-refresh","cc-travel-reset-filter","cc-travel-row-menu","cc-travel-toggle-column","cc-vendor-refresh","signout"]);
+  const blockedMessage = "Belum tersambung ke server; perubahan tidak disimpan";
+  const notifyBlocked = () => {
+    toast('warn', blockedMessage, '');
+  };
+  for (const name of Object.keys(A)) {
+    if (!allowedActions.has(name)) {
+      A[name] = () => notifyBlocked();
+    }
+  }
+  document.addEventListener('click', event => {
+    const target = event.target.closest('[data-act]');
+    if (!target || allowedActions.has(target.dataset.act)) return;
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    notifyBlocked();
+  }, true);
+  document.addEventListener('submit', event => {
+    event.preventDefault();
+    event.stopImmediatePropagation();
+  }, true);
+  window.__SEGALOKA_V7_ACTION_POLICY__ = Object.freeze({"navigation":37,"modal":36,"memory-only":97,"supabase-gateway":10,"payment-omnichannel":54});
+})();

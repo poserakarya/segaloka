@@ -1,47 +1,20 @@
-function replaceExpectedCount(source, search, replacement, expected, label) {
-  let count = 0;
-  let offset = 0;
+import {
+  applyCommonV7Patches,
+  CLEAR_DEMO_DATA,
+  createV7Patcher,
+  ORIGINAL_V7_BOOT,
+  safeJson,
+  TENANT_LABEL_PATCH,
+  UNKNOWN_STATUS_PATCH,
+  V7_PORTAL_RESTRICTION_STYLES
+} from '../../shared/runtime/v7-portal-source.mjs';
 
-  while ((offset = source.indexOf(search, offset)) >= 0) {
-    count++;
-    offset += search.length;
-  }
-
-  if (count !== expected) {
-    throw new Error(`TRAVEL_V7_SOURCE_ANCHOR_INVALID:${label}`);
-  }
-
-  return source.replaceAll(search, replacement);
-}
-
-function replaceExactlyOnce(source, search, replacement, label) {
-  return replaceExpectedCount(source, search, replacement, 1, label);
-}
-
-function removeBetweenOnce(source, start, end, label) {
-  const startIndex = source.indexOf(start);
-  const endIndex = startIndex < 0
-    ? -1
-    : source.indexOf(end, startIndex + start.length);
-
-  if (
-    startIndex < 0 ||
-    endIndex < 0 ||
-    source.indexOf(start, startIndex + start.length) >= 0 ||
-    source.indexOf(end, endIndex + end.length) >= 0
-  ) {
-    throw new Error(`TRAVEL_V7_SOURCE_ANCHOR_INVALID:${label}`);
-  }
-
-  return source.slice(0, startIndex) + source.slice(endIndex);
-}
-
-function safeJson(value) {
-  return JSON.stringify(value)
-    .replace(/</g, '\\u003c')
-    .replace(/>/g, '\\u003e')
-    .replace(/&/g, '\\u0026');
-}
+const patcher = createV7Patcher('TRAVEL');
+const {
+  replaceExpectedCount,
+  replaceExactlyOnce,
+  assembleDocument
+} = patcher;
 
 export function renderTravelV7Source(source, context) {
   if (
@@ -60,75 +33,19 @@ export function renderTravelV7Source(source, context) {
   const serializedContext = safeJson(context);
   const contextScript =
     `<script>window.__SEGALOKA_TRAVEL_CONTEXT__=${serializedContext};</script>`;
-  const styles = [
-    '<style>',
-    '.wsbtn{display:none!important}',
-    '.side-foot>a[href="#/overview"]{display:none!important}',
-    '.pent{cursor:default}',
-    '</style>'
-  ].join('');
-
-  const styleEnd = source.indexOf('</style>');
-  if (styleEnd < 0 || source.indexOf('</style>', styleEnd + 8) >= 0) {
-    throw new Error('TRAVEL_V7_SOURCE_ANCHOR_INVALID:style');
-  }
-
-  const styleEndOffset = styleEnd + '</style>'.length;
-  let html = [
-    '<!doctype html><html lang="id"><head>',
-    source.slice(0, styleEndOffset),
-    contextScript,
-    styles,
-    '<base href="/bff/ui/">',
-    '</head><body>',
-    source.slice(styleEndOffset),
-    '</body></html>'
-  ].join('');
-
-  html = replaceExactlyOnce(
-    html,
-    'const MOCK = true;',
-    'const MOCK = false;',
-    'mock-flag'
+  let html = assembleDocument(
+    source,
+    contextScript + V7_PORTAL_RESTRICTION_STYLES
   );
 
-  html = replaceExactlyOnce(
-    html,
-    'const DEMO = /[?&]demo\\b/.test(location.search);',
-    'const DEMO = false;',
-    'demo-flag'
-  );
+  html = applyCommonV7Patches(html, patcher, {
+    role: 'travel',
+    roleLabel: 'Travel',
+    contextVar: 'travelRuntimeContext',
+    tenantVar: 'travelOrganization'
+  });
 
-  html = replaceExactlyOnce(
-    html,
-    'const ROLES = {',
-    "const ROLES = {\n  travel: { label: 'Travel', perms: [] },",
-    'travel-role'
-  );
-
-  html = removeBetweenOnce(
-    html,
-    '  <div class="mh">${t(\'ux_sim\')}</div>',
-    '  <div class="sep"></div><div class="mh">${t(\'language\')} · ${t(\'theme\')}',
-    'account-simulator'
-  );
-
-  html = replaceExactlyOnce(
-    html,
-    '<span class="avatar">SA</span><div><b>Admin Pusat</b><div class="muted" style="font-size:12px">admin@segaloka.example</div>',
-    '<span class="avatar">${esc((travelRuntimeContext.user.name || travelRuntimeContext.user.email || travelOrganization.name).slice(0, 2).toUpperCase())}</span><div><b>${esc(travelRuntimeContext.user.name || travelRuntimeContext.user.email || travelOrganization.name)}</b><div class="muted" style="font-size:12px">${esc(travelRuntimeContext.user.email || \'\')}</div>',
-    'account-identity'
-  );
-
-  html = removeBetweenOnce(
-    html,
-    '<div class="sep"></div><button class="mi" data-act="nav" data-r="/compliance/audit">',
-    '<button class="mi" data-act="signout">',
-    'account-admin-link'
-  );
-
-  const clearDemoData =
-    'if (!DEMO) { ENTITY_ARRAYS().forEach(a => { a.length = 0; }); clearFakeStats(); }';
+  const clearDemoData = CLEAR_DEMO_DATA;
   const initializeTravelContext = `${clearDemoData}
 const travelRuntimeContext = window.__SEGALOKA_TRAVEL_CONTEXT__;
 if (!travelRuntimeContext || travelRuntimeContext.role !== 'travel') {
@@ -167,8 +84,8 @@ S.role = 'travel';`;
 
   html = replaceExactlyOnce(
     html,
-    "function st(key) { const s = STATUS[key] || ['neu', 'circle', key, key, key]; return `<span class=\"st ${s[0]}\">${ic(s[1])}${esc(L3(s.slice(2)))}</span>`; }",
-    "function st(key) { if (key == null) return `<span class=\"st neu\">${ic('minus')}${esc(L3(['Belum tersedia', 'Unavailable', 'غير متاح']))}</span>`; const s = STATUS[key] || ['neu', 'circle', key, key, key]; return `<span class=\"st ${s[0]}\">${ic(s[1])}${esc(L3(s.slice(2)))}</span>`; }",
+    UNKNOWN_STATUS_PATCH.search,
+    UNKNOWN_STATUS_PATCH.replacement,
     'unknown-status'
   );
 
@@ -194,8 +111,8 @@ S.role = 'travel';`;
 
   html = replaceExactlyOnce(
     html,
-    "L3(['Masuk sebagai · ganti', 'Signed in as · switch', 'تبديل'])",
-    "L3(['Organisasi aktif', 'Active organization', 'المؤسسة النشطة'])",
+    TENANT_LABEL_PATCH.search,
+    TENANT_LABEL_PATCH.replacement,
     'tenant-label'
   );
 
@@ -206,10 +123,7 @@ S.role = 'travel';`;
     'api-retry-action'
   );
 
-  const boot =
-    'applyTheme(); applyLang(); renderShell(); render();\n' +
-    'setInterval(realtime, 16000);\n' +
-    'sbConnect();';
+  const boot = ORIGINAL_V7_BOOT;
   const secureBoot = `S.route = '/p/travel/departures';
 if (!/^#\\/p\\/travel(?:\\/|$)/.test(location.hash)) {
   location.hash = '#/p/travel/departures';

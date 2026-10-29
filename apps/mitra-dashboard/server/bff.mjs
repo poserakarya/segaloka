@@ -1,8 +1,8 @@
 import http from 'node:http';
-import { serveProtectedV7 } from '../../protected-v7-assets.mjs';
-import { randomBytes } from 'node:crypto';
 import { createRequire } from 'node:module';
 import { createSessionStore } from './session-store.mjs';
+import { createBffLoginContract } from '../../shared/runtime/bff-login-contract.mjs';
+import { serveV7PortalUi } from '../../shared/runtime/v7-portal-source.mjs';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -92,6 +92,15 @@ const sessions = createSessionStore(
   pool,
   bffConfig.BFF_SESSION_ENCRYPTION_KEY
 );
+
+const loginContract = createBffLoginContract({
+  apiRequest,
+  sessions,
+  hasDashboardAccess: mitraMembership,
+  sessionCookie: sessionId => sessionCookie(sessionId),
+  accessDeniedCode: 'MITRA_ACCESS_REQUIRED',
+  accessDeniedMessage: 'Akun tidak memiliki akses Dashboard mitra.'
+});
 
 function json(res, status, data, headers = {}) {
   res.writeHead(status, {
@@ -245,93 +254,9 @@ const server = http.createServer(async (req, res) => {
       return json(res, 200, { status: 'ok' });
     }
 
-    if (req.method === 'POST' && path === '/bff/login') {
-      const body = JSON.parse(
-        (await readBody(req)).toString('utf8')
-      );
-
-      if (
-        typeof body.email !== 'string' ||
-        typeof body.password !== 'string'
-      ) {
-        return json(res, 400, {
-          code: 'INVALID_LOGIN_REQUEST'
-        });
-      }
-
-      const login = await apiRequest(
-        'POST',
-        '/auth/login',
-        {
-          email: body.email,
-          password: body.password
-        }
-      );
-
-      if (login.status !== 200) {
-        return json(res, login.status, {
-          code: login.data.code || 'LOGIN_FAILED',
-          message: login.data.message || 'Login gagal.'
-        });
-      }
-
-      const accessToken = accessTokenOf(
-        login.data.session
-      );
-
-      const refreshToken = refreshTokenOf(
-        login.data.session
-      );
-
-      if (!accessToken || !refreshToken) {
-        return json(res, 502, {
-          code: 'INVALID_SESSION_RESPONSE'
-        });
-      }
-
-      const me = await apiRequest(
-        'GET',
-        '/auth/me',
-        undefined,
-        accessToken
-      );
-
-      if (
-        me.status !== 200 ||
-        !mitraMembership(me.data)
-      ) {
-        await apiRequest('POST', '/auth/logout', {
-          refreshToken
-        });
-
-        return json(res, 403, {
-          code: 'MITRA_ACCESS_REQUIRED',
-          message: 'Akun tidak memiliki akses Dashboard mitra.'
-        });
-      }
-
-      const sessionId = randomBytes(32).toString('hex');
-
-      await sessions.create(sessionId, me.data.user.id, {
-        accessToken,
-        refreshToken,
-        user: me.data.user,
-        memberships: me.data.memberships
-      });
-
-      return json(
-        res,
-        200,
-        {
-          authenticated: true,
-          user: me.data.user,
-          memberships: me.data.memberships
-        },
-        {
-          'Set-Cookie':
-            sessionCookie(sessionId)
-        }
-      );
+    if (req.method === 'POST' && loginContract.handles(path)) {
+      const result = await loginContract.handle(path, await readBody(req));
+      return json(res, result.status, result.body, result.headers);
     }
 
     if (req.method === 'GET' && path === '/bff/dashboard/access') {
@@ -618,14 +543,13 @@ const server = http.createServer(async (req, res) => {
       return json(res, result.status, result.data);
     }
 
-    // SEGALOKA_PROTECTED_V7_ROUTE_V1
-    if (await serveProtectedV7(req, res, {
+    // SEGALOKA_V7_PORTAL_SOURCE_V1: sumber V7 asli, bukan shell dist-v7.
+    if (await serveV7PortalUi(req, res, {
       path,
       role: 'mitra',
       port,
-      folder: 'mitra-dashboard',
-      appsRoot: resolve(root, 'apps'),
-      json
+      json,
+      getSession
     })) {
       return;
     }

@@ -1,9 +1,8 @@
 import http from 'node:http';
-import { readFile } from 'node:fs/promises';
-import { extname, relative, sep } from 'node:path';
-import { randomBytes } from 'node:crypto';
 import { createRequire } from 'node:module';
 import { createSessionStore } from './session-store.mjs';
+import { createBffLoginContract } from '../../shared/runtime/bff-login-contract.mjs';
+import { serveV7PortalUi } from '../../shared/runtime/v7-portal-source.mjs';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -93,6 +92,15 @@ const sessions = createSessionStore(
   pool,
   bffConfig.BFF_SESSION_ENCRYPTION_KEY
 );
+
+const loginContract = createBffLoginContract({
+  apiRequest,
+  sessions,
+  hasDashboardAccess: vendorMembership,
+  sessionCookie: sessionId => sessionCookie(sessionId),
+  accessDeniedCode: 'VENDOR_ACCESS_REQUIRED',
+  accessDeniedMessage: 'Akun tidak memiliki akses Dashboard Vendor.'
+});
 
 function json(res, status, data, headers = {}) {
   res.writeHead(status, {
@@ -256,93 +264,9 @@ const server = http.createServer(async (req, res) => {
       return json(res, 200, { status: 'ok' });
     }
 
-    if (req.method === 'POST' && path === '/bff/login') {
-      const body = JSON.parse(
-        (await readBody(req)).toString('utf8')
-      );
-
-      if (
-        typeof body.email !== 'string' ||
-        typeof body.password !== 'string'
-      ) {
-        return json(res, 400, {
-          code: 'INVALID_LOGIN_REQUEST'
-        });
-      }
-
-      const login = await apiRequest(
-        'POST',
-        '/auth/login',
-        {
-          email: body.email,
-          password: body.password
-        }
-      );
-
-      if (login.status !== 200) {
-        return json(res, login.status, {
-          code: login.data.code || 'LOGIN_FAILED',
-          message: login.data.message || 'Login gagal.'
-        });
-      }
-
-      const accessToken = accessTokenOf(
-        login.data.session
-      );
-
-      const refreshToken = refreshTokenOf(
-        login.data.session
-      );
-
-      if (!accessToken || !refreshToken) {
-        return json(res, 502, {
-          code: 'INVALID_SESSION_RESPONSE'
-        });
-      }
-
-      const me = await apiRequest(
-        'GET',
-        '/auth/me',
-        undefined,
-        accessToken
-      );
-
-      if (
-        me.status !== 200 ||
-        !vendorMembership(me.data)
-      ) {
-        await apiRequest('POST', '/auth/logout', {
-          refreshToken
-        });
-
-        return json(res, 403, {
-          code: 'VENDOR_ACCESS_REQUIRED',
-          message: 'Akun tidak memiliki akses Dashboard Vendor.'
-        });
-      }
-
-      const sessionId = randomBytes(32).toString('hex');
-
-      await sessions.create(sessionId, me.data.user.id, {
-        accessToken,
-        refreshToken,
-        user: me.data.user,
-        memberships: me.data.memberships
-      });
-
-      return json(
-        res,
-        200,
-        {
-          authenticated: true,
-          user: me.data.user,
-          memberships: me.data.memberships
-        },
-        {
-          'Set-Cookie':
-            sessionCookie(sessionId)
-        }
-      );
+    if (req.method === 'POST' && loginContract.handles(path)) {
+      const result = await loginContract.handle(path, await readBody(req));
+      return json(res, result.status, result.body, result.headers);
     }
 
     if (req.method === 'GET' && path === '/bff/dashboard/access') {
@@ -611,149 +535,15 @@ const server = http.createServer(async (req, res) => {
       );
     }
 
-    // SEGALOKA_VENDOR_V7_PROTECTED_ROUTE_V1
-    if (
-      req.method === 'GET' &&
-      (path === '/bff/ui' || path.startsWith('/bff/ui/'))
-    ) {
-      const session = await getSession(req);
-
-      if (!session) {
-        return json(res, 401, {
-          authenticated: false,
-          code: 'AUTH_REQUIRED'
-        });
-      }
-
-      const accessResponse = await fetch(
-        `http://${host}:${port}/bff/dashboard/access`,
-        {
-          method: 'GET',
-          headers: {
-            cookie: req.headers.cookie || ''
-          },
-          signal: AbortSignal.timeout(10000)
-        }
-      );
-
-      if (accessResponse.status !== 200) {
-        return json(
-          res,
-          [401, 403].includes(accessResponse.status)
-            ? accessResponse.status
-            : 503,
-          { code: 'VENDOR_ACCESS_DENIED' }
-        );
-      }
-
-      const access = await accessResponse.json();
-
-      if (
-        access.authenticated !== true ||
-        !Array.isArray(access.dashboards) ||
-        !access.dashboards.some(item =>
-          item.dashboard === 'vendor' &&
-          item.role === 'vendor' &&
-          typeof item.organizationId === 'string' &&
-          item.organizationId.length > 0
-        )
-      ) {
-        return json(res, 403, {
-          code: 'VENDOR_ACCESS_DENIED'
-        });
-      }
-
-      const assetRoot = resolve(
-        root,
-        'apps/vendor-dashboard/dist-v7'
-      );
-
-      const requested = path === '/bff/ui'
-        ? 'index.html'
-        : path.slice('/bff/ui/'.length) || 'index.html';
-
-      let decoded;
-
-      try {
-        decoded = decodeURIComponent(requested);
-      } catch {
-        return json(res, 400, {
-          code: 'INVALID_PATH'
-        });
-      }
-
-      if (
-        decoded.includes('\0') ||
-        decoded.includes('\\')
-      ) {
-        return json(res, 400, {
-          code: 'INVALID_PATH'
-        });
-      }
-
-      const assetPath = resolve(assetRoot, decoded);
-      const rel = relative(assetRoot, assetPath);
-
-      if (
-        rel === '..' ||
-        rel.startsWith('..' + sep) ||
-        rel.startsWith(sep) ||
-        rel === ''
-      ) {
-        return json(res, 403, {
-          code: 'INVALID_ASSET_PATH'
-        });
-      }
-
-      const types = {
-        '.html': 'text/html; charset=utf-8',
-        '.js': 'text/javascript; charset=utf-8',
-        '.css': 'text/css; charset=utf-8',
-        '.json': 'application/json; charset=utf-8',
-        '.svg': 'image/svg+xml',
-        '.png': 'image/png',
-        '.jpg': 'image/jpeg',
-        '.jpeg': 'image/jpeg',
-        '.webp': 'image/webp',
-        '.woff2': 'font/woff2'
-      };
-
-      const type = types[extname(assetPath).toLowerCase()];
-
-      if (!type) {
-        return json(res, 403, {
-          code: 'ASSET_TYPE_NOT_ALLOWED'
-        });
-      }
-
-      try {
-        let content = await readFile(assetPath);
-
-        if (assetPath === resolve(assetRoot, 'index.html')) {
-          content = Buffer.from(
-            content.toString('utf8').replaceAll(
-              '/shared/v7-presentational.css',
-              '/bff/ui/shared/v7-presentational.css'
-            )
-          );
-        }
-
-        res.writeHead(200, {
-          'Content-Type': type,
-          'Cache-Control': 'no-store',
-          'X-Content-Type-Options': 'nosniff'
-        });
-
-        return res.end(content);
-      } catch (error) {
-        if (error.code === 'ENOENT') {
-          return json(res, 404, {
-            code: 'ASSET_NOT_FOUND'
-          });
-        }
-
-        throw error;
-      }
+    // SEGALOKA_V7_PORTAL_SOURCE_V1: sumber V7 asli, bukan shell dist-v7.
+    if (await serveV7PortalUi(req, res, {
+      path,
+      role: 'vendor',
+      port,
+      json,
+      getSession
+    })) {
+      return;
     }
     return json(res, 404, {
       code: 'NOT_FOUND'

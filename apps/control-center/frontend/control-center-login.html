@@ -50,6 +50,13 @@
 
     let preAuthTicket = null;
     let challengeId = null;
+    let authenticatorTicket = null;
+
+    const methodLabels = {
+      authenticator: 'Google Authenticator',
+      email: 'Email',
+      whatsapp: 'WhatsApp'
+    };
 
     function showError(message) {
       error.textContent = message;
@@ -109,7 +116,7 @@
     form.addEventListener('submit', async event => {
       event.preventDefault();
 
-      if (preAuthTicket || challengeId) return;
+      if (preAuthTicket || challengeId || authenticatorTicket) return;
 
       error.hidden = true;
       submit.disabled = true;
@@ -136,7 +143,7 @@
 
         const methods = Array.isArray(data.availableMethods)
           ? data.availableMethods.filter(method =>
-              ['email', 'whatsapp'].includes(method)
+              Object.hasOwn(methodLabels, method)
             )
           : [];
 
@@ -150,12 +157,11 @@
         for (const method of methods) {
           const option = document.createElement('option');
           option.value = method;
-          option.textContent = method === 'email'
-            ? 'Email'
-            : 'WhatsApp';
+          option.textContent = methodLabels[method];
           channelSelect.appendChild(option);
         }
 
+        syncSendLabel();
         channelSection.hidden = false;
         submit.hidden = true;
       } catch (err) {
@@ -165,10 +171,29 @@
       }
     });
 
+    function syncSendLabel() {
+      sendOtp.textContent = channelSelect.value === 'authenticator'
+        ? 'Lanjutkan'
+        : 'Kirim Kode Verifikasi';
+    }
+
+    channelSelect.addEventListener('change', syncSendLabel);
+
     sendOtp.addEventListener('click', async () => {
       if (!preAuthTicket) return;
 
       error.hidden = true;
+
+      // TOTP tidak mengirim kode; tiket dipakai langsung saat verifikasi.
+      if (channelSelect.value === 'authenticator') {
+        authenticatorTicket = preAuthTicket;
+        preAuthTicket = null;
+        channelSection.hidden = true;
+        codeSection.hidden = false;
+        otpCode.focus();
+        return;
+      }
+
       sendOtp.disabled = true;
 
       try {
@@ -200,7 +225,7 @@
     });
 
     verifyOtp.addEventListener('click', async () => {
-      if (!challengeId) return;
+      if (!challengeId && !authenticatorTicket) return;
 
       const code = otpCode.value.trim();
 
@@ -213,16 +238,22 @@
       verifyOtp.disabled = true;
 
       try {
-        const data = await postJson(
-          '/bff/login/verify-otp',
-          {challengeId, code}
-        );
+        const data = authenticatorTicket
+          ? await postJson(
+              '/bff/login/verify-authenticator',
+              {preAuthTicket: authenticatorTicket, code}
+            )
+          : await postJson(
+              '/bff/login/verify-otp',
+              {challengeId, code}
+            );
 
         if (data.authenticated !== true) {
           throw new Error('Verifikasi gagal.');
         }
 
         challengeId = null;
+        authenticatorTicket = null;
         otpCode.value = '';
 
         await enterDashboard();

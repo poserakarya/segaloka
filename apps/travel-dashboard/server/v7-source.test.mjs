@@ -73,3 +73,25 @@ test('rejects a non-Travel or incomplete session context', async () => {
     /INVALID_TRAVEL_V7_CONTEXT/
   );
 });
+
+test('shared runtime keeps the Travel V7 output byte-identical', async () => {
+  const { createHash } = await import('node:crypto');
+  const source = await readFile(originalPath, 'utf8');
+  const html = renderTravelV7Source(source, context);
+
+  // Hash output sebelum refactor ke apps/shared/runtime/v7-portal-source.mjs.
+  assert.equal(html.length, 997142);
+  assert.equal(
+    createHash('sha256').update(html).digest('hex'),
+    '5c3ee5cdcccb2db6ee028f735fe7a73ccafcf3eb74d5d09b0f12a70c6f4f4714'
+  );
+});
+
+test('fails safely with the Travel error prefix when an anchor is missing', async () => {
+  const source = await readFile(originalPath, 'utf8');
+
+  assert.throws(
+    () => renderTravelV7Source(source.replace('const DEMO = /[?&]demo\\b/.test(location.search);', ''), context),
+    /TRAVEL_V7_SOURCE_ANCHOR_INVALID:demo-flag/
+  );
+});

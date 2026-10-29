@@ -23,6 +23,74 @@ async function travelAccess(client, userId, organizationId) {
   return result.rows.length > 0;
 }
 
+// Entitlement langganan Travel: subscription trialing/active yang masih
+// berlaku, dengan override organisasi lebih diutamakan daripada paket.
+async function travelEntitlementEnabled(client, organizationId, code) {
+  const result = await client.query(
+    `SELECT 1
+     FROM public.organization_subscriptions os
+     JOIN public.entitlements e ON e.code = $2
+     LEFT JOIN public.plan_entitlements pe
+       ON pe.plan_id = os.plan_id
+      AND pe.entitlement_id = e.id
+     LEFT JOIN public.organization_entitlement_overrides oe
+       ON oe.organization_id = os.organization_id
+      AND oe.entitlement_id = e.id
+     WHERE os.organization_id = $1
+       AND os.status IN ('trialing', 'active')
+       AND (os.current_period_end IS NULL OR os.current_period_end > now())
+       AND COALESCE(oe.enabled, pe.enabled, false) = true
+     LIMIT 1`,
+    [organizationId, code]
+  );
+
+  return result.rows.length > 0;
+}
+
+// Agen (relationship 'agent') dan Mitra (relationship 'partner') wajib
+// memiliki role global portal dan hubungan approved dengan Travel tersebut.
+async function approvedPartnerAccess(client, userId, organizationId) {
+  const result = await client.query(
+    `SELECT 1
+     FROM public.travel_partner_relationships rel
+     JOIN public.memberships m
+       ON m.user_id = rel.partner_user_id
+      AND m.organization_id IS NULL
+     JOIN public.roles r ON r.id = m.role_id
+     WHERE rel.partner_user_id = $1
+       AND rel.travel_organization_id = $2
+       AND rel.status = 'approved'
+       AND (
+         (rel.relationship_type = 'agent' AND r.code = 'agen') OR
+         (rel.relationship_type = 'partner' AND r.code = 'mitra')
+       )
+     LIMIT 1`,
+    [userId, organizationId]
+  );
+
+  return result.rows.length > 0;
+}
+
+// Hanya Travel berwenang atau Agen/Mitra yang disetujui Travel tersebut yang
+// boleh membuat booking; keduanya mensyaratkan entitlement bookings.manage
+// milik Travel. Traveler dan role lain tidak dibuka lewat endpoint ini.
+async function bookingCreationAccess(client, userId, organizationId) {
+  const staff = await travelAccess(client, userId, organizationId);
+  const partner = staff
+    ? false
+    : await approvedPartnerAccess(client, userId, organizationId);
+
+  if (!staff && !partner) {
+    return fail(403, 'BOOKING_CREATION_NOT_ALLOWED');
+  }
+
+  if (!await travelEntitlementEnabled(client, organizationId, 'bookings.manage')) {
+    return fail(403, 'BOOKINGS_MANAGE_REQUIRED');
+  }
+
+  return null;
+}
+
 async function transaction(pool, request, reply, work) {
   let client;
 
@@ -113,6 +181,14 @@ export async function registerBookingRoutes(app, pool) {
       if (await isTestDataOrganization(client, departure.travel_organization_id)) {
         return fail(409, 'TEST_DATA_BOOKING_NOT_ALLOWED');
       }
+
+      const denied = await bookingCreationAccess(
+        client,
+        request.auth.userId,
+        departure.travel_organization_id
+      );
+
+      if (denied) return denied;
 
       const bookingNumber =
         'SLK-BKG-' + randomBytes(12).toString('hex').toUpperCase();

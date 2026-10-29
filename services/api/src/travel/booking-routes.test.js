@@ -44,6 +44,14 @@ function setup(options = {}) {
         };
       }
 
+      if (sql.includes('FROM public.travel_partner_relationships rel')) {
+        return { rows: options.partner === true ? [{ allowed: 1 }] : [] };
+      }
+
+      if (sql.includes('FROM public.organization_subscriptions os')) {
+        return { rows: options.entitlement === false ? [] : [{ allowed: 1 }] };
+      }
+
       if (sql.includes('FROM public.travel_bookings b') &&
           sql.includes('FOR UPDATE OF b')) {
         return {
@@ -206,6 +214,61 @@ test('booking berhasil dibuat dengan audit', async () => {
   ));
   assert.ok(state.calls.some(c => c.sql === 'COMMIT'));
   assert.equal(state.released, true);
+});
+
+test('booking Travel ditolak tanpa entitlement bookings.manage', async () => {
+  const { response, state } = await run(
+    { entitlement: false },
+    'POST',
+    '/travel/bookings',
+    { departureId: DEPARTURE }
+  );
+
+  assert.equal(response.statusCode, 403);
+  assert.equal(response.json().code, 'BOOKINGS_MANAGE_REQUIRED');
+  assert.ok(!state.calls.some(c => c.sql.includes('INSERT INTO public.travel_bookings')));
+  assert.ok(state.calls.some(c => c.sql === 'ROLLBACK'));
+});
+
+test('booking ditolak untuk pengguna tanpa role Travel atau hubungan partner', async () => {
+  const { response, state } = await run(
+    { staff: false, partner: false },
+    'POST',
+    '/travel/bookings',
+    { departureId: DEPARTURE }
+  );
+
+  assert.equal(response.statusCode, 403);
+  assert.equal(response.json().code, 'BOOKING_CREATION_NOT_ALLOWED');
+  assert.ok(!state.calls.some(c => c.sql.includes('INSERT INTO public.travel_bookings')));
+});
+
+test('booking Agen/Mitra dengan hubungan approved dan entitlement Travel diizinkan', async () => {
+  const { response, state } = await run(
+    { staff: false, partner: true },
+    'POST',
+    '/travel/bookings',
+    { departureId: DEPARTURE }
+  );
+
+  assert.equal(response.statusCode, 201);
+  const partnerQuery = state.calls.find(c =>
+    c.sql.includes('FROM public.travel_partner_relationships rel')
+  );
+  assert.deepEqual(partnerQuery.params, [USER, ORG]);
+  assert.match(partnerQuery.sql, /rel\.status = 'approved'/);
+});
+
+test('booking Agen/Mitra ditolak bila Travel tidak punya bookings.manage', async () => {
+  const { response } = await run(
+    { staff: false, partner: true, entitlement: false },
+    'POST',
+    '/travel/bookings',
+    { departureId: DEPARTURE }
+  );
+
+  assert.equal(response.statusCode, 403);
+  assert.equal(response.json().code, 'BOOKINGS_MANAGE_REQUIRED');
 });
 
 test('booking menolak jadwal tidak tersedia', async () => {

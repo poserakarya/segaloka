@@ -2,6 +2,7 @@ import http from 'node:http';
 import { randomBytes } from 'node:crypto';
 import { createRequire } from 'node:module';
 import { createSessionStore } from './session-store.mjs';
+import { classifyLoginResponse } from '../shared/runtime/bff-login-contract.mjs';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -567,6 +568,49 @@ const server = http.createServer(async (req, res) => {
           authenticated: false,
           code: result.data?.code || 'OTP_VERIFY_FAILED',
           message: result.data?.message || 'Kode OTP tidak valid.'
+        });
+      }
+
+      return finishControlCenterLogin(res, result);
+    }
+
+    if (
+      req.method === 'POST' &&
+      path === '/bff/login/verify-authenticator'
+    ) {
+      const body = JSON.parse(
+        (await readBody(req)).toString('utf8')
+      );
+
+      if (
+        typeof body.preAuthTicket !== 'string' ||
+        !/^[0-9a-f]{64}$/.test(body.preAuthTicket) ||
+        typeof body.code !== 'string' ||
+        !/^[0-9]{6}$/.test(body.code)
+      ) {
+        return json(res, 400, {
+          code: 'INVALID_AUTHENTICATOR_VERIFY_REQUEST'
+        });
+      }
+
+      const result = await apiRequest(
+        'POST',
+        '/auth/login/verify-authenticator',
+        {
+          preAuthTicket: body.preAuthTicket,
+          code: body.code
+        }
+      );
+
+      // Sesi hanya dibuat setelah API memverifikasi kode TOTP.
+      if (
+        result.status !== 200 ||
+        classifyLoginResponse(result.data).type !== 'authenticated'
+      ) {
+        return json(res, result.status === 200 ? 502 : result.status, {
+          authenticated: false,
+          code: result.data?.code || 'AUTHENTICATOR_VERIFY_FAILED',
+          message: result.data?.message || 'Kode authenticator tidak valid.'
         });
       }
 
