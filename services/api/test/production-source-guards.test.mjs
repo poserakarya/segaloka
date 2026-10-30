@@ -58,3 +58,10 @@ test('Control Center browser origin is configured for production HTTPS', () => {
   assert.match(server, /PUBLIC_ORIGIN_NOT_CONFIGURED/);
   assert.match(server, /origin !== expectedOrigin/);
 });
+
+test('Control Center supervisor uses validated configured service ports', () => {
+  const start = read('apps/control-center/start.mjs');
+  assert.match(start, /servicePort\('SEGALOKA_BFF_PORT', 4203\)/);
+  assert.match(start, /servicePort\('SEGALOKA_CONTROL_CENTER_PORT', 4202\)/);
+  assert.match(start, /CONTROL_CENTER_PORT_COLLISION/);
+});
