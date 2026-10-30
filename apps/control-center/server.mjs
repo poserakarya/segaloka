@@ -68,7 +68,13 @@ import http from 'node:http';
 
 function proxyBff(req, res) {
   const origin = req.headers.origin;
-  const expectedOrigin = `http://${HOST}:${PORT}`;
+  const configuredOrigin = process.env.CONTROL_CENTER_PUBLIC_ORIGIN;
+  if (process.env.NODE_ENV === 'production' && (!configuredOrigin || !/^https:\/\/[^/]+$/.test(configuredOrigin))) {
+    res.writeHead(503, { 'Cache-Control': 'no-store' });
+    res.end(JSON.stringify({ code: 'PUBLIC_ORIGIN_NOT_CONFIGURED' }));
+    return;
+  }
+  const expectedOrigin = configuredOrigin || `http://${HOST}:${PORT}`;
 
   if (origin !== undefined && origin !== expectedOrigin) {
     res.writeHead(403, {
