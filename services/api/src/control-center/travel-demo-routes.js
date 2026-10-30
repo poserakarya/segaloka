@@ -1,6 +1,5 @@
 import { createSessionAuth } from '../security/session-auth.js';
 import { parseTravelBranchPage, validateTravelBranchParent } from './travel-branch-contract.js';
-import { hasTestDataOrganizationColumn } from '../security/test-data-policy.js';
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
@@ -16,14 +15,14 @@ async function isSuperAdmin(pool, userId) {
 }
 
 async function schemaReady(pool) {
-  if (!(await hasTestDataOrganizationColumn(pool))) return false;
   const result = await pool.query(
-    `SELECT COUNT(*)::int AS count
-     FROM information_schema.tables
-     WHERE table_schema = 'public'
-       AND table_name IN ('test_data_batches', 'test_data_records', 'travel_branches')`
+    `SELECT EXISTS (
+       SELECT 1 FROM information_schema.tables
+       WHERE table_schema = 'public'
+         AND table_name = 'travel_branches'
+     ) AS ready`
   );
-  return result.rows[0]?.count === 3;
+  return result.rows[0]?.ready === true;
 }
 
 function unavailable(reply) {
