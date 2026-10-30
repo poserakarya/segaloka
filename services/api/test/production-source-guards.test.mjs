@@ -70,3 +70,9 @@ test('API recognizes existing Control Center production origin', () => {
   const server = read('services/api/src/server.js');
   assert.match(server, /'https:\/\/admin\.segaloka\.com'/);
 });
+
+test('Control Center frontend and BFF share configured port', () => {
+  const server = read('apps/control-center/server.mjs');
+  assert.match(server, /SEGALOKA_BFF_PORT/);
+  assert.doesNotMatch(server, /SEGALOKA_CONTROL_CENTER_BFF_PORT/);
+});
