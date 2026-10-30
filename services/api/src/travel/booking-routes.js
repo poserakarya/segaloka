@@ -1,6 +1,7 @@
 import { randomBytes } from 'node:crypto';
 import { createSessionAuth } from '../security/session-auth.js';
 import { isTestDataOrganization } from '../security/test-data-policy.js';
+import { recordBookingEvent, recordParticipantEvent } from '../sync/outbox.js';
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const isUuid = value => typeof value === 'string' && UUID.test(value);
@@ -214,6 +215,13 @@ export async function registerBookingRoutes(app, pool) {
         booking.id
       );
 
+      await recordBookingEvent(client, {
+        organizationId: departure.travel_organization_id,
+        eventType: 'travel.booking.created',
+        bookingId: booking.id,
+        departureId: departure.id
+      });
+
       return { status: 201, body: { booking } };
     });
   });
@@ -301,6 +309,13 @@ export async function registerBookingRoutes(app, pool) {
         participant.id
       );
 
+      await recordParticipantEvent(client, {
+        organizationId: booking.travel_organization_id,
+        eventType: 'travel.booking.participant_added',
+        participantId: participant.id,
+        bookingId
+      });
+
       return { status: 201, body: { participant } };
     });
   });
@@ -372,6 +387,7 @@ export async function registerBookingRoutes(app, pool) {
       const found = await client.query(
         `SELECT
            p.id,
+           p.booking_id,
            p.departure_status,
            b.status AS booking_status,
            d.status AS departure_status_record,
@@ -429,6 +445,13 @@ export async function registerBookingRoutes(app, pool) {
         'travel_booking_participant',
         participantId
       );
+
+      await recordParticipantEvent(client, {
+        organizationId: participant.travel_organization_id,
+        eventType: 'travel.booking.participant_departed',
+        participantId,
+        bookingId: participant.booking_id
+      });
 
       return {
         status: 200,

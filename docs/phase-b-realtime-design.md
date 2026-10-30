@@ -1,6 +1,38 @@
 # Fase B — Rancangan integrasi API, PostgreSQL, dan realtime
 
-Status: **rancangan, belum diimplementasikan.** Tidak ada migrasi atau endpoint baru yang dibuat pada Fase A. Dokumen ini disusun dari source di branch `e2e-02` dan menunggu evaluasi hasil Fase A.
+Status: **sebagian diimplementasikan (Fase B, tahap 1).** Lihat bagian 0 untuk yang aktif dan diuji. Tanpa migrasi baru dan tanpa `LISTEN/NOTIFY`; mekanisme tetap polling outbox.
+
+## 0. Yang sudah aktif (diuji dengan API Fastify asli + PostgreSQL `_test`, Node 24)
+
+| Perubahan (API) | Event `sync_outbox` (transaksi yang sama) |
+|---|---|
+| `POST /travel/bookings` | `travel.booking.created` / `travel_booking` |
+| `POST /travel/bookings/:id/participants` | `travel.booking.participant_added` / `travel_booking_participant` |
+| `POST /travel/bookings/:id/confirm` | `travel.booking.confirmed` / `travel_booking` |
+| `POST /travel/participants/:id/verify-departure` | `travel.booking.participant_departed` / `travel_booking_participant` |
+| `POST /travel/departures/:id/mark-departed` | `travel.departure.departed` / `travel_departure` |
+| `POST /travel/departures` (sudah ada) | `travel.departure.created` / `travel_departure` |
+
+Payload hanya berisi ID (`organizationId`, `bookingId`, `departureId`, `participantId`). Event ditulis setelah perubahan berhasil dan sebelum `COMMIT`. Kegagalan apa pun memicu `ROLLBACK`, sehingga perubahan dan event batal bersamaan (diuji).
+
+| Stream API | Penerima | Filter (di SQL, terhadap state DB saat dikirim) | Proxy BFF |
+|---|---|---|---|
+| `GET /sync/events?organizationId=` | Travel (anggota org) / super_admin | `organization_id`, departure + booking | `/bff/sync/events` (Travel, sudah ada) |
+| `GET /sync/agen/events` | role global `agen` | booking milik akun + hubungan `agent` approved dengan Travel tsb. | `/bff/sync/events` (Agen) |
+| `GET /sync/mitra/events` | role global `mitra` | idem, hubungan `partner` | `/bff/sync/events` (Mitra) |
+| `GET /sync/traveler/events` | role global `traveler` | booking milik akun atau akun sebagai peserta | `/bff/sync/events` (Traveler) |
+| `GET /sync/control-center/events` | role global `super_admin` | semua org Travel produksi (`is_test_data = false`) | `/bff/sync/events` (Control Center) |
+| `GET /sync/affiliate/events` (sudah ada) | affiliate dengan izin baca | link referral milik akun | `/bff/sync/affiliate/events` (sudah ada) |
+
+Semua stream memakai satu mekanisme (`openOutboxStream`): kursor `Last-Event-ID`/`?after`, `retry: 3000`, heartbeat 20 detik, cek sesi **dan** cek ulang akses setiap 10 detik (`auth.expired` dengan `INVALID_SESSION`/`ACCESS_REVOKED`), polling 1,5 detik. Stream affiliate sebelumnya tanpa cek sesi/heartbeat; sekarang ikut mekanisme ini.
+
+Runtime dashboard:
+- **Agen, Mitra, Traveler (V7):** booking dibaca dari `/bff/bookings` (→ `/agen|mitra|traveler/bookings`), dipetakan ke `BOOKINGS` V7. Event SSE memicu baca ulang tanpa reload. Saat putus: cek `/bff/dashboard/access` (refresh token), baca ulang, lalu buka stream dengan `?after=<id terakhir>`.
+- **Control Center:** event memicu `ccLoadBookings` (halaman `/booking`) atau `cc-summary-refresh` (`/overview`).
+- **Travel:** event (departure dan booking) memicu baca ulang keberangkatan (perilaku yang sudah ada).
+- Aksi V7 tanpa endpoint persisten tetap diblokir.
+
+Belum terintegrasi: lihat bagian 6.
 
 ## 1. Kondisi saat ini (dari source)
 
@@ -96,3 +128,12 @@ Semua memakai mekanisme yang sama dengan `/sync/events`: kursor, heartbeat, cek 
   - `apps/shared/runtime/v7-portal-data/*.mjs` (baru)
   - bundle Control Center lewat `apps/control-center/server.mjs`
 - **Tes:** E2E lintas dashboard di atas.
+
+## 6. Belum terintegrasi (setelah Fase B tahap 1)
+- **Travel:** belum ada endpoint daftar booking per organisasi, jadi booking belum tampil di Dashboard Travel. Event booking memang diterima, tapi hanya memicu baca ulang keberangkatan.
+- **Vendor:** belum ada endpoint data (produk, order, keuangan) maupun stream.
+- **Affiliate:** stream dan endpoint link referral sudah ada, tapi belum dipetakan ke `REFLINKS` V7.
+- **Control Center:** realtime hanya untuk halaman Booking dan Overview; halaman Travel, Vendor, cabang, dan audit masih dimuat saat dibuka atau di-refresh.
+- Booking dari API belum punya paket, harga, maupun pembayaran, sehingga kolom total/terbayar di V7 tampil "—". Detail booking traveler V7 (`/p/traveler/bookings/:id`) memerlukan entitas Travel V7 dan masih menampilkan state kosong.
+- Aksi pembuatan booking dari UI V7 Agen/Mitra (`ma-reg-go`) belum disambungkan ke `POST /travel/bookings` dan tetap diblokir.
+- Preferensi akun belum tersimpan (butuh migrasi; tidak dikerjakan pada tahap ini).

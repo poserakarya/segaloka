@@ -271,6 +271,30 @@ export const V7_PORTALS = Object.freeze({
   })
 });
 
+// Endpoint baca BFF per portal yang sudah tersedia di API.
+export const PORTAL_DATA_SOURCES = Object.freeze({
+  agen: '/bff/bookings',
+  mitra: '/bff/bookings',
+  traveler: '/bff/bookings'
+});
+
+// Booking dari API tidak memiliki entitas paket/rantai Mitra V7; tampilan
+// memakai nama keberangkatan dan filter kepemilikan tanpa membuat entitas.
+export const PORTAL_BOOKING_PATCHES = Object.freeze([
+  [
+    'portal-my-bookings',
+    "const myBookings = ws => { const { x } = chainOf(ws); return BOOKINGS.filter(b => ws === 'agen' ? b.agen === x.id : b.mitra === x.id); };",
+    "const myBookings = ws => { const x = me(ws); return BOOKINGS.filter(b => ws === 'agen' ? b.agen === x.id : b.mitra === x.id); };",
+    1
+  ],
+  [
+    'portal-booking-package-name',
+    '(pkgById(b.pkg) || {}).name',
+    "((pkgById(b.pkg) || {}).name || b.pkgName || '')",
+    12
+  ]
+]);
+
 export function validateV7PortalContext(context) {
   const portal = context && V7_PORTALS[context.role];
 
@@ -342,7 +366,7 @@ paintSync = function () {
   pill.className = 'envpill sync-' + (portalApiState.connected ? 'ok' : 'bad');
   pill.querySelector('.envtext').textContent = L3(labels);
 };
-A['sync-info'] = el => popAt(el, \`<div class="menu" style="max-width:340px;padding:12px"><b>API Segaloka</b><p class="muted" style="font-size:12.5px;margin:6px 0 10px">\${esc(portalApiState.connected ? L3(['Sesi terverifikasi oleh server. Perubahan data belum tersambung ke server.', 'Session verified by the server. Data changes are not connected to the server yet.', 'تم التحقق من الجلسة.']) : L3(['Koneksi API belum terverifikasi.', 'API connection has not been verified.', 'لم يتم التحقق من الاتصال.']))}</p><dl class="dl" style="font-size:12px"><dt>\${t('status')}</dt><dd>\${esc(portalApiState.connected ? 'session_verified' : 'disconnected')}</dd></dl><button class="btn sm" style="margin-top:10px" data-act="portal-api-retry">\${ic('refresh', 'sm')}\${t('retry')}</button></div>\`);
+A['sync-info'] = el => popAt(el, \`<div class="menu" style="max-width:340px;padding:12px"><b>API Segaloka</b><p class="muted" style="font-size:12.5px;margin:6px 0 10px">\${esc(portalApiState.connected ? L3(['Sesi terverifikasi oleh server. Perubahan data belum tersambung ke server.', 'Session verified by the server. Data changes are not connected to the server yet.', 'تم التحقق من الجلسة.']) : L3(['Koneksi API belum terverifikasi.', 'API connection has not been verified.', 'لم يتم التحقق من الاتصال.']))}</p><dl class="dl" style="font-size:12px"><dt>\${t('status')}</dt><dd>\${esc(portalApiState.connected ? 'session_verified' : 'disconnected')}</dd><dt>Realtime</dt><dd>\${esc(portalSync.source ? (portalSync.connected ? 'connected' : 'reconnecting') : 'not_available')}</dd></dl><button class="btn sm" style="margin-top:10px" data-act="portal-api-retry">\${ic('refresh', 'sm')}\${t('retry')}</button></div>\`);
 A['portal-api-retry'] = () => { closeOverlays(); checkSegalokaPortalSession(); };
 A.signout = async () => {
   closeOverlays();
@@ -403,8 +427,128 @@ async function checkSegalokaPortalSession() {
   }
 }
 
+// Data bisnis hanya dari endpoint BFF yang berotorisasi; event SSE memicu
+// pembacaan ulang. Portal tanpa endpoint baca tidak memuat data apa pun.
+const portalDataSource = ${JSON.stringify(PORTAL_DATA_SOURCES[role] || null)};
+const portalSync = window.__SEGALOKA_PORTAL_SYNC__ = {
+  source: portalDataSource ? '/bff/sync/events' : null,
+  connected: false,
+  lastEventId: null,
+  loads: 0,
+  lastLoadedAt: null,
+  lastError: null
+};
+
+function portalDateValue(value) {
+  if (typeof value !== 'string' || !value) return null;
+  const parsed = Date.parse(/^\\d{4}-\\d{2}-\\d{2}$/.test(value) ? value + 'T00:00:00.000Z' : value);
+  return Number.isFinite(parsed) ? parsed : null;
+}
+
+function portalBookingFromApi(item) {
+  const names = (Array.isArray(item.participants) ? item.participants : [])
+    .map(participant => participant && participant.fullName)
+    .filter(Boolean);
+  const booking = {
+    id: item.bookingNumber || item.id,
+    apiId: item.id,
+    traveler: ${JSON.stringify(role)} === 'traveler' ? portalTenant.id : (names.join(', ') || '—'),
+    pkg: null,
+    pkgName: [item.departure && item.departure.title, item.departure && item.departure.destination].filter(Boolean).join(' · '),
+    travel: null,
+    pax: names.length,
+    total: null,
+    paid: null,
+    state: item.status,
+    created: portalDateValue(item.createdAt),
+    dep: portalDateValue(item.departure && item.departure.departureDate),
+    source: 'Segaloka API'
+  };
+  if (${JSON.stringify(role)} === 'agen') booking.agen = portalTenant.id;
+  if (${JSON.stringify(role)} === 'mitra') booking.mitra = portalTenant.id;
+  return booking;
+}
+
+async function loadSegalokaPortalData() {
+  if (!portalDataSource) return;
+  try {
+    const response = await fetch(portalDataSource, { credentials: 'same-origin', cache: 'no-store' });
+    if (response.status === 401 || response.status === 403) {
+      window.location.replace('/');
+      return;
+    }
+    if (!response.ok) throw new Error('PORTAL_DATA_UNAVAILABLE');
+    const data = await response.json();
+    if (!Array.isArray(data.bookings)) throw new Error('INVALID_PORTAL_DATA');
+    BOOKINGS.length = 0;
+    data.bookings.forEach(item => BOOKINGS.push(portalBookingFromApi(item)));
+    portalSync.loads += 1;
+    portalSync.lastLoadedAt = Date.now();
+    portalSync.lastError = null;
+    rerender();
+  } catch (error) {
+    portalSync.lastError = error.message || 'PORTAL_DATA_UNAVAILABLE';
+    console.error('[Portal V7] Data API gagal dimuat.', error);
+  }
+}
+
+let portalEvents = null;
+let portalReconnectTimer = null;
+
+function openSegalokaPortalSync() {
+  if (!portalSync.source) return;
+  const url = portalSync.lastEventId
+    ? portalSync.source + '?after=' + encodeURIComponent(portalSync.lastEventId)
+    : portalSync.source;
+  portalEvents = new EventSource(url);
+  portalEvents.addEventListener('ready', event => {
+    portalSync.connected = true;
+    if (/^\\d+$/.test(event.lastEventId) && !portalSync.lastEventId) portalSync.lastEventId = event.lastEventId;
+    paintSync();
+  });
+  portalEvents.addEventListener('change', event => {
+    if (!/^\\d+$/.test(event.lastEventId)) return;
+    if (portalSync.lastEventId && BigInt(event.lastEventId) <= BigInt(portalSync.lastEventId)) return;
+    portalSync.lastEventId = event.lastEventId;
+    loadSegalokaPortalData();
+  });
+  const recover = () => {
+    portalSync.connected = false;
+    paintSync();
+    if (portalEvents) portalEvents.close();
+    portalEvents = null;
+    clearTimeout(portalReconnectTimer);
+    portalReconnectTimer = setTimeout(async () => {
+      try {
+        const response = await fetch('/bff/dashboard/access', { credentials: 'same-origin', cache: 'no-store' });
+        if (response.status === 401 || response.status === 403) {
+          window.location.replace('/');
+          return;
+        }
+      } catch (error) {
+        portalSync.lastError = 'SYNC_RECONNECT_FAILED';
+      }
+      // Muat ulang untuk menutup celah selama terputus, lalu buka stream.
+      await loadSegalokaPortalData();
+      openSegalokaPortalSync();
+    }, 3000);
+  };
+  portalEvents.addEventListener('auth.expired', recover);
+  portalEvents.addEventListener('sync.error', recover);
+  portalEvents.addEventListener('error', () => {
+    if (!portalEvents || portalEvents.readyState === EventSource.CLOSED) recover();
+    else { portalSync.connected = false; paintSync(); }
+  });
+  portalEvents.addEventListener('open', () => {
+    portalSync.connected = true;
+    paintSync();
+  });
+}
+
 applyTheme(); applyLang(); renderShell(); render();
 checkSegalokaPortalSession();
+loadSegalokaPortalData();
+openSegalokaPortalSync();
 window.SegalokaPortalRuntime = Object.freeze({
   source: 'original-v7',
   role: ${roleJson},
@@ -490,6 +634,10 @@ export function renderV7PortalSource(source, context) {
     TENANT_LABEL_PATCH.replacement,
     'tenant-label'
   );
+
+  for (const [label, search, replacement, count] of PORTAL_BOOKING_PATCHES) {
+    html = patcher.replaceExpectedCount(html, search, replacement, count, label);
+  }
 
   html = patcher.replaceExactlyOnce(
     html,

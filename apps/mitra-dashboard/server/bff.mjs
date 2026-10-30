@@ -4,6 +4,7 @@ import { createSessionStore } from './session-store.mjs';
 import { createBffLoginContract } from '../../shared/runtime/bff-login-contract.mjs';
 import { serveV7PortalUi } from '../../shared/runtime/v7-portal-source.mjs';
 import { serveSharedFont } from '../../shared/runtime/shared-fonts.mjs';
+import { proxySyncStream } from '../../shared/runtime/bff-sse-proxy.mjs';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -546,6 +547,28 @@ const server = http.createServer(async (req, res) => {
       );
 
       return json(res, result.status, result.data);
+    }
+
+    // Realtime: stream event booking milik akun ini (difilter oleh API).
+    if (req.method === 'GET' && path === '/bff/sync/events') {
+      const session = await getSession(req);
+
+      if (!session) {
+        return json(res, 401, {
+          authenticated: false,
+          code: 'AUTH_REQUIRED'
+        });
+      }
+
+      return proxySyncStream(req, res, {
+        apiOrigin,
+        target: '/sync/mitra/events',
+        ingressSecret,
+        accessToken: accessTokenOf(session),
+        signIngressRequest,
+        json,
+        label: 'Mitra BFF'
+      });
     }
 
     // SEGALOKA_V7_PORTAL_SOURCE_V1: sumber V7 asli, bukan shell dist-v7.

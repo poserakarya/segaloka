@@ -4,6 +4,7 @@ import { createRequire } from 'node:module';
 import { createSessionStore } from './session-store.mjs';
 import { classifyLoginResponse } from '../shared/runtime/bff-login-contract.mjs';
 import { serveSharedFont } from '../shared/runtime/shared-fonts.mjs';
+import { proxySyncStream } from '../shared/runtime/bff-sse-proxy.mjs';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -1049,6 +1050,26 @@ const server = http.createServer(async (req, res) => {
       if (result.status !== 200) return json(res, [401, 403].includes(result.status) ? result.status : 503, { code: result.data?.code || 'CONTROL_CENTER_VENDOR_UNAVAILABLE' });
       return json(res, 200, result.data);
     }
+    // Realtime Control Center: hanya super_admin; filter di API.
+    if (req.method === 'GET' && path === '/bff/sync/events') {
+      const accessResponse = await fetch(`http://${host}:${port}/bff/dashboard/access`, { headers: { cookie: req.headers.cookie || '' }, signal: AbortSignal.timeout(10000) });
+      if (accessResponse.status !== 200) return json(res, [401, 403].includes(accessResponse.status) ? accessResponse.status : 503, { code: 'CONTROL_CENTER_ACCESS_DENIED' });
+      const access = await accessResponse.json();
+      const allowed = access.authenticated === true && access.dashboards?.some(item => item.dashboard === 'control-center' && item.role === 'super_admin' && item.organizationId === null);
+      if (!allowed) return json(res, 403, { code: 'CONTROL_CENTER_ACCESS_DENIED' });
+      const session = await getSession(req);
+      if (!session?.accessToken) return json(res, 401, { authenticated: false, code: 'AUTH_REQUIRED' });
+      return proxySyncStream(req, res, {
+        apiOrigin,
+        target: '/sync/control-center/events',
+        ingressSecret,
+        accessToken: session.accessToken,
+        signIngressRequest,
+        json,
+        label: 'Control Center BFF'
+      });
+    }
+
     if (req.method === 'GET' && path === '/bff/control-center/bookings') {
       const session = await getSession(req);
       if (!session?.accessToken) return json(res, 401, { authenticated: false, code: 'AUTH_REQUIRED' });

@@ -130,6 +130,11 @@ function setup(options = {}) {
         return { rows: [] };
       }
 
+      if (sql.includes('INSERT INTO public.sync_outbox')) {
+        if (options.failOutbox) throw new Error('OUTBOX_FAILED');
+        return { rows: [] };
+      }
+
       throw new Error(`UNEXPECTED_SQL: ${sql.slice(0, 90)}`);
     },
     release() {
@@ -360,4 +365,53 @@ test('kegagalan audit membatalkan booking', async () => {
   assert.equal(response.statusCode, 500);
   assert.ok(state.calls.some(c => c.sql === 'ROLLBACK'));
   assert.ok(!state.calls.some(c => c.sql === 'COMMIT'));
+});
+
+function outboxCalls(state) {
+  return state.calls.filter(c => c.sql.includes('INSERT INTO public.sync_outbox'));
+}
+
+function committedAfter(state, index) {
+  return state.calls.slice(index + 1).some(c => c.sql === 'COMMIT');
+}
+
+test('booking baru menulis event outbox di transaksi yang sama sebelum COMMIT', async () => {
+  const { response, state } = await run({}, 'POST', '/travel/bookings', { departureId: DEPARTURE });
+
+  assert.equal(response.statusCode, 201);
+  const events = outboxCalls(state);
+  assert.equal(events.length, 1);
+  assert.deepEqual(events[0].params.slice(0, 3), [ORG, 'travel.booking.created', 'travel_booking']);
+  assert.deepEqual(JSON.parse(events[0].params[4]), {
+    organizationId: ORG,
+    bookingId: BOOKING,
+    departureId: DEPARTURE
+  });
+  assert.ok(committedAfter(state, state.calls.indexOf(events[0])));
+});
+
+test('booking yang ditolak atau gagal tidak menulis event', async () => {
+  for (const options of [{ entitlement: false }, { staff: false, partner: false }, { departureStatus: 'cancelled' }]) {
+    const { response, state } = await run(options, 'POST', '/travel/bookings', { departureId: DEPARTURE });
+    assert.ok(response.statusCode >= 400);
+    assert.equal(outboxCalls(state).length, 0, JSON.stringify(options));
+  }
+});
+
+test('kegagalan outbox membatalkan booking (ROLLBACK, tanpa COMMIT)', async () => {
+  const { response, state } = await run({ failOutbox: true }, 'POST', '/travel/bookings', { departureId: DEPARTURE });
+
+  assert.equal(response.statusCode, 500);
+  assert.ok(state.calls.some(c => c.sql === 'ROLLBACK'));
+  assert.ok(!state.calls.some(c => c.sql === 'COMMIT'));
+});
+
+test('peserta dan verifikasi keberangkatan menulis event booking', async () => {
+  const added = await run({ staff: false }, 'POST', `/travel/bookings/${BOOKING}/participants`, { fullName: 'Peserta Test' });
+  assert.equal(added.response.statusCode, 201);
+  assert.deepEqual(outboxCalls(added.state).map(c => c.params[1]), ['travel.booking.participant_added']);
+
+  const departed = await run({}, 'POST', `/travel/participants/${PARTICIPANT}/verify-departure`);
+  assert.equal(departed.response.statusCode, 200);
+  assert.deepEqual(outboxCalls(departed.state).map(c => c.params[1]), ['travel.booking.participant_departed']);
 });

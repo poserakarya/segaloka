@@ -1,5 +1,6 @@
 import { createSessionAuth } from '../security/session-auth.js';
 import { isTestDataOrganization } from '../security/test-data-policy.js';
+import { recordBookingEvent, recordSyncEvent, DEPARTURE_ENTITY } from '../sync/outbox.js';
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
@@ -79,7 +80,7 @@ export async function registerTravelStatusRoutes(app, pool) {
 
     return run(pool, request, reply, async client => {
       const result = await client.query(
-        `SELECT b.id, b.status, d.travel_organization_id,
+        `SELECT b.id, b.status, b.departure_id, d.travel_organization_id,
                 d.status AS departure_status
          FROM public.travel_bookings b
          JOIN public.travel_departures d ON d.id = b.departure_id
@@ -135,6 +136,13 @@ export async function registerTravelStatusRoutes(app, pool) {
         client, request.auth.userId, booking.travel_organization_id,
         'travel.booking.confirmed', 'travel_booking', id
       );
+
+      await recordBookingEvent(client, {
+        organizationId: booking.travel_organization_id,
+        eventType: 'travel.booking.confirmed',
+        bookingId: id,
+        departureId: booking.departure_id
+      });
 
       return { status: 200, body: { booking: updated.rows[0] } };
     });
@@ -212,6 +220,13 @@ export async function registerTravelStatusRoutes(app, pool) {
         client, request.auth.userId, departure.travel_organization_id,
         'travel.departure.marked_departed', 'travel_departure', id
       );
+
+      await recordSyncEvent(client, {
+        organizationId: departure.travel_organization_id,
+        eventType: 'travel.departure.departed',
+        entityType: DEPARTURE_ENTITY,
+        entityId: id
+      });
 
       return { status: 200, body: { departure: updated.rows[0] } };
     });

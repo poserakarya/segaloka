@@ -22,8 +22,68 @@ const HTML_CSP = "connect-src 'self'; font-src 'self'; frame-ancestors 'none'; b
 function patchControlCenterBundle(source) {
   const patched = applyFormatPatches(source, createV7Patcher('CONTROL_CENTER'));
   return patched + '\n/* SEGALOKA_CC_SIMULATION_LOCK_V1 */\n' +
-    simulationLockScript('super_admin') + '\n';
+    simulationLockScript('super_admin') + '\n' + CONTROL_CENTER_REALTIME_SCRIPT;
 }
+
+// Realtime Control Center: event /bff/sync/events memicu pemuat API yang
+// sudah ada (ccLoadBookings, cc-summary-refresh) untuk halaman yang aktif.
+const CONTROL_CENTER_REALTIME_SCRIPT = `
+/* SEGALOKA_CC_REALTIME_V1 */
+(() => {
+  const ccSync = window.__SEGALOKA_CC_SYNC__ = { connected: false, lastEventId: null, reloads: 0 };
+  let events = null;
+  let timer = null;
+  const reloadActivePage = () => {
+    const path = (location.hash.replace(/^#/, '') || '').split('?')[0];
+    if (path === '/booking') {
+      const q = document.getElementById('cc-booking-q');
+      const s = document.getElementById('cc-booking-status');
+      ccSync.reloads += 1;
+      ccLoadBookings(q ? q.value : '', s ? s.value : '');
+    } else if (path === '/overview') {
+      ccSync.reloads += 1;
+      A['cc-summary-refresh']();
+    }
+  };
+  const open = () => {
+    events = new EventSource(ccSync.lastEventId ? '/bff/sync/events?after=' + encodeURIComponent(ccSync.lastEventId) : '/bff/sync/events');
+    events.addEventListener('ready', event => {
+      ccSync.connected = true;
+      if (/^\\d+$/.test(event.lastEventId) && !ccSync.lastEventId) ccSync.lastEventId = event.lastEventId;
+    });
+    events.addEventListener('change', event => {
+      if (!/^\\d+$/.test(event.lastEventId)) return;
+      if (ccSync.lastEventId && BigInt(event.lastEventId) <= BigInt(ccSync.lastEventId)) return;
+      ccSync.lastEventId = event.lastEventId;
+      reloadActivePage();
+    });
+    const recover = () => {
+      ccSync.connected = false;
+      if (events) events.close();
+      events = null;
+      clearTimeout(timer);
+      timer = setTimeout(async () => {
+        try {
+          const response = await fetch('/bff/dashboard/access', { credentials: 'same-origin', cache: 'no-store' });
+          if (response.status === 401 || response.status === 403) {
+            window.location.replace('/login');
+            return;
+          }
+        } catch (_) {}
+        reloadActivePage();
+        open();
+      }, 3000);
+    };
+    events.addEventListener('auth.expired', recover);
+    events.addEventListener('sync.error', recover);
+    events.addEventListener('error', () => {
+      if (!events || events.readyState === EventSource.CLOSED) recover();
+      else ccSync.connected = false;
+    });
+  };
+  open();
+})();
+`;
 
 function patchControlCenterHtml(source, preferences) {
   const patcher = createV7Patcher('CONTROL_CENTER');
