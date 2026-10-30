@@ -51,3 +51,10 @@ test('Control Center rejects invalid database connection settings', () => {
   assert.match(bff, /CONTROL_CENTER_DB_SSL_INVALID/);
   assert.match(bff, /Number\.isInteger\(dbPort\)/);
 });
+
+test('Control Center browser origin is configured for production HTTPS', () => {
+  const server = read('apps/control-center/server.mjs');
+  assert.match(server, /CONTROL_CENTER_PUBLIC_ORIGIN/);
+  assert.match(server, /PUBLIC_ORIGIN_NOT_CONFIGURED/);
+  assert.match(server, /origin !== expectedOrigin/);
+});
