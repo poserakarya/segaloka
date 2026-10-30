@@ -100,6 +100,10 @@ if (isolatedTestConfig) {
   }
 }
 
+if (process.env.NODE_ENV === 'production' && dbConfig.DB_SSL !== 'true') {
+  throw new Error('CONTROL_CENTER_DB_TLS_REQUIRED');
+}
+
 const pool = new Pool({
   host: dbConfig.DB_HOST,
   port: Number(dbConfig.DB_PORT || '5432'),
