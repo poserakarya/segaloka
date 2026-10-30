@@ -84,18 +84,6 @@ export async function registerGoogleOAuthExchangeRoute(
   app.post(
     '/auth/google/exchange',
     {
-      config: {
-        cors: {
-          origin: [
-            'https://segaloka.com',
-            'https://www.segaloka.com',
-            'https://dashboard.segaloka.com',
-            'https://dev.segaloka.com',
-            'https://dev.dashboard.segaloka.com'
-          ],
-          credentials: true
-        }
-      },
       schema: {
         response: { 200: EXCHANGE_RESPONSE_SCHEMA },
         body: {

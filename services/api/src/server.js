@@ -21,6 +21,7 @@ import { registerGoogleOAuthStartRoute } from './auth/google-oauth-start-route.j
 import { registerLoginSelectChannelRoute } from './auth/login-select-channel-route.js';
 import { registerGoogleOAuthCallbackRoute } from './auth/google-oauth-callback-route.js';
 import { registerGoogleOAuthExchangeRoute } from './auth/google-oauth-exchange-route.js';
+import { corsDelegator } from './security/cors-policy.js';
 import { registerSessionRoutes } from './auth/session-route.js';
 import { registerDashboardHandoffRoutes } from './auth/dashboard-handoff-route.js';
 import { registerSecurityTwoFactorRoutes } from './auth/security-two-factor-routes.js';
@@ -62,46 +63,7 @@ const app = Fastify({
 
 await app.register(helmet);
 
-const allowedCorsOrigins = new Set([
-  'http://localhost:3000',
-  'http://127.0.0.1:3000',
-  'http://127.0.0.1:4178',
-  'http://localhost:4178',
-  'https://segaloka.com',
-  'https://www.segaloka.com',
-  'https://dashboard.segaloka.com',
-  'https://dev.segaloka.com',
-  'https://dev.dashboard.segaloka.com'
-]);
-
-await app.register(cors, {
-  delegator(request, callback) {
-    const origin = request.headers.origin;
-    const path = request.url.split('?')[0];
-
-    const allowedOrigin =
-      typeof origin === 'string' &&
-      allowedCorsOrigins.has(origin);
-
-    const googleExchange =
-      path === '/auth/google/exchange' &&
-      (
-        request.method === 'POST' ||
-        (
-          request.method === 'OPTIONS' &&
-          request.headers['access-control-request-method'] === 'POST'
-        )
-      );
-
-    callback(null, {
-      origin: allowedOrigin ? origin : false,
-      credentials: Boolean(googleExchange && allowedOrigin),
-      methods: ['GET', 'POST', 'PUT', 'PATCH', 'OPTIONS'],
-      allowedHeaders: ['Content-Type', 'Authorization'],
-      maxAge: 600
-    });
-  }
-});
+await app.register(cors, { delegator: corsDelegator });
 
 const pool = new Pool({
   host: process.env.DB_HOST,
