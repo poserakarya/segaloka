@@ -120,9 +120,17 @@ if (!isolatedTestConfig && (
   throw new Error('CONTROL_CENTER_SESSION_KEY_REQUIRED');
 }
 
+const dbPort = Number(dbConfig.DB_PORT || '5432');
+if (!Number.isInteger(dbPort) || dbPort < 1 || dbPort > 65535) {
+  throw new Error('CONTROL_CENTER_DB_PORT_INVALID');
+}
+if (!['true', 'false'].includes(dbConfig.DB_SSL)) {
+  throw new Error('CONTROL_CENTER_DB_SSL_INVALID');
+}
+
 const pool = new Pool({
   host: dbConfig.DB_HOST,
-  port: Number(dbConfig.DB_PORT || '5432'),
+  port: dbPort,
   database: dbConfig.DB_NAME,
   user: dbConfig.DB_USER,
   password: dbConfig.DB_PASSWORD,
