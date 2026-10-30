@@ -65,21 +65,25 @@ Perintah di atas tidak menimpa berkas yang sudah ada. Kunci enkripsi yang sudah 
 - Default hanya `status`. `apply` dan `baseline` wajib `--confirm-database <nama database>`.
 
 ```bash
-docker compose --profile migrate run --rm migrate status
+# Jalankan dari direktori deploy/cloud, setelah production.env dan secrets tersedia.
+docker compose --env-file production.env -f compose.production.yaml --profile migrate run --rm migrate status
 ```
 
 ```bash
-docker compose --profile migrate run --rm migrate apply --confirm-database segaloka_production
+# HANYA setelah backup, restore staging, audit baseline, dan persetujuan eksplisit.
+docker compose --env-file production.env -f compose.production.yaml --profile migrate run --rm migrate apply --confirm-database segaloka_production
 ```
 
 **Database yang sudah ada sebelum runner ini:** sebagian migrasi mencatat versinya sendiri, sebagian tidak. Jalankan `status` dulu, cocokkan versi tertunda dengan skema nyata, lalu tandai yang sudah diterapkan manual dengan `baseline --through <versi>` sebelum `apply`. Jangan `apply` ke production tanpa backup (`backup-postgres.sh`) dan tanpa mencobanya pada salinan staging.
 
 ## Menjalankan (setelah disetujui)
 1. Siapkan server, `production.env`, `secrets/`, dan sertifikat TLS (SAN atau wildcard untuk semua host) di `tls/fullchain.pem` dan `tls/privkey.pem`.
-2. `docker compose up -d postgres`, lalu migrasi seperti di atas.
-3. `docker compose up -d --build api dashboards nginx`.
+2. Dari direktori `deploy/cloud`, jalankan `docker compose --env-file production.env -f compose.production.yaml up -d postgres`, lalu audit status migrasi seperti di atas.
+3. Setelah staging dan otorisasi deployment lulus, jalankan `docker compose --env-file production.env -f compose.production.yaml up -d --build api dashboards nginx`.
 4. Isi `TRUSTED_PROXY_IPS` dengan alamat nginx di jaringan `edge`.
 5. Validasi runtime per host (login, 2FA, SSE) sebelum DNS production diarahkan.
+
+**Penting:** perintah di atas adalah petunjuk operasional, **bukan** perintah untuk langsung dieksekusi di production. Compose menggunakan interpolasi `${POSTGRES_DB}` dan `${POSTGRES_USER}` dari `production.env`; opsi `--env-file` harus disertakan. Pastikan semua secret dan TLS tersedia, gunakan staging lebih dahulu, dan jangan menjalankan `apply` tanpa persetujuan. Untuk mengaudit hasil interpolasi sebelum start, gunakan `docker compose --env-file production.env -f compose.production.yaml config` di lingkungan terotorisasi; output konfigurasi dapat mengandung informasi sensitif dan tidak boleh dipublikasikan.
 
 ## Yang sengaja tidak dilakukan
 - Tidak ada seed data uji: `POST /control-center/test-data/travel-demo` tidak didaftarkan bila `NODE_ENV=production`.
