@@ -104,6 +104,21 @@ if (process.env.NODE_ENV === 'production' && dbConfig.DB_SSL !== 'true') {
   throw new Error('CONTROL_CENTER_DB_TLS_REQUIRED');
 }
 
+if (!isolatedTestConfig && (
+  !dbConfig.DB_HOST ||
+  !dbConfig.DB_NAME ||
+  !dbConfig.DB_USER ||
+  !dbConfig.DB_PASSWORD
+)) {
+  throw new Error('CONTROL_CENTER_DB_CONFIGURATION_REQUIRED');
+}
+if (!isolatedTestConfig && (
+  typeof bffConfig.BFF_SESSION_ENCRYPTION_KEY !== 'string' ||
+  bffConfig.BFF_SESSION_ENCRYPTION_KEY.length < 32
+)) {
+  throw new Error('CONTROL_CENTER_SESSION_KEY_REQUIRED');
+}
+
 const pool = new Pool({
   host: dbConfig.DB_HOST,
   port: Number(dbConfig.DB_PORT || '5432'),
