@@ -32,6 +32,9 @@ test('destructive statements are detected, comments ignored', () => {
   assert.equal(isDestructive('ALTER TABLE x DROP COLUMN y;'), true);
   assert.equal(isDestructive('-- DROP TABLE x\nCREATE TABLE IF NOT EXISTS y (id int);'), false);
   assert.equal(isDestructive('CREATE TABLE a (b uuid REFERENCES c(id) ON DELETE CASCADE); DROP TRIGGER IF EXISTS t ON a;'), false);
+  assert.equal(isDestructive('CREATE TRIGGER t BEFORE TRUNCATE ON a FOR EACH STATEMENT EXECUTE FUNCTION f();'), false);
+  assert.equal(isDestructive('TRUNCATE TABLE public.a;'), true);
+  assert.equal(isDestructive('BEGIN; TRUNCATE public.a; COMMIT;'), true);
 });
 
 test('existing repository migrations contain no destructive statements', async () => {

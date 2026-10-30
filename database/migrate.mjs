@@ -25,7 +25,8 @@ import { fileURLToPath } from 'node:url';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 const LOCK_KEY = 'segaloka_schema_migrations';
-const DESTRUCTIVE = /\b(drop\s+(table|schema|database|column)|truncate|delete\s+from)\b/i;
+// TRUNCATE sebagai statement (bukan "BEFORE TRUNCATE ON" pada definisi trigger).
+const DESTRUCTIVE = /\b(drop\s+(table|schema|database|column)|truncate\s+(?!on\b)|delete\s+from)/i;
 const OWN_TRANSACTION = /^\s*BEGIN\s*;/im;
 
 export function migrationFiles(base = root) {

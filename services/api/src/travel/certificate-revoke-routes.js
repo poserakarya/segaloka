@@ -1,4 +1,5 @@
 import { createSessionAuth } from '../security/session-auth.js';
+import { hasTravelMembershipPermission } from '../security/membership-permission.js';
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
@@ -50,24 +51,15 @@ export async function registerCertificateRevokeRoutes(app, pool) {
         });
       }
 
-      const permission = await client.query(
-        `SELECT 1
-         FROM public.memberships m
-         JOIN public.roles r ON r.id = m.role_id
-         JOIN public.organizations o ON o.id = m.organization_id
-         JOIN public.role_permissions rp ON rp.role_id = m.role_id
-         JOIN public.permissions p ON p.id = rp.permission_id
-         WHERE m.user_id = $1
-           AND m.organization_id = $2
-           AND r.code = 'travel'
-           AND o.organization_type = 'travel'
-           AND o.status = 'active'
-           AND p.code = 'travel.certificates.revoke'
-         LIMIT 1`,
-        [request.auth.userId, certificate.organization_id]
-      );
+      // Pencabutan: izin travel.certificates.revoke pada membership Travel di
+      // organisasi pemilik sertifikat (data server), berdiri sendiri dari issue.
+      const allowed = await hasTravelMembershipPermission(client, {
+        userId: request.auth.userId,
+        organizationId: certificate.organization_id,
+        permission: 'travel.certificates.revoke'
+      });
 
-      if (permission.rows.length === 0) {
+      if (!allowed) {
         await client.query('ROLLBACK');
         return reply.code(403).send({
           code: 'CERTIFICATE_REVOKE_ACCESS_DENIED'

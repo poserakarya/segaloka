@@ -6,6 +6,7 @@ import { registerControlCenterVendorRoutes } from './control-center/vendor-route
 import { registerControlCenterBookingRoutes } from './control-center/booking-routes.js';
 import { registerControlCenterAuditLogRoutes } from './control-center/audit-log-routes.js';
 import { registerTravelDemoRoutes } from './control-center/travel-demo-routes.js';
+import { registerMembershipPermissionRoutes } from './control-center/membership-permission-routes.js';
 import { registerDashboardAccessRoute } from './security/dashboard-access-route.js';
 import { registerTravelerCertificateRoutes } from './travel/certificate-routes.js';
 import Fastify from 'fastify';
@@ -202,6 +203,7 @@ await registerControlCenterVendorRoutes(app, pool);
 await registerControlCenterBookingRoutes(app, pool);
 await registerControlCenterAuditLogRoutes(app, pool);
 await registerTravelDemoRoutes(app, pool);
+await registerMembershipPermissionRoutes(app, pool);
 await registerDocumentRoutes(app, pool);
 await registerDepartureRoutes(app, pool);
 await registerBookingRoutes(app, pool);

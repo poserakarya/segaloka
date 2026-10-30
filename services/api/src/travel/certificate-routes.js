@@ -4,6 +4,7 @@ import { createCertificatePdf } from './certificate-pdf.js';
 import { encryptCertificateToken } from './certificate-token-crypto.js';
 import { randomBytes, createHash } from 'node:crypto';
 import { createSessionAuth } from '../security/session-auth.js';
+import { hasTravelMembershipPermission } from '../security/membership-permission.js';
 import { isTestDataOrganization } from '../security/test-data-policy.js';
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -13,30 +14,14 @@ function hashToken(token) {
   return createHash('sha256').update(token).digest('hex');
 }
 
-async function hasTravelAccess(client, userId, organizationId) {
-  const result = await client.query(
-    `SELECT 1
-     FROM public.memberships m
-     JOIN public.roles r ON r.id = m.role_id
-     JOIN public.organizations o ON o.id = m.organization_id
-     WHERE m.user_id = $1
-       AND m.organization_id = $2
-       AND r.code = 'travel'
-       AND o.organization_type = 'travel'
-       AND o.status = 'active'
-       AND EXISTS (
-         SELECT 1
-         FROM public.role_permissions rp
-         JOIN public.permissions p
-           ON p.id = rp.permission_id
-         WHERE rp.role_id = m.role_id
-           AND p.code = 'travel.certificates.issue'
-       )
-     LIMIT 1`,
-    [userId, organizationId]
-  );
-
-  return result.rows.length > 0;
+// Penerbitan sertifikat: izin travel.certificates.issue pada membership
+// Travel di organisasi pemilik keberangkatan peserta (data server).
+function hasTravelAccess(client, userId, organizationId) {
+  return hasTravelMembershipPermission(client, {
+    userId,
+    organizationId,
+    permission: 'travel.certificates.issue'
+  });
 }
 
 export async function registerTravelerCertificateRoutes(app, pool) {

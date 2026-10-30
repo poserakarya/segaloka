@@ -975,6 +975,33 @@ const server = http.createServer(async (req, res) => {
       if (result.status !== 200) return json(res, [401, 403, 404].includes(result.status) ? result.status : 503, { code: result.data?.code || 'CONTROL_CENTER_TRAVEL_UNAVAILABLE' });
       return json(res, 200, result.data);
     }
+    // Izin per membership Travel: daftar (GET), beri (PUT), cabut (DELETE).
+    // Aktor diverifikasi ulang oleh API (sesi + RBAC super_admin + MFA).
+    const memberPermissionMatch = path.match(
+      /^\/bff\/control-center\/travels\/([0-9a-f-]{36})\/members(?:\/([0-9a-f-]{36})\/permissions\/([a-z.]{1,64}))?$/i
+    );
+    if (memberPermissionMatch && (
+      (req.method === 'GET' && !memberPermissionMatch[2]) ||
+      (['PUT', 'DELETE'].includes(req.method) && memberPermissionMatch[2])
+    )) {
+      const session = await getSession(req);
+      if (!session?.accessToken) return json(res, 401, { authenticated: false, code: 'AUTH_REQUIRED' });
+      const accessResponse = await fetch(`http://${host}:${port}/bff/dashboard/access`, {
+        headers: { cookie: req.headers.cookie || '' }, signal: AbortSignal.timeout(10000)
+      });
+      if (accessResponse.status !== 200) return json(res, accessResponse.status === 403 ? 403 : 503, { code: 'CONTROL_CENTER_ACCESS_DENIED' });
+      const access = await accessResponse.json();
+      const allowed = access.authenticated === true && access.workspaceSwitching === false && access.dashboards?.some(item => item.dashboard === 'control-center' && item.role === 'super_admin' && item.organizationId === null);
+      if (!allowed) return json(res, 403, { code: 'CONTROL_CENTER_ACCESS_DENIED' });
+      const [, organizationId, membershipId, code] = memberPermissionMatch;
+      const target = '/control-center/travels/' + encodeURIComponent(organizationId) + '/members' +
+        (membershipId ? '/' + encodeURIComponent(membershipId) + '/permissions/' + encodeURIComponent(code) : '');
+      const result = await apiRequest(req.method, target, undefined, session.accessToken);
+      if (![200, 201].includes(result.status)) {
+        return json(res, [400, 401, 403, 404].includes(result.status) ? result.status : 503, { code: result.data?.code || 'MEMBERSHIP_PERMISSION_UNAVAILABLE' });
+      }
+      return json(res, result.status, result.data);
+    }
     if ((req.method === 'GET' || req.method === 'POST') &&
       (path === '/bff/control-center/travel-branches' || path.startsWith('/bff/control-center/travels/'))) {
       const session = await getSession(req);

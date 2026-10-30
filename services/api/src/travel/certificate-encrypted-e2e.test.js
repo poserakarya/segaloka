@@ -27,6 +27,12 @@ test('sertifikat terenkripsi: PostgreSQL HTTP E2E', {
   const client = new pg.Client(database);
 
   const previousUrl = process.env.PUBLIC_CERTIFICATE_BASE_URL;
+  // Kunci enkripsi sementara khusus tes bila tidak disediakan lingkungan
+  // (dahulu dibaca dari .env lewat dotenv).
+  const previousKey = process.env.CERTIFICATE_ENCRYPTION_KEY;
+  if (!/^[0-9a-f]{64}$/i.test(previousKey || '')) {
+    process.env.CERTIFICATE_ENCRYPTION_KEY = randomBytes(32).toString('hex');
+  }
 
   process.env.PUBLIC_CERTIFICATE_BASE_URL =
     'http://localhost:4190';
@@ -119,11 +125,39 @@ test('sertifikat terenkripsi: PostgreSQL HTTP E2E', {
 
     const organizationId = organization.rows[0].id;
 
-    await client.query(
+    const operatorMembership = await client.query(
       `INSERT INTO public.memberships
          (user_id, organization_id, role_id)
-       VALUES ($1, $2, $3)`,
+       VALUES ($1, $2, $3)
+       RETURNING id`,
       [operatorId, organizationId, role.rows[0].id]
+    );
+
+    // Model RBAC: izin terbit melekat pada membership Travel ini dan diberikan
+    // oleh Super Admin (bukan role-level, bukan self-grant).
+    const grantor = await client.query(
+      `INSERT INTO public.users
+         (email, full_name, status, email_verified_at)
+       VALUES ($1, 'Segaloka E2E Super Admin', 'active', now())
+       RETURNING id`,
+      [`e2e-admin-${token()}@example.invalid`]
+    );
+
+    await client.query(
+      `INSERT INTO public.membership_permissions
+         (membership_id, permission_id, granted_by)
+       SELECT $1, id, $2 FROM public.permissions
+       WHERE code IN ('travel.certificates.issue', 'travel.certificates.revoke')`,
+      [operatorMembership.rows[0].id, grantor.rows[0].id]
+    );
+
+    // Akun Traveler memiliki role global 'traveler' (seperti hasil pendaftaran).
+    await client.query(
+      `INSERT INTO public.memberships (user_id, organization_id, role_id)
+       SELECT u.id, NULL, r.id
+       FROM unnest($1::uuid[]) AS u(id)
+       JOIN public.roles r ON r.code = 'traveler'`,
+      [[travelerId, strangerId]]
     );
 
     const departure = await client.query(
@@ -343,6 +377,12 @@ test('sertifikat terenkripsi: PostgreSQL HTTP E2E', {
       delete process.env.PUBLIC_CERTIFICATE_BASE_URL;
     } else {
       process.env.PUBLIC_CERTIFICATE_BASE_URL = previousUrl;
+    }
+
+    if (previousKey === undefined) {
+      delete process.env.CERTIFICATE_ENCRYPTION_KEY;
+    } else {
+      process.env.CERTIFICATE_ENCRYPTION_KEY = previousKey;
     }
   }
 });

@@ -1,6 +1,13 @@
 # Rancangan RBAC: izin per membership organisasi Travel
 
-Status: **rancangan untuk ditinjau.** Belum ada migrasi, kode, atau data yang dibuat. Tidak diterapkan ke database mana pun sebelum disetujui.
+Status: **rancangan disetujui; diimplementasikan di `e2e-02` dan diuji pada PostgreSQL `_test`.** Belum diterapkan ke database production.
+
+Keputusan (disetujui):
+1. Tahap sekarang hanya Super Admin yang memberi dan mencabut izin membership.
+2. Pengelolaan anggota oleh pemilik Travel **belum diaktifkan**. Fitur itu menunggu identitas pemilik Travel dan sistem manajemen anggota tersedia dan teruji.
+3. Tidak ada role global baru untuk membedakan pemilik dan staf Travel.
+4. `travel.certificates.issue` dan `travel.certificates.revoke` berdiri sendiri, tidak saling mensyaratkan.
+5. `travel.partners.read/manage/approve` terpisah satu sama lain dan hanya berlaku di organisasi Travel membership-nya.
 
 ## 1. Kondisi existing (hasil audit)
 
@@ -114,6 +121,11 @@ ON CONFLICT (version) DO NOTHING;
 COMMIT;
 ```
 
+Tambahan pada implementasi (`database/migrations/0041_membership_permissions.sql`):
+- Trigger juga menolak pencabut yang merupakan pemilik membership (self-revoke) dan INSERT yang langsung berstatus dicabut.
+- **Riwayat izin append-only:** trigger `BEFORE DELETE` dan `BEFORE TRUNCATE` menolak penghapusan.
+- **Hak akses database:** `REVOKE ALL ... FROM PUBLIC` dan `REVOKE DELETE, TRUNCATE ... FROM CURRENT_USER` (akun yang menjalankan migrasi). Bila production memisahkan akun aplikasi dari pemilik skema, berikan ke akun aplikasi hanya `SELECT, INSERT, UPDATE`.
+
 Sifat migrasi:
 - **Idempotent:** `IF NOT EXISTS`, `CREATE OR REPLACE`, dan trigger dibuat ulang. Runner `database/migrate.mjs` juga mencatat versinya.
 - **Non-destruktif:** tidak ada `DROP TABLE/COLUMN`, `DELETE`, atau `TRUNCATE`, dan tidak ada data yang diubah atau diisi. `DROP TRIGGER IF EXISTS` hanya untuk trigger milik tabel baru ini.
@@ -148,7 +160,8 @@ LIMIT 1
 | `DELETE /control-center/travels/:organizationId/members/:membershipId/permissions/:code` | Cabut izin: `revoked_at/revoked_by` diisi, baris tetap ada |
 
 Aturan:
-- Hanya `super_admin` global, lewat BFF Control Center yang sudah mewajibkan sesi super_admin. Sesi akun ber-2FA wajib MFA terverifikasi (`session-auth`).
+- Hanya `super_admin` global. Aktor diverifikasi oleh API dari sesi (`session-auth`) dan RBAC di database (membership `super_admin` global), bukan dari kolom `granted_by` atau input klien. BFF Control Center juga memeriksa akses super_admin sebelum meneruskan.
+- **Grant dan revoke mensyaratkan sesi ber-MFA:** akun dengan 2FA aktif dan sesi `mfa_verified_at` terisi. Bila tidak, `403 MFA_REQUIRED_FOR_PERMISSION_CHANGE`. Daftar anggota (GET) tidak mensyaratkan MFA.
 - `membershipId` wajib milik `organizationId` di path, ber-role `travel`. Kode izin wajib salah satu dari lima kode.
 - Aktor tidak boleh pemilik membership target (juga ditegakkan trigger).
 - Setiap perubahan menulis `audit_logs` dalam transaksi yang sama (`action`: `travel.membership_permission.granted` / `.revoked`, `entity_type`: `membership_permission`, `entity_id`: id baris izin, `organization_id`: organisasi Travel). Kode izin dapat ditelusuri dari `entity_id`.
@@ -191,6 +204,14 @@ UI: desain V7 Control Center tidak diubah. Penyambungan ke UI (misalnya tab tim 
 - **Audit log:** grant dan revoke masing-masing menulis satu baris audit dengan aktor, organisasi, dan `entity_id` yang benar. Kegagalan audit atau outbox me-rollback perubahan izin.
 - **Migrasi:** apply dua kali tidak menghasilkan perubahan kedua, dan tidak ada baris izin terisi otomatis.
 
-## 9. Keputusan yang diperlukan
-1. Apakah Super Admin satu-satunya pemberi izin (rancangan ini), atau perlu izin `travel.members.manage` agar pemilik organisasi Travel kelak dapat mengelola timnya sendiri? Itu tahap berikutnya dan juga tanpa self-grant.
-2. Apakah pemberian `travel.certificates.revoke` mensyaratkan `issue` juga ada? Rancangan ini memperlakukan keduanya independen.
+## 9. Matriks izin (implementasi)
+
+| Aksi | Super Admin (sesi MFA) | Super Admin tanpa MFA | Staf Travel A dengan izin di A | Staf Travel A tanpa izin | Staf Travel B | Vendor / Agen / Mitra / Traveler / Affiliate |
+|---|---|---|---|---|---|---|
+| Daftar anggota & izin organisasi A | ✓ | ✓ | ✗ | ✗ | ✗ | ✗ |
+| Beri/cabut izin membership di A | ✓ (bukan ke membership miliknya sendiri) | ✗ | ✗ | ✗ | ✗ | ✗ |
+| Terbitkan sertifikat peserta A | ✗ (tidak lewat role global) | ✗ | ✓ bila punya `issue` di A | ✗ | ✗ | ✗ |
+| Cabut sertifikat milik A | ✗ | ✗ | ✓ bila punya `revoke` di A | ✗ | ✗ | ✗ |
+| Mitra/agen organisasi A (`travel.partners.*`) | — | — | Belum ada endpoint; helper yang sama dipakai saat endpoint dibuat | — | — | — |
+
+Izin diperiksa dari database pada setiap request tanpa cache, jadi pencabutan berlaku untuk request berikutnya walaupun sesi masih aktif.

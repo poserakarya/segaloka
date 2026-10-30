@@ -19,13 +19,13 @@ Total awal: 13 kegagalan di 9 file. Setelah perbaikan keamanan Prioritas 1: **12
 
 ## Pembaruan setelah audit dan perbaikan (branch e2e-02)
 
-Suite penuh (Node 24, PostgreSQL `_test`): **470 lolos, 1 gagal, 0 dilewati.**
+Suite penuh (Node 24, PostgreSQL `_test`): **482 lolos, 0 gagal, 0 dilewati** setelah RBAC per membership (sebelumnya 470 lolos, 1 gagal).
 
 | # | File | Status sekarang | Tindakan |
 |---|---|---|---|
 | 1, 2 | `email-verification`, `certificate-transaction-safety` | Lolos | Tes memakai `test/support/test-database.js` (hanya `*_test` di localhost; tanpa DB dilewati dengan alasan jelas). Email verification diubah ke `node:test` dengan pemeriksaan yang sama. |
 | 3 | `google-oauth-exchange.integration` | Lolos | Tidak lagi memakai database/port/user hardcoded; fixture dibuat dan dihapus di database tes. |
-| 4 | `certificate-encrypted-e2e` | **Gagal (benar)** | Izin `travel.certificates.issue/revoke` tidak diberikan ke role mana pun. Model RBAC hanya memiliki role `travel` (semua staf Travel); pemberian ke semua staf tidak disetujui. Menunggu keputusan model role. |
+| 4 | `certificate-encrypted-e2e` | Lolos | Izin per membership (migrasi 0041, `docs/rbac-membership-permissions.md`). Setup tes kini memberi `issue`/`revoke` ke membership operator oleh admin terpisah, memberi akun Traveler role `traveler` seperti hasil pendaftaran, dan memakai kunci enkripsi sementara bila tidak disediakan. Asersi tidak berubah. |
 | 5 | `session-auth-access-token` | Lolos | Tes diselaraskan dengan kebijakan produk: sesi tidak mensyaratkan email terverifikasi (Traveler baru boleh masuk sebelum verifikasi), tetap memeriksa akun aktif, token/sesi, dan MFA untuk akun ber-2FA. |
 | 6 | `google-oauth-cors-isolated` | Lolos | Kebijakan CORS dipindah ke `src/security/cors-policy.js`; tidak ada izin CORS ber-credential. Tes menguji kebijakan dan route asli. |
 | 7 | `google-oauth-exchange-response-security` | Lolos | Diperbaiki sebelumnya (respons exchange minimal). |

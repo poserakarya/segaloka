@@ -459,7 +459,7 @@ export async function registerSyncRoutes(app, pool) {
          JOIN public.organizations o
            ON o.id = e.organization_id
          WHERE e.id > $1::bigint
-           AND (e.entity_type IN ('travel_departure', 'travel_branch') OR e.entity_type IN ${BOOKING_ENTITIES})
+           AND (e.entity_type IN ('travel_departure', 'travel_branch', 'travel_membership_permission') OR e.entity_type IN ${BOOKING_ENTITIES})
            AND o.organization_type = 'travel'${productionFilter}
          ORDER BY e.id
          LIMIT $2`,
