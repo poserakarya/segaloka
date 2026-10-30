@@ -3,7 +3,6 @@ import { parseTravelBranchPage, validateTravelBranchParent } from './travel-bran
 import { hasTestDataOrganizationColumn } from '../security/test-data-policy.js';
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-const DEMO_BATCH = 'SEGALOKA_TRAVEL_DEMO_20261020';
 
 async function isSuperAdmin(pool, userId) {
   const result = await pool.query(
@@ -179,25 +178,4 @@ export async function registerTravelDemoRoutes(app, pool) {
     } finally { client.release(); }
   });
 
-  app.post('/control-center/test-data/travel-demo', { preHandler: requireSession }, async (request, reply) => {
-    if (!await requireAdmin(pool, request, reply)) return;
-    const client = await pool.connect();
-    try {
-      await client.query('BEGIN');
-      const batch = await client.query(`INSERT INTO public.test_data_batches (batch_code, description) VALUES ($1, $2) ON CONFLICT (batch_code) DO UPDATE SET batch_code = EXCLUDED.batch_code RETURNING id`, [DEMO_BATCH, 'Segaloka Travel Demo and branches']);
-      const existing = await client.query(`SELECT id FROM public.test_data_records WHERE batch_id = $1 AND entity_table = 'organizations' LIMIT 1`, [batch.rows[0].id]);
-      if (existing.rows.length) { await client.query('ROLLBACK'); return reply.code(200).send({ code: DEMO_BATCH, idempotent: true }); }
-      const org = await client.query(`INSERT INTO public.organizations (name, organization_type, status, is_test_data) VALUES ('Segaloka Travel Demo','travel','active',TRUE) RETURNING id`);
-      await client.query(`INSERT INTO public.test_data_records (batch_id, entity_table, entity_id) VALUES ($1,'organizations',$2)`, [batch.rows[0].id, org.rows[0].id]);
-      for (const [code, name] of [['DEMO-MKS-01','Cabang Demo Makassar'], ['DEMO-JKT-02','Cabang Demo Jakarta']]) {
-        const branch = await client.query(`INSERT INTO public.travel_branches (organization_id, branch_code, branch_name) VALUES ($1,$2,$3) RETURNING id`, [org.rows[0].id, code, name]);
-        await client.query(`INSERT INTO public.test_data_records (batch_id, entity_table, entity_id) VALUES ($1,'travel_branches',$2)`, [batch.rows[0].id, branch.rows[0].id]);
-        await audit(client, request.auth.userId, org.rows[0].id, 'control_center.test_travel_demo.branch_created', 'travel_branch', branch.rows[0].id);
-      }
-      await audit(client, request.auth.userId, org.rows[0].id, 'control_center.test_travel_demo.created', 'organization', org.rows[0].id);
-      await client.query('COMMIT');
-      return reply.code(201).send({ organizationId: org.rows[0].id, batchCode: DEMO_BATCH });
-    } catch (error) { await client.query('ROLLBACK'); request.log.error({ err: error }, 'Travel demo create failed'); return reply.code(500).send({ code: 'TRAVEL_DEMO_CREATE_FAILED' }); }
-    finally { client.release(); }
-  });
 }
