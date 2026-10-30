@@ -15,3 +15,18 @@ Semua kegagalan di bawah juga terjadi di commit `3034776` (Fase A), dan yang dip
 | 9 | `apps/control-center/control-center-login.test.mjs` | 4 | Menguji `public/index.html` (gerbang lama yang tidak memiliki form login). Harness DOM tidak cocok (`classList` undefined). Halaman ini tidak lagi disajikan (Fase A: `/` → `/login`). | Tes usang | Pengganti yang aktif: `control-center-login-totp.test.mjs` (lolos) |
 
 Total awal: 13 kegagalan di 9 file. Setelah perbaikan keamanan Prioritas 1: **12 kegagalan di 8 file** (#7 lolos). Dua di antaranya (#1, #2) lolos bila DB tes dikonfigurasi. `traveler-certificate-download.test.js`, yang gagal di Node 22, lolos di Node 24.
+
+
+## Pembaruan setelah audit dan perbaikan (branch e2e-02)
+
+Suite penuh (Node 24, PostgreSQL `_test`): **470 lolos, 1 gagal, 0 dilewati.**
+
+| # | File | Status sekarang | Tindakan |
+|---|---|---|---|
+| 1, 2 | `email-verification`, `certificate-transaction-safety` | Lolos | Tes memakai `test/support/test-database.js` (hanya `*_test` di localhost; tanpa DB dilewati dengan alasan jelas). Email verification diubah ke `node:test` dengan pemeriksaan yang sama. |
+| 3 | `google-oauth-exchange.integration` | Lolos | Tidak lagi memakai database/port/user hardcoded; fixture dibuat dan dihapus di database tes. |
+| 4 | `certificate-encrypted-e2e` | **Gagal (benar)** | Izin `travel.certificates.issue/revoke` tidak diberikan ke role mana pun. Model RBAC hanya memiliki role `travel` (semua staf Travel); pemberian ke semua staf tidak disetujui. Menunggu keputusan model role. |
+| 5 | `session-auth-access-token` | Lolos | Tes diselaraskan dengan kebijakan produk: sesi tidak mensyaratkan email terverifikasi (Traveler baru boleh masuk sebelum verifikasi), tetap memeriksa akun aktif, token/sesi, dan MFA untuk akun ber-2FA. |
+| 6 | `google-oauth-cors-isolated` | Lolos | Kebijakan CORS dipindah ke `src/security/cors-policy.js`; tidak ada izin CORS ber-credential. Tes menguji kebijakan dan route asli. |
+| 7 | `google-oauth-exchange-response-security` | Lolos | Diperbaiki sebelumnya (respons exchange minimal). |
+| 8, 9 | `control-center-api-status`, `control-center-login` | Lolos | Tes kini menjalankan `server.mjs`, halaman login aktif (Chromium), dan bundle yang disajikan dengan BFF tiruan khusus tes. |
