@@ -4,17 +4,30 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const appDir = dirname(fileURLToPath(import.meta.url));
+function servicePort(envName, fallback) {
+  const value = Number(process.env[envName] || fallback);
+  if (!Number.isInteger(value) || value < 1024 || value > 65535) {
+    throw new Error(`INVALID_CONTROL_CENTER_PORT:${envName}`);
+  }
+  return value;
+}
+const bffPort = servicePort('SEGALOKA_BFF_PORT', 4203);
+const frontendPort = servicePort('SEGALOKA_CONTROL_CENTER_PORT', 4202);
+if (bffPort === frontendPort) {
+  throw new Error('CONTROL_CENTER_PORT_COLLISION');
+}
+
 const services = [
   {
     name: 'BFF',
-    port: 4203,
+    port: bffPort,
     path: '/bff/health',
     entrypoint: 'bff.mjs',
     isHealthy: body => body?.status === 'ok'
   },
   {
     name: 'frontend',
-    port: 4202,
+    port: frontendPort,
     path: '/health',
     entrypoint: 'server.mjs',
     isHealthy: body =>
