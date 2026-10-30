@@ -2,9 +2,6 @@ import http from 'node:http';
 import { randomBytes } from 'node:crypto';
 import { createRequire } from 'node:module';
 import { createSessionStore } from './session-store.mjs';
-import { readFileSync } from 'node:fs';
-import { resolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
 
 import { signIngressRequest } from '../../services/api/src/security/ingress-identity-v3.js';
 
@@ -52,10 +49,6 @@ function responseShape(data) {
       : null
   };
 }
-
-const root = resolve(
-  fileURLToPath(new URL('../../', import.meta.url))
-);
 
 function loadIngressSecret() {
   const secret = isolatedTestConfig
