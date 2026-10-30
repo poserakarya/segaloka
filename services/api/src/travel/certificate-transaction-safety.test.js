@@ -1,27 +1,14 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import pg from 'pg';
-import 'dotenv/config';
+import { TEST_DATABASE_SKIP, testDatabaseConfig } from '../../test/support/test-database.js';
 
-function config(name) {
-  const value = process.env[name];
+const database = testDatabaseConfig();
 
-  if (!value) {
-    throw new Error(`MISSING_CONFIGURATION_${name}`);
-  }
-
-  return value;
-}
-
-test('transaksi luar melindungi data uji Segaloka', async () => {
-  const client = new pg.Client({
-    host: config('DB_HOST'),
-    port: Number(config('DB_PORT')),
-    database: config('DB_NAME'),
-    user: config('DB_USER'),
-    password: config('DB_PASSWORD'),
-    ssl: process.env.DB_SSL === 'true'
-  });
+test('transaksi luar melindungi data uji Segaloka', {
+  skip: database ? false : TEST_DATABASE_SKIP
+}, async () => {
+  const client = new pg.Client(database);
 
   await client.connect();
 

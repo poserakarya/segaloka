@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { randomBytes, createHash } from 'node:crypto';
 import Fastify from 'fastify';
 import pg from 'pg';
-import 'dotenv/config';
+import { TEST_DATABASE_SKIP, testDatabaseConfig } from '../../test/support/test-database.js';
 
 import {
   registerTravelerCertificateRoutes
@@ -19,15 +19,12 @@ const hash = value =>
 
 const token = () => randomBytes(32).toString('hex');
 
-test('sertifikat terenkripsi: PostgreSQL HTTP E2E', async () => {
-  const client = new pg.Client({
-    host: process.env.DB_HOST,
-    port: Number(process.env.DB_PORT),
-    database: process.env.DB_NAME,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    ssl: process.env.DB_SSL === 'true'
-  });
+const database = testDatabaseConfig();
+
+test('sertifikat terenkripsi: PostgreSQL HTTP E2E', {
+  skip: database ? false : TEST_DATABASE_SKIP
+}, async () => {
+  const client = new pg.Client(database);
 
   const previousUrl = process.env.PUBLIC_CERTIFICATE_BASE_URL;
 

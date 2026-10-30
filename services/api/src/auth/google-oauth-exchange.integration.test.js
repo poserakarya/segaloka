@@ -10,9 +10,10 @@ import {
   signIngressRequest,
   verifyIngressRequest
 } from '../../../../projects/Segaloka-webs/src/lib/segaloka-ingress-v3.mjs';
+import { TEST_DATABASE_SKIP, testDatabaseConfig } from '../../test/support/test-database.js';
 
 const { Pool } = pg;
-const DATABASE = 'segaloka_migration_verify_20261017';
+const database = testDatabaseConfig();
 const USER_ID = '5880901b-8238-4ed6-98ba-8d84311455b6';
 const SESSION_ID = '741d38b2-16e2-4872-b16f-2e13e9ca4428';
 const TEST_TIMEOUT = 10000;
@@ -48,22 +49,36 @@ async function issueExchange(pool) {
 }
 
 test('Google OAuth exchange passes runtime security cases', {
+  skip: database ? false : TEST_DATABASE_SKIP,
   timeout: TEST_TIMEOUT * 2
 }, async () => {
   const previousKey = process.env.OAUTH_CONFIG_ENCRYPTION_KEY;
   process.env.OAUTH_CONFIG_ENCRYPTION_KEY = randomBytes(32).toString('hex');
   const pool = new Pool({
-    host: '127.0.0.1',
-    port: 5432,
-    database: DATABASE,
-    user: 'postgres',
+    ...database,
     max: 4,
     connectionTimeoutMillis: 2000,
     idleTimeoutMillis: 1000
   });
 
   let original;
+  let createdUser = false;
+  let createdSession = false;
   try {
+    // Fixture terisolasi di database *_test: dibuat bila belum ada dan
+    // dihapus lagi di akhir bila dibuat oleh tes ini.
+    createdUser = (await pool.query(
+      `INSERT INTO public.users (id, email, full_name, status, email_verified_at)
+       VALUES ($1, 'local-test@example.invalid', 'Local Integration Test', 'active', now())
+       ON CONFLICT (id) DO NOTHING`,
+      [USER_ID]
+    )).rowCount === 1;
+    createdSession = (await pool.query(
+      `INSERT INTO public.auth_sessions (id, user_id, refresh_token_hash, expires_at)
+       VALUES ($1, $2, encode(digest($3, 'sha256'), 'hex'), now() + interval '1 hour')
+       ON CONFLICT (id) DO NOTHING`,
+      [SESSION_ID, USER_ID, randomBytes(32).toString('hex')]
+    )).rowCount === 1;
     original = (await pool.query(
       'SELECT mfa_verified_at, mfa_method, revoked_at, expires_at FROM public.auth_sessions WHERE id = $1',
       [SESSION_ID]
@@ -134,15 +149,22 @@ test('Google OAuth exchange passes runtime security cases', {
       'DELETE FROM public.auth_oauth_exchanges WHERE session_id = $1',
       [SESSION_ID]
     );
-    await pool.query(
-      `UPDATE public.auth_sessions
-       SET revoked_at = $2, mfa_verified_at = $3, mfa_method = $4,
-           expires_at = $5
-       WHERE id = $1`,
-      [SESSION_ID, original?.revoked_at ?? null,
-        original?.mfa_verified_at ?? null, original?.mfa_method ?? null,
-        original?.expires_at]
-    );
+    if (createdSession) {
+      await pool.query('DELETE FROM public.auth_sessions WHERE id = $1', [SESSION_ID]);
+    } else if (original) {
+      await pool.query(
+        `UPDATE public.auth_sessions
+         SET revoked_at = $2, mfa_verified_at = $3, mfa_method = $4,
+             expires_at = $5
+         WHERE id = $1`,
+        [SESSION_ID, original.revoked_at ?? null,
+          original.mfa_verified_at ?? null, original.mfa_method ?? null,
+          original.expires_at]
+      );
+    }
+    if (createdUser) {
+      await pool.query('DELETE FROM public.users WHERE id = $1', [USER_ID]);
+    }
     await withTimeout(pool.end(), 'POOL_CLOSE');
     if (previousKey === undefined) delete process.env.OAUTH_CONFIG_ENCRYPTION_KEY;
     else process.env.OAUTH_CONFIG_ENCRYPTION_KEY = previousKey;
