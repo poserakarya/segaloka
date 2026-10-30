@@ -1,10 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { fileURLToPath } from 'node:url';
 
-const root = fileURLToPath(new URL('../../../', import.meta.url));
-const read = path => readFileSync(new URL(path, 'file://' + root), 'utf8');
+const root = new URL('../../../', import.meta.url);
+const read = path => readFileSync(new URL(path, root), 'utf8');
 
 test('Travel demo writer is absent from API and BFF', () => {
   const api = read('services/api/src/control-center/travel-demo-routes.js');
