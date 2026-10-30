@@ -26,9 +26,60 @@ function readBindingCookie(header) {
     : null;
 }
 
+// Exchange hanya untuk pemanggil server-ke-server yang menandatangani request
+// ingress (route server website). Respons berisi bidang minimum yang dipakai
+// pemanggil untuk menyetel cookie httpOnly: tanpa sessionId internal maupun
+// data pribadi pengguna, dan schema respons menolak bidang tambahan.
+const TOKEN = { type: 'string', pattern: '^[0-9a-f]{64}$' };
+const EXCHANGE_RESPONSE_SCHEMA = {
+  type: 'object',
+  additionalProperties: false,
+  required: ['authenticated', 'user', 'session'],
+  properties: {
+    authenticated: { type: 'boolean', const: true },
+    user: {
+      type: 'object',
+      additionalProperties: false,
+      required: ['id'],
+      properties: { id: { type: 'string' } }
+    },
+    session: {
+      type: 'object',
+      additionalProperties: false,
+      required: ['accessToken', 'refreshToken'],
+      properties: {
+        accessToken: TOKEN,
+        refreshToken: TOKEN,
+        tokenType: { type: 'string' },
+        expiresIn: { type: 'integer' },
+        accessTokenExpiresAt: { type: 'string' }
+      }
+    }
+  }
+};
+
+export function exchangeResponseBody(payload) {
+  const session = payload?.session || {};
+  const body = {
+    authenticated: true,
+    user: { id: String(payload?.user?.id || '') },
+    session: {
+      accessToken: session.accessToken,
+      refreshToken: session.refreshToken
+    }
+  };
+  if (typeof session.tokenType === 'string') body.session.tokenType = session.tokenType;
+  if (Number.isInteger(session.expiresIn)) body.session.expiresIn = session.expiresIn;
+  if (session.accessTokenExpiresAt != null) {
+    body.session.accessTokenExpiresAt = new Date(session.accessTokenExpiresAt).toISOString();
+  }
+  return body;
+}
+
 export async function registerGoogleOAuthExchangeRoute(
   app,
-  pool
+  pool,
+  { consume = consumeGoogleOAuthExchange } = {}
 ) {
   app.post(
     '/auth/google/exchange',
@@ -46,6 +97,7 @@ export async function registerGoogleOAuthExchangeRoute(
         }
       },
       schema: {
+        response: { 200: EXCHANGE_RESPONSE_SCHEMA },
         body: {
           type: 'object',
           required: ['code'],
@@ -63,11 +115,22 @@ export async function registerGoogleOAuthExchangeRoute(
       reply.header('Cache-Control', 'no-store');
       reply.header('Referrer-Policy', 'no-referrer');
       reply.header('X-Content-Type-Options', 'nosniff');
+      reply.header('Pragma', 'no-cache');
 
       if (!request.verifiedClientIp) {
         return reply.code(403).send({
           authenticated: false,
           code: 'GOOGLE_EXCHANGE_INGRESS_REQUIRED'
+        });
+      }
+
+      // Browser selalu mengirim Origin pada POST lintas origin; pemanggil
+      // server (website) tidak. Token tidak pernah dikembalikan ke konteks
+      // browser, dan kode exchange tidak dikonsumsi.
+      if (request.headers.origin !== undefined) {
+        return reply.code(403).send({
+          authenticated: false,
+          code: 'GOOGLE_EXCHANGE_SERVER_ONLY'
         });
       }
 
@@ -83,7 +146,7 @@ export async function registerGoogleOAuthExchangeRoute(
       }
 
       try {
-        const result = await consumeGoogleOAuthExchange(
+        const result = await consume(
           pool,
           {
             code: request.body.code,
@@ -104,7 +167,7 @@ export async function registerGoogleOAuthExchangeRoute(
           'Domain=.segaloka.com; HttpOnly; Secure; SameSite=Lax'
         );
 
-        return reply.code(200).send(result);
+        return reply.code(200).send(exchangeResponseBody(result));
       } catch (error) {
         request.log.error(
           { err: error },

@@ -72,7 +72,15 @@ async function audit(client, actor, organizationId, action, entityType, entityId
   );
 }
 
-export async function registerTravelDemoRoutes(app, pool) {
+// Seed data uji (organisasi "Segaloka Travel Demo" + cabang) hanya untuk
+// lingkungan non-production yang mengaktifkannya secara eksplisit. Di
+// production route tidak didaftarkan sama sekali (404), apa pun flag-nya.
+export function travelDemoSeedEnabled(env = process.env) {
+  return env.NODE_ENV !== 'production' &&
+    env.SEGALOKA_ENABLE_TEST_DATA_SEED === 'true';
+}
+
+export async function registerTravelDemoRoutes(app, pool, { env = process.env } = {}) {
   const requireSession = createSessionAuth(pool);
 
   app.get('/control-center/travel-branches', { preHandler: requireSession }, async (request, reply) => {
@@ -181,6 +189,8 @@ export async function registerTravelDemoRoutes(app, pool) {
       return reply.code(500).send({ code: 'TRAVEL_BRANCH_UPDATE_FAILED' });
     } finally { client.release(); }
   });
+
+  if (!travelDemoSeedEnabled(env)) return;
 
   app.post('/control-center/test-data/travel-demo', { preHandler: requireSession }, async (request, reply) => {
     if (!await requireAdmin(pool, request, reply)) return;

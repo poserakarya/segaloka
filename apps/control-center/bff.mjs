@@ -1046,6 +1046,8 @@ const server = http.createServer(async (req, res) => {
       return json(res, 200, result.data);
     }
     if (req.method === 'POST' && path === '/bff/control-center/test-data/travel-demo') {
+      // Seed data uji tidak tersedia di production (API juga tidak mendaftarkannya).
+      if (process.env.NODE_ENV === 'production') return json(res, 404, { code: 'NOT_FOUND' });
       const session = await getSession(req);
       if (!session?.accessToken) return json(res, 401, { authenticated: false, code: 'AUTH_REQUIRED' });
       const accessResponse = await fetch(`http://${host}:${port}/bff/dashboard/access`, { headers: { cookie: req.headers.cookie || '' }, signal: AbortSignal.timeout(10000) });
@@ -1054,7 +1056,7 @@ const server = http.createServer(async (req, res) => {
       const allowed = access.authenticated === true && access.workspaceSwitching === false && access.dashboards?.some(item => item.dashboard === 'control-center' && item.role === 'super_admin' && item.organizationId === null);
       if (!allowed) return json(res, 403, { code: 'CONTROL_CENTER_ACCESS_DENIED' });
       const result = await apiRequest('POST', '/control-center/test-data/travel-demo', (await readBody(req)).toString('utf8'), session.accessToken);
-      if (![200, 201].includes(result.status)) return json(res, [400, 401, 403, 409, 422].includes(result.status) ? result.status : 503, { code: result.data?.code || 'TRAVEL_DEMO_UNAVAILABLE' });
+      if (![200, 201].includes(result.status)) return json(res, [400, 401, 403, 404, 409, 422].includes(result.status) ? result.status : 503, { code: result.data?.code || 'TRAVEL_DEMO_UNAVAILABLE' });
       return json(res, result.status, result.data);
     }
     if (req.method === 'GET' && path === '/bff/control-center/vendors') {
