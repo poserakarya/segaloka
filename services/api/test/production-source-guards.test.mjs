@@ -38,3 +38,9 @@ test('Production PostgreSQL and session credentials fail closed', () => {
   assert.match(bff, /CONTROL_CENTER_DB_CONFIGURATION_REQUIRED/);
   assert.match(bff, /CONTROL_CENTER_SESSION_KEY_REQUIRED/);
 });
+
+test('Control Center API transport supports HTTPS', () => {
+  const bff = read('apps/control-center/bff.mjs');
+  assert.match(bff, /import https from 'node:https'/);
+  assert.match(bff, /url\.protocol === 'https:' \? https : http/);
+});
