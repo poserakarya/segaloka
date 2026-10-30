@@ -44,3 +44,10 @@ test('Control Center API transport supports HTTPS', () => {
   assert.match(bff, /import https from 'node:https'/);
   assert.match(bff, /url\.protocol === 'https:' \? https : http/);
 });
+
+test('Control Center rejects invalid database connection settings', () => {
+  const bff = read('apps/control-center/bff.mjs');
+  assert.match(bff, /CONTROL_CENTER_DB_PORT_INVALID/);
+  assert.match(bff, /CONTROL_CENTER_DB_SSL_INVALID/);
+  assert.match(bff, /Number\.isInteger\(dbPort\)/);
+});
