@@ -47,6 +47,13 @@ const { Pool } = pg;
 
 const host = process.env.API_HOST ?? '127.0.0.1';
 const port = Number(process.env.API_PORT ?? 4190);
+if (!Number.isInteger(port) || port < 1 || port > 65535) {
+  throw new Error('INVALID_API_PORT');
+}
+if (process.env.NODE_ENV === 'production' && !process.env.API_HOST) {
+  throw new Error('API_HOST_REQUIRED_IN_PRODUCTION');
+}
+
 
 const app = Fastify({
   logger: {
@@ -68,6 +75,7 @@ const allowedCorsOrigins = new Set([
   'https://segaloka.com',
   'https://www.segaloka.com',
   'https://dashboard.segaloka.com',
+  'https://admin.segaloka.com',
   'https://dev.segaloka.com',
   'https://dev.dashboard.segaloka.com'
 ]);
@@ -101,9 +109,24 @@ await app.register(cors, {
   }
 });
 
+if (process.env.NODE_ENV === 'production') {
+  for (const key of ['DB_HOST', 'DB_NAME', 'DB_USER', 'DB_PASSWORD']) {
+    if (typeof process.env[key] !== 'string' || !process.env[key].trim()) {
+      throw new Error(`API_DATABASE_CONFIG_MISSING:${key}`);
+    }
+  }
+  if (process.env.DB_SSL !== 'true') {
+    throw new Error('API_DATABASE_TLS_REQUIRED');
+  }
+}
+const databasePort = Number(process.env.DB_PORT || 5432);
+if (!Number.isInteger(databasePort) || databasePort < 1 || databasePort > 65535) {
+  throw new Error('API_DATABASE_PORT_INVALID');
+}
+
 const pool = new Pool({
   host: process.env.DB_HOST,
-  port: Number(process.env.DB_PORT),
+  port: databasePort,
   database: process.env.DB_NAME,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,

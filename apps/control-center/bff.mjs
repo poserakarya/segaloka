@@ -1,10 +1,8 @@
 import http from 'node:http';
+import https from 'node:https';
 import { randomBytes } from 'node:crypto';
 import { createRequire } from 'node:module';
 import { createSessionStore } from './session-store.mjs';
-import { readFileSync } from 'node:fs';
-import { resolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
 
 import { signIngressRequest } from '../../services/api/src/security/ingress-identity-v3.js';
 
@@ -15,6 +13,12 @@ if (!Number.isInteger(requestedPort) || requestedPort < 1024 || requestedPort > 
 }
 const port = requestedPort;
 const apiOrigin = process.env.API_ORIGIN || 'http://127.0.0.1:4192';
+if (process.env.NODE_ENV === 'production' && !process.env.API_ORIGIN) {
+  throw new Error('API_ORIGIN_REQUIRED_IN_PRODUCTION');
+}
+if (process.env.NODE_ENV === 'production' && new URL(apiOrigin).protocol !== 'https:') {
+  throw new Error('API_ORIGIN_MUST_USE_HTTPS');
+}
 const isolatedTestConfig = process.env.SEGALOKA_CONTROL_TEST === '1';
 const localDiagnostics = process.env.SEGALOKA_LOCAL_DIAGNOSTICS === '1' &&
   process.env.NODE_ENV !== 'production';
@@ -47,42 +51,13 @@ function responseShape(data) {
   };
 }
 
-const root = resolve(
-  fileURLToPath(new URL('../../', import.meta.url))
-);
-
 function loadIngressSecret() {
-  if (isolatedTestConfig) {
-    const secret = process.env.CONTROL_TEST_INGRESS_IDENTITY_SECRET;
-
-    if (typeof secret !== 'string' || secret.length < 32) {
-      throw new Error('CONTROL_TEST_INGRESS_SECRET_NOT_CONFIGURED');
-    }
-
-    return secret;
+  const secret = isolatedTestConfig
+    ? process.env.CONTROL_TEST_INGRESS_IDENTITY_SECRET
+    : process.env.INGRESS_IDENTITY_SECRET;
+  if (typeof secret !== 'string' || secret.length < 32) {
+    throw new Error('INGRESS_SECRET_NOT_CONFIGURED');
   }
-
-  const envPath = resolve(root, 'services/api/.env');
-  const text = readFileSync(envPath, 'utf8');
-
-  const match = text.match(
-    /^INGRESS_IDENTITY_SECRET\s*=\s*(.+)$/m
-  );
-
-  if (!match) {
-    throw new Error('INGRESS_SECRET_NOT_FOUND');
-  }
-
-  const value = match[1].trim();
-
-  const secret = (
-    value.startsWith('"') && value.endsWith('"')
-  ) ? value.slice(1, -1) : value;
-
-  if (secret.length < 32) {
-    throw new Error('INVALID_INGRESS_SECRET');
-  }
-
   return secret;
 }
 
@@ -91,27 +66,6 @@ const requireApi = createRequire(
   new URL('../../services/api/package.json', import.meta.url)
 );
 const { Pool } = requireApi('pg');
-
-function readEnvFile(path) {
-  const values = {};
-  const content = readFileSync(path, 'utf8');
-
-  for (const line of content.split(/\r?\n/)) {
-    const match = line.match(/^([A-Z][A-Z0-9_]*)\s*=\s*(.*)$/);
-    if (!match) continue;
-
-    let value = match[2].trim();
-    if (
-      (value.startsWith('"') && value.endsWith('"')) ||
-      (value.startsWith("'") && value.endsWith("'"))
-    ) {
-      value = value.slice(1, -1);
-    }
-    values[match[1]] = value;
-  }
-
-  return values;
-}
 
 const dbConfig = isolatedTestConfig
   ? {
@@ -122,13 +76,19 @@ const dbConfig = isolatedTestConfig
       DB_PASSWORD: process.env.CONTROL_TEST_DB_PASSWORD,
       DB_SSL: process.env.CONTROL_TEST_DB_SSL || 'false'
     }
-  : readEnvFile(resolve(root, 'services/api/.env'));
-const bffConfig = isolatedTestConfig
-  ? {
-      BFF_SESSION_ENCRYPTION_KEY:
-        process.env.CONTROL_TEST_BFF_SESSION_ENCRYPTION_KEY
-    }
-  : readEnvFile(resolve(root, 'apps/travel-dashboard/server/.env'));
+  : {
+      DB_HOST: process.env.DB_HOST,
+      DB_PORT: process.env.DB_PORT,
+      DB_NAME: process.env.DB_NAME,
+      DB_USER: process.env.DB_USER,
+      DB_PASSWORD: process.env.DB_PASSWORD,
+      DB_SSL: process.env.DB_SSL || 'true'
+    };
+const bffConfig = {
+  BFF_SESSION_ENCRYPTION_KEY: isolatedTestConfig
+    ? process.env.CONTROL_TEST_BFF_SESSION_ENCRYPTION_KEY
+    : process.env.BFF_SESSION_ENCRYPTION_KEY
+};
 
 if (isolatedTestConfig) {
   for (const key of [
@@ -141,13 +101,36 @@ if (isolatedTestConfig) {
   }
 }
 
+if (process.env.NODE_ENV === 'production' && dbConfig.DB_SSL !== 'true') {
+  throw new Error('CONTROL_CENTER_DB_TLS_REQUIRED');
+}
+
+if (!isolatedTestConfig && (
+  !dbConfig.DB_HOST ||
+  !dbConfig.DB_NAME ||
+  !dbConfig.DB_USER ||
+  !dbConfig.DB_PASSWORD
+)) {
+  throw new Error('CONTROL_CENTER_DB_CONFIGURATION_REQUIRED');
+}
+if (!isolatedTestConfig && (
+  typeof bffConfig.BFF_SESSION_ENCRYPTION_KEY !== 'string' ||
+  bffConfig.BFF_SESSION_ENCRYPTION_KEY.length < 32
+)) {
+  throw new Error('CONTROL_CENTER_SESSION_KEY_REQUIRED');
+}
+
+const dbPort = Number(dbConfig.DB_PORT || '5432');
+if (!Number.isInteger(dbPort) || dbPort < 1 || dbPort > 65535) {
+  throw new Error('CONTROL_CENTER_DB_PORT_INVALID');
+}
+if (!['true', 'false'].includes(dbConfig.DB_SSL)) {
+  throw new Error('CONTROL_CENTER_DB_SSL_INVALID');
+}
+
 const pool = new Pool({
   host: dbConfig.DB_HOST,
-  port: Number(
-    isolatedTestConfig
-      ? dbConfig.DB_PORT
-      : (process.env.CONTROL_CENTER_DB_PORT || '5434')
-  ),
+  port: dbPort,
   database: dbConfig.DB_NAME,
   user: dbConfig.DB_USER,
   password: dbConfig.DB_PASSWORD,
@@ -244,7 +227,7 @@ async function apiRequest(method, target, data, accessToken) {
   try {
     response = await new Promise((resolve, reject) => {
       const url = new URL(apiOrigin + target);
-      const request = http.request({
+      const request = (url.protocol === 'https:' ? https : http).request({
         protocol: url.protocol,
         hostname: url.hostname,
         port: url.port,
@@ -973,18 +956,7 @@ const server = http.createServer(async (req, res) => {
       if (result.status !== 200) return json(res, [400, 401, 403, 404, 409, 422].includes(result.status) ? result.status : 503, { code: result.data?.code || 'CONTROL_CENTER_BRANCH_UNAVAILABLE' });
       return json(res, 200, result.data);
     }
-    if (req.method === 'POST' && path === '/bff/control-center/test-data/travel-demo') {
-      const session = await getSession(req);
-      if (!session?.accessToken) return json(res, 401, { authenticated: false, code: 'AUTH_REQUIRED' });
-      const accessResponse = await fetch(`http://${host}:${port}/bff/dashboard/access`, { headers: { cookie: req.headers.cookie || '' }, signal: AbortSignal.timeout(10000) });
-      if (accessResponse.status !== 200) return json(res, accessResponse.status === 403 ? 403 : 503, { code: accessResponse.status === 403 ? 'CONTROL_CENTER_ACCESS_DENIED' : 'DASHBOARD_ACCESS_UNAVAILABLE' });
-      const access = await accessResponse.json();
-      const allowed = access.authenticated === true && access.workspaceSwitching === false && access.dashboards?.some(item => item.dashboard === 'control-center' && item.role === 'super_admin' && item.organizationId === null);
-      if (!allowed) return json(res, 403, { code: 'CONTROL_CENTER_ACCESS_DENIED' });
-      const result = await apiRequest('POST', '/control-center/test-data/travel-demo', (await readBody(req)).toString('utf8'), session.accessToken);
-      if (![200, 201].includes(result.status)) return json(res, [400, 401, 403, 409, 422].includes(result.status) ? result.status : 503, { code: result.data?.code || 'TRAVEL_DEMO_UNAVAILABLE' });
-      return json(res, result.status, result.data);
-    }
+
     if (req.method === 'GET' && path === '/bff/control-center/vendors') {
       const session = await getSession(req);
       if (!session?.accessToken) return json(res, 401, { authenticated: false, code: 'AUTH_REQUIRED' });

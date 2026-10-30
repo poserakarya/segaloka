@@ -9,7 +9,7 @@ async function hasControlCenterAccess(req) {
   return new Promise(resolve => {
     const check = http.request({
       hostname: '127.0.0.1',
-      port: Number(process.env.SEGALOKA_CONTROL_CENTER_BFF_PORT || 4203),
+      port: Number(process.env.SEGALOKA_BFF_PORT || 4203),
       method: 'GET',
       path: '/bff/dashboard/access',
       headers: {
@@ -68,7 +68,13 @@ import http from 'node:http';
 
 function proxyBff(req, res) {
   const origin = req.headers.origin;
-  const expectedOrigin = `http://${HOST}:${PORT}`;
+  const configuredOrigin = process.env.CONTROL_CENTER_PUBLIC_ORIGIN;
+  if (process.env.NODE_ENV === 'production' && (!configuredOrigin || !/^https:\/\/[^/]+$/.test(configuredOrigin))) {
+    res.writeHead(503, { 'Cache-Control': 'no-store' });
+    res.end(JSON.stringify({ code: 'PUBLIC_ORIGIN_NOT_CONFIGURED' }));
+    return;
+  }
+  const expectedOrigin = configuredOrigin || `http://${HOST}:${PORT}`;
 
   if (origin !== undefined && origin !== expectedOrigin) {
     res.writeHead(403, {
@@ -80,7 +86,7 @@ function proxyBff(req, res) {
   }
 
   const headers = { ...req.headers };
-  const bffPort = Number(process.env.SEGALOKA_CONTROL_CENTER_BFF_PORT || 4203);
+  const bffPort = Number(process.env.SEGALOKA_BFF_PORT || 4203);
   headers.host = `127.0.0.1:${bffPort}`;
 
   if (origin !== undefined) {
