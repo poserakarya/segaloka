@@ -82,3 +82,10 @@ test('API requires explicit production bind host and valid port', () => {
   assert.match(server, /API_HOST_REQUIRED_IN_PRODUCTION/);
   assert.match(server, /INVALID_API_PORT/);
 });
+
+test('API production database credentials and TLS fail closed', () => {
+  const server = read('services/api/src/server.js');
+  assert.match(server, /API_DATABASE_CONFIG_MISSING/);
+  assert.match(server, /API_DATABASE_TLS_REQUIRED/);
+  assert.match(server, /API_DATABASE_PORT_INVALID/);
+});
