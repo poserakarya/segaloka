@@ -5,6 +5,8 @@ import { createSessionStore } from './session-store.mjs';
 import { createHandoffChallengeStore } from './handoff-challenge.mjs';
 import { classifyLoginResponse } from './login-flow.mjs';
 import { renderTravelV7Source } from './v7-source.mjs';
+import { resolveAccountPreferences } from '../../shared/runtime/account-preferences.mjs';
+import { serveSharedFont } from '../../shared/runtime/shared-fonts.mjs';
 import {
   createReadStream,
   readFileSync,
@@ -462,6 +464,10 @@ const server = http.createServer(async (req, res) => {
       });
     }
 
+    if (serveSharedFont(req, res, path)) {
+      return;
+    }
+
     if (req.method === 'GET' && path === '/bff/health') {
       return json(res, 200, { status: 'ok' });
     }
@@ -637,7 +643,12 @@ const server = http.createServer(async (req, res) => {
               access.session.user.name ||
               access.session.user.email,
             email: access.session.user.email
-          }
+          },
+          preferences: resolveAccountPreferences({
+            account: access.session.user.preferences,
+            organization: dashboard.preferences,
+            acceptLanguage: req.headers['accept-language']
+          })
         }
       );
 
@@ -646,7 +657,8 @@ const server = http.createServer(async (req, res) => {
         'Cache-Control': 'no-store',
         'X-Content-Type-Options': 'nosniff',
         'X-Frame-Options': 'DENY',
-        'Referrer-Policy': 'no-referrer'
+        'Referrer-Policy': 'no-referrer',
+        'Content-Security-Policy': "connect-src 'self'; font-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'"
       });
       return res.end(html);
     }

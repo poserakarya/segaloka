@@ -80,7 +80,7 @@ async function loginUntilMethods(page, origin) {
   await page.waitForSelector('#otp-channel-section:not([hidden])');
 }
 
-test('Control Center login offers TOTP without changing the existing login markup', {
+test('Control Center login offers TOTP alongside the existing OTP flow', {
   skip: chromium ? false : 'playwright tidak tersedia',
   timeout: 120000
 }, async () => {
@@ -90,7 +90,7 @@ test('Control Center login offers TOTP without changing the existing login marku
   const browser = await chromium.launch();
 
   try {
-    const page = await browser.newPage();
+    const page = await browser.newPage({ locale: 'id-ID' });
     const errors = [];
     page.on('pageerror', error => errors.push(error.message));
 
@@ -148,13 +148,40 @@ test('Control Center login offers TOTP without changing the existing login marku
   }
 });
 
-test('login markup and styles are unchanged apart from the inline script', async () => {
+test('login supports ID/EN/AR with RTL and self-hosted fonts', {
+  skip: chromium ? false : 'playwright tidak tersedia',
+  timeout: 60000
+}, async () => {
+  const state = { requests: [], methods: ['authenticator'] };
+  const server = await startServer(state);
+  const origin = `http://127.0.0.1:${server.address().port}`;
+  const browser = await chromium.launch();
+
+  try {
+    const page = await browser.newPage({ locale: 'ar' });
+    await page.goto(origin + '/');
+    assert.equal(await page.evaluate(() => document.documentElement.dir), 'rtl');
+    assert.equal(await page.textContent('h1'), 'الدخول إلى مركز التحكم');
+    await page.click('[data-lang="en"]');
+    assert.equal(await page.evaluate(() => document.documentElement.dir), 'ltr');
+    assert.equal(await page.textContent('h1'), 'Sign in to Control Center');
+    await page.click('[data-lang="id"]');
+    assert.equal(await page.textContent('h1'), 'Masuk Control Center');
+    assert.ok(loginHtml.includes('<link rel="stylesheet" href="/bff/fonts/fonts.css">'));
+    assert.ok(!loginHtml.includes('Arial'));
+  } finally {
+    await browser.close();
+    server.close();
+  }
+});
+
+test('login markup and styles are pinned (Fase A: language switch and fonts)', async () => {
   const { createHash } = await import('node:crypto');
   const withoutScript = loginHtml.replace(/<script>[\s\S]*<\/script>/, '<script></script>');
 
-  // SHA-256 markup + CSS login sebelum E2E-02 (skrip inline dikosongkan).
+  // SHA-256 markup + CSS login setelah Fase A (skrip inline dikosongkan).
   assert.equal(
     createHash('sha256').update(withoutScript).digest('hex'),
-    '6a2e26f0a8034f6fbb8ff05ddc6eb92544896ae68500acb353f4fb133f18760f'
+    '9393a3a5da17d3f7f02038fb0d701326f6b2c6b78ba94d70b83eb75fc873b12d'
   );
 });

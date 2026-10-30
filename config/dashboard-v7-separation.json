@@ -1,48 +1,70 @@
-﻿{
-    "dashboards":  [
-                       {
-                           "port":  4202,
-                           "app":  "control-center",
-                           "source":  "apps/control-center/frontend/control-center.html",
-                           "role":  "super_admin"
-                       },
-                       {
-                           "port":  4200,
-                           "app":  "travel-dashboard",
-                           "source":  "apps/travel-dashboard/original-v7/travel.html",
-                           "role":  "travel"
-                       },
-                       {
-                           "port":  4204,
-                           "app":  "vendor-dashboard",
-                           "source":  "apps/vendor-dashboard/original-v7/vendor.html",
-                           "role":  "vendor"
-                       },
-                       {
-                           "port":  4210,
-                           "app":  "traveler-portal",
-                           "source":  "apps/traveler-portal/original-v7/traveler.html",
-                           "role":  "traveler"
-                       },
-                       {
-                           "port":  4212,
-                           "app":  "affiliate-dashboard",
-                           "source":  "apps/affiliate-dashboard/original-v7/affiliate.html",
-                           "role":  "affiliate"
-                       },
-                       {
-                           "port":  4214,
-                           "app":  "mitra-dashboard",
-                           "source":  "apps/mitra-dashboard/original-v7/mitra.html",
-                           "role":  "mitra"
-                       },
-                       {
-                           "port":  4216,
-                           "app":  "agen-dashboard",
-                           "source":  "apps/agen-dashboard/original-v7/agen.html",
-                           "role":  "agen"
-                       }
-                   ],
-    "source":  "existing-v7",
-    "version":  1
+{
+  "version": 2,
+  "source": "existing-v7",
+  "note": "Satu dashboard = satu entry port = satu origin. /bff/* diteruskan ke BFF dashboard itu sendiri.",
+  "dashboards": [
+    {
+      "app": "control-center",
+      "role": "super_admin",
+      "port": 4202,
+      "bffPort": 4203,
+      "login": "/login",
+      "dashboard": "/dashboard",
+      "source": "apps/control-center/frontend/control-center.html"
+    },
+    {
+      "app": "travel-dashboard",
+      "role": "travel",
+      "port": 4200,
+      "bffPort": 4201,
+      "login": "/",
+      "dashboard": "/bff/dashboard",
+      "source": "apps/travel-dashboard/original-v7/travel-existing.html"
+    },
+    {
+      "app": "vendor-dashboard",
+      "role": "vendor",
+      "port": 4204,
+      "bffPort": 4211,
+      "login": "/",
+      "dashboard": "/bff/ui",
+      "source": "apps/travel-dashboard/original-v7/travel-existing.html"
+    },
+    {
+      "app": "affiliate-dashboard",
+      "role": "affiliate",
+      "port": 4212,
+      "bffPort": 4221,
+      "login": "/",
+      "dashboard": "/bff/ui",
+      "source": "apps/travel-dashboard/original-v7/travel-existing.html"
+    },
+    {
+      "app": "agen-dashboard",
+      "role": "agen",
+      "port": 4216,
+      "bffPort": 4231,
+      "login": "/",
+      "dashboard": "/bff/ui",
+      "source": "apps/travel-dashboard/original-v7/travel-existing.html"
+    },
+    {
+      "app": "mitra-dashboard",
+      "role": "mitra",
+      "port": 4214,
+      "bffPort": 4241,
+      "login": "/",
+      "dashboard": "/bff/ui",
+      "source": "apps/travel-dashboard/original-v7/travel-existing.html"
+    },
+    {
+      "app": "traveler-portal",
+      "role": "traveler",
+      "port": 4210,
+      "bffPort": 4251,
+      "login": "/",
+      "dashboard": "/bff/ui",
+      "source": "apps/travel-dashboard/original-v7/travel-existing.html"
+    }
+  ]
 }

@@ -4,37 +4,48 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Masuk Control Center</title>
+  <link rel="stylesheet" href="/bff/fonts/fonts.css">
   <style>
-    :root{font-family:Arial,sans-serif;color:#172033;background:#f5f7fb}
+    :root{font-family:"Plus Jakarta Sans","IBM Plex Sans Arabic",system-ui,sans-serif;color:#172033;background:#f5f7fb}
     body{margin:0;min-height:100vh;display:grid;place-items:center}
-    main{width:min(420px,calc(100% - 32px));background:#fff;padding:32px;border-radius:16px;box-shadow:0 12px 40px #17203318}
+    main{box-sizing:border-box;width:min(420px,calc(100% - 32px));background:#fff;padding:32px;border-radius:16px;box-shadow:0 12px 40px #17203318}
+    @media (max-width:420px){main{padding:24px}}
     h1{margin:0 0 8px;font-size:24px} p{color:#5b6475;line-height:1.5}
     label{display:block;margin:18px 0 6px;font-weight:600} input{box-sizing:border-box;width:100%;padding:12px;border:1px solid #cfd5df;border-radius:8px;font:inherit}
     button{width:100%;margin-top:22px;padding:12px;border:0;border-radius:8px;background:#166534;color:#fff;font-weight:700;cursor:pointer} button:disabled{opacity:.6}
     [role=alert]{color:#b42318;margin-top:16px}
+    [hidden]{display:none!important}
+    .lang{display:flex;justify-content:flex-end;gap:2px;margin:-12px 0 12px}
+    .lang button{width:auto;margin:0;padding:4px 9px;background:transparent;color:#5b6475;border:1px solid #cfd5df;font-size:12px;font-weight:600}
+    .lang button[aria-pressed=true]{background:#166534;border-color:#166534;color:#fff}
   </style>
 </head>
 <body>
   <main>
-    <h1>Masuk Control Center</h1>
-    <p>Gunakan akun administrator resmi Segaloka.</p>
+    <div class="lang" id="lang" role="group">
+      <button type="button" data-lang="id">ID</button>
+      <button type="button" data-lang="en">EN</button>
+      <button type="button" data-lang="ar">AR</button>
+    </div>
+    <h1 data-t="title">Masuk Control Center</h1>
+    <p data-t="subtitle">Gunakan akun administrator resmi Segaloka.</p>
     <form id="login-form" novalidate>
-      <label for="email">Email</label>
+      <label for="email" data-t="email">Email</label>
       <input id="email" name="email" type="email" autocomplete="username" required>
-      <label for="password">Kata sandi</label>
+      <label for="password" data-t="password">Kata sandi</label>
       <input id="password" name="password" type="password" autocomplete="current-password" required>
       <section id="otp-channel-section" hidden>
-        <label for="otp-channel">Metode verifikasi</label>
+        <label for="otp-channel" data-t="method">Metode verifikasi</label>
         <select id="otp-channel" style="box-sizing:border-box;width:100%;padding:12px;border:1px solid #cfd5df;border-radius:8px;font:inherit"></select>
         <button id="send-otp" type="button">Kirim Kode Verifikasi</button>
       </section>
       <section id="otp-code-section" hidden>
-        <label for="otp-code">Kode verifikasi 6 digit</label>
-        <input id="otp-code" type="text" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" autocomplete="one-time-code">
-        <button id="verify-otp" type="button">Verifikasi dan Masuk</button>
+        <label for="otp-code" data-t="code">Kode verifikasi 6 digit</label>
+        <input id="otp-code" dir="ltr" type="text" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" autocomplete="one-time-code">
+        <button id="verify-otp" type="button" data-t="verify">Verifikasi dan Masuk</button>
       </section>
       <p id="error" role="alert" hidden></p>
-      <button id="submit" type="submit">Masuk</button>
+      <button id="submit" type="submit" data-t="submit">Masuk</button>
     </form>
   </main>
   <script>
@@ -52,30 +63,110 @@
     let challengeId = null;
     let authenticatorTicket = null;
 
+    const languages = ['id', 'en', 'ar'];
+    const TEXT = {
+      title: ['Masuk Control Center', 'Sign in to Control Center', 'الدخول إلى مركز التحكم'],
+      subtitle: ['Gunakan akun administrator resmi Segaloka.', 'Use an official Segaloka administrator account.', 'استخدم حساب مسؤول سيجالوكا الرسمي.'],
+      email: ['Email', 'Email', 'البريد الإلكتروني'],
+      password: ['Kata sandi', 'Password', 'كلمة المرور'],
+      method: ['Metode verifikasi', 'Verification method', 'طريقة التحقق'],
+      code: ['Kode verifikasi 6 digit', '6-digit verification code', 'رمز التحقق من 6 أرقام'],
+      verify: ['Verifikasi dan Masuk', 'Verify and sign in', 'تحقق وادخل'],
+      submit: ['Masuk', 'Sign in', 'دخول'],
+      send: ['Kirim Kode Verifikasi', 'Send verification code', 'إرسال رمز التحقق'],
+      continue: ['Lanjutkan', 'Continue', 'متابعة'],
+      authenticator: ['Google Authenticator', 'Google Authenticator', 'Google Authenticator'],
+      emailMethod: ['Email', 'Email', 'البريد الإلكتروني'],
+      whatsappMethod: ['WhatsApp', 'WhatsApp', 'واتساب'],
+      language: ['Bahasa', 'Language', 'اللغة'],
+      enterCode: ['Masukkan kode verifikasi 6 digit.', 'Enter the 6-digit verification code.', 'أدخل رمز التحقق من 6 أرقام.'],
+      INVALID_CREDENTIALS: ['Email atau kata sandi tidak valid.', 'Invalid email or password.', 'البريد أو كلمة المرور غير صحيحة.'],
+      SUPER_ADMIN_ACCESS_REQUIRED: ['Akun tidak memiliki akses Control Center.', 'This account has no Control Center access.', 'لا يملك هذا الحساب صلاحية مركز التحكم.'],
+      ACCESS_UNAVAILABLE: ['Akses Control Center tidak tersedia.', 'Control Center access is unavailable.', 'الوصول إلى مركز التحكم غير متاح.'],
+      INVALID_OR_EXPIRED_AUTHENTICATOR: ['Kode atau sesi verifikasi tidak valid.', 'Invalid code or verification session.', 'الرمز أو جلسة التحقق غير صالحة.'],
+      INVALID_OR_EXPIRED_PRE_AUTH: ['Sesi verifikasi berakhir. Silakan masuk lagi.', 'The verification session expired. Please sign in again.', 'انتهت جلسة التحقق. يرجى الدخول مجدداً.'],
+      OTP_DELIVERY_UNAVAILABLE: ['Pengiriman kode belum tersedia. Login dibatalkan.', 'Code delivery is unavailable. Sign-in was cancelled.', 'إرسال الرمز غير متاح. تم إلغاء الدخول.'],
+      TWO_FACTOR_METHOD_UNAVAILABLE: ['Metode verifikasi belum tersedia.', 'No verification method is available.', 'لا توجد طريقة تحقق متاحة.'],
+      RATE_LIMITED: ['Terlalu banyak percobaan. Coba lagi nanti.', 'Too many attempts. Try again later.', 'محاولات كثيرة. حاول لاحقاً.'],
+      NETWORK_ERROR: ['Server tidak dapat dihubungi.', 'The server cannot be reached.', 'تعذر الاتصال بالخادم.'],
+      FAILED: ['Permintaan gagal diproses.', 'The request could not be processed.', 'تعذرت معالجة الطلب.']
+    };
     const methodLabels = {
-      authenticator: 'Google Authenticator',
-      email: 'Email',
-      whatsapp: 'WhatsApp'
+      authenticator: 'authenticator',
+      email: 'emailMethod',
+      whatsapp: 'whatsappMethod'
     };
 
-    function showError(message) {
-      error.textContent = message;
+    const storedLanguage = (() => {
+      try { return JSON.parse(localStorage.getItem('sg.lang')); } catch { return null; }
+    })();
+    const browserLanguage = (navigator.languages || [navigator.language])
+      .map(tag => String(tag).toLowerCase().split('-')[0])
+      .find(tag => languages.includes(tag));
+    let language = languages.includes(storedLanguage)
+      ? storedLanguage
+      : (browserLanguage || 'id');
+
+    function t(key) {
+      return (TEXT[key] || TEXT.FAILED)[languages.indexOf(language)];
+    }
+
+    function messageFor(code) {
+      if (code === 'OTP_RATE_LIMITED') return t('RATE_LIMITED');
+      if (code === 'OTP_CHANNEL_UNAVAILABLE') return t('OTP_DELIVERY_UNAVAILABLE');
+      return TEXT[code] ? t(code) : t('FAILED');
+    }
+
+    function applyLanguage() {
+      document.documentElement.lang = language;
+      document.documentElement.dir = language === 'ar' ? 'rtl' : 'ltr';
+      document.title = t('title');
+      for (const el of document.querySelectorAll('[data-t]')) el.textContent = t(el.dataset.t);
+      for (const el of document.querySelectorAll('[data-lang]')) {
+        el.setAttribute('aria-pressed', String(el.dataset.lang === language));
+      }
+      document.getElementById('lang').setAttribute('aria-label', t('language'));
+      for (const option of channelSelect.options) option.textContent = t(methodLabels[option.value]);
+      if (!error.hidden && error.dataset.code) error.textContent = messageFor(error.dataset.code);
+      syncSendLabel();
+    }
+
+    for (const button of document.querySelectorAll('[data-lang]')) {
+      button.addEventListener('click', () => {
+        language = button.dataset.lang;
+        try { localStorage.setItem('sg.lang', JSON.stringify(language)); } catch {}
+        applyLanguage();
+      });
+    }
+
+    function showError(code) {
+      error.dataset.code = code;
+      error.textContent = messageFor(code);
       error.hidden = false;
     }
 
+    function failure(err) {
+      return err && err.code ? err.code : 'FAILED';
+    }
+
     async function postJson(path, payload) {
-      const response = await fetch(path, {
-        method: 'POST',
-        credentials: 'same-origin',
-        cache: 'no-store',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(payload)
-      });
+      let response;
+      try {
+        response = await fetch(path, {
+          method: 'POST',
+          credentials: 'same-origin',
+          cache: 'no-store',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify(payload)
+        });
+      } catch {
+        throw Object.assign(new Error('NETWORK_ERROR'), { code: 'NETWORK_ERROR' });
+      }
 
       const data = await response.json().catch(() => ({}));
 
       if (!response.ok) {
-        throw new Error(data.message || 'Permintaan gagal diproses.');
+        throw Object.assign(new Error(data.code || 'FAILED'), { code: data.code || 'FAILED' });
       }
 
       return data;
@@ -107,7 +198,7 @@
           credentials: 'same-origin'
         });
 
-        throw new Error('Akses Control Center tidak tersedia.');
+        throw Object.assign(new Error('ACCESS_UNAVAILABLE'), { code: 'ACCESS_UNAVAILABLE' });
       }
 
       window.location.replace('/dashboard#/travel');
@@ -138,7 +229,7 @@
           data.code !== 'OTP_CHANNEL_REQUIRED' ||
           !/^[0-9a-f]{64}$/.test(data.preAuthTicket)
         ) {
-          throw new Error('Respons autentikasi tidak valid.');
+          throw Object.assign(new Error('FAILED'), { code: 'FAILED' });
         }
 
         const methods = Array.isArray(data.availableMethods)
@@ -148,7 +239,7 @@
           : [];
 
         if (!methods.length) {
-          throw new Error('Metode verifikasi belum tersedia.');
+          throw Object.assign(new Error('TWO_FACTOR_METHOD_UNAVAILABLE'), { code: 'TWO_FACTOR_METHOD_UNAVAILABLE' });
         }
 
         preAuthTicket = data.preAuthTicket;
@@ -157,7 +248,7 @@
         for (const method of methods) {
           const option = document.createElement('option');
           option.value = method;
-          option.textContent = methodLabels[method];
+          option.textContent = t(methodLabels[method]);
           channelSelect.appendChild(option);
         }
 
@@ -166,15 +257,15 @@
         submit.hidden = true;
       } catch (err) {
         document.getElementById('password').value = '';
-        showError(err.message || 'Login gagal.');
+        showError(failure(err));
         submit.disabled = false;
       }
     });
 
     function syncSendLabel() {
       sendOtp.textContent = channelSelect.value === 'authenticator'
-        ? 'Lanjutkan'
-        : 'Kirim Kode Verifikasi';
+        ? t('continue')
+        : t('send');
     }
 
     channelSelect.addEventListener('change', syncSendLabel);
@@ -209,7 +300,7 @@
           data.code !== 'OTP_REQUIRED' ||
           typeof data.challengeId !== 'string'
         ) {
-          throw new Error('Challenge OTP tidak valid.');
+          throw Object.assign(new Error('FAILED'), { code: 'FAILED' });
         }
 
         challengeId = data.challengeId;
@@ -219,7 +310,7 @@
         codeSection.hidden = false;
         otpCode.focus();
       } catch (err) {
-        showError(err.message || 'Pengiriman OTP gagal.');
+        showError(failure(err));
         sendOtp.disabled = false;
       }
     });
@@ -230,7 +321,7 @@
       const code = otpCode.value.trim();
 
       if (!/^[0-9]{6}$/.test(code)) {
-        showError('Masukkan kode verifikasi 6 digit.');
+        showError('enterCode');
         return;
       }
 
@@ -249,7 +340,7 @@
             );
 
         if (data.authenticated !== true) {
-          throw new Error('Verifikasi gagal.');
+          throw Object.assign(new Error('FAILED'), { code: 'FAILED' });
         }
 
         challengeId = null;
@@ -258,10 +349,12 @@
 
         await enterDashboard();
       } catch (err) {
-        showError(err.message || 'Kode OTP tidak valid.');
+        showError(failure(err));
         verifyOtp.disabled = false;
       }
     });
+
+    applyLanguage();
   </script>
 </body>
 </html>

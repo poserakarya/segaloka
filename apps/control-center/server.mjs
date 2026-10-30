@@ -2,7 +2,74 @@ import { readFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 
+import { resolveAccountPreferences } from '../shared/runtime/account-preferences.mjs';
+import { allowedPublicOrigins } from '../shared/runtime/v7-portal-entry.mjs';
+import { FONT_STYLESHEET_LINK } from '../shared/runtime/shared-fonts.mjs';
+import {
+  applyFormatPatches,
+  createV7Patcher,
+  formatScriptBody,
+  GOOGLE_FONT_LINKS,
+  simulationLockScript
+} from '../shared/runtime/v7-portal-source.mjs';
+
 const FRONTEND_DIR = join(dirname(fileURLToPath(import.meta.url)), 'frontend');
+const BUNDLE_SCRIPT_TAG = '<script src="/control-center.bundle.js"></script>';
+const HTML_CSP = "connect-src 'self'; font-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'";
+
+// Bundle V7 Control Center: format mengikuti preferensi dan state simulasi
+// (role/ux) dikunci ke super_admin. Patch gagal aman bila anchor berubah.
+function patchControlCenterBundle(source) {
+  const patched = applyFormatPatches(source, createV7Patcher('CONTROL_CENTER'));
+  return patched + '\n/* SEGALOKA_CC_SIMULATION_LOCK_V1 */\n' +
+    simulationLockScript('super_admin') + '\n';
+}
+
+function patchControlCenterHtml(source, preferences) {
+  const patcher = createV7Patcher('CONTROL_CENTER');
+  let html = patcher.replaceExactlyOnce(
+    source, GOOGLE_FONT_LINKS, FONT_STYLESHEET_LINK, 'self-hosted-fonts'
+  );
+  html = patcher.replaceExactlyOnce(
+    html,
+    BUNDLE_SCRIPT_TAG,
+    `<script>${formatScriptBody(preferences)}</script>${BUNDLE_SCRIPT_TAG}`,
+    'format-context'
+  );
+  return html;
+}
+
+// Preferensi akun (/bff/me) bila tersedia; selain itu Accept-Language.
+function readAccountPreferences(req) {
+  return new Promise(resolve => {
+    const done = account => resolve(resolveAccountPreferences({
+      account,
+      acceptLanguage: req.headers['accept-language']
+    }));
+    const check = http.request({
+      hostname: '127.0.0.1',
+      port: Number(process.env.SEGALOKA_CONTROL_CENTER_BFF_PORT || 4203),
+      method: 'GET',
+      path: '/bff/me',
+      headers: { cookie: req.headers.cookie || '', accept: 'application/json' },
+      timeout: 5000
+    }, response => {
+      const chunks = [];
+      response.on('data', chunk => chunks.push(chunk));
+      response.on('end', () => {
+        try {
+          const data = JSON.parse(Buffer.concat(chunks).toString('utf8'));
+          done(response.statusCode === 200 ? data?.user?.preferences : undefined);
+        } catch {
+          done(undefined);
+        }
+      });
+    });
+    check.on('timeout', () => check.destroy());
+    check.on('error', () => done(undefined));
+    check.end();
+  });
+}
 const LOGIN_FILE = join(FRONTEND_DIR, 'control-center-login.html');
 
 async function hasControlCenterAccess(req) {
@@ -68,9 +135,11 @@ import http from 'node:http';
 
 function proxyBff(req, res) {
   const origin = req.headers.origin;
-  const expectedOrigin = `http://${HOST}:${PORT}`;
+  // Origin lokal entry ini, plus origin publik (mis. URL staging) dari
+  // SEGALOKA_PUBLIC_ORIGIN.
+  const allowedOrigins = allowedPublicOrigins(PORT);
 
-  if (origin !== undefined && origin !== expectedOrigin) {
+  if (origin !== undefined && !allowedOrigins.has(origin)) {
     res.writeHead(403, {
       'Content-Type': 'application/json; charset=utf-8',
       'Cache-Control': 'no-store'
@@ -211,9 +280,10 @@ const server = http.createServer(async (req, res) => {
     }
 
     try {
-      const script = await readFile(
-        join(FRONTEND_DIR, 'control-center.bundle.js')
-      );
+      const script = patchControlCenterBundle(await readFile(
+        join(FRONTEND_DIR, 'control-center.bundle.js'),
+        'utf8'
+      ));
 
       res.writeHead(200, {
         'Content-Type': 'text/javascript; charset=utf-8',
@@ -235,17 +305,21 @@ const server = http.createServer(async (req, res) => {
   if (req.method === 'GET' && (path === '/' || path === '/index.html' || path === '/dashboard')) {
     const allowed = await hasControlCenterAccess(req);
 
-    if (!allowed && path === '/dashboard') {
-      res.writeHead(302, { Location: '/login', 'Cache-Control': 'no-store' });
+    // Entry Control Center: tanpa sesi ke halaman login, dengan sesi ke
+    // dashboard. Tidak ada halaman gerbang terpisah.
+    if (!allowed || path !== '/dashboard') {
+      res.writeHead(302, {
+        Location: allowed ? '/dashboard' : '/login',
+        'Cache-Control': 'no-store'
+      });
       res.end();
       return;
     }
 
     try {
-      const html = await readFile(
-        allowed && path === '/dashboard'
-          ? join(FRONTEND_DIR, 'control-center.html')
-          : join(FRONTEND_DIR, '..', 'public', 'index.html')
+      const html = patchControlCenterHtml(
+        await readFile(join(FRONTEND_DIR, 'control-center.html'), 'utf8'),
+        await readAccountPreferences(req)
       );
 
       res.writeHead(200, {
@@ -253,7 +327,8 @@ const server = http.createServer(async (req, res) => {
         'Cache-Control': 'no-store',
         'X-Content-Type-Options': 'nosniff',
         'X-Frame-Options': 'DENY',
-        'Referrer-Policy': 'no-referrer'
+        'Referrer-Policy': 'no-referrer',
+        'Content-Security-Policy': HTML_CSP
       });
 
       res.end(html);

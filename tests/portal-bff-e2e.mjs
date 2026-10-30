@@ -32,11 +32,11 @@ const configured = ['127.0.0.1', 'localhost', '::1'].includes(db.host) &&
   /_test$/.test(db.name || '') && Boolean(db.port && db.user);
 
 const PORTALS = [
-  { role: 'vendor', app: 'vendor-dashboard', port: 4211, origin: 'http://127.0.0.1:4210' },
-  { role: 'affiliate', app: 'affiliate-dashboard', port: 4221, origin: 'http://127.0.0.1:4220' },
-  { role: 'agen', app: 'agen-dashboard', port: 4231, origin: 'http://127.0.0.1:4230' },
-  { role: 'mitra', app: 'mitra-dashboard', port: 4241, origin: 'http://127.0.0.1:4240' },
-  { role: 'traveler', app: 'traveler-portal', port: 4251, origin: 'http://127.0.0.1:4250' }
+  { role: 'vendor', app: 'vendor-dashboard', port: 4211, origin: 'http://127.0.0.1:4204' },
+  { role: 'affiliate', app: 'affiliate-dashboard', port: 4221, origin: 'http://127.0.0.1:4212' },
+  { role: 'agen', app: 'agen-dashboard', port: 4231, origin: 'http://127.0.0.1:4216' },
+  { role: 'mitra', app: 'mitra-dashboard', port: 4241, origin: 'http://127.0.0.1:4214' },
+  { role: 'traveler', app: 'traveler-portal', port: 4251, origin: 'http://127.0.0.1:4210' }
 ];
 
 const ORG = '22222222-2222-4222-8222-222222222222';
@@ -314,7 +314,7 @@ test('portal BFF login (2FA) and V7 source serving', {
     // Akun traveler tidak boleh masuk ke BFF agen.
     await t.test('cross-role login is rejected', async () => {
       const base = 'http://127.0.0.1:4231';
-      const headers = { 'Content-Type': 'application/json', Origin: 'http://127.0.0.1:4230' };
+      const headers = { 'Content-Type': 'application/json', Origin: 'http://127.0.0.1:4216' };
       const login = await (await fetch(base + '/bff/login', {
         method: 'POST', headers,
         body: JSON.stringify({ email: 'traveler@example.invalid', password: 'benar' })
@@ -346,7 +346,7 @@ const ENTRY_SERVERS = [
   { role: 'traveler', file: 'apps/traveler-portal/server.mjs', port: 4210, bff: 4251 }
 ];
 
-test('portal entry servers redirect to the BFF V7 source, not a dist-v7 shell', {
+test('portal entry servers serve the V7 login and proxy /bff to their own BFF', {
   timeout: 60000
 }, async () => {
   const children = [];
@@ -371,14 +371,28 @@ test('portal entry servers redirect to the BFF V7 source, not a dist-v7 shell', 
       assert.equal(health.status, 200, entry.role);
       const body = await health.json();
       assert.equal(body.source, 'original-v7');
+      assert.equal(body.login, 'v7-login');
       assert.equal(body.service, `segaloka-${entry.role}`);
 
-      const redirect = await fetch(`http://127.0.0.1:${entry.port}/`, { redirect: 'manual' });
-      assert.equal(redirect.status, 302);
-      assert.equal(redirect.headers.get('location'), `http://127.0.0.1:${entry.bff}/bff/ui`);
+      // Login V7 milik portal ini, bukan redirect ke host lain.
+      const login = await fetch(`http://127.0.0.1:${entry.port}/`, { redirect: 'manual' });
+      assert.equal(login.status, 200);
+      assert.match(login.headers.get('content-security-policy'), /connect-src 'self'/);
+      const html = await login.text();
+      assert.ok(html.includes(`"role":"${entry.role}"`));
+      assert.ok(html.includes('<link rel="stylesheet" href="/bff/fonts/fonts.css">'));
+      assert.ok(!html.includes('fonts.googleapis.com'));
+
+      // POST lewat entry wajib memakai origin entry ini.
+      const foreign = await fetch(`http://127.0.0.1:${entry.port}/bff/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Origin: 'http://127.0.0.1:4999' },
+        body: '{}'
+      });
+      assert.equal(foreign.status, 403);
 
       const other = await fetch(`http://127.0.0.1:${entry.port}/dist-v7/index.html`);
-      assert.equal(other.status, 403);
+      assert.equal(other.status, 404);
     }
   } finally {
     for (const child of children) child.kill();

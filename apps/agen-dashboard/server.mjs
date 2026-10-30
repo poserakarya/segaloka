@@ -1,48 +1,10 @@
-import http from 'node:http';
-import { existsSync } from 'node:fs';
+import { createPortalEntryServer } from '../shared/runtime/v7-portal-entry.mjs';
 
-import { V7_ORIGINAL_SOURCE_URL } from '../shared/runtime/v7-portal-source.mjs';
-
-// Dashboard disajikan dari sumber V7 asli oleh BFF di /bff/ui setelah sesi
-// dan role diverifikasi. Shell dist-v7 tidak lagi dipakai sebagai entry.
-if (!existsSync(V7_ORIGINAL_SOURCE_URL)) {
-  throw new Error('Agen V7 original source not found');
-}
-
+// Entry Agen: login V7 di /, dashboard V7 asli di /bff/ui (lewat BFF
+// pada port 4231). Port entry tidak berubah.
 const role = 'agen';
 const port = 4216;
-const bffUiUrl = 'http://127.0.0.1:4231/bff/ui';
 
-const server = http.createServer((req, res) => {
-  res.setHeader('Cache-Control', 'no-store');
-
-  if (req.url === '/health') {
-    res.writeHead(200, {
-      'Content-Type': 'application/json; charset=utf-8'
-    });
-    res.end(JSON.stringify({
-      service: `segaloka-${role}`,
-      status: 'running',
-      source: 'original-v7',
-      dashboardAccess: 'protected'
-    }));
-    return;
-  }
-
-  if (req.url === '/' || req.url === '/index.html') {
-    res.writeHead(302, { Location: bffUiUrl });
-    res.end();
-    return;
-  }
-
-  res.writeHead(403, {
-    'Content-Type': 'application/json; charset=utf-8'
-  });
-  res.end(JSON.stringify({
-    code: 'DASHBOARD_ACCESS_DENIED'
-  }));
-});
-
-server.listen(port, '127.0.0.1', () => {
-  console.log(`Segaloka ${role} V7 runtime: http://127.0.0.1:${port}`);
+createPortalEntryServer({ role, port, bffPort: 4231 }).listen(port, '127.0.0.1', () => {
+  console.log(`Segaloka ${role} entry: http://127.0.0.1:${port}`);
 });

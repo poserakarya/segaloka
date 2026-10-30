@@ -74,17 +74,33 @@ test('rejects a non-Travel or incomplete session context', async () => {
   );
 });
 
-test('shared runtime keeps the Travel V7 output byte-identical', async () => {
+test('Travel V7 output is pinned (Fase A: fonts, format, no simulation, observer fix)', async () => {
   const { createHash } = await import('node:crypto');
   const source = await readFile(originalPath, 'utf8');
   const html = renderTravelV7Source(source, context);
 
-  // Hash output sebelum refactor ke apps/shared/runtime/v7-portal-source.mjs.
-  assert.equal(html.length, 997142);
+  // Hash output setelah Fase A. Perbedaan terhadap E2E-02 (5c3ee5cd…):
+  // font lokal, window.__SEGALOKA_FORMAT__, patch LOC/money/fD/fDT/bahasa
+  // awal, banner simulasi permission dihapus, kunci S.role/S.ux, dan
+  // observer akun yang tidak lagi memicu dirinya sendiri.
+  assert.equal(html.length, 998164);
   assert.equal(
     createHash('sha256').update(html).digest('hex'),
-    '5c3ee5cdcccb2db6ee028f735fe7a73ccafcf3eb74d5d09b0f12a70c6f4f4714'
+    '6673414c07355feeabff2c0b22960230d7ea7c0cd1eecbf3b4003301f34d2065'
   );
+});
+
+test('removes permission simulation and Google Fonts from the Travel runtime', async () => {
+  const source = await readFile(originalPath, 'utf8');
+  const html = renderTravelV7Source(source, context);
+
+  assert.ok(!html.includes('Mode simulasi permission'));
+  assert.ok(!html.includes('fonts.googleapis.com'));
+  assert.ok(!html.includes('fonts.gstatic.com'));
+  assert.ok(html.includes('<link rel="stylesheet" href="/bff/fonts/fonts.css">'));
+  assert.ok(html.includes(`Object.defineProperty(S, 'role', { value: "travel", writable: false, configurable: false });`));
+  assert.ok(html.includes("Object.defineProperty(S, 'ux', { value: 'normal', writable: false, configurable: false });"));
+  assert.ok(html.includes('if (name && name.textContent !== accountName)'));
 });
 
 test('fails safely with the Travel error prefix when an anchor is missing', async () => {

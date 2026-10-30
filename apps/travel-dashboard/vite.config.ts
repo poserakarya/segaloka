@@ -6,7 +6,6 @@ export default defineConfig(({ mode }) => {
 
   return {
     plugins: [react()],
-    cacheDir: 'D:/Server-Segaloka/.cache/vite/travel-dashboard',
     server: {
       host: '127.0.0.1',
       port: 4200,

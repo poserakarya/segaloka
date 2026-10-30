@@ -1,13 +1,17 @@
-﻿{
-    "role":  "mitra",
-    "port":  4214,
-    "entry":  "dist-v7/index.html",
-    "assetRoot":  "dist-v7",
-    "uiSource":  "existing-v7",
-    "standalone":  true,
-    "authenticationRequired":  true,
-    "serverAuthorizationRequired":  true,
-    "publicAccessEnabled":  false,
-    "workspaceSwitching":  false,
-    "status":  "awaiting-server-integration"
+{
+  "role": "mitra",
+  "port": 4214,
+  "bffPort": 4241,
+  "entry": "server.mjs",
+  "login": "/ (V7 login, apps/shared/runtime/v7-login-page.mjs)",
+  "dashboard": "/bff/ui",
+  "uiSource": "original-v7",
+  "source": "apps/travel-dashboard/original-v7/travel-existing.html",
+  "standalone": true,
+  "authenticationRequired": true,
+  "serverAuthorizationRequired": true,
+  "publicAccessEnabled": false,
+  "workspaceSwitching": false,
+  "permissionSimulation": false,
+  "status": "v7-login-and-bff"
 }

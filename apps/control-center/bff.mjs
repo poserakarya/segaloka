@@ -3,6 +3,7 @@ import { randomBytes } from 'node:crypto';
 import { createRequire } from 'node:module';
 import { createSessionStore } from './session-store.mjs';
 import { classifyLoginResponse } from '../shared/runtime/bff-login-contract.mjs';
+import { serveSharedFont } from '../shared/runtime/shared-fonts.mjs';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -434,6 +435,10 @@ const server = http.createServer(async (req, res) => {
       req.url,
       `http://${host}:${port}`
     ).pathname;
+
+    if (serveSharedFont(req, res, path)) {
+      return;
+    }
 
     if (req.method === 'GET' && path === '/bff/health') {
       return json(res, 200, { status: 'ok' });

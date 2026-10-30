@@ -2,74 +2,141 @@ import React, { useEffect, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import './styles.css';
 
-type User = {
-  id: string;
-  email: string;
-  fullName?: string;
-  status?: string;
+// Login Dashboard Travel. Setelah sesi valid, dashboard V7 asli disajikan
+// oleh BFF di /bff/dashboard; aplikasi ini tidak memiliki tampilan dashboard
+// sendiri.
+
+type Language = 'id' | 'en' | 'ar';
+type VerificationMethod = 'authenticator' | 'email' | 'whatsapp';
+
+const LANGUAGES: Language[] = ['id', 'en', 'ar'];
+
+const TEXT = {
+  checking: ['Memeriksa sesi Segaloka...', 'Checking your Segaloka session...', 'جارٍ التحقق من جلسة سيجالوكا...'],
+  opening: ['Membuka Dashboard Travel...', 'Opening the Travel Dashboard...', 'جارٍ فتح لوحة السفر...'],
+  platform: ['Travel Management Platform', 'Travel Management Platform', 'منصة إدارة السفر'],
+  dashboardEyebrow: ['TRAVEL DASHBOARD', 'TRAVEL DASHBOARD', 'لوحة السفر'],
+  heroTitle: ['Kelola perjalanan dalam satu sistem.', 'Manage your travel operations in one system.', 'أدر رحلاتك في نظام واحد.'],
+  heroBody: [
+    'Operasional travel, booking, peserta, keberangkatan, dan sertifikat perjalanan dalam satu dashboard terintegrasi.',
+    'Travel operations, bookings, participants, departures, and travel certificates in one integrated dashboard.',
+    'عمليات السفر والحجوزات والمشاركون والرحلات وشهادات السفر في لوحة واحدة متكاملة.'
+  ],
+  access: ['AKSES TRAVEL', 'TRAVEL ACCESS', 'دخول السفر'],
+  title: ['Masuk ke Dashboard', 'Sign in to the Dashboard', 'الدخول إلى اللوحة'],
+  subtitle: ['Gunakan akun Travel Segaloka yang sudah terdaftar.', 'Use your registered Segaloka Travel account.', 'استخدم حساب سيجالوكا للسفر المسجل.'],
+  email: ['Alamat Email', 'Email address', 'البريد الإلكتروني'],
+  emailPlaceholder: ['nama@travel.com', 'name@travel.com', 'name@travel.com'],
+  password: ['Kata Sandi', 'Password', 'كلمة المرور'],
+  passwordPlaceholder: ['Masukkan kata sandi', 'Enter your password', 'أدخل كلمة المرور'],
+  processing: ['Memproses...', 'Processing...', 'جارٍ المعالجة...'],
+  submit: ['Masuk ke Dashboard', 'Sign in to the Dashboard', 'الدخول إلى اللوحة'],
+  twoStep: ['Verifikasi dua langkah diperlukan untuk melanjutkan login.', 'Two-step verification is required to continue.', 'التحقق بخطوتين مطلوب للمتابعة.'],
+  chooseMethod: ['Pilih Metode Verifikasi', 'Choose a verification method', 'اختر طريقة التحقق'],
+  choosePlaceholder: ['Pilih metode', 'Choose a method', 'اختر طريقة'],
+  authenticator: ['Google Authenticator', 'Google Authenticator', 'Google Authenticator'],
+  emailOtp: ['Kode OTP Email', 'Email OTP code', 'رمز عبر البريد'],
+  whatsappOtp: ['Kode OTP WhatsApp', 'WhatsApp OTP code', 'رمز عبر واتساب'],
+  hintAuthenticator: ['Masukkan kode dari aplikasi autentikator.', 'Enter the code from your authenticator app.', 'أدخل الرمز من تطبيق المصادقة.'],
+  hintEmail: ['Masukkan kode OTP yang dikirim ke email.', 'Enter the OTP code sent to your email.', 'أدخل الرمز المرسل إلى بريدك.'],
+  hintWhatsapp: ['Masukkan kode OTP yang dikirim ke WhatsApp.', 'Enter the OTP code sent to WhatsApp.', 'أدخل الرمز المرسل عبر واتساب.'],
+  code: ['Kode Verifikasi', 'Verification code', 'رمز التحقق'],
+  codePlaceholder: ['6 digit kode', '6-digit code', 'رمز من 6 أرقام'],
+  verifying: ['Memverifikasi...', 'Verifying...', 'جارٍ التحقق...'],
+  verify: ['Verifikasi dan Masuk', 'Verify and sign in', 'تحقق وادخل'],
+  back: ['Kembali ke Login', 'Back to sign in', 'العودة لتسجيل الدخول'],
+  note: ['Akses hanya untuk pengguna dengan izin Dashboard Travel.', 'Access is limited to users with Travel Dashboard permission.', 'الدخول مقصور على المستخدمين المصرح لهم بلوحة السفر.'],
+  language: ['Bahasa', 'Language', 'اللغة'],
+  enterCode: ['Masukkan kode verifikasi enam digit.', 'Enter the six-digit verification code.', 'أدخل رمز التحقق المكون من ستة أرقام.'],
+  errFailed: ['Login gagal. Coba lagi.', 'Sign-in failed. Try again.', 'فشل تسجيل الدخول. حاول مجدداً.'],
+  errCredentials: ['Email atau kata sandi tidak valid.', 'Invalid email or password.', 'البريد أو كلمة المرور غير صحيحة.'],
+  errDenied: ['Akun tidak memiliki akses Dashboard Travel.', 'This account has no Travel Dashboard access.', 'لا يملك هذا الحساب صلاحية لوحة السفر.'],
+  errCode: ['Kode atau sesi verifikasi tidak valid.', 'Invalid code or verification session.', 'الرمز أو جلسة التحقق غير صالحة.'],
+  errExpired: ['Sesi verifikasi berakhir. Silakan masuk lagi.', 'The verification session expired. Please sign in again.', 'انتهت جلسة التحقق. يرجى الدخول مجدداً.'],
+  errOtpUnavailable: ['Pengiriman kode belum tersedia. Login dibatalkan.', 'Code delivery is unavailable. Sign-in was cancelled.', 'إرسال الرمز غير متاح. تم إلغاء الدخول.'],
+  errNoMethod: ['Metode verifikasi tidak tersedia.', 'No verification method is available.', 'لا توجد طريقة تحقق متاحة.'],
+  errRateLimited: ['Terlalu banyak percobaan. Coba lagi nanti.', 'Too many attempts. Try again later.', 'محاولات كثيرة. حاول لاحقاً.'],
+  errNetwork: ['Server tidak dapat dihubungi.', 'The server cannot be reached.', 'تعذر الاتصال بالخادم.']
+} as const;
+
+type TextKey = keyof typeof TEXT;
+
+const ERROR_KEYS: Record<string, TextKey> = {
+  INVALID_CREDENTIALS: 'errCredentials',
+  TRAVEL_ACCESS_REQUIRED: 'errDenied',
+  INVALID_OR_EXPIRED_AUTHENTICATOR: 'errCode',
+  OTP_INVALID: 'errCode',
+  INVALID_OR_EXPIRED_PRE_AUTH: 'errExpired',
+  OTP_DELIVERY_UNAVAILABLE: 'errOtpUnavailable',
+  OTP_CHANNEL_UNAVAILABLE: 'errOtpUnavailable',
+  TWO_FACTOR_METHOD_UNAVAILABLE: 'errNoMethod',
+  RATE_LIMITED: 'errRateLimited',
+  OTP_RATE_LIMITED: 'errRateLimited'
 };
 
-type Membership = {
-  role: string;
-  organizationId: string | null;
-};
+class RequestError extends Error {
+  code: string;
 
-type Session = {
-  authenticated: boolean;
-  user: User;
-  memberships: Membership[];
-};
+  constructor(code: string) {
+    super(code);
+    this.code = code;
+  }
+}
+
+function initialLanguage(): Language {
+  try {
+    const stored = JSON.parse(localStorage.getItem('sg.lang') || 'null');
+    if (LANGUAGES.includes(stored)) return stored;
+  } catch {
+    // Pilihan bahasa tersimpan tidak tersedia.
+  }
+
+  for (const tag of navigator.languages || [navigator.language]) {
+    const language = String(tag).toLowerCase().split('-')[0] as Language;
+    if (LANGUAGES.includes(language)) return language;
+  }
+
+  return 'id';
+}
 
 async function request(
   path: string,
   options: RequestInit = {}
 ) {
-  const response = await fetch(path, {
-    ...options,
-    credentials: 'same-origin',
-    headers: {
-      ...(options.body
-        ? { 'Content-Type': 'application/json' }
-        : {}),
-      ...options.headers
-    }
-  });
+  let response: Response;
 
-  const result = await response.json();
+  try {
+    response = await fetch(path, {
+      ...options,
+      credentials: 'same-origin',
+      headers: {
+        ...(options.body
+          ? { 'Content-Type': 'application/json' }
+          : {}),
+        ...options.headers
+      }
+    });
+  } catch {
+    throw new RequestError('NETWORK_ERROR');
+  }
+
+  const result = await response.json().catch(() => ({}));
 
   if (!response.ok) {
-    throw new Error(
-      result.message ||
-      result.code ||
-      'Permintaan gagal.'
-    );
+    throw new RequestError(result.code || 'REQUEST_FAILED');
   }
 
   return result;
 }
 
-const navigation = [
-  'Ringkasan',
-  'Keberangkatan',
-  'Booking',
-  'Peserta',
-  'Sertifikat Perjalanan',
-  'Pengaturan'
-];
-
 function App() {
-  const [session, setSession] =
-    useState<Session | null>(null);
-
+  const [language, setLanguage] = useState<Language>(initialLanguage);
   const [loading, setLoading] = useState(true);
+  const [redirecting, setRedirecting] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const [active, setActive] = useState('Ringkasan');
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-  type VerificationMethod =
-    'authenticator' | 'email' | 'whatsapp';
+  const [error, setError] = useState<TextKey | ''>('');
 
   const [verification, setVerification] = useState<{
     preAuthTicket: string;
@@ -82,15 +149,41 @@ function App() {
 
   const [otpCode, setOtpCode] = useState('');
 
+  const t = (key: TextKey) => TEXT[key][LANGUAGES.indexOf(language)];
+
+  useEffect(() => {
+    document.documentElement.lang = language;
+    document.documentElement.dir = language === 'ar' ? 'rtl' : 'ltr';
+  }, [language]);
+
   useEffect(() => {
     request('/bff/me')
-      .then(result => {
-        setSession(result);
-        window.location.replace('/bff/dashboard');
-      })
-      .catch(() => setSession(null))
-      .finally(() => setLoading(false));
+      .then(() => openDashboard())
+      .catch(() => setLoading(false));
   }, []);
+
+  function openDashboard() {
+    setRedirecting(true);
+    window.location.replace('/bff/dashboard');
+  }
+
+  function changeLanguage(next: Language) {
+    setLanguage(next);
+    try {
+      localStorage.setItem('sg.lang', JSON.stringify(next));
+    } catch {
+      // Penyimpanan browser tidak tersedia; pilihan berlaku untuk halaman ini.
+    }
+  }
+
+  function showError(cause: unknown) {
+    const code = cause instanceof RequestError ? cause.code : '';
+    setError(
+      code === 'NETWORK_ERROR'
+        ? 'errNetwork'
+        : ERROR_KEYS[code] || 'errFailed'
+    );
+  }
 
   async function login(event: React.FormEvent) {
     event.preventDefault();
@@ -108,7 +201,7 @@ function App() {
       });
 
       if (result.authenticated === true) {
-        window.location.replace('/bff/dashboard');
+        openDashboard();
         return;
       }
 
@@ -130,26 +223,21 @@ function App() {
         );
 
         if (availableMethods.length === 0) {
-          throw new Error('Metode verifikasi tidak tersedia.');
+          throw new RequestError('TWO_FACTOR_METHOD_UNAVAILABLE');
         }
 
         setVerification({
           preAuthTicket: result.preAuthTicket,
           availableMethods
         });
-
         setPassword('');
         setMethod('');
         setOtpCode('');
         return;
       }
-      throw new Error('INVALID_LOGIN_RESPONSE');
+      throw new RequestError('INVALID_LOGIN_RESPONSE');
     } catch (cause) {
-      setError(
-        cause instanceof Error
-          ? cause.message
-          : 'Login gagal.'
-      );
+      showError(cause);
     } finally {
       setSubmitting(false);
     }
@@ -177,7 +265,7 @@ function App() {
           body: JSON.stringify({
             preAuthTicket: verification.preAuthTicket,
             channel: selected,
-            language: 'ID'
+            language: language.toUpperCase()
           })
         }
       );
@@ -188,7 +276,7 @@ function App() {
         typeof result.challengeId !== 'string' ||
         result.channel !== selected
       ) {
-        throw new Error('INVALID_OTP_RESPONSE');
+        throw new RequestError('INVALID_OTP_RESPONSE');
       }
 
       setVerification({
@@ -199,11 +287,9 @@ function App() {
       setMethod(selected);
       setOtpCode('');
     } catch (cause) {
-      setError(
-        cause instanceof Error
-          ? cause.message
-          : 'Gagal memilih metode verifikasi.'
-      );
+      // Tiket pre-auth sudah dipakai API; pengguna harus login ulang.
+      cancelVerification();
+      showError(cause);
     } finally {
       setSubmitting(false);
     }
@@ -217,7 +303,7 @@ function App() {
       !method ||
       !/^[0-9]{6}$/.test(otpCode)
     ) {
-      setError('Masukkan kode verifikasi enam digit.');
+      setError('enterCode');
       return;
     }
 
@@ -228,7 +314,7 @@ function App() {
       const authenticator = method === 'authenticator';
 
       if (!authenticator && !verification.challengeId) {
-        throw new Error('Sesi OTP tidak tersedia.');
+        throw new RequestError('INVALID_OR_EXPIRED_PRE_AUTH');
       }
 
       const result = await request(
@@ -252,16 +338,13 @@ function App() {
       );
 
       if (result.authenticated !== true) {
-        throw new Error('Verifikasi belum berhasil.');
+        throw new RequestError('VERIFICATION_FAILED');
       }
 
-      window.location.replace('/bff/dashboard');
+      openDashboard();
     } catch (cause) {
-      setError(
-        cause instanceof Error
-          ? cause.message
-          : 'Verifikasi gagal.'
-      );
+      setOtpCode('');
+      showError(cause);
     } finally {
       setSubmitting(false);
     }
@@ -274,404 +357,231 @@ function App() {
     setPassword('');
     setError('');
   }
-  async function logout() {
-    setSubmitting(true);
 
-    try {
-      await request('/bff/logout', {
-        method: 'POST'
-      });
-
-      setSession(null);
-      setActive('Ringkasan');
-    } catch (cause) {
-      setError(
-        cause instanceof Error
-          ? cause.message
-          : 'Logout gagal.'
-      );
-    } finally {
-      setSubmitting(false);
-    }
-  }
-
-  if (loading) {
+  if (loading || redirecting) {
     return (
       <div className="loading-screen">
         <div className="spinner" />
-        <p>Memeriksa sesi Segaloka...</p>
+        <p>{redirecting ? t('opening') : t('checking')}</p>
       </div>
     );
   }
 
-  if (!session) {
-    return (
-      <div className="login-layout">
-        <section className="login-brand">
-          <div className="brand-logo">S</div>
-          <div>
-            <h1>Segaloka</h1>
-            <p>Travel Management Platform</p>
-          </div>
+  return (
+    <div className="login-layout">
+      <section className="login-brand">
+        <div className="brand-logo">S</div>
+        <div>
+          <h1>Segaloka</h1>
+          <p>{t('platform')}</p>
+        </div>
 
-          <div className="brand-message">
-            <span className="eyebrow">TRAVEL DASHBOARD</span>
-            <h2>
-              Kelola perjalanan dalam satu sistem.
-            </h2>
-            <p>
-              Operasional travel, booking, peserta,
-              keberangkatan, dan sertifikat perjalanan
-              dalam satu dashboard terintegrasi.
-            </p>
-          </div>
+        <div className="brand-message">
+          <span className="eyebrow">{t('dashboardEyebrow')}</span>
+          <h2>{t('heroTitle')}</h2>
+          <p>{t('heroBody')}</p>
+        </div>
 
-          <div className="brand-footer">
-            © Segaloka
-          </div>
-        </section>
+        <div className="brand-footer">
+          © Segaloka
+        </div>
+      </section>
 
-        <section className="login-panel">
-          <div className="login-card">
+      <section className="login-panel">
+        <div className="login-card">
+          <div className="login-card-top">
             <div className="mobile-brand">Segaloka</div>
 
-            <span className="eyebrow">
-              AKSES TRAVEL
-            </span>
+            <div
+              className="lang-switch"
+              role="group"
+              aria-label={t('language')}
+            >
+              {LANGUAGES.map(item => (
+                <button
+                  key={item}
+                  type="button"
+                  aria-pressed={item === language}
+                  onClick={() => changeLanguage(item)}
+                >
+                  {item.toUpperCase()}
+                </button>
+              ))}
+            </div>
+          </div>
 
-            <h2>Masuk ke Dashboard</h2>
+          <span className="eyebrow">
+            {t('access')}
+          </span>
 
-            <p className="muted">
-              Gunakan akun Travel Segaloka yang
-              sudah terdaftar.
-            </p>
+          <h2>{t('title')}</h2>
 
-            {!verification ? (
-              <form onSubmit={login}>
-                <label htmlFor="email">
-                  Alamat Email
-                </label>
+          <p className="muted">
+            {t('subtitle')}
+          </p>
 
-                <input
-                  id="email"
-                  type="email"
-                  value={email}
-                  onChange={e => setEmail(e.target.value)}
-                  placeholder="nama@travel.com"
-                  autoComplete="username"
-                  required
-                />
+          {!verification ? (
+            <form onSubmit={login}>
+              <label htmlFor="email">
+                {t('email')}
+              </label>
 
-                <label htmlFor="password">
-                  Kata Sandi
-                </label>
+              <input
+                id="email"
+                type="email"
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+                placeholder={t('emailPlaceholder')}
+                autoComplete="username"
+                dir="ltr"
+                required
+              />
 
-                <input
-                  id="password"
-                  type="password"
-                  value={password}
-                  onChange={e => setPassword(e.target.value)}
-                  placeholder="Masukkan kata sandi"
-                  autoComplete="current-password"
-                  required
-                />
+              <label htmlFor="password">
+                {t('password')}
+              </label>
 
-                {error && (
-                  <div className="error-message" role="alert">
-                    {error}
-                  </div>
-                )}
+              <input
+                id="password"
+                type="password"
+                value={password}
+                onChange={e => setPassword(e.target.value)}
+                placeholder={t('passwordPlaceholder')}
+                autoComplete="current-password"
+                required
+              />
 
+              {error && (
+                <div className="error-message" role="alert">
+                  {t(error)}
+                </div>
+              )}
+
+              <button
+                className="primary-button"
+                type="submit"
+                disabled={submitting}
+              >
+                {submitting ? t('processing') : t('submit')}
+              </button>
+            </form>
+          ) : (
+            <form onSubmit={verifyLogin}>
+              <p className="muted">
+                {t('twoStep')}
+              </p>
+
+              {!method ? (
+                <>
+                  <label htmlFor="verification-method">
+                    {t('chooseMethod')}
+                  </label>
+
+                  <select
+                    id="verification-method"
+                    defaultValue=""
+                    disabled={submitting}
+                    onChange={event => {
+                      const selected =
+                        event.target.value as VerificationMethod;
+
+                      if (
+                        verification.availableMethods.includes(
+                          selected
+                        )
+                      ) {
+                        void selectVerificationMethod(selected);
+                      }
+                    }}
+                    required
+                  >
+                    <option value="" disabled>
+                      {t('choosePlaceholder')}
+                    </option>
+
+                    {verification.availableMethods.map(
+                      available => (
+                        <option
+                          key={available}
+                          value={available}
+                        >
+                          {available === 'authenticator'
+                            ? t('authenticator')
+                            : available === 'email'
+                              ? t('emailOtp')
+                              : t('whatsappOtp')}
+                        </option>
+                      )
+                    )}
+                  </select>
+                </>
+              ) : (
+                <>
+                  <p className="muted">
+                    {method === 'authenticator'
+                      ? t('hintAuthenticator')
+                      : method === 'email'
+                        ? t('hintEmail')
+                        : t('hintWhatsapp')}
+                  </p>
+
+                  <label htmlFor="otp-code">
+                    {t('code')}
+                  </label>
+
+                  <input
+                    id="otp-code"
+                    type="text"
+                    inputMode="numeric"
+                    autoComplete="one-time-code"
+                    maxLength={6}
+                    pattern="[0-9]{6}"
+                    dir="ltr"
+                    value={otpCode}
+                    onChange={event => {
+                      setOtpCode(
+                        event.target.value
+                          .replace(/[^0-9]/g, '')
+                          .slice(0, 6)
+                      );
+                    }}
+                    placeholder={t('codePlaceholder')}
+                    required
+                  />
+                </>
+              )}
+
+              {error && (
+                <div className="error-message" role="alert">
+                  {t(error)}
+                </div>
+              )}
+
+              {method && (
                 <button
                   className="primary-button"
                   type="submit"
                   disabled={submitting}
                 >
-                  {submitting
-                    ? 'Memproses...'
-                    : 'Masuk ke Dashboard'}
+                  {submitting ? t('verifying') : t('verify')}
                 </button>
-              </form>
-            ) : (
-              <form onSubmit={verifyLogin}>
-                <p className="muted">
-                  Verifikasi dua langkah diperlukan
-                  untuk melanjutkan login.
-                </p>
+              )}
 
-                {!method ? (
-                  <>
-                    <label htmlFor="verification-method">
-                      Pilih Metode Verifikasi
-                    </label>
-
-                    <select
-                      id="verification-method"
-                      defaultValue=""
-                      disabled={submitting}
-                      onChange={event => {
-                        const selected =
-                          event.target.value as VerificationMethod;
-
-                        if (
-                          verification.availableMethods.includes(
-                            selected
-                          )
-                        ) {
-                          void selectVerificationMethod(selected);
-                        }
-                      }}
-                      required
-                    >
-                      <option value="" disabled>
-                        Pilih metode
-                      </option>
-
-                      {verification.availableMethods.map(
-                        available => (
-                          <option
-                            key={available}
-                            value={available}
-                          >
-                            {available === 'authenticator'
-                              ? 'Google Authenticator'
-                              : available === 'email'
-                                ? 'Kode OTP Email'
-                                : 'Kode OTP WhatsApp'}
-                          </option>
-                        )
-                      )}
-                    </select>
-                  </>
-                ) : (
-                  <>
-                    <p className="muted">
-                      {method === 'authenticator'
-                        ? 'Masukkan kode dari aplikasi autentikator.'
-                        : method === 'email'
-                          ? 'Masukkan kode OTP yang dikirim ke email.'
-                          : 'Masukkan kode OTP yang dikirim ke WhatsApp.'}
-                    </p>
-
-                    <label htmlFor="otp-code">
-                      Kode Verifikasi
-                    </label>
-
-                    <input
-                      id="otp-code"
-                      type="text"
-                      inputMode="numeric"
-                      autoComplete="one-time-code"
-                      maxLength={6}
-                      pattern="[0-9]{6}"
-                      value={otpCode}
-                      onChange={event => {
-                        setOtpCode(
-                          event.target.value
-                            .replace(/[^0-9]/g, '')
-                            .slice(0, 6)
-                        );
-                      }}
-                      placeholder="6 digit kode"
-                      required
-                    />
-                  </>
-                )}
-
-                {error && (
-                  <div className="error-message" role="alert">
-                    {error}
-                  </div>
-                )}
-
-                {method && (
-                  <button
-                    className="primary-button"
-                    type="submit"
-                    disabled={submitting}
-                  >
-                    {submitting
-                      ? 'Memverifikasi...'
-                      : 'Verifikasi dan Masuk'}
-                  </button>
-                )}
-
-                <button
-                  type="button"
-                  disabled={submitting}
-                  onClick={cancelVerification}
-                >
-                  Kembali ke Login
-                </button>
-              </form>
-            )}
-
-            <p className="login-note">
-
-              Akses hanya untuk pengguna dengan
-              izin Dashboard Travel.
-            </p>
-          </div>
-        </section>
-      </div>
-    );
-  }
-
-  const organization = session.memberships.find(
-    membership =>
-      (membership.role === 'travel' || membership.role.startsWith('TRAVEL_'))
-  );
-
-  return (
-    <div className="dashboard-layout">
-      <aside className={
-        `sidebar ${sidebarOpen ? 'open' : ''}`
-      }>
-        <div className="sidebar-brand">
-          <span className="sidebar-symbol">S</span>
-          <div>
-            <strong>Segaloka</strong>
-            <small>Travel Dashboard</small>
-          </div>
-        </div>
-
-        <div className="sidebar-section-label">
-          MENU UTAMA
-        </div>
-
-        <nav>
-          {navigation.map(item => (
-            <button
-              key={item}
-              type="button"
-              className={
-                active === item ? 'nav-active' : ''
-              }
-              onClick={() => {
-                setActive(item);
-                setSidebarOpen(false);
-              }}
-            >
-              <span className="nav-dot" />
-              {item}
-            </button>
-          ))}
-        </nav>
-
-        <div className="sidebar-bottom">
-          <div className="account-name">
-            {session.user.fullName ||
-              session.user.email}
-          </div>
-          <small>{session.user.email}</small>
-        </div>
-      </aside>
-
-      <div className="dashboard-main">
-        <header className="topbar">
-          <button
-            className="menu-toggle"
-            type="button"
-            onClick={() =>
-              setSidebarOpen(!sidebarOpen)
-            }
-            aria-label="Buka menu"
-          >
-            ☰
-          </button>
-
-          <div className="topbar-title">
-            <strong>{active}</strong>
-            <span>Dashboard Travel</span>
-          </div>
-
-          <div className="topbar-actions">
-            <span className="account-badge">
-              {session.user.fullName ||
-                session.user.email}
-            </span>
-
-            <button
-              className="logout-button"
-              type="button"
-              onClick={logout}
-              disabled={submitting}
-            >
-              Keluar
-            </button>
-          </div>
-        </header>
-
-        <main className="content">
-          <div className="page-heading">
-            <div>
-              <span className="eyebrow">
-                SEGALOKA TRAVEL
-              </span>
-              <h1>{active}</h1>
-              <p>
-                {active === 'Ringkasan'
-                  ? 'Informasi akun dan akses operasional Travel.'
-                  : `Modul ${active} akan dihubungkan dengan API operasional Segaloka.`}
-              </p>
-            </div>
-          </div>
-
-          {active === 'Ringkasan' ? (
-            <div className="info-grid">
-              <article className="info-card">
-                <span>Nama Pengguna</span>
-                <strong>
-                  {session.user.fullName ||
-                    session.user.email}
-                </strong>
-                <small>Akun terautentikasi</small>
-              </article>
-
-              <article className="info-card">
-                <span>Hak Akses</span>
-                <strong>
-                  {organization?.role || 'Travel'}
-                </strong>
-                <small>Role dari backend</small>
-              </article>
-
-              <article className="info-card">
-                <span>Organisasi</span>
-                <strong className="long-value">
-                  {organization?.organizationId ||
-                    'Belum tersedia'}
-                </strong>
-                <small>ID organisasi</small>
-              </article>
-            </div>
-          ) : (
-            <article className="module-card">
-              <h2>{active}</h2>
-              <p>
-                Halaman telah disiapkan.
-                Belum ada data yang ditampilkan
-                karena integrasi modul belum selesai.
-              </p>
-            </article>
+              <button
+                type="button"
+                disabled={submitting}
+                onClick={cancelVerification}
+              >
+                {t('back')}
+              </button>
+            </form>
           )}
 
-          {error && (
-            <div className="error-message" role="alert">
-              {error}
-            </div>
-          )}
-        </main>
-      </div>
-
-      {sidebarOpen && (
-        <button
-          type="button"
-          className="sidebar-overlay"
-          aria-label="Tutup menu"
-          onClick={() => setSidebarOpen(false)}
-        />
-      )}
+          <p className="login-note">
+            {t('note')}
+          </p>
+        </div>
+      </section>
     </div>
   );
 }

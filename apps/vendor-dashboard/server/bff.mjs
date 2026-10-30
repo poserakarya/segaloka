@@ -3,6 +3,7 @@ import { createRequire } from 'node:module';
 import { createSessionStore } from './session-store.mjs';
 import { createBffLoginContract } from '../../shared/runtime/bff-login-contract.mjs';
 import { serveV7PortalUi } from '../../shared/runtime/v7-portal-source.mjs';
+import { serveSharedFont } from '../../shared/runtime/shared-fonts.mjs';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -228,7 +229,7 @@ function isAllowedOrigin(req) {
     const parsed = new URL(origin);
 
     return parsed.origin ===
-      'http://127.0.0.1:4210';
+      'http://127.0.0.1:4204';
   } catch {
     return false;
   }
@@ -259,6 +260,10 @@ const server = http.createServer(async (req, res) => {
       req.url,
       `http://${host}:${port}`
     ).pathname;
+
+    if (serveSharedFont(req, res, path)) {
+      return;
+    }
 
     if (req.method === 'GET' && path === '/bff/health') {
       return json(res, 200, { status: 'ok' });

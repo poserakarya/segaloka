@@ -1,6 +1,8 @@
 import { readFile } from 'node:fs/promises';
 
 import { buildV7ActionGuardScript } from './v7-action-policy.mjs';
+import { resolveAccountPreferences } from './account-preferences.mjs';
+import { FONT_STYLESHEET_LINK } from './shared-fonts.mjs';
 
 // Patch atas sumber V7 asli (travel-existing.html). Setiap patch wajib
 // menemukan anchor dengan jumlah yang tepat; bila tidak cocok, render gagal
@@ -139,7 +141,87 @@ export function applyCommonV7Patches(html, patcher, options) {
     'account-admin-link'
   );
 
+  result = patcher.replaceExactlyOnce(
+    result,
+    GOOGLE_FONT_LINKS,
+    FONT_STYLESHEET_LINK,
+    'self-hosted-fonts'
+  );
+
+  result = patcher.removeBetweenOnce(
+    result,
+    SIMULATION_BANNER_START,
+    '  b.innerHTML = h;',
+    'permission-simulation-banner'
+  );
+
+  return applyFormatPatches(result, patcher);
+}
+
+// Tiga tag font Google di sumber V7 diganti stylesheet font lokal.
+export const GOOGLE_FONT_LINKS = [
+  '<link rel="preconnect" href="https://fonts.googleapis.com">',
+  '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>',
+  '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap">'
+].join('\n');
+
+// Banner "Mode simulasi permission … Kembali ke Super Admin" di renderBanners.
+export const SIMULATION_BANNER_START =
+  "  if (S.role !== 'super_admin') h += `<div class=\"banner info\" role=\"status\">";
+
+// Bahasa awal, locale, mata uang, dan zona waktu dari
+// window.__SEGALOKA_FORMAT__ (lihat account-preferences.mjs). Bahasa
+// akun/organisasi menang; selain itu pilihan bahasa terakhir di browser ini,
+// lalu Accept-Language.
+export const FORMAT_PATCHES = Object.freeze([
+  [
+    'initial-language',
+    "const S = { lang: store.get('lang', 'id'),",
+    "const S = { lang: (() => { const f = window.__SEGALOKA_FORMAT__ || {}; const source = f.source && f.source.language; if ((source === 'account' || source === 'organization') && ['id', 'en', 'ar'].includes(f.language)) return f.language; const stored = store.get('lang', null); return ['id', 'en', 'ar'].includes(stored) ? stored : (['id', 'en', 'ar'].includes(f.language) ? f.language : 'id'); })(),"
+  ],
+  [
+    'format-locale',
+    "const LOC = () => ({ id: 'id-ID', en: 'en-US', ar: 'ar-u-ca-gregory-nu-latn' })[S.lang];",
+    "const LOC = () => { const f = window.__SEGALOKA_FORMAT__ || {}; if (f.locale && String(f.locale).split('-')[0].toLowerCase() === S.lang) return f.locale; return ({ id: 'id-ID', en: 'en-US', ar: 'ar-u-ca-gregory-nu-latn' })[S.lang]; };\nconst segalokaCurrency = () => { const f = window.__SEGALOKA_FORMAT__ || {}; return /^[A-Z]{3}$/.test(f.currency || '') ? f.currency : 'IDR'; };\nconst segalokaDateOptions = o => { const f = window.__SEGALOKA_FORMAT__ || {}; return f.timeZone ? Object.assign({}, o, { timeZone: f.timeZone }) : o; };"
+  ],
+  [
+    'format-money',
+    "const money = (v, full) => (v == null || !isFinite(v)) ? '—' : 'Rp ' + (full ? fN(Math.round(v)) : fN(v, { notation: 'compact', maximumFractionDigits: v >= 1e9 ? 2 : 1 }));",
+    "const money = (v, full) => (v == null || !isFinite(v)) ? '—' : segalokaCurrency() === 'IDR' ? 'Rp ' + (full ? fN(Math.round(v)) : fN(v, { notation: 'compact', maximumFractionDigits: v >= 1e9 ? 2 : 1 })) : new Intl.NumberFormat(LOC(), full ? { style: 'currency', currency: segalokaCurrency(), maximumFractionDigits: 0 } : { style: 'currency', currency: segalokaCurrency(), notation: 'compact', maximumFractionDigits: v >= 1e9 ? 2 : 1 }).format(full ? Math.round(v) : v);"
+  ],
+  [
+    'format-date',
+    "const fD = (ts, o) => new Intl.DateTimeFormat(LOC(), o || { day: 'numeric', month: 'short', year: 'numeric' }).format(ts);",
+    "const fD = (ts, o) => new Intl.DateTimeFormat(LOC(), segalokaDateOptions(o || { day: 'numeric', month: 'short', year: 'numeric' })).format(ts);"
+  ],
+  [
+    'format-datetime',
+    "const fDT = ts => new Intl.DateTimeFormat(LOC(), { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }).format(ts);",
+    "const fDT = ts => new Intl.DateTimeFormat(LOC(), segalokaDateOptions({ day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })).format(ts);"
+  ]
+]);
+
+export function applyFormatPatches(source, patcher) {
+  let result = source;
+  for (const [label, search, replacement] of FORMAT_PATCHES) {
+    result = patcher.replaceExactlyOnce(result, search, replacement, label);
+  }
   return result;
+}
+
+export function formatScriptBody(preferences) {
+  return `window.__SEGALOKA_FORMAT__=${safeJson(preferences || resolveAccountPreferences())};`;
+}
+
+// Mengunci state simulasi V7 (role dan ux) dan menghapus handler
+// pengganti role/tenant. Dipanggil setelah S.role diset ke role portal.
+export function simulationLockScript(role) {
+  return `Object.defineProperty(S, 'role', { value: ${JSON.stringify(role)}, writable: false, configurable: false });
+Object.defineProperty(S, 'ux', { value: 'normal', writable: false, configurable: false });
+delete A.role;
+delete A.ux;
+delete A['pent-set'];
+A['pent-pick'] = () => {};`;
 }
 
 export const UNKNOWN_STATUS_PATCH = Object.freeze({
@@ -216,7 +298,7 @@ function portalSecureBoot(role, portal) {
   const homeRoute = `/p/${role}`;
   const routePattern = `^#\\/p\\/${role}(?:\\/|$)`;
   const actionGuard = buildV7ActionGuardScript({
-    overrides: ['signout', 'sync-info', 'portal-api-retry']
+    overrides: ['signout', 'sync-info', 'portal-api-retry', 'pent-pick']
   });
 
   return `S.route = '${homeRoute}';
@@ -277,6 +359,7 @@ A.signout = async () => {
     toast('bad', L3(['Logout gagal', 'Logout failed', 'فشل تسجيل الخروج']), L3(['Koneksi ke server tidak tersedia.', 'The server connection is unavailable.', 'الخادم غير متاح.']));
   }
 };
+${simulationLockScript(role)}
 ${actionGuard}
 const portalAccountObserver = new MutationObserver(() => {
   const button = document.querySelector('.acctbtn');
@@ -373,7 +456,7 @@ export function renderV7PortalSource(source, context) {
       role,
       tenant: context.tenant,
       user: context.user
-    })};</script>`;
+    })};${formatScriptBody(context.preferences)}</script>`;
 
   let html = patcher.assembleDocument(
     source,
@@ -426,7 +509,7 @@ export const V7_PORTAL_HTML_HEADERS = Object.freeze({
   'X-Content-Type-Options': 'nosniff',
   'X-Frame-Options': 'DENY',
   'Referrer-Policy': 'no-referrer',
-  'Content-Security-Policy': "connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'"
+  'Content-Security-Policy': "connect-src 'self'; font-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'"
 });
 
 export const V7_ORIGINAL_SOURCE_URL = new URL(
@@ -524,7 +607,12 @@ export async function serveV7PortalUi(req, res, options) {
   const html = renderV7PortalSource(await readFile(sourceUrl, 'utf8'), {
     role,
     tenant,
-    user: { id: user.id, name: userName, email: user.email || '' }
+    user: { id: user.id, name: userName, email: user.email || '' },
+    preferences: resolveAccountPreferences({
+      account: user.preferences,
+      organization: dashboards[0].preferences,
+      acceptLanguage: req.headers['accept-language']
+    })
   });
 
   res.writeHead(200, V7_PORTAL_HTML_HEADERS);

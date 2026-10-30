@@ -4,24 +4,23 @@ Preparation only. This does not enable public access, change DNS, open firewalls
 
 ## Runtime ports (as implemented in source)
 
-Port values below are read from the current source. This document does not change any runtime port.
+Port values below are read from the current source. Entry ports are unchanged; each dashboard has one origin.
 
-| Dashboard | Entry runtime | BFF | Origin accepted by BFF for POST | Source |
-|---|---:|---:|---:|---|
-| Travel | 4200 (Vite) | 4201 | 4200 | `apps/travel-dashboard/vite.config.ts`, `server/bff.mjs` (`BFF_PORT`, `FRONTEND_ORIGIN`) |
-| Control Center | 4202 | 4203 | 4203 (via 4202 proxy) | `apps/control-center/start.mjs`, `server.mjs`, `bff.mjs` (`SEGALOKA_BFF_PORT`) |
-| Vendor | 4204 | 4211 | 4210 | `apps/vendor-dashboard/v7-runtime.json`, `server-v7.mjs`, `server/bff.mjs` |
-| Affiliate | 4212 | 4221 | 4220 | `apps/affiliate-dashboard/server.mjs`, `server/bff.mjs` |
-| Mitra | 4214 | 4241 | 4240 | `apps/mitra-dashboard/server.mjs`, `server/bff.mjs` |
-| Agen | 4216 | 4231 | 4230 | `apps/agen-dashboard/server.mjs`, `server/bff.mjs` |
-| Traveler | 4210 | 4251 | 4250 | `apps/traveler-portal/server.mjs`, `server/bff.mjs` |
+| Dashboard | Entry (public origin) | BFF (127.0.0.1 only) | Login | Dashboard | Origin accepted by BFF |
+|---|---:|---:|---|---|---|
+| Control Center | 4202 | 4203 | `/login` | `/dashboard` | 4203 (rewritten by the 4202 proxy) |
+| Travel | 4200 (Vite) | 4201 | `/` | `/bff/dashboard` | 4200 (`FRONTEND_ORIGIN`) |
+| Vendor | 4204 | 4211 | `/` | `/bff/ui` | 4204 |
+| Affiliate | 4212 | 4221 | `/` | `/bff/ui` | 4212 |
+| Mitra | 4214 | 4241 | `/` | `/bff/ui` | 4214 |
+| Agen | 4216 | 4231 | `/` | `/bff/ui` | 4216 |
+| Traveler | 4210 | 4251 | `/` | `/bff/ui` | 4210 |
 
-Vendor, Affiliate, Mitra, Agen, and Traveler entry runtimes only redirect `/` to `http://127.0.0.1:<BFF>/bff/ui`. The BFF serves the original V7 source (`apps/travel-dashboard/original-v7/travel-existing.html`) after verifying the session and role. The `dist-v7` shells are not served.
-
-Known inconsistencies, left unchanged on purpose because this document does not change ports:
-
-- The Vendor BFF accepts POST requests only from Origin `4210`, and `4210` is also the Traveler entry runtime port. The Affiliate, Mitra, Agen, and Traveler BFFs likewise accept Origins (`4220`, `4240`, `4230`, `4250`) that differ from their entry runtime ports.
-- `config/dashboard-v7-separation.json` lists ports that do not match the BFF ports in this table.
+- Vendor, Affiliate, Mitra, Agen, and Traveler entry servers (`apps/shared/runtime/v7-portal-entry.mjs`) serve the V7 login page at `/` and forward `/bff/*` to their own BFF. Login, session cookie (`Path=/bff`), and dashboard therefore share one origin.
+- Non-GET requests through an entry must carry that entry's Origin, or an origin listed in `SEGALOKA_PUBLIC_ORIGIN` (comma-separated, e.g. the staging hostname). The entry forwards them to the BFF as `http://127.0.0.1:<entry port>`, which is the only Origin the BFF accepts. Control Center `server.mjs` supports the same `SEGALOKA_PUBLIC_ORIGIN`. Travel BFF uses `FRONTEND_ORIGIN`.
+- Every BFF serves the self-hosted fonts at `/bff/fonts/*` (`apps/shared/assets/fonts`, SIL OFL 1.1).
+- `tests/port-origin-audit.test.mjs` checks that nginx upstreams, entry servers, BFF ports, BFF origins, and `config/dashboard-v7-separation.json` agree.
+- Travel's 4200 is the Vite dev server (`start.mjs`). A production build/serve for Travel on 4200 is still needed before staging.
 
 ## API and ingress
 

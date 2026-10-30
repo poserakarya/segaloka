@@ -55,6 +55,13 @@ for (const role of Object.keys(V7_PORTALS)) {
     assert.ok(!html.includes("t('ux_sim')"));
     assert.ok(!html.includes('<b>Admin Pusat</b><div class="muted" style="font-size:12px">admin@segaloka.example</div>'));
 
+    // Fase A: tanpa simulasi permission, font lokal, format dari preferensi.
+    assert.ok(!html.includes('Mode simulasi permission'));
+    assert.ok(!html.includes('fonts.googleapis.com'));
+    assert.ok(html.includes('<link rel="stylesheet" href="/bff/fonts/fonts.css">'));
+    assert.ok(html.includes(`Object.defineProperty(S, 'role', { value: "${role}", writable: false, configurable: false });`));
+    assert.ok(html.includes('window.__SEGALOKA_FORMAT__='));
+
     const scripts = [...html.matchAll(/<script>([\s\S]*?)<\/script>/g)];
     assert.equal(scripts.length, 2);
     assert.doesNotThrow(() => new Script(scripts[1][1]));

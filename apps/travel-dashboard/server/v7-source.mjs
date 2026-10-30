@@ -3,7 +3,9 @@ import {
   CLEAR_DEMO_DATA,
   createV7Patcher,
   ORIGINAL_V7_BOOT,
+  formatScriptBody,
   safeJson,
+  simulationLockScript,
   TENANT_LABEL_PATCH,
   UNKNOWN_STATUS_PATCH,
   V7_PORTAL_RESTRICTION_STYLES
@@ -32,7 +34,7 @@ export function renderTravelV7Source(source, context) {
 
   const serializedContext = safeJson(context);
   const contextScript =
-    `<script>window.__SEGALOKA_TRAVEL_CONTEXT__=${serializedContext};</script>`;
+    `<script>window.__SEGALOKA_TRAVEL_CONTEXT__=${serializedContext};${formatScriptBody(context.preferences)}</script>`;
   let html = assembleDocument(
     source,
     contextScript + V7_PORTAL_RESTRICTION_STYLES
@@ -168,6 +170,7 @@ A.signout = async () => {
     toast('bad', L3(['Logout gagal', 'Logout failed', 'فشل تسجيل الخروج']), L3(['Koneksi ke server tidak tersedia.', 'The server connection is unavailable.', 'الخادم غير متاح.']));
   }
 };
+${simulationLockScript('travel')}
 const allowedTravelActions = new Set([
   'acct', 'collapse', 'drawer', 'lang', 'notif', 'search', 'signout',
   'sync-info', 'theme', 'travel-api-retry'
@@ -191,9 +194,13 @@ const travelAccountObserver = new MutationObserver(() => {
   const avatar = button.querySelector('.avatar');
   const accountName = travelRuntimeContext.user.name ||
     travelRuntimeContext.user.email || travelOrganization.name;
-  if (name) name.textContent = accountName;
-  if (role) role.textContent = L3(['Akun Travel', 'Travel account', 'حساب السفر']);
-  if (avatar) avatar.textContent = accountName.slice(0, 2).toUpperCase();
+  const accountRole = L3(['Akun Travel', 'Travel account', 'حساب السفر']);
+  const initials = accountName.slice(0, 2).toUpperCase();
+  // Tulis hanya bila berbeda: menulis textContent memicu observer lagi dan
+  // sebelumnya membuat loop tak berujung (halaman macet di Chromium).
+  if (name && name.textContent !== accountName) name.textContent = accountName;
+  if (role && role.textContent !== accountRole) role.textContent = accountRole;
+  if (avatar && avatar.textContent !== initials) avatar.textContent = initials;
 });
 travelAccountObserver.observe(document.getElementById('root'), {
   childList: true,
