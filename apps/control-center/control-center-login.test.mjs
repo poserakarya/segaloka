@@ -1,178 +1,115 @@
+// Uji login Control Center yang aktif: entry server.mjs (gerbang sesi untuk
+// /, /dashboard, dan bundle) dan halaman frontend/control-center-login.html di
+// Chromium, di depan BFF tiruan khusus tes. Menggantikan uji lama terhadap
+// public/index.html yang tidak lagi disajikan sejak Fase A (/ -> /login).
+// Alur 2FA (TOTP/OTP) diuji di control-center-login-totp.test.mjs.
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
-import vm from 'node:vm';
+import { createRequire } from 'node:module';
 
-const loginHtml = await readFile(
-  new URL('./public/index.html', import.meta.url),
-  'utf8'
-);
-const inlineScript = loginHtml.match(/<script>([\s\S]*?)<\/script>/i)?.[1];
+import { startControlCenter } from './test-support/control-center-harness.mjs';
 
-assert.ok(inlineScript, 'Control Center login script must exist.');
-const compiledScript = new vm.Script(inlineScript);
-
-function response(status, body) {
-  return {
-    ok: status >= 200 && status < 300,
-    status,
-    json: async () => body
-  };
-}
-
-function createHarness(responses) {
-  const elements = new Map();
-  const handlers = new Map();
-  const redirects = [];
-  const requests = [];
-
-  function element(id) {
-    if (!elements.has(id)) {
-      const classes = new Set();
-      elements.set(id, {
-        id,
-        value: '',
-        textContent: '',
-        classList: {
-          toggle(name, force) {
-            if (force) classes.add(name);
-            else classes.delete(name);
-          },
-          contains: name => classes.has(name)
-        },
-        addEventListener(name, callback) {
-          handlers.set(`${id}:${name}`, callback);
-        }
-      });
-    }
-
-    return elements.get(id);
-  }
-
-  const context = {
-    document: {
-      getElementById: element
-    },
-    fetch: async (path, options = {}) => {
-      requests.push({ path, options });
-      const result = responses.shift();
-
-      if (!result) {
-        throw new Error(`Unexpected request: ${path}`);
-      }
-
-      return result;
-    },
-    window: {
-      location: {
-        replace: path => redirects.push(path)
-      }
-    }
-  };
-
-  compiledScript.runInNewContext(context);
-
-  return {
-    elements,
-    element,
-    handlers,
-    redirects,
-    requests
-  };
+let chromium = null;
+try {
+  ({ chromium } = createRequire(import.meta.url)('playwright'));
+} catch {
+  chromium = null;
 }
 
 test('tanpa sesi, login ditampilkan dan akses dashboard tidak diteruskan', async () => {
-  const harness = createHarness([
-    response(401, { authenticated: false, code: 'AUTH_REQUIRED' })
-  ]);
-
-  await new Promise(resolve => setImmediate(resolve));
-
-  assert.equal(harness.elements.get('login').classList.contains('hidden'), false);
-  assert.deepEqual(harness.redirects, []);
-  assert.deepEqual(harness.requests.map(request => request.path), [
-    '/bff/dashboard/access'
-  ]);
+  const cc = await startControlCenter();
+  try {
+    for (const path of ['/', '/dashboard', '/index.html']) {
+      const response = await cc.fetch(path, { redirect: 'manual' });
+      assert.equal(response.status, 302, path);
+      assert.equal(response.headers.get('location'), '/login', path);
+    }
+    const login = await cc.fetch('/login');
+    assert.equal(login.status, 200);
+    assert.match(await login.text(), /id="email"[\s\S]*id="password"/);
+    assert.equal((await cc.fetch('/control-center.bundle.js')).status, 401);
+  } finally {
+    await cc.stop();
+  }
 });
 
 test('role selain super_admin tidak diarahkan ke dashboard V7', async () => {
-  const harness = createHarness([
-    response(200, {
-      authenticated: true,
-      workspaceSwitching: false,
-      dashboards: [{
-        dashboard: 'travel-dashboard',
-        role: 'travel',
-        organizationId: 'travel-1'
-      }]
-    })
-  ]);
-
-  await new Promise(resolve => setImmediate(resolve));
-
-  assert.equal(harness.elements.get('login').classList.contains('hidden'), false);
-  assert.deepEqual(harness.redirects, []);
+  const cc = await startControlCenter();
+  try {
+    const dashboard = await cc.fetch('/dashboard', { session: 'travel', redirect: 'manual' });
+    assert.equal(dashboard.status, 302);
+    assert.equal(dashboard.headers.get('location'), '/login');
+    assert.equal((await cc.fetch('/control-center.bundle.js', { session: 'travel' })).status, 401);
+    const admin = await cc.fetch('/', { session: 'admin', redirect: 'manual' });
+    assert.equal(admin.headers.get('location'), '/dashboard');
+  } finally {
+    await cc.stop();
+  }
 });
 
-test('login super_admin memeriksa akses lalu redirect ke /dashboard', async () => {
-  const harness = createHarness([
-    response(401, { authenticated: false, code: 'AUTH_REQUIRED' }),
-    response(200, { authenticated: true }),
-    response(200, {
-      authenticated: true,
-      workspaceSwitching: false,
-      dashboards: [{
-        dashboard: 'control-center',
-        role: 'super_admin',
-        organizationId: null
-      }]
-    })
-  ]);
+async function loginInBrowser(cc, email) {
+  const browser = await chromium.launch();
+  const page = await browser.newPage({ locale: 'id-ID' });
+  const errors = [];
+  page.on('pageerror', error => errors.push(error.message));
+  await page.goto(cc.origin + '/login');
+  await page.fill('#email', email);
+  await page.fill('#password', 'kata-sandi-uji');
+  await page.click('#submit');
+  return { browser, page, errors };
+}
 
-  await new Promise(resolve => setImmediate(resolve));
-  harness.element('email').value = 'admin@example.test';
-  harness.element('password').value = 'test-password';
-
-  await harness.handlers.get('loginForm:submit')({
-    preventDefault() {}
+test('login super_admin memeriksa akses lalu redirect ke /dashboard', {
+  skip: chromium ? false : 'playwright tidak tersedia',
+  timeout: 60000
+}, async () => {
+  const cc = await startControlCenter({
+    loginResult: body => body.email === 'admin@example.test'
+      ? { status: 200, body: { authenticated: true }, session: 'admin' }
+      : { status: 401, body: { code: 'INVALID_CREDENTIALS' } }
   });
-
-  assert.deepEqual(harness.redirects, ['/dashboard']);
-  assert.deepEqual(harness.requests.map(request => request.path), [
-    '/bff/dashboard/access',
-    '/bff/login',
-    '/bff/dashboard/access'
-  ]);
-  assert.deepEqual(JSON.parse(harness.requests[1].options.body), {
-    email: 'admin@example.test',
-    password: 'test-password'
-  });
-  assert.equal(harness.element('password').value, '');
+  const { browser, page, errors } = await loginInBrowser(cc, 'admin@example.test');
+  try {
+    await page.waitForURL(/\/dashboard#\/travel$/, { timeout: 30000 });
+    const bffCalls = cc.requests.filter(r => r.path.startsWith('/bff/login') || r.path === '/bff/logout');
+    assert.deepEqual(bffCalls.map(r => r.path), ['/bff/login']);
+    assert.deepEqual(bffCalls[0].body, { email: 'admin@example.test', password: 'kata-sandi-uji' });
+    assert.deepEqual(errors, []);
+  } finally {
+    await browser.close();
+    await cc.stop();
+  }
 });
 
-test('login role lain yang ditolak BFF tetap berada di halaman login', async () => {
-  const harness = createHarness([
-    response(401, { authenticated: false, code: 'AUTH_REQUIRED' }),
-    response(403, {
-      code: 'SUPER_ADMIN_ACCESS_REQUIRED',
-      message: 'Akun tidak memiliki akses Control Center.'
-    })
-  ]);
-
-  await new Promise(resolve => setImmediate(resolve));
-  await harness.handlers.get('loginForm:submit')({
-    preventDefault() {}
+test('login role lain yang ditolak BFF tetap berada di halaman login', {
+  skip: chromium ? false : 'playwright tidak tersedia',
+  timeout: 60000
+}, async () => {
+  const cc = await startControlCenter({
+    loginResult: body => body.email === 'travel@example.test'
+      ? { status: 200, body: { authenticated: true }, session: 'travel' }
+      : { status: 403, body: { code: 'SUPER_ADMIN_ACCESS_REQUIRED', message: 'Akun tidak memiliki akses Control Center.' } }
   });
+  try {
+    // Ditolak BFF: pesan ditampilkan, password dikosongkan.
+    let run = await loginInBrowser(cc, 'vendor@example.test');
+    await run.page.waitForSelector('#error:not([hidden])');
+    assert.equal(await run.page.textContent('#error'), 'Akun tidak memiliki akses Control Center.');
+    assert.equal(await run.page.inputValue('#password'), '');
+    assert.equal(new URL(run.page.url()).pathname, '/login');
+    await run.browser.close();
 
-  assert.deepEqual(harness.redirects, []);
-  assert.equal(
-    harness.elements.get('loginError').textContent,
-    'Akun tidak memiliki akses Control Center.'
-  );
-  assert.deepEqual(harness.requests.map(request => request.path), [
-    '/bff/dashboard/access',
-    '/bff/login'
-  ]);
+    // Login berhasil tetapi bukan super_admin: sesi diakhiri, tetap di /login.
+    run = await loginInBrowser(cc, 'travel@example.test');
+    await run.page.waitForSelector('#error:not([hidden])');
+    assert.equal(new URL(run.page.url()).pathname, '/login');
+    assert.ok(cc.requests.some(r => r.path === '/bff/logout' && r.method === 'POST'), 'logout dipanggil');
+    assert.deepEqual(run.errors, []);
+    await run.browser.close();
+  } finally {
+    await cc.stop();
+  }
 });
 
 test('server hanya menyajikan UI Control Center untuk role pusat yang eksplisit', async () => {
