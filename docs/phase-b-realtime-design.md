@@ -1,6 +1,6 @@
 # Fase B — Rancangan integrasi API, PostgreSQL, dan realtime
 
-Status: **sebagian diimplementasikan (Fase B, tahap 1).** Lihat bagian 0 untuk yang aktif dan diuji. Tanpa migrasi baru dan tanpa `LISTEN/NOTIFY`; mekanisme tetap polling outbox.
+Status: **sebagian diimplementasikan (Fase B, tahap 1 dan 2).** Lihat bagian 0 untuk yang aktif dan diuji. Tanpa migrasi baru dan tanpa `LISTEN/NOTIFY`; mekanisme tetap polling outbox.
 
 ## 0. Yang sudah aktif (diuji dengan API Fastify asli + PostgreSQL `_test`, Node 24)
 
@@ -31,6 +31,22 @@ Runtime dashboard:
 - **Control Center:** event memicu `ccLoadBookings` (halaman `/booking`) atau `cc-summary-refresh` (`/overview`).
 - **Travel:** event (departure dan booking) memicu baca ulang keberangkatan (perilaku yang sudah ada).
 - Aksi V7 tanpa endpoint persisten tetap diblokir.
+
+### Tahap 2 (diuji: `tests/realtime-stage2-e2e.mjs`)
+
+| Perubahan | Rincian |
+|---|---|
+| `GET /travel/bookings?organizationId=` (API, baru) | Sesi wajib; anggota Travel org tsb. (`travelAccess`) dan entitlement `bookings.manage`. 403 `TRAVEL_ACCESS_DENIED` / `BOOKINGS_MANAGE_REQUIRED`, 400 untuk ID tidak valid. Maksimal 200 baris, hanya keberangkatan milik org. |
+| `GET /bff/bookings?organizationId=` (BFF Travel) | Org wajib ada di `dashboards` sesi, selain itu 403 `TRAVEL_ORGANIZATION_ACCESS_DENIED`. |
+| Runtime Travel V7 | `loadSegalokaTravelBookings()` mengisi `BOOKINGS` dari BFF; event SSE yang sudah ada memicu baca ulang. Nama paket memakai `b.pkgName` bila paket V7 tidak ada. |
+| Affiliate V7 | `/bff/affiliate/referral-links` → `REFLINKS` (travel, kode referral, status, tanggal). Klik dan konversi tidak tersedia di API sehingga tampil "—". Tombol Pause/Aktifkan (`al-toggle`) memanggil `PATCH` dan toast tampil setelah server berhasil. Stream `/bff/sync/affiliate/events` memicu baca ulang. |
+| Control Center | Event memicu refresh halaman aktif: `/booking`, `/overview`, `/compliance/audit`, `/travel`, `/travel/branches`, `/travel/:id(/tab)`. |
+| Event cabang | `travel.branch.created` dan `travel.branch.status_changed` (`travel_branch`) ditulis dalam transaksi pembuatan/perubahan status cabang. Stream Control Center menyertakan `travel_branch`. |
+
+Perbaikan bug bawaan yang ditemukan oleh uji asli:
+- BFF Affiliate: proxy SSE memakai variabel `requestUrl` yang tidak ada sehingga stream selalu 503. Sekarang memakai `proxySyncStream` bersama.
+- API Affiliate: `PATCH /affiliate/referral-links/:id` selalu 500 di PostgreSQL karena parameter `$5` tanpa tipe di `jsonb_build_object`. Sekarang `$5::text`.
+- BFF Control Center: daftar cabang dari API memakai snake_case, sedangkan UI membaca camelCase sehingga kolom tampil "—". BFF menambahkan alias camelCase.
 
 Belum terintegrasi: lihat bagian 6.
 
@@ -129,11 +145,12 @@ Semua memakai mekanisme yang sama dengan `/sync/events`: kursor, heartbeat, cek 
   - bundle Control Center lewat `apps/control-center/server.mjs`
 - **Tes:** E2E lintas dashboard di atas.
 
-## 6. Belum terintegrasi (setelah Fase B tahap 1)
-- **Travel:** belum ada endpoint daftar booking per organisasi, jadi booking belum tampil di Dashboard Travel. Event booking memang diterima, tapi hanya memicu baca ulang keberangkatan.
-- **Vendor:** belum ada endpoint data (produk, order, keuangan) maupun stream.
-- **Affiliate:** stream dan endpoint link referral sudah ada, tapi belum dipetakan ke `REFLINKS` V7.
-- **Control Center:** realtime hanya untuk halaman Booking dan Overview; halaman Travel, Vendor, cabang, dan audit masih dimuat saat dibuka atau di-refresh.
-- Booking dari API belum punya paket, harga, maupun pembayaran, sehingga kolom total/terbayar di V7 tampil "—". Detail booking traveler V7 (`/p/traveler/bookings/:id`) memerlukan entitas Travel V7 dan masih menampilkan state kosong.
+## 6. Belum terintegrasi (setelah Fase B tahap 2)
+- **Vendor:** belum ada tabel produk/order/keuangan maupun event. Lihat `docs/vendor-data-contract.md`; skema baru menunggu persetujuan.
+- **Travel:** detail booking (`/p/travel/bookings/:id`) memakai entitas V7 (paket, pembayaran, dokumen) yang belum ada di API. Halaman Paket, Keuangan, Mitra/Agen, Vendor, Ulasan, dan SegaDeals belum disambungkan.
+- **Affiliate:** pembuatan link dari UI (`al-save`) tetap diblokir karena V7 butuh daftar Travel yang boleh dipilih, dan API belum menyediakan endpoint daftar itu untuk Affiliate. Komisi dan payout belum memiliki tabel.
+- **Control Center:** halaman Vendor tidak realtime (tidak ada event Vendor). Halaman lain tanpa endpoint API tetap statis.
+- Booking dari API belum memiliki paket, harga, maupun pembayaran, sehingga total/terbayar tampil "—".
 - Aksi pembuatan booking dari UI V7 Agen/Mitra (`ma-reg-go`) belum disambungkan ke `POST /travel/bookings` dan tetap diblokir.
-- Preferensi akun belum tersimpan (butuh migrasi; tidak dikerjakan pada tahap ini).
+- Preferensi akun belum tersimpan (butuh migrasi; tidak dikerjakan).
+- Website dan mobile belum disentuh (Fase C).

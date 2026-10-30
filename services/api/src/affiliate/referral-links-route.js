@@ -303,7 +303,7 @@ export async function registerAffiliateReferralLinkRoutes(app, pool) {
          ) VALUES ($1, $2, 'affiliate_referral_link', $3, jsonb_build_object(
            'affiliateUserId', $4::uuid::text,
            'travelOrganizationId', $1::uuid::text,
-           'status', $5
+           'status', $5::text
          ))`,
         [
           link.travelOrganizationId,

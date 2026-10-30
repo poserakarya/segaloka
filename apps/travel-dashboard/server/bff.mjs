@@ -725,6 +725,31 @@ const server = http.createServer(async (req, res) => {
       return stream.pipe(res);
     }
 
+    if (req.method === 'GET' && path === '/bff/bookings') {
+      const access = await authorizedTravelSession(req);
+
+      if (access.status !== 200) {
+        return json(res, access.status, access.body);
+      }
+
+      const organizationId = requestUrl.searchParams.get('organizationId');
+
+      if (!access.dashboards.some(item => item.organizationId === organizationId)) {
+        return json(res, 403, {
+          code: 'TRAVEL_ORGANIZATION_ACCESS_DENIED'
+        });
+      }
+
+      const apiResult = await apiRequest(
+        'GET',
+        `/travel/bookings?organizationId=${encodeURIComponent(organizationId)}`,
+        undefined,
+        access.session.accessToken
+      );
+
+      return json(res, apiResult.status, apiResult.data);
+    }
+
     if (
       (req.method === 'GET' || req.method === 'POST') &&
       path === '/bff/departures'

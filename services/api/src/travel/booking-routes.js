@@ -372,6 +372,85 @@ export async function registerBookingRoutes(app, pool) {
     });
   });
 
+  // Daftar booking satu organisasi Travel. Hanya anggota Travel org tersebut
+  // dengan entitlement bookings.manage; tidak ada data org lain.
+  app.get('/travel/bookings', {
+    preHandler: requireSession
+  }, async (request, reply) => {
+    reply.header('Cache-Control', 'no-store');
+
+    const organizationId = request.query?.organizationId;
+
+    if (!isUuid(organizationId)) {
+      return reply.code(400).send({ code: 'INVALID_ORGANIZATION_ID' });
+    }
+
+    return transaction(pool, request, reply, async client => {
+      if (!await travelAccess(client, request.auth.userId, organizationId)) {
+        return fail(403, 'TRAVEL_ACCESS_DENIED');
+      }
+
+      if (!await travelEntitlementEnabled(client, organizationId, 'bookings.manage')) {
+        return fail(403, 'BOOKINGS_MANAGE_REQUIRED');
+      }
+
+      const result = await client.query(
+        `SELECT
+           b.id,
+           b.booking_number,
+           b.status,
+           b.created_at,
+           u.full_name AS booker_name,
+           d.id AS departure_id,
+           d.title,
+           d.destination,
+           d.departure_date,
+           d.return_date,
+           COALESCE(
+             jsonb_agg(
+               jsonb_build_object(
+                 'id', p.id,
+                 'fullName', p.full_name,
+                 'departureStatus', p.departure_status
+               )
+               ORDER BY p.created_at, p.id
+             ) FILTER (WHERE p.id IS NOT NULL),
+             '[]'::jsonb
+           ) AS participants
+         FROM public.travel_bookings b
+         JOIN public.travel_departures d ON d.id = b.departure_id
+         JOIN public.users u ON u.id = b.booking_user_id
+         LEFT JOIN public.travel_booking_participants p ON p.booking_id = b.id
+         WHERE d.travel_organization_id = $1
+         GROUP BY b.id, d.id, u.full_name
+         ORDER BY b.created_at DESC, b.id
+         LIMIT 200`,
+        [organizationId]
+      );
+
+      return {
+        status: 200,
+        body: {
+          bookings: result.rows.map(row => ({
+            id: row.id,
+            bookingNumber: row.booking_number,
+            status: row.status,
+            createdAt: row.created_at,
+            bookerName: row.booker_name,
+            departure: {
+              id: row.departure_id,
+              title: row.title,
+              destination: row.destination,
+              departureDate: row.departure_date,
+              returnDate: row.return_date
+            },
+            participants: row.participants
+          }))
+        }
+      };
+    });
+  });
+
   app.post('/travel/participants/:id/verify-departure', {
     preHandler: requireSession
   }, async (request, reply) => {

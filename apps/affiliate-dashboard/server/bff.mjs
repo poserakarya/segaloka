@@ -4,6 +4,7 @@ import { createSessionStore } from './session-store.mjs';
 import { createBffLoginContract } from '../../shared/runtime/bff-login-contract.mjs';
 import { serveV7PortalUi } from '../../shared/runtime/v7-portal-source.mjs';
 import { serveSharedFont } from '../../shared/runtime/shared-fonts.mjs';
+import { proxySyncStream } from '../../shared/runtime/bff-sse-proxy.mjs';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -540,49 +541,15 @@ const server = http.createServer(async (req, res) => {
       const session = await getSession(req);
       if (!session) return json(res, 401, { authenticated: false, code: 'AUTH_REQUIRED' });
 
-      const target = `/sync/affiliate/events${requestUrl.search}`;
-      const signed = signIngressRequest(ingressSecret, {
-        ip: '127.0.0.1', method: 'GET', target, body: Buffer.alloc(0)
+      return proxySyncStream(req, res, {
+        apiOrigin,
+        target: '/sync/affiliate/events',
+        ingressSecret,
+        accessToken: accessTokenOf(session),
+        signIngressRequest,
+        json,
+        label: 'Affiliate BFF'
       });
-      const abort = new AbortController();
-      res.once('close', () => abort.abort());
-      const upstream = await fetch(apiOrigin + target, {
-        headers: {
-          ...signed,
-          Authorization: `Bearer ${accessTokenOf(session)}`,
-          ...(req.headers['last-event-id'] ? { 'Last-Event-ID': req.headers['last-event-id'] } : {})
-        },
-        signal: abort.signal
-      });
-      if (!upstream.ok || !upstream.body) {
-        return json(res, upstream.status, await upstream.json());
-      }
-      res.writeHead(200, {
-        'Content-Type': 'text/event-stream; charset=utf-8',
-        'Cache-Control': 'no-cache, no-transform',
-        'Connection': 'keep-alive',
-        'X-Accel-Buffering': 'no',
-        'X-Content-Type-Options': 'nosniff',
-        'Access-Control-Allow-Origin': 'http://127.0.0.1:4212',
-        'Access-Control-Allow-Credentials': 'true',
-        'Access-Control-Allow-Headers': 'Content-Type, Last-Event-ID'
-      });
-      res.socket?.setNoDelay?.(true);
-      res.flushHeaders?.();
-      const reader = upstream.body.getReader();
-      try {
-        while (!res.destroyed) {
-          const chunk = await reader.read();
-          if (chunk.done) break;
-          if (!res.write(Buffer.from(chunk.value))) {
-            await new Promise(resolve => res.once('drain', resolve));
-          }
-        }
-      } finally {
-        reader.releaseLock();
-      }
-      if (!res.writableEnded && !res.destroyed) res.end();
-      return;
     }
 
     const referralLinkMatch = path.match(

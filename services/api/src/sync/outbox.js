@@ -8,6 +8,7 @@
 export const BOOKING_ENTITY = 'travel_booking';
 export const PARTICIPANT_ENTITY = 'travel_booking_participant';
 export const DEPARTURE_ENTITY = 'travel_departure';
+export const BRANCH_ENTITY = 'travel_branch';
 
 export async function recordSyncEvent(client, {
   organizationId,

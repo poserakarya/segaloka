@@ -421,6 +421,28 @@ async function finishControlCenterLogin(res, login) {
     ]
   });
 }
+// API mengirim kolom cabang snake_case; UI V7 Control Center membaca
+// camelCase. Alias ditambahkan tanpa membuang kolom aslinya.
+function branchForUi(row) {
+  if (!row || typeof row !== 'object') return row;
+  return {
+    ...row,
+    organizationId: row.organizationId ?? row.organization_id,
+    organizationName: row.organizationName ?? row.organization_name,
+    branchCode: row.branchCode ?? row.branch_code,
+    branchName: row.branchName ?? row.branch_name
+  };
+}
+
+function branchResponseForUi(data) {
+  if (!data || typeof data !== 'object') return data;
+  return {
+    ...data,
+    ...(Array.isArray(data.items) ? { items: data.items.map(branchForUi) } : {}),
+    ...(data.branch ? { branch: branchForUi(data.branch) } : {})
+  };
+}
+
 const server = http.createServer(async (req, res) => {
   try {
     if (
@@ -1007,7 +1029,7 @@ const server = http.createServer(async (req, res) => {
       const body = req.method === 'POST' ? (await readBody(req)).toString('utf8') : undefined;
       const result = await apiRequest(req.method, target, body, session.accessToken);
       if (result.status !== 200 && result.status !== 201) return json(res, [400, 401, 403, 404, 409, 422].includes(result.status) ? result.status : 503, { code: result.data?.code || 'CONTROL_CENTER_BRANCH_UNAVAILABLE' });
-      return json(res, result.status, result.data);
+      return json(res, result.status, branchResponseForUi(result.data));
     }
     if (req.method === 'PATCH' && path.startsWith('/bff/control-center/travel-branches/')) {
       const session = await getSession(req);

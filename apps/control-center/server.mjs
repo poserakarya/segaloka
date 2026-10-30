@@ -33,17 +33,31 @@ const CONTROL_CENTER_REALTIME_SCRIPT = `
   const ccSync = window.__SEGALOKA_CC_SYNC__ = { connected: false, lastEventId: null, reloads: 0 };
   let events = null;
   let timer = null;
+  // Halaman dengan endpoint API dimuat ulang memakai aksi refresh yang sudah
+  // ada (mempertahankan pencarian, filter, dan paginasi yang aktif).
+  // Vendor belum memiliki event outbox sehingga tidak termasuk.
   const reloadActivePage = () => {
     const path = (location.hash.replace(/^#/, '') || '').split('?')[0];
+    const detail = path.match(/^\\/travel\\/([0-9a-f-]{36})(?:\\/([a-z-]+))?$/i);
+    let reload = null;
     if (path === '/booking') {
       const q = document.getElementById('cc-booking-q');
       const s = document.getElementById('cc-booking-status');
-      ccSync.reloads += 1;
-      ccLoadBookings(q ? q.value : '', s ? s.value : '');
-    } else if (path === '/overview') {
-      ccSync.reloads += 1;
-      A['cc-summary-refresh']();
+      reload = () => ccLoadBookings(q ? q.value : '', s ? s.value : '');
+    } else if (path === '/overview') reload = A['cc-summary-refresh'];
+    else if (path === '/compliance/audit') reload = A['cc-audit-refresh'];
+    else if (path === '/travel') reload = A['cc-travel-refresh'];
+    else if (path === '/travel/branches') reload = A['cc-branches-refresh'];
+    else if (detail) {
+      reload = () => {
+        ccLoadTravelDetail(detail[1]);
+        if (detail[2] === 'branches') ccLoadTravelBranches(detail[1]);
+      };
     }
+    if (!reload) return;
+    ccSync.reloads += 1;
+    ccSync.lastReloadPath = path;
+    reload();
   };
   const open = () => {
     events = new EventSource(ccSync.lastEventId ? '/bff/sync/events?after=' + encodeURIComponent(ccSync.lastEventId) : '/bff/sync/events');

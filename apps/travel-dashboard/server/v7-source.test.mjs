@@ -83,10 +83,12 @@ test('Travel V7 output is pinned (Fase A: fonts, format, no simulation, observer
   // font lokal, window.__SEGALOKA_FORMAT__, patch LOC/money/fD/fDT/bahasa
   // awal, banner simulasi permission dihapus, kunci S.role/S.ux, dan
   // observer akun yang tidak lagi memicu dirinya sendiri.
-  assert.equal(html.length, 998164);
+  // Fase B tahap 2 (6673414c… -> 1733ae20…): pemuat GET /bff/bookings dan
+  // fallback nama paket b.pkgName pada 12 titik render booking.
+  assert.equal(html.length, 1000183);
   assert.equal(
     createHash('sha256').update(html).digest('hex'),
-    '6673414c07355feeabff2c0b22960230d7ea7c0cd1eecbf3b4003301f34d2065'
+    '1733ae201331d6c78f4d7dd62afc6b51f04a3be6e7e03bd87d972d34cb5e8fa3'
   );
 });
 

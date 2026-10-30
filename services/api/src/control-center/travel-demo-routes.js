@@ -1,6 +1,7 @@
 import { createSessionAuth } from '../security/session-auth.js';
 import { parseTravelBranchPage, validateTravelBranchParent } from './travel-branch-contract.js';
 import { hasTestDataOrganizationColumn } from '../security/test-data-policy.js';
+import { BRANCH_ENTITY, recordSyncEvent } from '../sync/outbox.js';
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const DEMO_BATCH = 'SEGALOKA_TRAVEL_DEMO_20261020';
@@ -142,6 +143,7 @@ export async function registerTravelDemoRoutes(app, pool) {
         return reply.code(200).send({ branch: existing.rows[0], idempotent: true });
       }
       await audit(client, request.auth.userId, request.params.organizationId, 'control_center.travel_branch.created', 'travel_branch', inserted.rows[0].id);
+      await recordSyncEvent(client, { organizationId: request.params.organizationId, eventType: 'travel.branch.created', entityType: BRANCH_ENTITY, entityId: inserted.rows[0].id });
       await client.query('COMMIT');
       return reply.code(201).send({ branch: inserted.rows[0], idempotent: false });
     } catch (error) {
@@ -170,6 +172,7 @@ export async function registerTravelDemoRoutes(app, pool) {
         return reply.code(404).send({ code: 'BRANCH_NOT_FOUND' });
       }
       await audit(client, request.auth.userId, result.rows[0].organization_id, 'control_center.travel_branch.status_changed', 'travel_branch', result.rows[0].id);
+      await recordSyncEvent(client, { organizationId: result.rows[0].organization_id, eventType: 'travel.branch.status_changed', entityType: BRANCH_ENTITY, entityId: result.rows[0].id });
       await client.query('COMMIT');
       return { branch: result.rows[0] };
     } catch (error) {

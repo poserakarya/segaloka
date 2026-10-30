@@ -3,6 +3,7 @@ import {
   CLEAR_DEMO_DATA,
   createV7Patcher,
   ORIGINAL_V7_BOOT,
+  PORTAL_BOOKING_PATCHES,
   formatScriptBody,
   safeJson,
   simulationLockScript,
@@ -207,6 +208,53 @@ travelAccountObserver.observe(document.getElementById('root'), {
   subtree: true
 });
 
+function travelDateValue(value) {
+  if (typeof value !== 'string' || !value) return null;
+  const parsed = Date.parse(/^\\d{4}-\\d{2}-\\d{2}$/.test(value) ? value + 'T00:00:00.000Z' : value);
+  return Number.isFinite(parsed) ? parsed : null;
+}
+
+// Booking organisasi ini dari GET /bff/bookings (RBAC + entitlement di API).
+// Peserta asli mengisi pilgrims; tidak ada peserta atau pembayaran buatan.
+async function loadSegalokaTravelBookings() {
+  const response = await fetch(
+    '/bff/bookings?organizationId=' + encodeURIComponent(travelOrganization.id),
+    { credentials: 'same-origin', cache: 'no-store' }
+  );
+  if (response.status === 401) {
+    window.location.replace('/');
+    return;
+  }
+  if (!response.ok) {
+    travelApiState.bookings = 'unavailable';
+    return;
+  }
+  const data = await response.json();
+  if (!Array.isArray(data.bookings)) throw new Error('INVALID_BOOKING_RESPONSE');
+  BOOKINGS.length = 0;
+  data.bookings.forEach(item => {
+    const pilgrims = (Array.isArray(item.participants) ? item.participants : [])
+      .map(participant => ({ name: participant.fullName || '' }));
+    BOOKINGS.push({
+      id: item.bookingNumber || item.id,
+      apiId: item.id,
+      traveler: item.bookerName || '—',
+      pkg: null,
+      pkgName: [item.departure && item.departure.title, item.departure && item.departure.destination].filter(Boolean).join(' · '),
+      travel: travelOrganization.id,
+      pax: pilgrims.length,
+      pilgrims,
+      total: null,
+      paid: null,
+      state: item.status,
+      created: travelDateValue(item.createdAt),
+      dep: travelDateValue(item.departure && item.departure.departureDate),
+      source: 'Segaloka API'
+    });
+  });
+  travelApiState.bookings = 'ready';
+}
+
 async function loadSegalokaTravelData() {
   try {
     const statusResponse = await fetch('/bff/status', {
@@ -247,6 +295,7 @@ async function loadSegalokaTravelData() {
         roomState: null
       });
     });
+    await loadSegalokaTravelBookings();
     travelApiState.message = null;
     rerender();
   } catch (error) {
@@ -289,6 +338,9 @@ window.SegalokaTravelRuntime = Object.freeze({
   readOnly: true,
   tenantId: travelOrganization.id
 });`;
+
+  const packageName = PORTAL_BOOKING_PATCHES.find(([label]) => label === 'portal-booking-package-name');
+  html = replaceExpectedCount(html, packageName[1], packageName[2], packageName[3], packageName[0]);
 
   html = replaceExactlyOnce(html, boot, secureBoot, 'secure-boot');
   return html;

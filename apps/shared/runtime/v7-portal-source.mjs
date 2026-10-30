@@ -273,10 +273,35 @@ export const V7_PORTALS = Object.freeze({
 
 // Endpoint baca BFF per portal yang sudah tersedia di API.
 export const PORTAL_DATA_SOURCES = Object.freeze({
-  agen: '/bff/bookings',
-  mitra: '/bff/bookings',
-  traveler: '/bff/bookings'
+  agen: Object.freeze({ kind: 'bookings', url: '/bff/bookings', stream: '/bff/sync/events' }),
+  mitra: Object.freeze({ kind: 'bookings', url: '/bff/bookings', stream: '/bff/sync/events' }),
+  traveler: Object.freeze({ kind: 'bookings', url: '/bff/bookings', stream: '/bff/sync/events' }),
+  affiliate: Object.freeze({
+    kind: 'referrals',
+    url: '/bff/affiliate/referral-links',
+    stream: '/bff/sync/affiliate/events'
+  })
 });
+
+// Link referral dari API tidak memiliki entitas Travel V7 maupun data klik/
+// konversi; tampilan memakai nama Travel dari API dan "—" untuk metrik.
+export const AFFILIATE_REFERRAL_PATCHES = Object.freeze([
+  [
+    'affiliate-links-travel-name',
+    'L.map(r => `<tr><td>${esc(travelById(r.travel).name)}</td>',
+    "L.map(r => `<tr><td>${esc((travelById(r.travel) || {}).name || r.travelName || '')}</td>"
+  ],
+  [
+    'affiliate-links-conversions',
+    '<td class="r tnum">${r.conv}</td>',
+    '<td class="r tnum">${r.conv == null ? \'—\' : r.conv}</td>'
+  ],
+  [
+    'affiliate-home-travel-name',
+    'hbars(L.map(r => [travelById(r.travel).name, r.conv])',
+    "hbars(L.map(r => [(travelById(r.travel) || {}).name || r.travelName || '', r.conv])"
+  ]
+]);
 
 // Booking dari API tidak memiliki entitas paket/rantai Mitra V7; tampilan
 // memakai nama keberangkatan dan filter kepemilikan tanpa membuat entitas.
@@ -317,12 +342,38 @@ export function validateV7PortalContext(context) {
   return portal;
 }
 
+// al-toggle Affiliate tersambung ke PATCH /affiliate/referral-links/:id
+// (persisten, dengan event outbox). Tampilan berubah setelah server
+// mengonfirmasi dan data dibaca ulang; tidak ada keberhasilan lokal.
+const AFFILIATE_TOGGLE_SCRIPT = `A['al-toggle'] = async el => {
+  const link = REFLINKS.find(item => item.id === el.dataset.id);
+  if (!link) return;
+  el.disabled = true;
+  try {
+    const response = await fetch('/bff/affiliate/referral-links/' + encodeURIComponent(link.id), {
+      method: 'PATCH',
+      credentials: 'same-origin',
+      cache: 'no-store',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ status: link.state === 'active' ? 'paused' : 'active' })
+    });
+    if (!response.ok) throw new Error('REFERRAL_UPDATE_FAILED');
+    await loadSegalokaPortalData();
+    toast('ok', L3(['Link referral diperbarui', 'Referral link updated', 'تم تحديث الرابط']), '');
+  } catch (error) {
+    toast('bad', L3(['Perubahan tidak tersimpan', 'Change was not saved', 'لم يتم الحفظ']), L3(['Server menolak atau tidak dapat dihubungi.', 'The server rejected the request or is unreachable.', 'رفض الخادم الطلب.']));
+  } finally {
+    el.disabled = false;
+  }
+};`;
+
 function portalSecureBoot(role, portal) {
   const roleJson = JSON.stringify(role);
   const homeRoute = `/p/${role}`;
   const routePattern = `^#\\/p\\/${role}(?:\\/|$)`;
   const actionGuard = buildV7ActionGuardScript({
-    overrides: ['signout', 'sync-info', 'portal-api-retry', 'pent-pick']
+    overrides: ['signout', 'sync-info', 'portal-api-retry', 'pent-pick',
+      ...(role === 'affiliate' ? ['al-toggle'] : [])]
   });
 
   return `S.route = '${homeRoute}';
@@ -383,6 +434,7 @@ A.signout = async () => {
     toast('bad', L3(['Logout gagal', 'Logout failed', 'فشل تسجيل الخروج']), L3(['Koneksi ke server tidak tersedia.', 'The server connection is unavailable.', 'الخادم غير متاح.']));
   }
 };
+${role === 'affiliate' ? AFFILIATE_TOGGLE_SCRIPT : ''}
 ${simulationLockScript(role)}
 ${actionGuard}
 const portalAccountObserver = new MutationObserver(() => {
@@ -431,7 +483,7 @@ async function checkSegalokaPortalSession() {
 // pembacaan ulang. Portal tanpa endpoint baca tidak memuat data apa pun.
 const portalDataSource = ${JSON.stringify(PORTAL_DATA_SOURCES[role] || null)};
 const portalSync = window.__SEGALOKA_PORTAL_SYNC__ = {
-  source: portalDataSource ? '/bff/sync/events' : null,
+  source: portalDataSource ? portalDataSource.stream : null,
   connected: false,
   lastEventId: null,
   loads: 0,
@@ -469,19 +521,37 @@ function portalBookingFromApi(item) {
   return booking;
 }
 
+function portalReferralFromApi(item) {
+  return {
+    id: item.id,
+    aff: portalTenant.id,
+    travel: item.travelOrganizationId,
+    travelName: item.travelName || '',
+    url: item.referralCode || '',
+    state: item.status,
+    created: portalDateValue(item.createdAt)
+  };
+}
+
 async function loadSegalokaPortalData() {
   if (!portalDataSource) return;
   try {
-    const response = await fetch(portalDataSource, { credentials: 'same-origin', cache: 'no-store' });
+    const response = await fetch(portalDataSource.url, { credentials: 'same-origin', cache: 'no-store' });
     if (response.status === 401 || response.status === 403) {
       window.location.replace('/');
       return;
     }
     if (!response.ok) throw new Error('PORTAL_DATA_UNAVAILABLE');
     const data = await response.json();
-    if (!Array.isArray(data.bookings)) throw new Error('INVALID_PORTAL_DATA');
-    BOOKINGS.length = 0;
-    data.bookings.forEach(item => BOOKINGS.push(portalBookingFromApi(item)));
+    if (portalDataSource.kind === 'referrals') {
+      if (!Array.isArray(data.items)) throw new Error('INVALID_PORTAL_DATA');
+      REFLINKS.length = 0;
+      data.items.forEach(item => REFLINKS.push(portalReferralFromApi(item)));
+    } else {
+      if (!Array.isArray(data.bookings)) throw new Error('INVALID_PORTAL_DATA');
+      BOOKINGS.length = 0;
+      data.bookings.forEach(item => BOOKINGS.push(portalBookingFromApi(item)));
+    }
     portalSync.loads += 1;
     portalSync.lastLoadedAt = Date.now();
     portalSync.lastError = null;
@@ -637,6 +707,12 @@ export function renderV7PortalSource(source, context) {
 
   for (const [label, search, replacement, count] of PORTAL_BOOKING_PATCHES) {
     html = patcher.replaceExpectedCount(html, search, replacement, count, label);
+  }
+
+  if (role === 'affiliate') {
+    for (const [label, search, replacement] of AFFILIATE_REFERRAL_PATCHES) {
+      html = patcher.replaceExactlyOnce(html, search, replacement, label);
+    }
   }
 
   html = patcher.replaceExactlyOnce(
