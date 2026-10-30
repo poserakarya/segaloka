@@ -68,6 +68,7 @@ const allowedCorsOrigins = new Set([
   'https://segaloka.com',
   'https://www.segaloka.com',
   'https://dashboard.segaloka.com',
+  'https://admin.segaloka.com',
   'https://dev.segaloka.com',
   'https://dev.dashboard.segaloka.com'
 ]);
