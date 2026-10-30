@@ -15,6 +15,12 @@ if (!Number.isInteger(requestedPort) || requestedPort < 1024 || requestedPort > 
 }
 const port = requestedPort;
 const apiOrigin = process.env.API_ORIGIN || 'http://127.0.0.1:4192';
+if (process.env.NODE_ENV === 'production' && !process.env.API_ORIGIN) {
+  throw new Error('API_ORIGIN_REQUIRED_IN_PRODUCTION');
+}
+if (process.env.NODE_ENV === 'production' && new URL(apiOrigin).protocol !== 'https:') {
+  throw new Error('API_ORIGIN_MUST_USE_HTTPS');
+}
 const isolatedTestConfig = process.env.SEGALOKA_CONTROL_TEST === '1';
 const localDiagnostics = process.env.SEGALOKA_LOCAL_DIAGNOSTICS === '1' &&
   process.env.NODE_ENV !== 'production';
