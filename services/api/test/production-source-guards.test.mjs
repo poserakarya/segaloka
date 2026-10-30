@@ -76,3 +76,9 @@ test('Control Center frontend and BFF share configured port', () => {
   assert.match(server, /SEGALOKA_BFF_PORT/);
   assert.doesNotMatch(server, /SEGALOKA_CONTROL_CENTER_BFF_PORT/);
 });
+
+test('API requires explicit production bind host and valid port', () => {
+  const server = read('services/api/src/server.js');
+  assert.match(server, /API_HOST_REQUIRED_IN_PRODUCTION/);
+  assert.match(server, /INVALID_API_PORT/);
+});
