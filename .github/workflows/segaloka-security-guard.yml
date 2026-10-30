@@ -1,0 +1,33 @@
+name: Segaloka API security guard
+on:
+  pull_request:
+    paths:
+      - 'services/api/**'
+      - 'apps/control-center/**'
+      - '.github/workflows/segaloka-security-guard.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  syntax-and-production-guards:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout reviewed source
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - name: Set up Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: '24'
+      - name: Check syntax without accessing a database
+        run: |
+          node --check services/api/src/server.js
+          node --check services/api/src/control-center/travel-demo-routes.js
+          node --check services/api/src/auth/dashboard-handoff-route.js
+          node --check apps/control-center/bff.mjs
+          node --check apps/control-center/server.mjs
+      - name: Enforce no demo writer and fail-closed handoff
+        run: node --test services/api/test/production-source-guards.test.mjs
