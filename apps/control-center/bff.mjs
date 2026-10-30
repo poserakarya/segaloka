@@ -935,18 +935,7 @@ const server = http.createServer(async (req, res) => {
       if (result.status !== 200) return json(res, [400, 401, 403, 404, 409, 422].includes(result.status) ? result.status : 503, { code: result.data?.code || 'CONTROL_CENTER_BRANCH_UNAVAILABLE' });
       return json(res, 200, result.data);
     }
-    if (req.method === 'POST' && path === '/bff/control-center/test-data/travel-demo') {
-      const session = await getSession(req);
-      if (!session?.accessToken) return json(res, 401, { authenticated: false, code: 'AUTH_REQUIRED' });
-      const accessResponse = await fetch(`http://${host}:${port}/bff/dashboard/access`, { headers: { cookie: req.headers.cookie || '' }, signal: AbortSignal.timeout(10000) });
-      if (accessResponse.status !== 200) return json(res, accessResponse.status === 403 ? 403 : 503, { code: accessResponse.status === 403 ? 'CONTROL_CENTER_ACCESS_DENIED' : 'DASHBOARD_ACCESS_UNAVAILABLE' });
-      const access = await accessResponse.json();
-      const allowed = access.authenticated === true && access.workspaceSwitching === false && access.dashboards?.some(item => item.dashboard === 'control-center' && item.role === 'super_admin' && item.organizationId === null);
-      if (!allowed) return json(res, 403, { code: 'CONTROL_CENTER_ACCESS_DENIED' });
-      const result = await apiRequest('POST', '/control-center/test-data/travel-demo', (await readBody(req)).toString('utf8'), session.accessToken);
-      if (![200, 201].includes(result.status)) return json(res, [400, 401, 403, 409, 422].includes(result.status) ? result.status : 503, { code: result.data?.code || 'TRAVEL_DEMO_UNAVAILABLE' });
-      return json(res, result.status, result.data);
-    }
+
     if (req.method === 'GET' && path === '/bff/control-center/vendors') {
       const session = await getSession(req);
       if (!session?.accessToken) return json(res, 401, { authenticated: false, code: 'AUTH_REQUIRED' });
