@@ -52,37 +52,12 @@ const root = resolve(
 );
 
 function loadIngressSecret() {
-  if (isolatedTestConfig) {
-    const secret = process.env.CONTROL_TEST_INGRESS_IDENTITY_SECRET;
-
-    if (typeof secret !== 'string' || secret.length < 32) {
-      throw new Error('CONTROL_TEST_INGRESS_SECRET_NOT_CONFIGURED');
-    }
-
-    return secret;
+  const secret = isolatedTestConfig
+    ? process.env.CONTROL_TEST_INGRESS_IDENTITY_SECRET
+    : process.env.INGRESS_IDENTITY_SECRET;
+  if (typeof secret !== 'string' || secret.length < 32) {
+    throw new Error('INGRESS_SECRET_NOT_CONFIGURED');
   }
-
-  const envPath = resolve(root, 'services/api/.env');
-  const text = readFileSync(envPath, 'utf8');
-
-  const match = text.match(
-    /^INGRESS_IDENTITY_SECRET\s*=\s*(.+)$/m
-  );
-
-  if (!match) {
-    throw new Error('INGRESS_SECRET_NOT_FOUND');
-  }
-
-  const value = match[1].trim();
-
-  const secret = (
-    value.startsWith('"') && value.endsWith('"')
-  ) ? value.slice(1, -1) : value;
-
-  if (secret.length < 32) {
-    throw new Error('INVALID_INGRESS_SECRET');
-  }
-
   return secret;
 }
 
@@ -91,27 +66,6 @@ const requireApi = createRequire(
   new URL('../../services/api/package.json', import.meta.url)
 );
 const { Pool } = requireApi('pg');
-
-function readEnvFile(path) {
-  const values = {};
-  const content = readFileSync(path, 'utf8');
-
-  for (const line of content.split(/\r?\n/)) {
-    const match = line.match(/^([A-Z][A-Z0-9_]*)\s*=\s*(.*)$/);
-    if (!match) continue;
-
-    let value = match[2].trim();
-    if (
-      (value.startsWith('"') && value.endsWith('"')) ||
-      (value.startsWith("'") && value.endsWith("'"))
-    ) {
-      value = value.slice(1, -1);
-    }
-    values[match[1]] = value;
-  }
-
-  return values;
-}
 
 const dbConfig = isolatedTestConfig
   ? {
@@ -122,13 +76,19 @@ const dbConfig = isolatedTestConfig
       DB_PASSWORD: process.env.CONTROL_TEST_DB_PASSWORD,
       DB_SSL: process.env.CONTROL_TEST_DB_SSL || 'false'
     }
-  : readEnvFile(resolve(root, 'services/api/.env'));
-const bffConfig = isolatedTestConfig
-  ? {
-      BFF_SESSION_ENCRYPTION_KEY:
-        process.env.CONTROL_TEST_BFF_SESSION_ENCRYPTION_KEY
-    }
-  : readEnvFile(resolve(root, 'apps/travel-dashboard/server/.env'));
+  : {
+      DB_HOST: process.env.DB_HOST,
+      DB_PORT: process.env.DB_PORT,
+      DB_NAME: process.env.DB_NAME,
+      DB_USER: process.env.DB_USER,
+      DB_PASSWORD: process.env.DB_PASSWORD,
+      DB_SSL: process.env.DB_SSL || 'true'
+    };
+const bffConfig = {
+  BFF_SESSION_ENCRYPTION_KEY: isolatedTestConfig
+    ? process.env.CONTROL_TEST_BFF_SESSION_ENCRYPTION_KEY
+    : process.env.BFF_SESSION_ENCRYPTION_KEY
+};
 
 if (isolatedTestConfig) {
   for (const key of [
@@ -143,11 +103,7 @@ if (isolatedTestConfig) {
 
 const pool = new Pool({
   host: dbConfig.DB_HOST,
-  port: Number(
-    isolatedTestConfig
-      ? dbConfig.DB_PORT
-      : (process.env.CONTROL_CENTER_DB_PORT || '5434')
-  ),
+  port: Number(dbConfig.DB_PORT || '5432'),
   database: dbConfig.DB_NAME,
   user: dbConfig.DB_USER,
   password: dbConfig.DB_PASSWORD,
