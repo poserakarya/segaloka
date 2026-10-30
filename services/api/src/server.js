@@ -47,6 +47,13 @@ const { Pool } = pg;
 
 const host = process.env.API_HOST ?? '127.0.0.1';
 const port = Number(process.env.API_PORT ?? 4190);
+if (!Number.isInteger(port) || port < 1 || port > 65535) {
+  throw new Error('INVALID_API_PORT');
+}
+if (process.env.NODE_ENV === 'production' && !process.env.API_HOST) {
+  throw new Error('API_HOST_REQUIRED_IN_PRODUCTION');
+}
+
 
 const app = Fastify({
   logger: {
