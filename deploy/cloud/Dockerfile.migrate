@@ -1,0 +1,11 @@
+# Runner migrasi (database/migrate.mjs). Default hanya menampilkan status;
+# penerapan wajib: apply --confirm-database <DB_NAME>.
+FROM node:24-alpine
+WORKDIR /app
+COPY services/api/package.json services/api/pnpm-lock.yaml services/api/pnpm-workspace.yaml services/api/
+RUN cd services/api && corepack enable && corepack prepare pnpm@10.28.0 --activate && \
+    pnpm install --prod --frozen-lockfile
+COPY database database
+USER node
+ENTRYPOINT ["node", "database/migrate.mjs"]
+CMD ["status"]

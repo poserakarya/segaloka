@@ -3,7 +3,7 @@ import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 
 import { resolveAccountPreferences } from '../shared/runtime/account-preferences.mjs';
-import { allowedPublicOrigins } from '../shared/runtime/v7-portal-entry.mjs';
+import { allowedPublicOrigins, entryBindHost } from '../shared/runtime/v7-portal-entry.mjs';
 import { FONT_STYLESHEET_LINK } from '../shared/runtime/shared-fonts.mjs';
 import {
   applyFormatPatches,
@@ -282,7 +282,7 @@ function proxyBff(req, res) {
   req.pipe(upstream);
 }
 
-const HOST = '127.0.0.1';
+const HOST = entryBindHost();
 const requestedPort = Number(process.env.SEGALOKA_CONTROL_CENTER_PORT || 4202);
 if (!Number.isInteger(requestedPort) || requestedPort < 1024 || requestedPort > 65535) {
   throw new Error('Invalid SEGALOKA_CONTROL_CENTER_PORT');

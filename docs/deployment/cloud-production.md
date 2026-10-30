@@ -4,10 +4,14 @@ This package is a deployment template only. It does not deploy anything and does
 
 ## Files
 
-- `deploy/cloud/compose.production.yaml`: isolated production services.
+> Diperbarui: konfigurasi lengkap (API, ketujuh Dashboard V7, secret berkas, runner migrasi) dijelaskan di `deploy/cloud/README.md`. Bagian di bawah tetap berlaku untuk backup, restore, rollback, dan keamanan host.
+
+- `deploy/cloud/compose.production.yaml`: isolated production services (postgres, api, dashboards, nginx, migrate profile).
 - `deploy/cloud/Dockerfile.api`: production API image using the existing API source.
-- `deploy/cloud/nginx.production.conf`: HTTPS reverse proxy for `api.segaloka.com`.
-- `deploy/cloud/production.env.example`: variable names only; keep the real file outside Git.
+- `deploy/cloud/Dockerfile.dashboards` + `dashboards-supervisor.mjs`: the seven existing V7 dashboards (entry + BFF).
+- `deploy/cloud/Dockerfile.migrate` + `database/migrate.mjs`: explicit, idempotent, non-destructive migration runner.
+- `deploy/cloud/nginx/segaloka.conf.template`: HTTPS reverse proxy for the API host and the seven dashboard hosts.
+- `deploy/cloud/production.env.example`: non-secret variables only; secrets are files under `deploy/cloud/secrets/`.
 - `deploy/cloud/backup-postgres.sh` and `restore-postgres.sh`: operator-run backup/restore procedures.
 
 ## VPS requirements
@@ -26,7 +30,7 @@ This package is a deployment template only. It does not deploy anything and does
 4. Review the Compose image tags and resource limits.
 5. Run `docker compose -f deploy/cloud/compose.production.yaml config`.
 6. Start only after firewall, DNS, backup destination, and restore rehearsal are approved.
-7. Apply database migrations through the existing controlled migration process; this template does not run migrations.
+7. Apply database migrations explicitly with `database/migrate.mjs` (see `deploy/cloud/README.md`); services never run migrations on start.
 8. Check `https://api.segaloka.com/health` and service logs.
 
 ## Backup and restore

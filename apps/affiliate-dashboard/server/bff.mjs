@@ -5,7 +5,7 @@ import { createBffLoginContract } from '../../shared/runtime/bff-login-contract.
 import { serveV7PortalUi } from '../../shared/runtime/v7-portal-source.mjs';
 import { serveSharedFont } from '../../shared/runtime/shared-fonts.mjs';
 import { proxySyncStream } from '../../shared/runtime/bff-sse-proxy.mjs';
-import { readFileSync } from 'node:fs';
+import { createConfigReader, readDbConfig, readIngressSecret } from '../../shared/runtime/service-config.mjs';
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -19,64 +19,22 @@ const root = resolve(
   fileURLToPath(new URL('../../../', import.meta.url))
 );
 
-function loadIngressSecret() {
-  const envPath = resolve(root, 'services/api/.env');
-  const text = readFileSync(envPath, 'utf8');
+// Konfigurasi dari environment / <NAMA>_FILE (secret manager), dengan
+// fallback ke berkas .env lokal yang sudah ada.
+const readConfig = createConfigReader();
+const apiEnvFile = resolve(root, 'services/api/.env');
+const appEnvFile = resolve(root, 'apps/affiliate-dashboard/server/.env');
 
-  const match = text.match(
-    /^INGRESS_IDENTITY_SECRET\s*=\s*(.+)$/m
-  );
-
-  if (!match) {
-    throw new Error('INGRESS_SECRET_NOT_FOUND');
-  }
-
-  const value = match[1].trim();
-
-  const secret = (
-    value.startsWith('"') && value.endsWith('"')
-  ) ? value.slice(1, -1) : value;
-
-  if (secret.length < 32) {
-    throw new Error('INVALID_INGRESS_SECRET');
-  }
-
-  return secret;
-}
-
-const ingressSecret = loadIngressSecret();
+const ingressSecret = readIngressSecret(readConfig, apiEnvFile);
 const requireApi = createRequire(
   new URL('../../../services/api/package.json', import.meta.url)
 );
 const { Pool } = requireApi('pg');
 
-function readEnvFile(path) {
-  const values = {};
-  const content = readFileSync(path, 'utf8');
-
-  for (const line of content.split(/\r?\n/)) {
-    const match = line.match(/^([A-Z][A-Z0-9_]*)\s*=\s*(.*)$/);
-    if (!match) continue;
-
-    let value = match[2].trim();
-    if (
-      (value.startsWith('"') && value.endsWith('"')) ||
-      (value.startsWith("'") && value.endsWith("'"))
-    ) {
-      value = value.slice(1, -1);
-    }
-    values[match[1]] = value;
-  }
-
-  return values;
-}
-
-const dbConfig = readEnvFile(
-  resolve(root, 'services/api/.env')
-);
-const bffConfig = readEnvFile(
-  resolve(root, 'apps/affiliate-dashboard/server/.env')
-);
+const dbConfig = readDbConfig(readConfig, apiEnvFile);
+const bffConfig = {
+  BFF_SESSION_ENCRYPTION_KEY: readConfig('BFF_SESSION_ENCRYPTION_KEY', appEnvFile)
+};
 
 const pool = new Pool({
   host: dbConfig.DB_HOST,

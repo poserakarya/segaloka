@@ -2,8 +2,11 @@ FROM node:24-alpine
 
 WORKDIR /app
 
-COPY services/api/package.json services/api/pnpm-lock.yaml ./
-RUN corepack enable && pnpm install --prod --frozen-lockfile
+# pnpm-workspace.yaml memuat allowBuilds (argon2): tanpa berkas ini binding
+# native argon2 tidak terpasang dan login password gagal.
+COPY services/api/package.json services/api/pnpm-lock.yaml services/api/pnpm-workspace.yaml ./
+RUN corepack enable && corepack prepare pnpm@10.28.0 --activate && \
+    pnpm install --prod --frozen-lockfile
 
 COPY services/api/src ./src
 

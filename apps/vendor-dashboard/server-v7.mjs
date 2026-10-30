@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
 
-import { createPortalEntryServer } from '../shared/runtime/v7-portal-entry.mjs';
+import { createPortalEntryServer, entryBindHost } from '../shared/runtime/v7-portal-entry.mjs';
 
 const config = JSON.parse(
   readFileSync(new URL('./v7-runtime.json', import.meta.url), 'utf8').replace(/^\uFEFF/, '')
@@ -15,6 +15,6 @@ if (config.role !== 'vendor') {
 const role = 'vendor';
 const port = Number(config.port);
 
-createPortalEntryServer({ role, port, bffPort: 4211 }).listen(port, '127.0.0.1', () => {
-  console.log(`Segaloka ${role} entry: http://127.0.0.1:${port}`);
+createPortalEntryServer({ role, port, bffPort: 4211 }).listen(port, entryBindHost(), () => {
+  console.log(`Segaloka ${role} entry: http://${entryBindHost()}:${port}`);
 });

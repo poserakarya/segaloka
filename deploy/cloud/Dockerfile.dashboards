@@ -1,0 +1,30 @@
+# Ketujuh Dashboard V7 yang sudah ada (entry server + BFF) dalam satu image.
+# UI tidak dibangun ulang: V7 asli disajikan dari apps/*/original-v7 dan
+# halaman login Travel dibangun dari src yang sama (vite build).
+
+FROM node:24-alpine AS travel-build
+WORKDIR /build/apps/travel-dashboard
+COPY apps/travel-dashboard/package.json apps/travel-dashboard/pnpm-lock.yaml apps/travel-dashboard/pnpm-workspace.yaml ./
+RUN corepack enable && corepack prepare pnpm@10.28.0 --activate && \
+    pnpm install --frozen-lockfile
+COPY apps/travel-dashboard/index.html apps/travel-dashboard/vite.config.ts apps/travel-dashboard/tsconfig.json apps/travel-dashboard/tsconfig.app.json ./
+COPY apps/travel-dashboard/src ./src
+RUN pnpm build
+
+FROM node:24-alpine
+WORKDIR /app
+ENV NODE_ENV=production SEGALOKA_ENTRY_HOST=0.0.0.0
+
+# BFF memakai pg dan modul tanda tangan ingress dari services/api.
+COPY services/api/package.json services/api/pnpm-lock.yaml services/api/pnpm-workspace.yaml services/api/
+RUN cd services/api && corepack enable && corepack prepare pnpm@10.28.0 --activate && \
+    pnpm install --prod --frozen-lockfile
+COPY services/api/src services/api/src
+COPY apps apps
+COPY --from=travel-build /build/apps/travel-dashboard/dist apps/travel-dashboard/dist
+COPY deploy/cloud/dashboards-supervisor.mjs deploy/cloud/dashboards-supervisor.mjs
+
+USER node
+# Entry server: Control Center, Travel, Vendor, Affiliate, Agen, Mitra, Traveler.
+EXPOSE 4202 4200 4204 4212 4216 4214 4210
+CMD ["node", "deploy/cloud/dashboards-supervisor.mjs"]

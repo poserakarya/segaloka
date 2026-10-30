@@ -1,0 +1,26 @@
+# Konteks build image cloud: jangan pernah membawa secret, data lokal, atau
+# dependensi hasil instal lokal ke dalam image.
+.git
+**/.env
+**/.env.*
+!**/.env.example
+**/*.pem
+**/*.key
+secrets/
+backups/
+storage/
+logs/
+**/node_modules
+**/dist
+apps/*/dist-v7
+**/*.bak
+**/*.bak-*
+**/*.tsbuildinfo
+projects/
+mobile/
+tests/
+tools/
+docs/
+deploy/cloud/tls
+deploy/cloud/secrets
+deploy/cloud/production.env

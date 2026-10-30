@@ -5,7 +5,7 @@ import { createSessionStore } from './session-store.mjs';
 import { classifyLoginResponse } from '../shared/runtime/bff-login-contract.mjs';
 import { serveSharedFont } from '../shared/runtime/shared-fonts.mjs';
 import { proxySyncStream } from '../shared/runtime/bff-sse-proxy.mjs';
-import { readFileSync } from 'node:fs';
+import { createConfigReader, readDbConfig, readIngressSecret } from '../shared/runtime/service-config.mjs';
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -65,28 +65,7 @@ function loadIngressSecret() {
     return secret;
   }
 
-  const envPath = resolve(root, 'services/api/.env');
-  const text = readFileSync(envPath, 'utf8');
-
-  const match = text.match(
-    /^INGRESS_IDENTITY_SECRET\s*=\s*(.+)$/m
-  );
-
-  if (!match) {
-    throw new Error('INGRESS_SECRET_NOT_FOUND');
-  }
-
-  const value = match[1].trim();
-
-  const secret = (
-    value.startsWith('"') && value.endsWith('"')
-  ) ? value.slice(1, -1) : value;
-
-  if (secret.length < 32) {
-    throw new Error('INVALID_INGRESS_SECRET');
-  }
-
-  return secret;
+  return readIngressSecret(createConfigReader(), resolve(root, 'services/api/.env'));
 }
 
 const ingressSecret = loadIngressSecret();
@@ -95,26 +74,7 @@ const requireApi = createRequire(
 );
 const { Pool } = requireApi('pg');
 
-function readEnvFile(path) {
-  const values = {};
-  const content = readFileSync(path, 'utf8');
-
-  for (const line of content.split(/\r?\n/)) {
-    const match = line.match(/^([A-Z][A-Z0-9_]*)\s*=\s*(.*)$/);
-    if (!match) continue;
-
-    let value = match[2].trim();
-    if (
-      (value.startsWith('"') && value.endsWith('"')) ||
-      (value.startsWith("'") && value.endsWith("'"))
-    ) {
-      value = value.slice(1, -1);
-    }
-    values[match[1]] = value;
-  }
-
-  return values;
-}
+const readConfig = createConfigReader();
 
 const dbConfig = isolatedTestConfig
   ? {
@@ -125,13 +85,18 @@ const dbConfig = isolatedTestConfig
       DB_PASSWORD: process.env.CONTROL_TEST_DB_PASSWORD,
       DB_SSL: process.env.CONTROL_TEST_DB_SSL || 'false'
     }
-  : readEnvFile(resolve(root, 'services/api/.env'));
+  : readDbConfig(readConfig, resolve(root, 'services/api/.env'));
 const bffConfig = isolatedTestConfig
   ? {
       BFF_SESSION_ENCRYPTION_KEY:
         process.env.CONTROL_TEST_BFF_SESSION_ENCRYPTION_KEY
     }
-  : readEnvFile(resolve(root, 'apps/travel-dashboard/server/.env'));
+  : {
+      BFF_SESSION_ENCRYPTION_KEY: readConfig(
+        'BFF_SESSION_ENCRYPTION_KEY',
+        resolve(root, 'apps/travel-dashboard/server/.env')
+      )
+    };
 
 if (isolatedTestConfig) {
   for (const key of [

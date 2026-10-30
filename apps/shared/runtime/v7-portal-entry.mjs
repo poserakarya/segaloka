@@ -18,6 +18,17 @@ export function localEntryOrigin(port) {
   return `http://127.0.0.1:${port}`;
 }
 
+// Alamat bind entry server. Default loopback; di container yang berada di
+// belakang reverse proxy dapat diset 0.0.0.0 lewat SEGALOKA_ENTRY_HOST.
+// BFF tetap hanya mendengarkan 127.0.0.1.
+export function entryBindHost(env = process.env) {
+  const host = env.SEGALOKA_ENTRY_HOST || '127.0.0.1';
+  if (!/^(?:\d{1,3}\.){3}\d{1,3}$/.test(host) && host !== '::') {
+    throw new Error('INVALID_SEGALOKA_ENTRY_HOST');
+  }
+  return host;
+}
+
 export function allowedPublicOrigins(port, env = process.env) {
   const configured = (env.SEGALOKA_PUBLIC_ORIGIN || '')
     .split(',')
@@ -43,17 +54,11 @@ function sendJson(res, status, data) {
   res.end(JSON.stringify(data));
 }
 
-export function createPortalEntryServer({ role, port, bffPort, env = process.env }) {
-  if (!V7_PORTALS[role]) throw new Error('INVALID_V7_PORTAL_ROLE');
-  if (!existsSync(V7_ORIGINAL_SOURCE_URL)) {
-    throw new Error('V7_ORIGINAL_SOURCE_NOT_FOUND');
-  }
-
-  const styleBlock = v7StyleBlock();
-  const origins = allowedPublicOrigins(port, env);
-  const forwardedOrigin = localEntryOrigin(port);
-
-  function proxyBff(req, res) {
+// Proxy /bff/* ke BFF lokal dengan pemeriksaan Origin: Origin publik yang
+// diizinkan dipetakan ke origin lokal (forwardedOrigin) sebelum diteruskan.
+// Dipakai entry portal dan server frontend Travel production.
+export function createBffProxy({ bffPort, origins, forwardedOrigin }) {
+  return function proxyBff(req, res) {
     const origin = req.headers.origin;
 
     if (
@@ -95,7 +100,20 @@ export function createPortalEntryServer({ role, port, bffPort, env = process.env
     });
     res.on('close', () => upstream.destroy());
     req.pipe(upstream);
+  };
+}
+
+export function createPortalEntryServer({ role, port, bffPort, env = process.env }) {
+  if (!V7_PORTALS[role]) throw new Error('INVALID_V7_PORTAL_ROLE');
+  if (!existsSync(V7_ORIGINAL_SOURCE_URL)) {
+    throw new Error('V7_ORIGINAL_SOURCE_NOT_FOUND');
   }
+
+  const styleBlock = v7StyleBlock();
+  const origins = allowedPublicOrigins(port, env);
+  const forwardedOrigin = localEntryOrigin(port);
+
+  const proxyBff = createBffProxy({ bffPort, origins, forwardedOrigin });
 
   return http.createServer((req, res) => {
     let path;

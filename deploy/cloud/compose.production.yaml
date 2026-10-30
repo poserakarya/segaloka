@@ -1,16 +1,38 @@
 name: segaloka-production
 
+# Satu PostgreSQL utama, satu API Fastify bersama, ketujuh Dashboard V7
+# (entry + BFF), dan nginx sebagai satu-satunya titik masuk publik.
+# Secret dibaca dari berkas di ./secrets/ (Docker secrets; tidak masuk Git)
+# lewat variabel <NAMA>_FILE. Konfigurasi non-secret ada di production.env.
+# Lihat deploy/cloud/README.md sebelum menjalankan.
+
+x-api-secrets: &api-secrets
+  - db_password
+  - ingress_identity_secret
+  - auth_ip_hash_secret
+  - auth_otp_hash_secret
+  - certificate_encryption_key
+  - oauth_config_encryption_key
+  - totp_encryption_key
+  - password_reset_otp_secret
+  - dashboard_handoff_secret
+  - resend_api_key
+  - resend_webhook_signing_secret
+
 services:
   postgres:
     image: postgres:17-alpine
+    container_name: segaloka-production-postgres
     restart: unless-stopped
     env_file:
       - ./production.env
     environment:
       POSTGRES_DB: ${POSTGRES_DB:?POSTGRES_DB is required}
       POSTGRES_USER: ${POSTGRES_USER:?POSTGRES_USER is required}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}
+      POSTGRES_PASSWORD_FILE: /run/secrets/db_password
       PGDATA: /var/lib/postgresql/data/pgdata
+    secrets:
+      - db_password
     volumes:
       - segaloka-postgres:/var/lib/postgresql/data
     healthcheck:
@@ -19,6 +41,29 @@ services:
       timeout: 5s
       retries: 6
       start_period: 30s
+    networks:
+      - backend
+
+  # Migrasi dijalankan manual dan eksplisit, tidak otomatis saat start:
+  #   docker compose --profile migrate run --rm migrate status
+  #   docker compose --profile migrate run --rm migrate apply --confirm-database <POSTGRES_DB>
+  migrate:
+    profiles: ["migrate"]
+    build:
+      context: ../..
+      dockerfile: deploy/cloud/Dockerfile.migrate
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: ${POSTGRES_DB:?POSTGRES_DB is required}
+      DB_USER: ${POSTGRES_USER:?POSTGRES_USER is required}
+      DB_PASSWORD_FILE: /run/secrets/db_password
+      DB_SSL: "false"
+    secrets:
+      - db_password
+    depends_on:
+      postgres:
+        condition: service_healthy
     networks:
       - backend
 
@@ -37,7 +82,21 @@ services:
       DB_PORT: 5432
       DB_NAME: ${POSTGRES_DB:?POSTGRES_DB is required}
       DB_USER: ${POSTGRES_USER:?POSTGRES_USER is required}
-      DB_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}
+      DB_PASSWORD_FILE: /run/secrets/db_password
+      INGRESS_IDENTITY_SECRET_FILE: /run/secrets/ingress_identity_secret
+      AUTH_IP_HASH_SECRET_FILE: /run/secrets/auth_ip_hash_secret
+      AUTH_OTP_HASH_SECRET_FILE: /run/secrets/auth_otp_hash_secret
+      CERTIFICATE_ENCRYPTION_KEY_FILE: /run/secrets/certificate_encryption_key
+      OAUTH_CONFIG_ENCRYPTION_KEY_FILE: /run/secrets/oauth_config_encryption_key
+      SEGALOKA_TOTP_ENCRYPTION_KEY_FILE: /run/secrets/totp_encryption_key
+      PASSWORD_RESET_OTP_SECRET_FILE: /run/secrets/password_reset_otp_secret
+      DASHBOARD_HANDOFF_SECRET_FILE: /run/secrets/dashboard_handoff_secret
+      RESEND_API_KEY_FILE: /run/secrets/resend_api_key
+      RESEND_WEBHOOK_SIGNING_SECRET_FILE: /run/secrets/resend_webhook_signing_secret
+      SEGALOKA_PRIVATE_STORAGE_ROOT: /var/lib/segaloka/private
+    secrets: *api-secrets
+    volumes:
+      - segaloka-private-storage:/var/lib/segaloka/private
     expose:
       - "4192"
     depends_on:
@@ -53,24 +112,106 @@ services:
       - backend
       - edge
 
+  dashboards:
+    build:
+      context: ../..
+      dockerfile: deploy/cloud/Dockerfile.dashboards
+    restart: unless-stopped
+    env_file:
+      - ./production.env
+    environment:
+      NODE_ENV: production
+      SEGALOKA_ENTRY_HOST: 0.0.0.0
+      API_ORIGIN: http://api:4192
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: ${POSTGRES_DB:?POSTGRES_DB is required}
+      DB_USER: ${POSTGRES_USER:?POSTGRES_USER is required}
+      DB_PASSWORD_FILE: /run/secrets/db_password
+      DB_SSL: "false"
+      INGRESS_IDENTITY_SECRET_FILE: /run/secrets/ingress_identity_secret
+      SEGALOKA_CONTROL_CENTER_BFF_SESSION_ENCRYPTION_KEY_FILE: /run/secrets/control_center_session_key
+      SEGALOKA_TRAVEL_BFF_SESSION_ENCRYPTION_KEY_FILE: /run/secrets/travel_session_key
+      SEGALOKA_VENDOR_BFF_SESSION_ENCRYPTION_KEY_FILE: /run/secrets/vendor_session_key
+      SEGALOKA_AFFILIATE_BFF_SESSION_ENCRYPTION_KEY_FILE: /run/secrets/affiliate_session_key
+      SEGALOKA_AGEN_BFF_SESSION_ENCRYPTION_KEY_FILE: /run/secrets/agen_session_key
+      SEGALOKA_MITRA_BFF_SESSION_ENCRYPTION_KEY_FILE: /run/secrets/mitra_session_key
+      SEGALOKA_TRAVELER_BFF_SESSION_ENCRYPTION_KEY_FILE: /run/secrets/traveler_session_key
+    secrets:
+      - db_password
+      - ingress_identity_secret
+      - control_center_session_key
+      - travel_session_key
+      - vendor_session_key
+      - affiliate_session_key
+      - agen_session_key
+      - mitra_session_key
+      - traveler_session_key
+    expose:
+      - "4202"
+      - "4200"
+      - "4204"
+      - "4212"
+      - "4216"
+      - "4214"
+      - "4210"
+    depends_on:
+      api:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "node", "-e", "Promise.all([4202,4200,4204,4212,4216,4214,4210].map(p => fetch('http://127.0.0.1:' + p + '/health').then(r => { if (!r.ok) throw 0 }))).catch(() => process.exit(1))"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    networks:
+      - backend
+      - edge
+
   nginx:
     image: nginx:1.27-alpine
     restart: unless-stopped
+    env_file:
+      - ./production.env
     ports:
       - "80:80"
       - "443:443"
     volumes:
-      - ./nginx.production.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./nginx:/etc/nginx/templates:ro
       - ./tls:/etc/nginx/tls:ro
     depends_on:
       api:
         condition: service_healthy
+      dashboards:
+        condition: service_healthy
     networks:
       - edge
+
+secrets:
+  db_password: { file: ./secrets/db_password }
+  ingress_identity_secret: { file: ./secrets/ingress_identity_secret }
+  auth_ip_hash_secret: { file: ./secrets/auth_ip_hash_secret }
+  auth_otp_hash_secret: { file: ./secrets/auth_otp_hash_secret }
+  certificate_encryption_key: { file: ./secrets/certificate_encryption_key }
+  oauth_config_encryption_key: { file: ./secrets/oauth_config_encryption_key }
+  totp_encryption_key: { file: ./secrets/totp_encryption_key }
+  password_reset_otp_secret: { file: ./secrets/password_reset_otp_secret }
+  dashboard_handoff_secret: { file: ./secrets/dashboard_handoff_secret }
+  resend_api_key: { file: ./secrets/resend_api_key }
+  resend_webhook_signing_secret: { file: ./secrets/resend_webhook_signing_secret }
+  control_center_session_key: { file: ./secrets/control_center_session_key }
+  travel_session_key: { file: ./secrets/travel_session_key }
+  vendor_session_key: { file: ./secrets/vendor_session_key }
+  affiliate_session_key: { file: ./secrets/affiliate_session_key }
+  agen_session_key: { file: ./secrets/agen_session_key }
+  mitra_session_key: { file: ./secrets/mitra_session_key }
+  traveler_session_key: { file: ./secrets/traveler_session_key }
 
 volumes:
   segaloka-postgres:
     name: segaloka-production-postgres
+  segaloka-private-storage:
+    name: segaloka-production-private-storage
 
 networks:
   backend:

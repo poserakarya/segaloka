@@ -7,6 +7,7 @@ import { classifyLoginResponse } from './login-flow.mjs';
 import { renderTravelV7Source } from './v7-source.mjs';
 import { resolveAccountPreferences } from '../../shared/runtime/account-preferences.mjs';
 import { serveSharedFont } from '../../shared/runtime/shared-fonts.mjs';
+import { createConfigReader, readDbConfig, readIngressSecret } from '../../shared/runtime/service-config.mjs';
 import {
   createReadStream,
   readFileSync,
@@ -42,28 +43,7 @@ function loadIngressSecret() {
     return testSecret;
   }
 
-  const envPath = resolve(root, 'services/api/.env');
-  const text = readFileSync(envPath, 'utf8');
-
-  const match = text.match(
-    /^INGRESS_IDENTITY_SECRET\s*=\s*(.+)$/m
-  );
-
-  if (!match) {
-    throw new Error('INGRESS_SECRET_NOT_FOUND');
-  }
-
-  const value = match[1].trim();
-
-  const secret = (
-    value.startsWith('"') && value.endsWith('"')
-  ) ? value.slice(1, -1) : value;
-
-  if (secret.length < 32) {
-    throw new Error('INVALID_INGRESS_SECRET');
-  }
-
-  return secret;
+  return readIngressSecret(createConfigReader(), resolve(root, 'services/api/.env'));
 }
 
 const ingressSecret = loadIngressSecret();
@@ -72,26 +52,7 @@ const requireApi = createRequire(
 );
 const { Pool } = requireApi('pg');
 
-function readEnvFile(path) {
-  const values = {};
-  const content = readFileSync(path, 'utf8');
-
-  for (const line of content.split(/\r?\n/)) {
-    const match = line.match(/^([A-Z][A-Z0-9_]*)\s*=\s*(.*)$/);
-    if (!match) continue;
-
-    let value = match[2].trim();
-    if (
-      (value.startsWith('"') && value.endsWith('"')) ||
-      (value.startsWith("'") && value.endsWith("'"))
-    ) {
-      value = value.slice(1, -1);
-    }
-    values[match[1]] = value;
-  }
-
-  return values;
-}
+const readConfig = createConfigReader();
 
 const dbConfig = testDatabaseMode
   ? {
@@ -102,15 +63,18 @@ const dbConfig = testDatabaseMode
       DB_PASSWORD: process.env.DB_PASSWORD,
       DB_SSL: process.env.DB_SSL
     }
-  : readEnvFile(resolve(root, 'services/api/.env'));
+  : readDbConfig(readConfig, resolve(root, 'services/api/.env'));
 const bffConfig = testDatabaseMode
   ? {
       BFF_SESSION_ENCRYPTION_KEY:
         process.env.BFF_SESSION_ENCRYPTION_KEY
     }
-  : readEnvFile(
-      resolve(root, 'apps/travel-dashboard/server/.env')
-    );
+  : {
+      BFF_SESSION_ENCRYPTION_KEY: readConfig(
+        'BFF_SESSION_ENCRYPTION_KEY',
+        resolve(root, 'apps/travel-dashboard/server/.env')
+      )
+    };
 
 if (testDatabaseMode) {
   const testDbName = dbConfig.DB_NAME || '';

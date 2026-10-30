@@ -1,3 +1,5 @@
+// Wajib paling awal: memuat secret NAMA_FILE sebelum modul lain membaca env.
+import './config/secret-files.js';
 import { registerControlCenterSummaryRoute } from './control-center/summary-route.js';
 import { registerControlCenterTravelRoutes } from './control-center/travel-routes.js';
 import { registerControlCenterVendorRoutes } from './control-center/vendor-routes.js';
