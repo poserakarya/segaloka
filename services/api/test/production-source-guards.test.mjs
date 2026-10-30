@@ -1,0 +1,34 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+
+const root = fileURLToPath(new URL('../../../', import.meta.url));
+const read = path => readFileSync(new URL(path, 'file://' + root), 'utf8');
+
+test('Travel demo writer is absent from API and BFF', () => {
+  const api = read('services/api/src/control-center/travel-demo-routes.js');
+  const bff = read('apps/control-center/bff.mjs');
+  assert.doesNotMatch(api, /app\.post\(['"]\/control-center\/test-data\/travel-demo/);
+  assert.doesNotMatch(bff, /\/bff\/control-center\/test-data\/travel-demo/);
+  assert.doesNotMatch(api, /INSERT INTO public\.test_data_batches/i);
+});
+
+test('Travel branch operations do not require test-data tables', () => {
+  const api = read('services/api/src/control-center/travel-demo-routes.js');
+  assert.doesNotMatch(api, /test_data_batches|test_data_records|hasTestDataOrganizationColumn/);
+  assert.match(api, /table_name = 'travel_branches'/);
+});
+
+test('Handoff remains fail-closed until browser binding is verified', () => {
+  const route = read('services/api/src/auth/dashboard-handoff-route.js');
+  assert.match(route, /HANDOFF_CHALLENGE_NOT_READY/);
+  assert.match(route, /return reply\.code\(503\)/);
+});
+
+test('Production BFF requires managed secrets and HTTPS upstream', () => {
+  const bff = read('apps/control-center/bff.mjs');
+  assert.match(bff, /process\.env\.INGRESS_IDENTITY_SECRET/);
+  assert.match(bff, /process\.env\.BFF_SESSION_ENCRYPTION_KEY/);
+  assert.match(bff, /API_ORIGIN_MUST_USE_HTTPS/);
+});
