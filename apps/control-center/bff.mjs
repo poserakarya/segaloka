@@ -1,4 +1,5 @@
 import http from 'node:http';
+import https from 'node:https';
 import { randomBytes } from 'node:crypto';
 import { createRequire } from 'node:module';
 import { createSessionStore } from './session-store.mjs';
@@ -218,7 +219,7 @@ async function apiRequest(method, target, data, accessToken) {
   try {
     response = await new Promise((resolve, reject) => {
       const url = new URL(apiOrigin + target);
-      const request = http.request({
+      const request = (url.protocol === 'https:' ? https : http).request({
         protocol: url.protocol,
         hostname: url.hostname,
         port: url.port,
