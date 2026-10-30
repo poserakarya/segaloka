@@ -37,7 +37,7 @@ if [ ! -d "$PREVIEW_HOME/pgdata" ]; then
   "$PG_BIN/initdb" -D "$PREVIEW_HOME/pgdata" -U "$DB_USER" --auth=trust >/dev/null
 fi
 "$PG_BIN/pg_ctl" -D "$PREVIEW_HOME/pgdata" -l "$PREVIEW_HOME/logs/postgres.log" \
-  -o "-p $PG_PORT -k $PREVIEW_HOME -c listen_addresses=127.0.0.1" start
+  -o "-p $PG_PORT -k $PREVIEW_HOME -c listen_addresses=127.0.0.1" start >/dev/null </dev/null
 sleep 2
 PSQL=("$PG_BIN/psql" -h 127.0.0.1 -p "$PG_PORT" -U "$DB_USER" -v ON_ERROR_STOP=1 -q)
 "${PSQL[@]}" -d postgres -c "DROP DATABASE IF EXISTS $DB_NAME" -c "CREATE DATABASE $DB_NAME"
@@ -62,7 +62,7 @@ done
 
 start() {
   local name="$1"; shift
-  (cd "$REPO" && nohup "$@" > "$PREVIEW_HOME/logs/$name.log" 2>&1 &)
+  (cd "$REPO" && nohup "$@" > "$PREVIEW_HOME/logs/$name.log" 2>&1 </dev/null &)
 }
 wait_http() {
   for _ in $(seq 1 300); do

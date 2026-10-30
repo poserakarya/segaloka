@@ -9,6 +9,7 @@
 //
 //   PREVIEW_GATE_USER, PREVIEW_GATE_PASSWORD   kredensial gerbang (wajib)
 //   PREVIEW_GATE_ROUTES   "8101=4902,8102=4900,..." (port publik = port lokal)
+//   PREVIEW_GATE_PUBLIC_SCHEME   https (default; http hanya untuk uji lokal)
 import http from 'node:http';
 import net from 'node:net';
 import { createHash, timingSafeEqual } from 'node:crypto';
@@ -25,6 +26,9 @@ const routes = (process.env.PREVIEW_GATE_ROUTES || '')
 if (!routes.length || routes.some(([a, b]) => !Number.isInteger(a) || !Number.isInteger(b))) {
   throw new Error('PREVIEW_GATE_ROUTES_INVALID');
 }
+
+const scheme = process.env.PREVIEW_GATE_PUBLIC_SCHEME || 'https';
+if (!['https', 'http'].includes(scheme)) throw new Error('PREVIEW_GATE_SCHEME_INVALID');
 
 const digest = value => createHash('sha256').update(value).digest();
 const expected = digest(`${user}:${password}`);
@@ -59,7 +63,7 @@ function authorized(req) {
 
 function publicOrigin(req) {
   const host = String(req.headers['x-forwarded-host'] || req.headers.host || '').split(',')[0].trim();
-  return `https://${host}`;
+  return `${scheme}://${host}`;
 }
 
 function forwardHeaders(req, localOrigin) {
