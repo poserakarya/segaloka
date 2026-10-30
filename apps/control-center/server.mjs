@@ -9,7 +9,7 @@ async function hasControlCenterAccess(req) {
   return new Promise(resolve => {
     const check = http.request({
       hostname: '127.0.0.1',
-      port: Number(process.env.SEGALOKA_CONTROL_CENTER_BFF_PORT || 4203),
+      port: Number(process.env.SEGALOKA_BFF_PORT || 4203),
       method: 'GET',
       path: '/bff/dashboard/access',
       headers: {
@@ -86,7 +86,7 @@ function proxyBff(req, res) {
   }
 
   const headers = { ...req.headers };
-  const bffPort = Number(process.env.SEGALOKA_CONTROL_CENTER_BFF_PORT || 4203);
+  const bffPort = Number(process.env.SEGALOKA_BFF_PORT || 4203);
   headers.host = `127.0.0.1:${bffPort}`;
 
   if (origin !== undefined) {
