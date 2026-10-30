@@ -74,7 +74,12 @@ test('token valid menghasilkan request.auth', async () => {
       assert.match(sql, /s\.revoked_at\s+IS\s+NULL/);
       assert.match(sql, /s\.expires_at\s*>\s*now\(\)/);
       assert.match(sql, /u\.status\s*=\s*'active'/);
-      assert.match(sql, /u\.email_verified_at\s+IS\s+NOT\s+NULL/);
+      // 2FA opsional: sesi akun ber-2FA wajib sudah terverifikasi MFA.
+      assert.match(sql, /u\.two_factor_enabled\s*=\s*false\s+OR\s+s\.mfa_verified_at\s+IS\s+NOT\s+NULL/);
+      // Kebijakan produk: Traveler baru boleh masuk sebelum verifikasi email
+      // (verifikasi dilakukan di dalam dashboard), jadi sesi tidak
+      // mensyaratkan email terverifikasi secara global.
+      assert.doesNotMatch(sql, /email_verified_at/);
 
       assert.deepEqual(params, [TOKEN_HASH]);
     }
@@ -88,7 +93,9 @@ test('token valid menghasilkan request.auth', async () => {
   assert.equal(queryCount, 1);
   assert.deepEqual(request.auth, {
     userId: USER_ID,
-    sessionId: SESSION_ID
+    sessionId: SESSION_ID,
+    // Dipakai stream SSE untuk memeriksa ulang token yang sama.
+    accessTokenHash: TOKEN_HASH
   });
   assert.equal(reply.sent, false);
   assert.equal(reply.headers['cache-control'], 'no-store');
