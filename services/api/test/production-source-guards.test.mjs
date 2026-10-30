@@ -31,3 +31,10 @@ test('Production BFF requires managed secrets and HTTPS upstream', () => {
   assert.match(bff, /process\.env\.BFF_SESSION_ENCRYPTION_KEY/);
   assert.match(bff, /API_ORIGIN_MUST_USE_HTTPS/);
 });
+
+test('Production PostgreSQL and session credentials fail closed', () => {
+  const bff = read('apps/control-center/bff.mjs');
+  assert.match(bff, /CONTROL_CENTER_DB_TLS_REQUIRED/);
+  assert.match(bff, /CONTROL_CENTER_DB_CONFIGURATION_REQUIRED/);
+  assert.match(bff, /CONTROL_CENTER_SESSION_KEY_REQUIRED/);
+});
