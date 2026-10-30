@@ -65,3 +65,8 @@ test('Control Center supervisor uses validated configured service ports', () => 
   assert.match(start, /servicePort\('SEGALOKA_CONTROL_CENTER_PORT', 4202\)/);
   assert.match(start, /CONTROL_CENTER_PORT_COLLISION/);
 });
+
+test('API recognizes existing Control Center production origin', () => {
+  const server = read('services/api/src/server.js');
+  assert.match(server, /'https:\/\/admin\.segaloka\.com'/);
+});
