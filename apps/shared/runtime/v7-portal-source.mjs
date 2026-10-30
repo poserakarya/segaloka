@@ -83,12 +83,15 @@ export function safeJson(value) {
 }
 
 // Gaya yang sudah dipakai Dashboard Travel untuk menyembunyikan pemilih
-// workspace dan tautan Control Center. Tidak ada gaya visual baru.
+// workspace dan tautan Control Center. Di layar sempit, tabel V7 dengan lima
+// kolom atau lebih tidak membungkus isi sel dan bergulir di dalam .tbl-wrap
+// (bukan halaman); struktur tabel tidak berubah.
 export const V7_PORTAL_RESTRICTION_STYLES = [
   '<style>',
   '.wsbtn{display:none!important}',
   '.side-foot>a[href="#/overview"]{display:none!important}',
   '.pent{cursor:default}',
+  '@media (max-width:640px){.tbl-wrap>table.t:has(thead th:nth-child(5)) :is(th,td){white-space:nowrap}}',
   '</style>'
 ].join('');
 
@@ -229,10 +232,39 @@ export const UNKNOWN_STATUS_PATCH = Object.freeze({
   replacement: "function st(key) { if (key == null) return `<span class=\"st neu\">${ic('minus')}${esc(L3(['Belum tersedia', 'Unavailable', 'غير متاح']))}</span>`; const s = STATUS[key] || ['neu', 'circle', key, key, key]; return `<span class=\"st ${s[0]}\">${ic(s[1])}${esc(L3(s.slice(2)))}</span>`; }"
 });
 
-export const TENANT_LABEL_PATCH = Object.freeze({
-  search: "L3(['Masuk sebagai · ganti', 'Signed in as · switch', 'تبديل'])",
-  replacement: "L3(['Organisasi aktif', 'Active organization', 'المؤسسة النشطة'])"
-});
+// Kartu identitas sidebar: label mengikuti jenis tenant sesi (organisasi
+// untuk Travel/Vendor, akun untuk portal perorangan).
+export function tenantLabelPatch(labels = ['Organisasi', 'Organization', 'المؤسسة']) {
+  return Object.freeze({
+    search: "L3(['Masuk sebagai · ganti', 'Signed in as · switch', 'تبديل'])",
+    replacement: `L3(${JSON.stringify(labels)})`
+  });
+}
+
+export const TENANT_LABEL_PATCH = tenantLabelPatch();
+
+// Kartu identitas sidebar tidak lagi berupa tombol dropdown: chevron dan
+// aksi pent-pick (pindah organisasi/tenant) dihapus, gaya .pent V7 tetap.
+export const ORG_CARD_PATCHES = Object.freeze([
+  Object.freeze([
+    'org-card-static',
+    '<button class="pent" data-act="pent-pick" data-ws="${ws}">',
+    '<div class="pent" data-ws="${ws}" aria-label="${esc(x ? x.name : \'\')}">'
+  ]),
+  Object.freeze([
+    'org-card-no-chevron',
+    "${ic('chevD', 'sm')}</button></div>\n  <nav class=\"side-scroll\">",
+    '</div></div>\n  <nav class="side-scroll">'
+  ])
+]);
+
+export function applyOrgCardPatches(source, patcher) {
+  let result = source;
+  for (const [label, search, replacement] of ORG_CARD_PATCHES) {
+    result = patcher.replaceExactlyOnce(result, search, replacement, label);
+  }
+  return result;
+}
 
 export const CLEAR_DEMO_DATA =
   'if (!DEMO) { ENTITY_ARRAYS().forEach(a => { a.length = 0; }); clearFakeStats(); }';
@@ -280,8 +312,32 @@ export const PORTAL_DATA_SOURCES = Object.freeze({
     kind: 'referrals',
     url: '/bff/affiliate/referral-links',
     stream: '/bff/sync/affiliate/events'
-  })
+  }),
+  vendor: Object.freeze({ kind: 'vendor-verification', url: '/bff/vendor/verification', stream: null })
 });
+
+// Keterangan internal di bawah bingkai aplikasi Traveler dihapus dari UI
+// pengguna (bukan fitur, hanya catatan pratinjau V7).
+export const TRAVELER_PREVIEW_CAPTION_PATCH = Object.freeze([
+  'traveler-preview-caption',
+  "<p class=\"muted\" style=\"text-align:center;font-size:12px;margin-top:10px\">${L3(['Pratinjau aplikasi pengguna (mobile) · data tersambung ke database yang sama', 'Traveler app preview (mobile) · connected to the same database', 'معاينة التطبيق'])}</p>",
+  ''
+]);
+
+// Beranda Vendor: status verifikasi dari API (null = belum tersedia, tanpa
+// banner), KPI yang belum memiliki endpoint tampil "—" dengan keterangan.
+export const VENDOR_HOME_PATCHES = Object.freeze([
+  [
+    'vendor-verification-banner',
+    "${v.verif !== 'verified' ? `<div class=\"banner warn\"",
+    "${v.verif && v.verif !== 'verified' ? `<div class=\"banner warn\""
+  ],
+  [
+    'vendor-home-kpis',
+    "${kpiRow([{ k: L3(['Order perlu diproses', 'Orders to process', 'طلبات']), v: fN(O.filter(o => o.state === 'pending').length), icon: 'list' }, { k: 'GMV 30d', v: money(v.gmv30), icon: 'trend' }, { k: L3(['Saldo tersedia', 'Available balance', 'الرصيد']), v: money(v.balance), icon: 'wallet' }, { k: L3(['Produk published', 'Published products', 'منشورة']), v: P.filter(p => p.state === 'published').length + ' / ' + P.length, icon: 'package' }])}",
+    "${kpiRow([{ k: L3(['Order perlu diproses', 'Orders to process', 'طلبات']), v: '—', d: esc(L3(['Belum tersedia dari API', 'Not available from the API yet', 'غير متاح من الواجهة بعد'])), icon: 'list' }, { k: 'GMV 30d', v: '—', d: esc(L3(['Belum tersedia dari API', 'Not available from the API yet', 'غير متاح من الواجهة بعد'])), icon: 'trend' }, { k: L3(['Saldo tersedia', 'Available balance', 'الرصيد']), v: '—', d: esc(L3(['Belum tersedia dari API', 'Not available from the API yet', 'غير متاح من الواجهة بعد'])), icon: 'wallet' }, { k: L3(['Produk published', 'Published products', 'منشورة']), v: '—', d: esc(L3(['Belum tersedia dari API', 'Not available from the API yet', 'غير متاح من الواجهة بعد'])), icon: 'package' }])}"
+  ]
+]);
 
 // Link referral dari API tidak memiliki entitas Travel V7 maupun data klik/
 // konversi; tampilan memakai nama Travel dari API dan "—" untuk metrik.
@@ -543,7 +599,10 @@ async function loadSegalokaPortalData() {
     }
     if (!response.ok) throw new Error('PORTAL_DATA_UNAVAILABLE');
     const data = await response.json();
-    if (portalDataSource.kind === 'referrals') {
+    if (portalDataSource.kind === 'vendor-verification') {
+      const vendorEntity = WS.vendor.list().find(item => item.id === portalTenant.id);
+      if (vendorEntity) vendorEntity.verif = typeof data.verification === 'string' ? data.verification : null;
+    } else if (portalDataSource.kind === 'referrals') {
       if (!Array.isArray(data.items)) throw new Error('INVALID_PORTAL_DATA');
       REFLINKS.length = 0;
       data.items.forEach(item => REFLINKS.push(portalReferralFromApi(item)));
@@ -653,6 +712,8 @@ portalEntity.id = portalTenant.id;
 portalEntity.name = portalTenant.name;
 portalEntity.status = 'active';
 if ('op' in portalEntity) portalEntity.op = 'active';
+// Status verifikasi hanya dari API; sebelum dimuat dianggap belum tersedia.
+if ('verif' in portalEntity) portalEntity.verif = null;
 if ('color' in portalEntity) portalEntity.color = colorFor(portalTenant.name);
 WS[${roleJson}].list().push(portalEntity);
 PENT[${roleJson}] = portalTenant.id;
@@ -698,15 +759,30 @@ export function renderV7PortalSource(source, context) {
     'unknown-status'
   );
 
+  const tenantLabel = tenantLabelPatch(
+    portal.tenantKind === 'organization' ? undefined : portal.account
+  );
   html = patcher.replaceExactlyOnce(
     html,
-    TENANT_LABEL_PATCH.search,
-    TENANT_LABEL_PATCH.replacement,
+    tenantLabel.search,
+    tenantLabel.replacement,
     'tenant-label'
   );
+  html = applyOrgCardPatches(html, patcher);
 
   for (const [label, search, replacement, count] of PORTAL_BOOKING_PATCHES) {
     html = patcher.replaceExpectedCount(html, search, replacement, count, label);
+  }
+
+  if (role === 'traveler') {
+    const [label, search, replacement] = TRAVELER_PREVIEW_CAPTION_PATCH;
+    html = patcher.replaceExactlyOnce(html, search, replacement, label);
+  }
+
+  if (role === 'vendor') {
+    for (const [label, search, replacement] of VENDOR_HOME_PATCHES) {
+      html = patcher.replaceExactlyOnce(html, search, replacement, label);
+    }
   }
 
   if (role === 'affiliate') {

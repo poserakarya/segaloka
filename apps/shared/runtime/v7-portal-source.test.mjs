@@ -125,3 +125,34 @@ test('HTML responses restrict network access to the same origin', () => {
   assert.equal(V7_PORTAL_HTML_HEADERS['Cache-Control'], 'no-store');
   assert.equal(V7_PORTAL_HTML_HEADERS['X-Frame-Options'], 'DENY');
 });
+
+for (const role of Object.keys(V7_PORTALS)) {
+  test(`${role}: identity card is static (no organization/tenant dropdown)`, () => {
+    const html = renderV7PortalSource(source, contextFor(role));
+
+    assert.ok(!html.includes('data-act="pent-pick"'));
+    assert.ok(html.includes('<div class="pent" data-ws="${ws}"'));
+    assert.ok(!html.includes("${ic('chevD', 'sm')}</button></div>\n  <nav class=\"side-scroll\">"));
+    assert.ok(!html.includes('Masuk sebagai · ganti'));
+    const label = V7_PORTALS[role].tenantKind === 'organization'
+      ? ['Organisasi', 'Organization', 'المؤسسة']
+      : V7_PORTALS[role].account;
+    assert.ok(html.includes(`L3(${JSON.stringify(label)})`));
+    assert.ok(html.includes('.tbl-wrap>table.t:has(thead th:nth-child(5)) :is(th,td){white-space:nowrap}'));
+  });
+}
+
+test('traveler: internal preview caption is removed', () => {
+  const html = renderV7PortalSource(source, contextFor('traveler'));
+  assert.ok(!html.includes('Traveler app preview (mobile)'));
+  assert.ok(!html.includes('Pratinjau aplikasi pengguna (mobile)'));
+});
+
+test('vendor: verification from API, KPIs without endpoints show unavailable', () => {
+  const html = renderV7PortalSource(source, contextFor('vendor'));
+  assert.ok(html.includes('"url":"/bff/vendor/verification"'));
+  assert.ok(html.includes("${v.verif && v.verif !== 'verified' ? `<div class=\"banner warn\""));
+  assert.ok(html.includes("if ('verif' in portalEntity) portalEntity.verif = null;"));
+  assert.ok(!html.includes("v: money(v.gmv30)"));
+  assert.equal(html.split('Belum tersedia dari API').length - 1, 4);
+});

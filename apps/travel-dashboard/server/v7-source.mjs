@@ -8,6 +8,7 @@ import {
   safeJson,
   simulationLockScript,
   TENANT_LABEL_PATCH,
+  applyOrgCardPatches,
   UNKNOWN_STATUS_PATCH,
   V7_PORTAL_RESTRICTION_STYLES
 } from '../../shared/runtime/v7-portal-source.mjs';
@@ -118,6 +119,7 @@ S.role = 'travel';`;
     TENANT_LABEL_PATCH.replacement,
     'tenant-label'
   );
+  html = applyOrgCardPatches(html, { replaceExactlyOnce });
 
   html = replaceExactlyOnce(
     html,

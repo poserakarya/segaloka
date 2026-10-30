@@ -19,8 +19,17 @@ const HTML_CSP = "connect-src 'self'; font-src 'self'; frame-ancestors 'none'; b
 
 // Bundle V7 Control Center: format mengikuti preferensi dan state simulasi
 // (role/ux) dikunci ke super_admin. Patch gagal aman bila anchor berubah.
+// Tanggal booking dari API (ISO) diformat dengan fD V7, yang memakai locale
+// dan zona waktu dari preferensi akun (window.__SEGALOKA_FORMAT__).
+const CC_BOOKING_DATE_PATCH = [
+  "esc(String(b.createdAt || '—'))",
+  "esc(Number.isFinite(Date.parse(b.createdAt)) ? fD(Date.parse(b.createdAt), { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : '—')"
+];
+
 function patchControlCenterBundle(source) {
-  const patched = applyFormatPatches(source, createV7Patcher('CONTROL_CENTER'));
+  const patcher = createV7Patcher('CONTROL_CENTER');
+  const formatted = applyFormatPatches(source, patcher);
+  const patched = patcher.replaceExactlyOnce(formatted, ...CC_BOOKING_DATE_PATCH, 'cc-booking-date');
   return patched + '\n/* SEGALOKA_CC_SIMULATION_LOCK_V1 */\n' +
     simulationLockScript('super_admin') + '\n' + CONTROL_CENTER_REALTIME_SCRIPT;
 }

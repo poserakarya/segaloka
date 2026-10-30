@@ -85,10 +85,13 @@ test('Travel V7 output is pinned (Fase A: fonts, format, no simulation, observer
   // observer akun yang tidak lagi memicu dirinya sendiri.
   // Fase B tahap 2 (6673414c… -> 1733ae20…): pemuat GET /bff/bookings dan
   // fallback nama paket b.pkgName pada 12 titik render booking.
-  assert.equal(html.length, 1000183);
+  // Pratinjau (1733ae20… -> 09de446a…): kartu organisasi statis tanpa
+  // chevron/pent-pick, label "Organisasi", sel tabel >=5 kolom tidak dibungkus,
+  // tabel bergulir di dalam .tbl-wrap pada layar <=640px.
+  assert.equal(html.length, 1000252);
   assert.equal(
     createHash('sha256').update(html).digest('hex'),
-    '1733ae201331d6c78f4d7dd62afc6b51f04a3be6e7e03bd87d972d34cb5e8fa3'
+    '09de446aa2c07a1c4ebe3db2b21fdf087cc1d05d5fb152f41325c72a778be0f1'
   );
 });
 

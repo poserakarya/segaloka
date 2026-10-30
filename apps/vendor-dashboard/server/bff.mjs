@@ -417,6 +417,44 @@ const server = http.createServer(async (req, res) => {
         dashboards: vendorDashboards
       });
     }
+    // Status verifikasi Vendor dari pendaftaran di database (read-only).
+    // Tanpa aplikasi pendaftaran untuk organisasi ini, status = null
+    // (UI menampilkan "Belum tersedia", bukan status simulasi V7).
+    if (req.method === 'GET' && path === '/bff/vendor/verification') {
+      const session = await getSession(req);
+      if (!session) return json(res, 401, { authenticated: false, code: 'AUTH_REQUIRED' });
+      const accessResponse = await fetch(`http://127.0.0.1:${port}/bff/dashboard/access`, {
+        headers: { cookie: req.headers.cookie || '' }, signal: AbortSignal.timeout(10000)
+      });
+      if (accessResponse.status !== 200) {
+        return json(res, [401, 403].includes(accessResponse.status) ? accessResponse.status : 503, {
+          code: 'VENDOR_ACCESS_DENIED'
+        });
+      }
+      const organizationId = (await accessResponse.json()).dashboards?.[0]?.organizationId;
+      const fresh = await getSession(req);
+      const result = await apiRequest('GET', '/registration/applications/mine', undefined, accessTokenOf(fresh || session));
+      if (result.status !== 200 || !Array.isArray(result.data?.items)) {
+        return json(res, 503, { code: 'VENDOR_VERIFICATION_UNAVAILABLE' });
+      }
+      const applications = result.data.items.filter(item => item.applicationType === 'vendor');
+      const application = applications.find(item => item.organizationId === organizationId) ||
+        applications.find(item => !item.organizationId && item.status !== 'approved') || null;
+      const VERIFICATION = {
+        approved: 'verified',
+        submitted: 'under_review',
+        under_review: 'under_review',
+        revision_required: 'pending',
+        draft: 'pending',
+        rejected: 'rejected'
+      };
+      return json(res, 200, {
+        organizationId,
+        verification: application ? VERIFICATION[application.status] || null : null,
+        applicationStatus: application ? application.status : null
+      });
+    }
+
     if (req.method === 'GET' && path === '/bff/me') {
       const session = await getSession(req);
 
