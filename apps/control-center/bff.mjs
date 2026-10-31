@@ -1080,7 +1080,7 @@ async function routeRequest(req, res) {
       const accessResponse = await internalDashboardAccess(req);
       if (accessResponse.status !== 200) return json(res, [401, 403].includes(accessResponse.status) ? accessResponse.status : 503, { code: 'CONTROL_CENTER_ACCESS_DENIED' });
       const access = await accessResponse.json();
-      const allowed = access.authenticated === true && access.dashboards?.some(item => item.dashboard === 'control-center' && item.role === 'super_admin' && item.organizationId === null);
+      const allowed = access.authenticated === true && access.workspaceSwitching === false && access.dashboards?.some(item => item.dashboard === 'control-center' && item.role === 'super_admin' && item.organizationId === null);
       if (!allowed) return json(res, 403, { code: 'CONTROL_CENTER_ACCESS_DENIED' });
       const session = await getSession(req);
       if (!session?.accessToken) return json(res, 401, { authenticated: false, code: 'AUTH_REQUIRED' });
