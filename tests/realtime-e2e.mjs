@@ -20,6 +20,7 @@ import { fileURLToPath } from 'node:url';
 
 import { signIngressRequest } from '../services/api/src/security/ingress-identity-v3.js';
 
+import { marketplaceHandoffLogin } from './support/marketplace-handoff.mjs';
 const root = fileURLToPath(new URL('../', import.meta.url));
 const require = createRequire(import.meta.url);
 let chromium = null;
@@ -171,14 +172,9 @@ function start(children, label, args, options) {
   return child;
 }
 
-async function bffLogin(origin, email) {
-  const response = await fetch(`${origin}/bff/login`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', Origin: origin },
-    body: JSON.stringify({ email, password: PASSWORD })
-  });
-  assert.equal(response.status, 200, `BFF login ${email}`);
-  return response.headers.get('set-cookie').split(';')[0];
+// Login dashboard lewat Marketplace (handoff), bukan form dashboard.
+function bffLogin(origin, email, dashboard) {
+  return marketplaceHandoffLogin({ apiOrigin: API, ingressSecret, dashboardOrigin: origin, dashboard, email, password: PASSWORD });
 }
 
 test('Fase B realtime: outbox, SSE isolation, rollback, reconnect, cross-dashboard', {
@@ -398,17 +394,16 @@ test('Fase B realtime: outbox, SSE isolation, rollback, reconnect, cross-dashboa
       const page = await context.newPage();
       const errors = [];
       page.on('pageerror', error => errors.push(error.message));
-      await page.goto(origin + loginPath);
-      await loginFn(page, email);
+      if (loginPath) await page.goto(origin + loginPath);
+      await loginFn(page, email, origin);
       await page.waitForFunction(readyFn, null, { timeout: 30000 });
       await page.evaluate(h => { location.hash = h; window.__noReloadMarker = 'kept'; }, hash);
       return { page, errors, context };
     }
-    const portalLogin = async (page, email) => {
-      await page.fill('#sg-email', email);
-      await page.fill('#sg-password', PASSWORD);
-      await page.click('#sg-submit');
-      await page.waitForURL(/\/bff\/ui/, { timeout: 30000 });
+    const portalLogin = dashboard => async (page, email, origin) => {
+      const [name, value] = (await bffLogin(origin, email, dashboard)).split('=');
+      await page.context().addCookies([{ name, value, url: `${origin}/bff/` }]);
+      await page.goto(origin + '/bff/ui');
     };
     const controlLogin = async (page, email) => {
       await page.fill('#email', email);
@@ -418,9 +413,9 @@ test('Fase B realtime: outbox, SSE isolation, rollback, reconnect, cross-dashboa
     };
     const portalReady = () => window.SegalokaPortalRuntime && window.__SEGALOKA_PORTAL_SYNC__?.connected === true;
     const dashboards = {
-      agen: await openDashboard(`http://127.0.0.1:${PORTALS.agen.entry}`, '/', ids.agena.email, '#/p/agen/bookings', portalReady, portalLogin),
-      mitra: await openDashboard(`http://127.0.0.1:${PORTALS.mitra.entry}`, '/', ids.mitraa.email, '#/p/mitra/bookings', portalReady, portalLogin),
-      traveler: await openDashboard(`http://127.0.0.1:${PORTALS.traveler.entry}`, '/', ids.traveler.email, '#/p/traveler/bookings', portalReady, portalLogin),
+      agen: await openDashboard(`http://127.0.0.1:${PORTALS.agen.entry}`, null, ids.agena.email, '#/p/agen/bookings', portalReady, portalLogin('agen')),
+      mitra: await openDashboard(`http://127.0.0.1:${PORTALS.mitra.entry}`, null, ids.mitraa.email, '#/p/mitra/bookings', portalReady, portalLogin('mitra')),
+      traveler: await openDashboard(`http://127.0.0.1:${PORTALS.traveler.entry}`, null, ids.traveler.email, '#/p/traveler/bookings', portalReady, portalLogin('traveler')),
       control: await openDashboard(`http://127.0.0.1:${CONTROL.server}`, '/login', ids.admin.email, '#/booking',
         () => window.__SEGALOKA_CC_SYNC__?.connected === true, controlLogin)
     };
@@ -430,16 +425,7 @@ test('Fase B realtime: outbox, SSE isolation, rollback, reconnect, cross-dashboa
     );
 
     // Travel BFF stream (login asli lewat BFF Travel).
-    const travelCookie = await bffLogin(`http://127.0.0.1:${TRAVEL_BFF}`, ids.staffa.email)
-      .catch(async () => {
-        const response = await fetch(`http://127.0.0.1:${TRAVEL_BFF}/bff/login`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', Origin: 'http://127.0.0.1:4700' },
-          body: JSON.stringify({ email: ids.staffa.email, password: PASSWORD })
-        });
-        assert.equal(response.status, 200, 'travel BFF login');
-        return response.headers.get('set-cookie').split(';')[0];
-      });
+    const travelCookie = await bffLogin(`http://127.0.0.1:${TRAVEL_BFF}`, ids.staffa.email, 'travel');
     const travelBffStream = openStream(`http://127.0.0.1:${TRAVEL_BFF}/bff/sync/events?organizationId=${orgA}`, { cookie: travelCookie });
     await travelBffStream.waitReady();
     assert.equal(travelBffStream.status, 200, 'travel BFF stream');
@@ -566,7 +552,7 @@ test('Fase B realtime: outbox, SSE isolation, rollback, reconnect, cross-dashboa
       resumed.close();
 
       // Lewat BFF Agen dengan ?after (dipakai runtime V7 setelah putus).
-      const agenCookie = await bffLogin(`http://127.0.0.1:${PORTALS.agen.entry}`, ids.agena.email);
+      const agenCookie = await bffLogin(`http://127.0.0.1:${PORTALS.agen.entry}`, ids.agena.email, 'agen');
       const viaBff = openStream(`http://127.0.0.1:${PORTALS.agen.entry}/bff/sync/events?after=${lastSeen}`, { cookie: agenCookie });
       await viaBff.waitFor(e => e.event === 'change' && e.data.entityId === missed.data.booking.id, 8000);
       viaBff.close();

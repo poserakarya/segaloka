@@ -1,7 +1,9 @@
 // E2E ketujuh dashboard di Chromium: proses asli (entry server, BFF, Vite
 // Travel, server Control Center) + PostgreSQL tes + API tiruan bertanda
-// tangan ingress. Untuk setiap dashboard: login lewat UI (password + TOTP),
-// lalu login page dan dashboard diperiksa pada 360/768/1280 px dalam
+// tangan ingress. Control Center: login sendiri lewat UI (password + TOTP).
+// Enam dashboard lain: tanpa form login; browser diarahkan ke Marketplace
+// (halaman handoff Marketplace distub lewat Playwright route dengan tiket dari
+// API tiruan) lalu kembali lewat form POST. Dashboard diperiksa pada 360/768/1280 px dalam
 // ID/EN/AR (RTL), termasuk font lokal, tanpa banner simulasi, tanpa request
 // eksternal, dan tanpa scroll horizontal.
 //
@@ -14,7 +16,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import http from 'node:http';
 import { spawn } from 'node:child_process';
-import { randomBytes } from 'node:crypto';
+import { createHash, randomBytes } from 'node:crypto';
 import { existsSync, mkdirSync, unlinkSync, writeFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';
@@ -93,8 +95,31 @@ function dashboardsFor(role) {
 }
 
 // API tiruan khusus pengujian terisolasi.
+// Marketplace tiruan lokal (127.0.0.1, diizinkan di luar production):
+// halaman handoff dengan tiket dari API tiruan untuk role = dashboard.
+const MARKETPLACE_PORT = 4706;
+const MARKETPLACE = `http://127.0.0.1:${MARKETPLACE_PORT}`;
+const DASHBOARD_ORIGINS = {};
+
+function createMarketplaceStub(mock) {
+  return http.createServer((req, res) => {
+    const url = new URL(req.url, MARKETPLACE);
+    const dashboard = url.searchParams.get('dashboard');
+    const origin = DASHBOARD_ORIGINS[dashboard];
+    if (url.pathname !== '/api/auth/dashboard-handoff' || !origin) {
+      res.writeHead(404);
+      return res.end();
+    }
+    const ticket = mock.issueHandoff(dashboard, dashboard, url.searchParams.get('challenge'));
+    res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8', 'Referrer-Policy': 'strict-origin', 'Cache-Control': 'no-store' });
+    res.end(`<!doctype html><form id="f" method="post" action="${origin}/bff/auth/handoff/callback">` +
+      `<input type="hidden" name="ticket" value="${ticket}"></form><script>document.getElementById('f').submit()</script>`);
+  });
+}
+
 function createMockApi() {
   const tickets = new Map();
+  const handoffs = new Map();
   const tokens = new Map();
   const unsigned = [];
 
@@ -141,6 +166,22 @@ function createMockApi() {
         session: { accessToken, refreshToken: randomBytes(32).toString('hex') }
       });
     }
+    if (req.method === 'POST' && path === '/auth/dashboard-handoff/consume') {
+      const entry = handoffs.get(data.ticket);
+      handoffs.delete(data.ticket);
+      const challenge = createHash('sha256').update(String(data.verifier)).digest('hex');
+      if (!entry || entry.dashboard !== data.dashboard || entry.challenge !== challenge) {
+        return send(401, { authenticated: false, code: 'INVALID_OR_EXPIRED_HANDOFF' });
+      }
+      const accessToken = randomBytes(32).toString('hex');
+      tokens.set(accessToken, entry.role);
+      return send(200, {
+        authenticated: true,
+        dashboard: entry.dashboard,
+        organizationId: dashboardsFor(entry.role)[0].organizationId,
+        session: { accessToken, refreshToken: randomBytes(32).toString('hex') }
+      });
+    }
     if (req.method === 'POST' && path === '/auth/logout') return send(200, { success: true });
     if (req.method === 'GET' && path === '/health') return send(200, { service: 'segaloka-api', status: 'ok' });
     if (req.method === 'GET' && path === '/ready') return send(200, { status: 'ready', database: { connected: true } });
@@ -167,7 +208,13 @@ function createMockApi() {
     return send(503, { code: 'SERVICE_UNAVAILABLE' });
   });
 
-  return { server, unsigned };
+  function issueHandoff(role, dashboard, challenge) {
+    const ticket = randomBytes(32).toString('hex');
+    handoffs.set(ticket, { role, dashboard, challenge });
+    return ticket;
+  }
+
+  return { server, unsigned, issueHandoff };
 }
 
 async function waitFor(url, child, label) {
@@ -242,43 +289,21 @@ const DASHBOARDS = [
     name: 'travel',
     role: 'travel',
     origin: `http://127.0.0.1:${TRAVEL.vite}`,
-    loginPath: '/',
+    entryPath: '/bff/dashboard',
     dashboardPattern: /\/bff\/dashboard/,
-    ready: () => window.SegalokaTravelRuntime && document.querySelector('#side'),
-    async login(page) {
-      await page.waitForSelector('#email');
-      await page.fill('#email', ACCOUNTS.travel.email);
-      await page.fill('#password', 'kata-sandi-uji');
-      await page.click('button[type=submit]');
-      await page.waitForSelector('#verification-method');
-      await page.selectOption('#verification-method', 'authenticator');
-      await page.waitForSelector('#otp-code');
-      await page.fill('#otp-code', TOTP_OK);
-      await page.click('button.primary-button[type=submit]');
-    }
+    ready: () => window.SegalokaTravelRuntime && document.querySelector('#side')
   },
   ...PORTALS.map(portal => ({
     name: portal.role,
     role: portal.role,
     origin: `http://127.0.0.1:${portal.port}`,
-    loginPath: '/',
+    entryPath: '/',
     dashboardPattern: /\/bff\/ui/,
-    ready: () => window.SegalokaPortalRuntime && document.querySelector('#side'),
-    async login(page) {
-      await page.fill('#sg-email', ACCOUNTS[portal.role].email);
-      await page.fill('#sg-password', 'kata-sandi-uji');
-      await page.click('#sg-submit');
-      await page.waitForSelector('#sg-method-form:not([hidden])');
-      await page.check('input[name="sg-method"][value="authenticator"]');
-      await page.click('#sg-method-submit');
-      await page.waitForSelector('#sg-code-form:not([hidden])');
-      await page.fill('#sg-code', TOTP_OK);
-      await page.click('#sg-verify');
-    }
+    ready: () => window.SegalokaPortalRuntime && document.querySelector('#side')
   }))
 ];
 
-test('seven separate V7 dashboards: login, render, responsive, ID/EN/AR, fonts, no simulation', {
+test('seven separate V7 dashboards: Marketplace login, render, responsive, ID/EN/AR, fonts, no simulation', {
   skip: !chromium
     ? 'playwright tidak tersedia'
     : configured ? false : 'database tes (_test, localhost) belum dikonfigurasi',
@@ -319,7 +344,11 @@ test('seven separate V7 dashboards: login, render, responsive, ID/EN/AR, fonts, 
     ].join('\n'));
     for (const file of envFiles.slice(1)) writeFileSync(file, `BFF_SESSION_ENCRYPTION_KEY=${sessionKey()}\n`);
 
-    const baseEnv = { ...process.env, API_ORIGIN: apiOrigin, NODE_ENV: 'test' };
+    const baseEnv = { ...process.env, API_ORIGIN: apiOrigin, NODE_ENV: 'test', SEGALOKA_MARKETPLACE_ORIGIN: MARKETPLACE };
+    for (const dashboard of DASHBOARDS) if (!dashboard.login) DASHBOARD_ORIGINS[dashboard.name] = dashboard.origin;
+    const marketplace = createMarketplaceStub(mock);
+    await new Promise(resolve => marketplace.listen(MARKETPLACE_PORT, '127.0.0.1', resolve));
+    children.push({ kill: () => marketplace.close() });
 
     for (const portal of PORTALS) {
       const bff = start(children, `${portal.role} BFF`, [`apps/${portal.app}/server/bff.mjs`], { cwd: root, env: baseEnv });
@@ -387,9 +416,8 @@ test('seven separate V7 dashboards: login, render, responsive, ID/EN/AR, fonts, 
           const url = new URL(request.url());
           if (url.hostname !== '127.0.0.1') external.push(url.href);
         });
-
-        // Halaman login per dashboard di setiap viewport dan bahasa.
-        for (const viewport of VIEWPORTS) {
+        // Halaman login sendiri hanya untuk Control Center (Super Admin).
+        for (const viewport of dashboard.login ? VIEWPORTS : []) {
           await page.setViewportSize(viewport);
           for (const language of LANGUAGES) {
             await page.goto(dashboard.origin + dashboard.loginPath);
@@ -405,10 +433,23 @@ test('seven separate V7 dashboards: login, render, responsive, ID/EN/AR, fonts, 
           }
         }
 
-        // Login nyata lewat UI (password + TOTP) ke dashboard ini.
-        await page.evaluate(() => localStorage.setItem('sg.lang', JSON.stringify('id')));
-        await page.goto(dashboard.origin + dashboard.loginPath);
-        await dashboard.login(page);
+        if (dashboard.login) {
+          // Control Center: login nyata lewat UI (password + TOTP).
+          await page.goto(dashboard.origin + dashboard.loginPath);
+          await page.evaluate(() => localStorage.setItem('sg.lang', JSON.stringify('id')));
+          await page.goto(dashboard.origin + dashboard.loginPath);
+          await dashboard.login(page);
+        } else {
+          // Tanpa form login dashboard: entry -> handoff -> Marketplace -> callback.
+          const handoffUrls = [];
+          page.on('request', request => { if (request.url().startsWith(`${MARKETPLACE}/`)) handoffUrls.push(request.url()); });
+          await page.goto(dashboard.origin + dashboard.entryPath);
+          await page.waitForURL(dashboard.dashboardPattern, { timeout: 30000 });
+          assert.equal(handoffUrls.length, 1, `${dashboard.name}: lewat Marketplace`);
+          assert.match(handoffUrls[0], new RegExp(`dashboard=${dashboard.name}&challenge=[0-9a-f]{64}$`));
+          assert.equal(await page.locator('#sg-email, #email, input[type=password]').count(), 0, `${dashboard.name}: tanpa form login`);
+          await page.evaluate(() => localStorage.setItem('sg.lang', JSON.stringify('id')));
+        }
         await page.waitForURL(dashboard.dashboardPattern, { timeout: 30000 });
         await page.waitForFunction(dashboard.ready, null, { timeout: 30000 });
 

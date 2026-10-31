@@ -3,6 +3,7 @@
 import { spawn } from 'node:child_process';
 
 import { signIngressRequest } from '../../services/api/src/security/ingress-identity-v3.js';
+import { marketplaceHandoffLogin } from './marketplace-handoff.mjs';
 
 export function createRealtimeHarness({ apiOrigin, ingressSecret }) {
   const streams = [];
@@ -117,14 +118,9 @@ export function createRealtimeHarness({ apiOrigin, ingressSecret }) {
     throw new Error(`${label} not ready`);
   }
 
-  async function bffLogin(origin, email, password, headerOrigin = origin) {
-    const response = await fetch(`${origin}/bff/login`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', Origin: headerOrigin },
-      body: JSON.stringify({ email, password })
-    });
-    if (response.status !== 200) throw new Error(`BFF login ${email}: ${response.status}`);
-    return response.headers.get('set-cookie').split(';')[0];
+  // Login dashboard lewat Marketplace (handoff), bukan form dashboard.
+  function bffLogin(origin, email, password, dashboard, options = {}) {
+    return marketplaceHandoffLogin({ apiOrigin, ingressSecret, dashboardOrigin: origin, dashboard, email, password, ...options });
   }
 
   function shutdown() {

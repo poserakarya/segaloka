@@ -57,6 +57,16 @@ umask 077 && for n in control_center travel vendor affiliate agen mitra traveler
 
 Perintah di atas tidak menimpa berkas yang sudah ada. Kunci enkripsi yang sudah dipakai data existing (sertifikat, OAuth, TOTP) **harus** memakai nilai lama: kunci baru membuat data terenkripsi lama tidak bisa dibaca. `db_password`, `resend_api_key`, dan `resend_webhook_signing_secret` diisi manual.
 
+### Login lewat Marketplace (enam dashboard non-admin)
+Hanya Control Center (Super Admin) yang punya halaman login sendiri. Travel, Vendor, Affiliate, Agen, Mitra, dan Traveler tidak menerima login password (`/bff/login*` → 404); `/`, `/login`, dan dashboard tanpa sesi diarahkan ke `/bff/auth/handoff/start`:
+
+1. BFF membuat verifier acak (cookie HttpOnly `Path=/bff/auth/handoff`, 5 menit, `Secure`) dan mengarahkan ke `SEGALOKA_MARKETPLACE_ORIGIN/api/auth/dashboard-handoff?dashboard=..&challenge=sha256(verifier)`.
+2. Website memakai sesi Marketplace (cookie `segaloka_access`) atau mengarahkan ke login Marketplace existing, lalu meminta tiket ke API `POST /auth/dashboard-handoff/tickets` (ingress bertanda). API memeriksa role/tenant di database; akun dengan beberapa organisasi Travel/Vendor memilih workspace dulu.
+3. Tiket sekali pakai (hash di tabel `dashboard_handoff_tickets`, migrasi 0042, 60 detik) dikirim lewat form POST ke `/bff/auth/handoff/callback`, tidak pernah lewat URL.
+4. BFF menukar tiket + verifier di `POST /auth/dashboard-handoff/consume`: tiket dibakar pada percobaan pertama, akses diperiksa ulang, sesi API baru dibuat (status 2FA mengikuti sesi Marketplace), dan sesi BFF terikat ke workspace yang dipilih.
+
+Variabel website (Vercel project segaloka.com): `SEGALOKA_API_BASE_URL`, `SEGALOKA_ORIGIN_AUTH_SECRET` (sama dengan `ingress_identity_secret` API), dan opsional `SEGALOKA_DASHBOARD_ORIGINS` (JSON `{"vendor":"https://vendor.dashboard.segaloka.com",…}`; default hostname resmi, wajib https `*.segaloka.com` di production).
+
 ## Migrasi database (`database/migrate.mjs`)
 - Urutan: `database/migrations/*.sql` (tanpa `*.rollback.sql` dan `*.draft.sql`), lalu `database/postgres/migrations/*.sql`.
 - Versi yang sudah diterapkan dicatat di tabel `public.schema_migrations` yang sudah ada (dibuat migrasi 0001) dan tidak dijalankan lagi, jadi runner aman dijalankan berulang.

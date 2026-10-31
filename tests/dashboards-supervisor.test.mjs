@@ -7,12 +7,14 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { spawn, spawnSync } from 'node:child_process';
 import { randomBytes } from 'node:crypto';
+import { createRequire } from 'node:module';
 import { existsSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { DASHBOARDS, childEnvironments } from '../deploy/cloud/dashboards-supervisor.mjs';
+import { marketplaceHandoffLogin } from './support/marketplace-handoff.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 const db = {
@@ -143,36 +145,87 @@ test('seven dashboards run in production mode from secret files (no .env), real 
     for (const { port } of DASHBOARDS) await waitHealth(`http://127.0.0.1:${port}/health`);
     assert.deepEqual(envFiles.filter(existsSync), [], 'tidak ada .env yang dibuat');
 
-    for (const { key, port } of DASHBOARDS) {
-      const origin = `https://${key.toLowerCase()}.preview.example`;
-      const loginPath = '/bff/login';
-      // Tanpa sesi: akses dashboard ditolak.
-      const access = await fetch(`http://127.0.0.1:${port}/bff/dashboard/access`);
-      assert.equal(access.status, 401, `${key} access`);
-      // Origin asing ditolak oleh entry.
-      const foreign = await fetch(`http://127.0.0.1:${port}${loginPath}`, {
+    // Control Center: login terpisah milik Super Admin (tidak berubah).
+    {
+      const port = 4202;
+      const origin = 'https://control_center.preview.example';
+      assert.equal((await fetch(`http://127.0.0.1:${port}/bff/dashboard/access`)).status, 401, 'CONTROL_CENTER access');
+      const foreign = await fetch(`http://127.0.0.1:${port}/bff/login`, {
         method: 'POST', headers: { Origin: 'https://evil.example', 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: 'tidak-ada@example.invalid', password: 'kata-sandi-salah-123' })
       });
-      assert.equal(foreign.status, 403, `${key} foreign origin`);
-      // Origin publik: diteruskan ke BFF lalu API (ingress bertanda dari secret file).
-      const login = await fetch(`http://127.0.0.1:${port}${loginPath}`, {
+      assert.equal(foreign.status, 403, 'CONTROL_CENTER foreign origin');
+      const login = await fetch(`http://127.0.0.1:${port}/bff/login`, {
         method: 'POST', headers: { Origin: origin, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: `tidak-ada-${key.toLowerCase()}@example.invalid`, password: 'kata-sandi-salah-123' })
+        body: JSON.stringify({ email: 'tidak-ada-control@example.invalid', password: 'kata-sandi-salah-123' })
       });
-      // 401 = kredensial ditolak API; 429 RATE_LIMITED = pembatas login API
-      // (per IP, tersimpan di PostgreSQL). Keduanya hanya bisa datang dari API
-      // lewat request ingress bertanda tangan.
+      // 401 = kredensial ditolak API; 429 = pembatas login API (PostgreSQL).
       const body = await login.json().catch(() => ({}));
       assert.ok(login.status === 401 || (login.status === 429 && body.code === 'RATE_LIMITED'),
-        `${key} login: ${login.status} ${JSON.stringify(body)}`);
-      assert.equal(login.headers.get('set-cookie'), null, `${key}: tidak ada cookie sesi`);
+        `CONTROL_CENTER login: ${login.status} ${JSON.stringify(body)}`);
+      assert.equal(login.headers.get('set-cookie'), null);
     }
 
-    // Halaman login Travel dari build production.
-    const travelIndex = await (await fetch('http://127.0.0.1:4200/')).text();
-    assert.match(travelIndex, /id="root"/);
-    assert.doesNotMatch(travelIndex, /\/src\/main\.tsx/);
+    // Enam dashboard lain: hanya login Marketplace. Satu akun uji dengan
+    // keenam role (satu login API), tiket handoff per dashboard lewat entry
+    // publik dalam mode production (cookie Secure, ingress dari secret file).
+    const { Pool } = createRequire(join(root, 'services/api/package.json'))('pg');
+    const { hashPassword } = await import('../services/api/src/auth/password.js');
+    const pool = new Pool({ host: db.host, port: Number(db.port), database: db.name, user: db.user, password: 'x' });
+    const suffix = randomBytes(4).toString('hex');
+    const email = `supervisor-${suffix}@example.invalid`;
+    const password = `kata-sandi-${suffix}`;
+    try {
+      const q = async (sql, params) => (await pool.query(sql, params)).rows;
+      const [user] = await q(`INSERT INTO public.users (email, full_name, status, email_verified_at, two_factor_enabled)
+                              VALUES ($1, 'Uji Supervisor', 'active', now(), false) RETURNING id`, [email]);
+      await q('INSERT INTO public.user_credentials (user_id, password_hash) VALUES ($1, $2)', [user.id, await hashPassword(password)]);
+      for (const role of ['travel', 'vendor', 'affiliate', 'agen', 'mitra', 'traveler']) {
+        const org = ['travel', 'vendor'].includes(role)
+          ? (await q(`INSERT INTO public.organizations (name, organization_type, status) VALUES ($1, $2, 'active') RETURNING id`, [`Uji ${role} ${suffix}`, role]))[0].id
+          : null;
+        await q('INSERT INTO public.memberships (user_id, organization_id, role_id) SELECT $1, $2, id FROM public.roles WHERE code = $3', [user.id, org, role]);
+      }
+    } finally {
+      await pool.end();
+    }
+    const { signIngressRequest } = await import('../services/api/src/security/ingress-identity-v3.js');
+    const raw = Buffer.from(JSON.stringify({ email, password }));
+    const apiLogin = await fetch('http://127.0.0.1:4995/auth/login', {
+      method: 'POST', body: raw,
+      headers: { ...signIngressRequest(ingress, { ip: '127.0.0.1', method: 'POST', target: '/auth/login', body: raw }), 'Content-Type': 'application/json' }
+    });
+    const apiBody = await apiLogin.json();
+    assert.equal(apiLogin.status, 200, `login Marketplace: ${JSON.stringify(apiBody.code)}`);
+
+    for (const { key, port } of DASHBOARDS.filter(item => item.key !== 'CONTROL_CENTER')) {
+      const base = `http://127.0.0.1:${port}`;
+      const dashboard = key.toLowerCase();
+      assert.equal((await fetch(`${base}/bff/dashboard/access`)).status, 401, `${key} access`);
+      const entry = await fetch(`${base}/`, { redirect: 'manual' });
+      assert.equal(entry.status, 302, `${key} /`);
+      assert.equal(entry.headers.get('location'), '/bff/auth/handoff/start');
+      const disabled = await fetch(`${base}/bff/login`, {
+        method: 'POST', headers: { Origin: `https://${dashboard}.preview.example`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+      });
+      assert.equal(disabled.status, 404, `${key} login dashboard dimatikan`);
+      const start = await fetch(`${base}/bff/auth/handoff/start`, { redirect: 'manual' });
+      assert.match(start.headers.get('set-cookie'), /; Secure$/, `${key} cookie verifier Secure`);
+      assert.match(start.headers.get('location'), new RegExp(`^https://www\\.segaloka\\.com/api/auth/dashboard-handoff\\?dashboard=${dashboard}&`));
+      const foreign = await fetch(`${base}/bff/auth/handoff/callback`, {
+        method: 'POST', headers: { Origin: 'https://evil.example', 'Content-Type': 'application/x-www-form-urlencoded' }, body: 'ticket=' + 'a'.repeat(64)
+      });
+      assert.equal(foreign.status, 403, `${key} callback origin asing`);
+      const cookie = await marketplaceHandoffLogin({
+        apiOrigin: 'http://127.0.0.1:4995', ingressSecret: ingress, dashboardOrigin: base, dashboard,
+        accessToken: apiBody.session.accessToken
+      });
+      assert.match(cookie, new RegExp(`^segaloka_${dashboard}_session=`), key);
+      const access = await fetch(`${base}/bff/dashboard/access`, { headers: { Cookie: cookie } });
+      assert.equal(access.status, 200, `${key} access setelah handoff`);
+    }
+
   } finally {
     for (const child of children.reverse()) child.kill('SIGTERM');
     await new Promise(r => setTimeout(r, 500));

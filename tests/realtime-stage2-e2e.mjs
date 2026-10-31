@@ -290,7 +290,7 @@ test('Fase B tahap 2: Travel bookings, Affiliate referral, Control Center realti
     async function openTravel(email) {
       const view = await contextPage();
       const vite = `http://127.0.0.1:${TRAVEL.vite}`;
-      const cookie = await h.bffLogin(vite, email, PASSWORD);
+      const cookie = await h.bffLogin(`http://127.0.0.1:${TRAVEL.bff}`, email, PASSWORD, 'travel');
       const [name, value] = cookie.split('=');
       await view.context.addCookies([{ name, value, url: `${vite}/bff/` }]);
       await view.page.goto(`${vite}/bff/dashboard#/p/travel/bookings`);
@@ -301,11 +301,10 @@ test('Fase B tahap 2: Travel bookings, Affiliate referral, Control Center realti
     async function openAffiliate(email) {
       const view = await contextPage();
       const origin = `http://127.0.0.1:${AFFILIATE.entry}`;
-      await view.page.goto(origin + '/');
-      await view.page.fill('#sg-email', email);
-      await view.page.fill('#sg-password', PASSWORD);
-      await view.page.click('#sg-submit');
-      await view.page.waitForURL(/\/bff\/ui/, { timeout: 30000 });
+      const cookie = await h.bffLogin(origin, email, PASSWORD, 'affiliate');
+      const [name, value] = cookie.split('=');
+      await view.context.addCookies([{ name, value, url: `${origin}/bff/` }]);
+      await view.page.goto(origin + '/bff/ui');
       await view.page.waitForFunction(
         () => window.SegalokaPortalRuntime && window.__SEGALOKA_PORTAL_SYNC__?.connected === true, null, { timeout: 30000 }
       ).catch(async error => {
@@ -353,7 +352,7 @@ test('Fase B tahap 2: Travel bookings, Affiliate referral, Control Center realti
       assert.equal(await marker(travelB.page), 'kept');
 
       // BFF Travel menolak organisasi lain walaupun sesi valid.
-      const cookieB = await h.bffLogin(`http://127.0.0.1:${TRAVEL.vite}`, ids.staffb.email, PASSWORD);
+      const cookieB = await h.bffLogin(`http://127.0.0.1:${TRAVEL.bff}`, ids.staffb.email, PASSWORD, 'travel');
       const cross = await fetch(`http://127.0.0.1:${TRAVEL.bff}/bff/bookings?organizationId=${orgA}`, { headers: { cookie: cookieB } });
       assert.equal(cross.status, 403);
       const own = await fetch(`http://127.0.0.1:${TRAVEL.bff}/bff/bookings?organizationId=${orgB}`, { headers: { cookie: cookieB } });
@@ -440,12 +439,12 @@ test('Fase B tahap 2: Travel bookings, Affiliate referral, Control Center realti
       const lastSeen = streams.affA.changes().at(-1).id;
       const resumed = await h.api('PATCH', `/affiliate/referral-links/${link.id}`, { body: { status: 'active' }, token: tokens.affa });
       assert.equal(resumed.status, 200, JSON.stringify(resumed.data));
-      const cookie = await h.bffLogin(`http://127.0.0.1:${AFFILIATE.entry}`, ids.affa.email, PASSWORD);
+      const cookie = await h.bffLogin(`http://127.0.0.1:${AFFILIATE.entry}`, ids.affa.email, PASSWORD, 'affiliate');
       const viaBff = h.openStream(`http://127.0.0.1:${AFFILIATE.entry}/bff/sync/affiliate/events?after=${lastSeen}`, { cookie });
       const replay = await viaBff.waitFor(e => e.event === 'change' && e.data.eventType === 'affiliate.referral_link.active');
       assert.ok(BigInt(replay.id) > BigInt(lastSeen));
       viaBff.close();
-      const cookieB = await h.bffLogin(`http://127.0.0.1:${AFFILIATE.entry}`, ids.affb.email, PASSWORD);
+      const cookieB = await h.bffLogin(`http://127.0.0.1:${AFFILIATE.entry}`, ids.affb.email, PASSWORD, 'affiliate');
       const viaBffB = h.openStream(`http://127.0.0.1:${AFFILIATE.entry}/bff/sync/affiliate/events?after=0`, { cookie: cookieB });
       await viaBffB.waitReady();
       await sleep(2500);
@@ -527,7 +526,7 @@ test('Fase B tahap 2: Travel bookings, Affiliate referral, Control Center realti
     });
 
     await t.test('sesi Affiliate dicabut: stream BFF ditutup auth.expired', async () => {
-      const cookie = await h.bffLogin(`http://127.0.0.1:${AFFILIATE.entry}`, ids.affb.email, PASSWORD);
+      const cookie = await h.bffLogin(`http://127.0.0.1:${AFFILIATE.entry}`, ids.affb.email, PASSWORD, 'affiliate');
       const stream = h.openStream(`http://127.0.0.1:${AFFILIATE.entry}/bff/sync/affiliate/events`, { cookie });
       await stream.waitReady();
       await q('UPDATE public.auth_sessions SET revoked_at = now() WHERE user_id = $1 AND revoked_at IS NULL', [ids.affb.id]);
