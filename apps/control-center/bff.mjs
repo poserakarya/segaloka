@@ -6,6 +6,7 @@ import { createSessionStore } from './session-store.mjs';
 import { classifyLoginResponse } from '../shared/runtime/bff-login-contract.mjs';
 import { serveSharedFont } from '../shared/runtime/shared-fonts.mjs';
 import { proxySyncStream } from '../shared/runtime/bff-sse-proxy.mjs';
+import { allowedPublicOrigins } from '../shared/runtime/v7-portal-entry.mjs';
 import { createConfigReader, readDbConfig, readIngressSecret } from '../shared/runtime/service-config.mjs';
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -325,21 +326,11 @@ function controlCenterMembership(me) {
       m.organizationId === null
     );
 }
+// Origin browser publik di Vercel, origin lokal hanya untuk entry/container.
+const allowedOrigins = allowedPublicOrigins(port);
 function isAllowedOrigin(req) {
   const origin = req.headers.origin;
-
-  if (typeof origin !== 'string') {
-    return false;
-  }
-
-  try {
-    const parsed = new URL(origin);
-
-    return parsed.origin ===
-      `http://${host}:${port}`;
-  } catch {
-    return false;
-  }
+  return typeof origin === 'string' && allowedOrigins.has(origin);
 }
 
 function sessionCookie(value, clear = false, path = '/') {
