@@ -192,7 +192,7 @@ async function getSession(req) {
 // Jalankan guard akses yang sama di proses ini. Tidak memerlukan HTTP localhost
 // dan tetap menggunakan pembaruan sesi, role, serta tenant dari endpoint asli.
 async function internalDashboardAccess(req) {
-  const internalReq = { ...req, method: 'GET', url: '/bff/dashboard/access' };
+  const internalReq = { method: 'GET', url: '/bff/dashboard/access', headers: req.headers };
   let status = 503;
   let body = '';
   const internalRes = {
