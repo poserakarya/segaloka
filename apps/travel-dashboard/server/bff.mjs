@@ -117,6 +117,10 @@ const pool = new Pool({
   idleTimeoutMillis: 30000
 });
 
+pool.on('error', (error) => {
+  console.error('TRAVEL_DATABASE_POOL_ERROR', error?.code || 'CONNECTION_ERROR');
+});
+
 const sessions = createSessionStore(
   pool,
   bffConfig.BFF_SESSION_ENCRYPTION_KEY
