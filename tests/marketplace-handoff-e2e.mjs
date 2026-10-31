@@ -37,6 +37,15 @@ const WEB = `http://127.0.0.1:${WEB_PORT}`;
 const VENDOR = 'http://127.0.0.1:4204';
 const PASSWORD = 'kata-sandi-handoff-uji';
 const sha256 = value => createHash('sha256').update(value).digest('hex');
+// Lima dashboard lain memakai mekanisme yang sama. Travel: BFF langsung
+// (frontend Travel hanya proxy + redirect yang sama).
+const OTHER_PORTALS = [
+  { dashboard: 'affiliate', app: 'affiliate-dashboard', bff: 4221, origin: 'http://127.0.0.1:4212', ui: '/bff/ui' },
+  { dashboard: 'agen', app: 'agen-dashboard', bff: 4231, origin: 'http://127.0.0.1:4216', ui: '/bff/ui' },
+  { dashboard: 'mitra', app: 'mitra-dashboard', bff: 4241, origin: 'http://127.0.0.1:4214', ui: '/bff/ui' },
+  { dashboard: 'traveler', app: 'traveler-portal', bff: 4251, origin: 'http://127.0.0.1:4210', ui: '/bff/ui' },
+  { dashboard: 'travel', bff: 4701, origin: 'http://127.0.0.1:4701', ui: '/bff/dashboard' }
+];
 
 test('Marketplace login -> Vendor V7 dashboard handoff (real processes)', {
   skip: nodeMajor < 24 ? 'butuh Node >= 24'
@@ -80,6 +89,11 @@ test('Marketplace login -> Vendor V7 dashboard handoff (real processes)', {
     await user('vendora', 'vendor', [vendorA]);
     await user('multivendor', 'vendor', [vendorA, vendorB]);
     await user('traveler', 'traveler');
+    await user('affiliate', 'affiliate');
+    await user('agen', 'agen');
+    await user('mitra', 'mitra');
+    const travelA = await org('Travel Handoff A', 'travel');
+    await user('travel', 'travel', [travelA]);
 
     // ---------- Proses asli ----------
     const storage = join(tmpdir(), `segaloka-handoff-${randomBytes(3).toString('hex')}`);
@@ -96,10 +110,23 @@ test('Marketplace login -> Vendor V7 dashboard handoff (real processes)', {
     await h.waitHttp('http://127.0.0.1:4211/bff/health', bff, 'vendor BFF');
     const entry = h.start('vendor entry', ['apps/vendor-dashboard/server-v7.mjs'], { cwd: root, env: portalEnv });
     await h.waitHttp(`${VENDOR}/health`, entry, 'vendor entry');
+    for (const portal of OTHER_PORTALS) {
+      if (portal.dashboard === 'travel') {
+        const travel = h.start('travel BFF', ['apps/travel-dashboard/server/bff.mjs'], {
+          cwd: root, env: { ...portalEnv, SEGALOKA_TEST_DATABASE: 'true', BFF_PORT: String(portal.bff), FRONTEND_ORIGIN: portal.origin }
+        });
+        await h.waitHttp(`${portal.origin}/bff/health`, travel, 'travel BFF');
+        continue;
+      }
+      const portalBff = h.start(`${portal.dashboard} BFF`, [`apps/${portal.app}/server/bff.mjs`], { cwd: root, env: portalEnv });
+      await h.waitHttp(`http://127.0.0.1:${portal.bff}/bff/health`, portalBff, `${portal.dashboard} BFF`);
+      const portalEntry = h.start(`${portal.dashboard} entry`, [`apps/${portal.app}/server.mjs`], { cwd: root, env: portalEnv });
+      await h.waitHttp(`${portal.origin}/health`, portalEntry, `${portal.dashboard} entry`);
+    }
     const web = h.start('website', ['node_modules/next/dist/bin/next', 'dev', '-H', '127.0.0.1', '-p', String(WEB_PORT)], {
       cwd: join(root, 'projects/Segaloka-webs'),
       env: { ...process.env, NODE_ENV: 'development', SEGALOKA_API_BASE_URL: API, SEGALOKA_ORIGIN_AUTH_SECRET: ingressSecret,
-        SEGALOKA_DASHBOARD_ORIGINS: JSON.stringify({ vendor: VENDOR }), NEXT_TELEMETRY_DISABLED: '1' }
+        SEGALOKA_DASHBOARD_ORIGINS: JSON.stringify({ vendor: VENDOR, ...Object.fromEntries(OTHER_PORTALS.map(p => [p.dashboard, p.origin])) }), NEXT_TELEMETRY_DISABLED: '1' }
     });
     for (let i = 0; ; i++) {
       try { await h.waitHttp(`${WEB}/api/auth/dashboard-handoff`, web, 'website'); break; } catch (error) { if (i >= 5) throw error; }
@@ -237,6 +264,56 @@ test('Marketplace login -> Vendor V7 dashboard handoff (real processes)', {
       assert.equal(foreign.ticket, null);
       assert.match(foreign.html, /Akses ditolak/);
       await single.close();
+    });
+
+    await t.test('Travel, Affiliate, Agen, Mitra, Traveler: mekanisme handoff yang sama', async () => {
+      for (const portal of OTHER_PORTALS) {
+        const label = portal.dashboard;
+        const anonymous = await newContext();
+        // Tanpa sesi: halaman dashboard -> handoff -> login Marketplace.
+        const entry = await anonymous.request.get(`${portal.origin}${portal.dashboard === 'travel' ? '/bff/dashboard' : '/'}`, { maxRedirects: 0 });
+        assert.equal(entry.status(), 302, `${label} tanpa sesi`);
+        assert.equal(entry.headers().location, '/bff/auth/handoff/start');
+        const disabled = await anonymous.request.post(`${portal.origin}/bff/login`, {
+          headers: { Origin: portal.origin }, data: { email: users[label].email, password: PASSWORD }
+        });
+        assert.equal(disabled.status(), 404, `${label} login password dashboard dimatikan`);
+        await anonymous.close();
+
+        const context = await newContext();
+        await marketplaceLogin(context, label);
+        const start = await context.request.get(`${portal.origin}/bff/auth/handoff/start`, { maxRedirects: 0 });
+        const location = new URL(start.headers().location);
+        assert.equal(location.origin, WEB);
+        assert.equal(location.searchParams.get('dashboard'), label);
+        const html = await (await context.request.get(location.toString(), { maxRedirects: 0 })).text();
+        const ticket = html.match(/name="ticket" value="([0-9a-f]{64})"/)?.[1];
+        assert.ok(ticket, `${label} tiket: ${html.slice(0, 200)}`);
+        assert.ok(html.includes(`action="${portal.origin}/bff/auth/handoff/callback"`));
+        const done = await context.request.post(`${portal.origin}/bff/auth/handoff/callback`, {
+          headers: { Origin: WEB, 'Content-Type': 'application/x-www-form-urlencoded' }, data: `ticket=${ticket}`, maxRedirects: 0
+        });
+        assert.equal(done.status(), 303, `${label} callback`);
+        assert.equal(done.headers().location, portal.ui);
+        const ui = await context.request.get(`${portal.origin}${portal.ui}`, { maxRedirects: 0 });
+        assert.equal(ui.status(), 200, `${label} dashboard V7`);
+        assert.match(ui.headers()['content-type'], /text\/html/);
+        const replay = await context.request.post(`${portal.origin}/bff/auth/handoff/callback`, {
+          headers: { Origin: WEB, 'Content-Type': 'application/x-www-form-urlencoded' }, data: `ticket=${ticket}`, maxRedirects: 0
+        });
+        assert.equal(replay.status(), 401, `${label} replay`);
+        await context.close();
+
+        // Role lain ditolak di Marketplace (tidak ada tiket).
+        const wrong = await newContext();
+        const other = label === 'traveler' ? 'agen' : 'traveler';
+        await marketplaceLogin(wrong, other);
+        const wrongStart = await wrong.request.get(`${portal.origin}/bff/auth/handoff/start`, { maxRedirects: 0 });
+        const wrongHtml = await (await wrong.request.get(wrongStart.headers().location, { maxRedirects: 0 })).text();
+        assert.match(wrongHtml, /Akses ditolak/, `${other} -> ${label}`);
+        assert.ok(!/name="ticket"/.test(wrongHtml));
+        await wrong.close();
+      }
     });
 
     await t.test('API: tiket hanya lewat ingress bertanda; sesi dashboard terpisah dan dapat dicabut', async () => {

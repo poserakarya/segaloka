@@ -1,8 +1,8 @@
-// Server frontend Travel untuk production: menyajikan hasil `vite build`
-// (halaman login Travel) dan meneruskan /bff/* ke BFF Travel lokal dengan
-// pemeriksaan Origin yang sama seperti entry portal. Dashboard V7 sendiri
-// tetap disajikan BFF di /bff/dashboard. Pengganti server dev Vite; UI tidak
-// berubah.
+// Server frontend Travel untuk production: meneruskan /bff/* ke BFF Travel
+// lokal dengan pemeriksaan Origin yang sama seperti entry portal. Dashboard V7
+// disajikan BFF di /bff/dashboard. Login hanya lewat Marketplace: halaman
+// selain /assets/ diarahkan ke handoff (form login Travel tidak disajikan;
+// berkas sumbernya tetap ada).
 //
 //   TRAVEL_FRONTEND_PORT   default 4200
 //   TRAVEL_BFF_PORT        default 4201
@@ -20,6 +20,7 @@ import {
   entryBindHost,
   localEntryOrigin
 } from '../../shared/runtime/v7-portal-entry.mjs';
+import { HANDOFF_START_PATH, marketplaceOrigin } from '../../shared/runtime/bff-marketplace-handoff.mjs';
 
 const port = Number(process.env.TRAVEL_FRONTEND_PORT || 4200);
 const bffPort = Number(process.env.TRAVEL_BFF_PORT || 4201);
@@ -51,7 +52,8 @@ const SECURITY_HEADERS = {
 const proxyBff = createBffProxy({
   bffPort,
   origins: allowedPublicOrigins(port),
-  forwardedOrigin: localEntryOrigin(port)
+  forwardedOrigin: localEntryOrigin(port),
+  handoffOrigin: marketplaceOrigin()
 });
 
 function sendFile(res, file, cacheControl) {
@@ -93,8 +95,9 @@ export const server = http.createServer((req, res) => {
     return sendFile(res, file, 'public, max-age=31536000, immutable');
   }
 
-  // Semua rute lain memakai halaman login Travel (SPA).
-  return sendFile(res, resolve(distRoot, 'index.html'), 'no-store');
+  // Semua rute lain: login lewat Marketplace.
+  res.writeHead(302, { ...SECURITY_HEADERS, Location: HANDOFF_START_PATH, 'Cache-Control': 'no-store' });
+  return res.end();
 });
 
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {

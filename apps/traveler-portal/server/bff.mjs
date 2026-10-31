@@ -2,6 +2,7 @@ import http from 'node:http';
 import { createRequire } from 'node:module';
 import { createSessionStore } from './session-store.mjs';
 import { createBffLoginContract } from '../../shared/runtime/bff-login-contract.mjs';
+import { createMarketplaceHandoff, sendHandoffResult } from '../../shared/runtime/bff-marketplace-handoff.mjs';
 import { serveV7PortalUi } from '../../shared/runtime/v7-portal-source.mjs';
 import { serveSharedFont } from '../../shared/runtime/shared-fonts.mjs';
 import { proxySyncStream } from '../../shared/runtime/bff-sse-proxy.mjs';
@@ -60,6 +61,15 @@ const loginContract = createBffLoginContract({
   sessionCookie: sessionId => sessionCookie(sessionId),
   accessDeniedCode: 'TRAVELER_ACCESS_REQUIRED',
   accessDeniedMessage: 'Akun tidak memiliki akses Dashboard traveler.'
+});
+
+// Login hanya lewat Marketplace: sesi BFF dibuat dari tiket handoff.
+const marketplaceHandoff = createMarketplaceHandoff({
+  dashboard: 'traveler',
+  apiRequest,
+  completeSession: loginContract.completeSession,
+  hasValidSession: async req => Boolean(await getSession(req)),
+  successPath: '/bff/ui'
 });
 
 function json(res, status, data, headers = {}) {
@@ -196,6 +206,11 @@ function sessionCookie(value, clear = false) {
 }
 const server = http.createServer(async (req, res) => {
   try {
+    const handoffPath = new URL(req.url, `http://${host}:${port}`).pathname;
+    if (marketplaceHandoff.handles(req.method, handoffPath)) {
+      return sendHandoffResult(res, await marketplaceHandoff.handle(req, handoffPath, () => readBody(req)));
+    }
+
     if (
       req.method === 'POST' &&
       !isAllowedOrigin(req)
@@ -219,8 +234,8 @@ const server = http.createServer(async (req, res) => {
     }
 
     if (req.method === 'POST' && loginContract.handles(path)) {
-      const result = await loginContract.handle(path, await readBody(req));
-      return json(res, result.status, result.body, result.headers);
+      // Dashboard non-admin tidak menerima login password langsung.
+      return json(res, 404, { code: 'DASHBOARD_LOGIN_DISABLED' });
     }
 
     if (req.method === 'GET' && path === '/bff/dashboard/access') {

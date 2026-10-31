@@ -2,7 +2,7 @@ import http from 'node:http';
 import { randomBytes } from 'node:crypto';
 import { createRequire } from 'node:module';
 import { createSessionStore } from './session-store.mjs';
-import { createHandoffChallengeStore } from './handoff-challenge.mjs';
+import { createMarketplaceHandoff, sendHandoffResult } from '../../shared/runtime/bff-marketplace-handoff.mjs';
 import { classifyLoginResponse } from './login-flow.mjs';
 import { renderTravelV7Source } from './v7-source.mjs';
 import { resolveAccountPreferences } from '../../shared/runtime/account-preferences.mjs';
@@ -122,7 +122,6 @@ const sessions = createSessionStore(
   bffConfig.BFF_SESSION_ENCRYPTION_KEY
 );
 
-const handoffChallenges = createHandoffChallengeStore();
 
 function json(res, status, data, headers = {}) {
   res.writeHead(status, {
@@ -310,7 +309,9 @@ async function authorizedTravelSession(req) {
       item.dashboard === 'travel' &&
       item.role === 'travel' &&
       typeof item.organizationId === 'string' &&
-      item.organizationId.length > 0
+      item.organizationId.length > 0 &&
+      // Sesi dari handoff terikat ke organisasi yang dipilih.
+      (!session.organizationId || item.organizationId === session.organizationId)
     );
 
     if (dashboards.length === 0) {
@@ -377,8 +378,44 @@ function sessionCookie(value, clear = false) {
     secure +
     (clear ? '; Max-Age=0' : '');
 }
+// Sesi BFF Travel dari tiket handoff Marketplace: diperiksa /auth/me dan
+// terikat ke organisasi Travel yang dipilih (sudah diperiksa API).
+async function completeTravelSession(session, binding = {}) {
+  const accessToken = accessTokenOf(session);
+  const refreshToken = refreshTokenOf(session);
+  const denied = { status: 403, headers: {}, body: { authenticated: false, code: 'TRAVEL_ACCESS_REQUIRED' } };
+  if (!accessToken || !refreshToken || typeof binding.organizationId !== 'string') return denied;
+  const me = await apiRequest('GET', '/auth/me', undefined, accessToken);
+  if (me.status !== 200 || typeof me.data?.user?.id !== 'string' || !travelMembership(me.data)) {
+    await apiRequest('POST', '/auth/logout', { refreshToken });
+    return denied;
+  }
+  const sessionId = randomBytes(32).toString('hex');
+  await sessions.create(sessionId, me.data.user.id, {
+    accessToken,
+    refreshToken,
+    user: me.data.user,
+    memberships: me.data.memberships,
+    organizationId: binding.organizationId
+  });
+  return { status: 200, headers: { 'Set-Cookie': sessionCookie(sessionId) }, body: { authenticated: true } };
+}
+
+const marketplaceHandoff = createMarketplaceHandoff({
+  dashboard: 'travel',
+  apiRequest,
+  completeSession: completeTravelSession,
+  hasValidSession: async req => (await authorizedTravelSession(req)).status === 200,
+  successPath: '/bff/dashboard'
+});
+
 const server = http.createServer(async (req, res) => {
   try {
+    const handoffPath = new URL(req.url, `http://${host}:${port}`).pathname;
+    if (marketplaceHandoff.handles(req.method, handoffPath)) {
+      return sendHandoffResult(res, await marketplaceHandoff.handle(req, handoffPath, () => readBody(req)));
+    }
+
     if (
       req.method === 'POST' &&
       !isAllowedOrigin(req)
@@ -394,38 +431,10 @@ const server = http.createServer(async (req, res) => {
     );
     const path = requestUrl.pathname;
 
-    if (
-      req.method === 'POST' &&
-      path === '/bff/auth/handoff'
-    ) {
-      return json(res, 503, {
-        code: 'HANDOFF_BRIDGE_NOT_READY'
-      });
-    }
-    if (
-      req.method === 'POST' &&
-      path === '/bff/auth/handoff/start'
-    ) {
-      const challenge = handoffChallenges.issue();
-
-      const secure = process.env.NODE_ENV === 'production'
-        ? '; Secure'
-        : '';
-
-      res.setHeader(
-        'Set-Cookie',
-        `segaloka_handoff_id=${challenge.id}; ` +
-        'HttpOnly; SameSite=Lax; Path=/bff/auth/handoff; ' +
-        'Max-Age=60' +
-        secure
-      );
-
-      return json(res, 200, {
-        initialized: true,
-        expiresIn: challenge.expiresIn
-      }, {
-        'Referrer-Policy': 'no-referrer'
-      });
+    // Dashboard Travel tidak menerima login password langsung; login hanya
+    // lewat Marketplace (handoff di atas).
+    if (req.method === 'POST' && (path === '/bff/login' || path.startsWith('/bff/login/'))) {
+      return json(res, 404, { code: 'DASHBOARD_LOGIN_DISABLED' });
     }
 
     if (serveSharedFont(req, res, path)) {
@@ -583,6 +592,12 @@ const server = http.createServer(async (req, res) => {
 
     if (req.method === 'GET' && path === '/bff/dashboard') {
       const access = await authorizedTravelSession(req);
+
+      // Belum login (atau organisasi belum dipilih): ke login Marketplace.
+      if (access.status === 401 || access.status === 409) {
+        res.writeHead(302, { Location: '/bff/auth/handoff/start', 'Cache-Control': 'no-store' });
+        return res.end();
+      }
 
       if (access.status !== 200) {
         return json(res, access.status, access.body);
