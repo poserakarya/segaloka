@@ -1,4 +1,5 @@
 import http from 'node:http';
+import { AsyncLocalStorage } from 'node:async_hooks';
 import https from 'node:https';
 import { randomBytes } from 'node:crypto';
 import { createRequire } from 'node:module';
@@ -7,6 +8,7 @@ import { classifyLoginResponse } from '../shared/runtime/bff-login-contract.mjs'
 import { serveSharedFont } from '../shared/runtime/shared-fonts.mjs';
 import { proxySyncStream } from '../shared/runtime/bff-sse-proxy.mjs';
 import { allowedPublicOrigins } from '../shared/runtime/v7-portal-entry.mjs';
+import { createClientIpResolver } from '../shared/runtime/client-ip.mjs';
 import { createConfigReader, readDbConfig, readIngressSecret } from '../shared/runtime/service-config.mjs';
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -218,7 +220,12 @@ async function requireSuperAdmin(req, res) {
   return session;
 }
 
+const requestContext = new AsyncLocalStorage();
+const proxyClientIp = createClientIpResolver({ mode: 'proxy', trustLoopback: true });
+
 async function apiRequest(method, target, data, accessToken) {
+  const clientIp = requestContext.getStore()?.clientIp;
+  if (!clientIp) throw new Error('CLIENT_IP_UNAVAILABLE');
   const startedAt = performance.now();
   const body = data === undefined
     ? Buffer.alloc(0)
@@ -227,7 +234,7 @@ async function apiRequest(method, target, data, accessToken) {
   const signed = signIngressRequest(
     ingressSecret,
     {
-      ip: '127.0.0.1',
+      ip: clientIp,
       method,
       target,
       body
@@ -424,7 +431,12 @@ function branchResponseForUi(data) {
   };
 }
 
-export async function handleRequest(req, res) {
+export async function handleRequest(req, res, { clientIp = proxyClientIp(req) } = {}) {
+  if (!clientIp) return json(res, 503, { code: 'CLIENT_IP_UNAVAILABLE' });
+  return requestContext.run({ clientIp }, () => routeRequest(req, res));
+}
+
+async function routeRequest(req, res) {
   try {
     if (
       ['POST', 'PUT'].includes(req.method) &&
@@ -1077,7 +1089,10 @@ export async function handleRequest(req, res) {
         target: '/sync/control-center/events',
         ingressSecret,
         accessToken: session.accessToken,
-        signIngressRequest,
+        signIngressRequest: (secret, input) => signIngressRequest(secret, {
+          ...input,
+          ip: requestContext.getStore()?.clientIp
+        }),
         json,
         label: 'Control Center BFF'
       });
