@@ -186,10 +186,30 @@ async function getSession(req) {
   return id ? await sessions.get(id) : null;
 }
 
+// Jalankan guard akses yang sama di proses ini. Tidak memerlukan HTTP localhost
+// dan tetap menggunakan pembaruan sesi, role, serta tenant dari endpoint asli.
+async function internalDashboardAccess(req) {
+  const internalReq = { ...req, method: 'GET', url: '/bff/dashboard/access' };
+  let status = 503;
+  let body = '';
+  const internalRes = {
+    writeHead(code) { status = code; return this; },
+    end(chunk = '') { body = String(chunk); return this; }
+  };
+  await handleRequest(internalReq, internalRes);
+  return {
+    status,
+    ok: status >= 200 && status < 300,
+    async json() {
+      return JSON.parse(body);
+    }
+  };
+}
+
 async function requireSuperAdmin(req, res) {
   const session = await getSession(req);
   if (!session?.accessToken) { json(res, 401, { code: 'AUTH_REQUIRED' }); return null; }
-  const accessResponse = await fetch(`http://${host}:${port}/bff/dashboard/access`, { headers: { cookie: req.headers.cookie || '' }, signal: AbortSignal.timeout(10000) });
+  const accessResponse = await internalDashboardAccess(req);
   if (!accessResponse.ok) { json(res, accessResponse.status === 403 ? 403 : 503, { code: 'CONTROL_CENTER_ACCESS_DENIED' }); return null; }
   const access = await accessResponse.json();
   const allowed = access.authenticated === true && access.workspaceSwitching === false && Array.isArray(access.dashboards) && access.dashboards.some(x => x.dashboard === 'control-center' && x.role === 'super_admin' && x.organizationId === null);
@@ -782,15 +802,7 @@ export async function handleRequest(req, res) {
 
       // Validasi identitas dan refresh token jika diperlukan.
       // Gunakan alur akses yang sudah ada di BFF.
-      const accessResponse = await fetch(
-        `http://${host}:${port}/bff/dashboard/access`,
-        {
-          headers: {
-            cookie: req.headers.cookie || ''
-          },
-          signal: AbortSignal.timeout(10000)
-        }
-      );
+      const accessResponse = await internalDashboardAccess(req);
 
       if (accessResponse.status !== 200) {
         const status = [401, 403].includes(accessResponse.status)
@@ -863,7 +875,7 @@ export async function handleRequest(req, res) {
       const startedAt = performance.now();
       const session = await getSession(req);
       if (!session?.accessToken) return json(res, 401, { authenticated: false, code: 'AUTH_REQUIRED' });
-      const accessResponse = await fetch(`http://${host}:${port}/bff/dashboard/access`, { headers: { cookie: req.headers.cookie || '' }, signal: AbortSignal.timeout(10000) });
+      const accessResponse = await internalDashboardAccess(req);
       if (accessResponse.status !== 200) return json(res, accessResponse.status === 403 ? 403 : 503, { code: accessResponse.status === 403 ? 'CONTROL_CENTER_ACCESS_DENIED' : 'DASHBOARD_ACCESS_UNAVAILABLE' });
       const access = await accessResponse.json();
       const allowed = access.authenticated === true && access.workspaceSwitching === false && access.dashboards?.some(item => item.dashboard === 'control-center' && item.role === 'super_admin' && item.organizationId === null);
@@ -898,10 +910,7 @@ export async function handleRequest(req, res) {
         return json(res, 401, { authenticated: false, code: 'AUTH_REQUIRED' });
       }
 
-      const accessResponse = await fetch(`http://${host}:${port}/bff/dashboard/access`, {
-        headers: { cookie: req.headers.cookie || '' },
-        signal: AbortSignal.timeout(10000)
-      });
+      const accessResponse = await internalDashboardAccess(req);
       if (accessResponse.status !== 200) {
         diagnostic(route, requestId, {
           stage: 'dashboard_access', status: accessResponse.status,
@@ -965,9 +974,7 @@ export async function handleRequest(req, res) {
       if (!session?.accessToken) {
         return json(res, 401, { authenticated: false, code: 'AUTH_REQUIRED' });
       }
-      const accessResponse = await fetch(`http://${host}:${port}/bff/dashboard/access`, {
-        headers: { cookie: req.headers.cookie || '' }, signal: AbortSignal.timeout(10000)
-      });
+      const accessResponse = await internalDashboardAccess(req);
       if (accessResponse.status !== 200) {
         return json(res, accessResponse.status === 403 ? 403 : 503, { code: accessResponse.status === 403 ? 'CONTROL_CENTER_ACCESS_DENIED' : 'DASHBOARD_ACCESS_UNAVAILABLE' });
       }
@@ -991,9 +998,7 @@ export async function handleRequest(req, res) {
     )) {
       const session = await getSession(req);
       if (!session?.accessToken) return json(res, 401, { authenticated: false, code: 'AUTH_REQUIRED' });
-      const accessResponse = await fetch(`http://${host}:${port}/bff/dashboard/access`, {
-        headers: { cookie: req.headers.cookie || '' }, signal: AbortSignal.timeout(10000)
-      });
+      const accessResponse = await internalDashboardAccess(req);
       if (accessResponse.status !== 200) return json(res, accessResponse.status === 403 ? 403 : 503, { code: 'CONTROL_CENTER_ACCESS_DENIED' });
       const access = await accessResponse.json();
       const allowed = access.authenticated === true && access.workspaceSwitching === false && access.dashboards?.some(item => item.dashboard === 'control-center' && item.role === 'super_admin' && item.organizationId === null);
@@ -1011,9 +1016,7 @@ export async function handleRequest(req, res) {
       (path === '/bff/control-center/travel-branches' || path.startsWith('/bff/control-center/travels/'))) {
       const session = await getSession(req);
       if (!session?.accessToken) return json(res, 401, { authenticated: false, code: 'AUTH_REQUIRED' });
-      const accessResponse = await fetch(`http://${host}:${port}/bff/dashboard/access`, {
-        headers: { cookie: req.headers.cookie || '' }, signal: AbortSignal.timeout(10000)
-      });
+      const accessResponse = await internalDashboardAccess(req);
       if (accessResponse.status !== 200) return json(res, accessResponse.status === 403 ? 403 : 503, { code: accessResponse.status === 403 ? 'CONTROL_CENTER_ACCESS_DENIED' : 'DASHBOARD_ACCESS_UNAVAILABLE' });
       const access = await accessResponse.json();
       const allowed = access.authenticated === true && access.workspaceSwitching === false && access.dashboards?.some(item => item.dashboard === 'control-center' && item.role === 'super_admin' && item.organizationId === null);
@@ -1031,7 +1034,7 @@ export async function handleRequest(req, res) {
     if (req.method === 'PATCH' && path.startsWith('/bff/control-center/travel-branches/')) {
       const session = await getSession(req);
       if (!session?.accessToken) return json(res, 401, { authenticated: false, code: 'AUTH_REQUIRED' });
-      const accessResponse = await fetch(`http://${host}:${port}/bff/dashboard/access`, { headers: { cookie: req.headers.cookie || '' }, signal: AbortSignal.timeout(10000) });
+      const accessResponse = await internalDashboardAccess(req);
       if (accessResponse.status !== 200) return json(res, accessResponse.status === 403 ? 403 : 503, { code: accessResponse.status === 403 ? 'CONTROL_CENTER_ACCESS_DENIED' : 'DASHBOARD_ACCESS_UNAVAILABLE' });
       const access = await accessResponse.json();
       const allowed = access.authenticated === true && access.workspaceSwitching === false && access.dashboards?.some(item => item.dashboard === 'control-center' && item.role === 'super_admin' && item.organizationId === null);
@@ -1047,7 +1050,7 @@ export async function handleRequest(req, res) {
       if (process.env.NODE_ENV === 'production') return json(res, 404, { code: 'NOT_FOUND' });
       const session = await getSession(req);
       if (!session?.accessToken) return json(res, 401, { authenticated: false, code: 'AUTH_REQUIRED' });
-      const accessResponse = await fetch(`http://${host}:${port}/bff/dashboard/access`, { headers: { cookie: req.headers.cookie || '' }, signal: AbortSignal.timeout(10000) });
+      const accessResponse = await internalDashboardAccess(req);
       if (accessResponse.status !== 200) return json(res, accessResponse.status === 403 ? 403 : 503, { code: accessResponse.status === 403 ? 'CONTROL_CENTER_ACCESS_DENIED' : 'DASHBOARD_ACCESS_UNAVAILABLE' });
       const access = await accessResponse.json();
       const allowed = access.authenticated === true && access.workspaceSwitching === false && access.dashboards?.some(item => item.dashboard === 'control-center' && item.role === 'super_admin' && item.organizationId === null);
@@ -1059,9 +1062,7 @@ export async function handleRequest(req, res) {
     if (req.method === 'GET' && path === '/bff/control-center/vendors') {
       const session = await getSession(req);
       if (!session?.accessToken) return json(res, 401, { authenticated: false, code: 'AUTH_REQUIRED' });
-      const accessResponse = await fetch(`http://${host}:${port}/bff/dashboard/access`, {
-        headers: { cookie: req.headers.cookie || '' }, signal: AbortSignal.timeout(10000)
-      });
+      const accessResponse = await internalDashboardAccess(req);
       if (accessResponse.status !== 200) return json(res, accessResponse.status === 403 ? 403 : 503, { code: 'CONTROL_CENTER_ACCESS_DENIED' });
       const access = await accessResponse.json();
       const allowed = access.authenticated === true && access.workspaceSwitching === false && access.dashboards?.some(item => item.dashboard === 'control-center' && item.role === 'super_admin' && item.organizationId === null);
@@ -1073,7 +1074,7 @@ export async function handleRequest(req, res) {
     }
     // Realtime Control Center: hanya super_admin; filter di API.
     if (req.method === 'GET' && path === '/bff/sync/events') {
-      const accessResponse = await fetch(`http://${host}:${port}/bff/dashboard/access`, { headers: { cookie: req.headers.cookie || '' }, signal: AbortSignal.timeout(10000) });
+      const accessResponse = await internalDashboardAccess(req);
       if (accessResponse.status !== 200) return json(res, [401, 403].includes(accessResponse.status) ? accessResponse.status : 503, { code: 'CONTROL_CENTER_ACCESS_DENIED' });
       const access = await accessResponse.json();
       const allowed = access.authenticated === true && access.dashboards?.some(item => item.dashboard === 'control-center' && item.role === 'super_admin' && item.organizationId === null);
@@ -1094,7 +1095,7 @@ export async function handleRequest(req, res) {
     if (req.method === 'GET' && path === '/bff/control-center/bookings') {
       const session = await getSession(req);
       if (!session?.accessToken) return json(res, 401, { authenticated: false, code: 'AUTH_REQUIRED' });
-      const accessResponse = await fetch(`http://${host}:${port}/bff/dashboard/access`, { headers: { cookie: req.headers.cookie || '' }, signal: AbortSignal.timeout(10000) });
+      const accessResponse = await internalDashboardAccess(req);
       if (accessResponse.status !== 200) return json(res, accessResponse.status === 403 ? 403 : 503, { code: 'CONTROL_CENTER_ACCESS_DENIED' });
       const access = await accessResponse.json();
       const allowed = access.authenticated === true && access.workspaceSwitching === false && access.dashboards?.some(item => item.dashboard === 'control-center' && item.role === 'super_admin' && item.organizationId === null);
@@ -1107,9 +1108,7 @@ export async function handleRequest(req, res) {
     if (req.method === 'GET' && path === '/bff/control-center/audit-logs') {
       const session = await getSession(req);
       if (!session?.accessToken) return json(res, 401, { authenticated: false, code: 'AUTH_REQUIRED' });
-      const accessResponse = await fetch(`http://${host}:${port}/bff/dashboard/access`, {
-        headers: { cookie: req.headers.cookie || '' }, signal: AbortSignal.timeout(10000)
-      });
+      const accessResponse = await internalDashboardAccess(req);
       if (accessResponse.status !== 200) return json(res, accessResponse.status === 403 ? 403 : 503, { code: 'CONTROL_CENTER_ACCESS_DENIED' });
       const access = await accessResponse.json();
       const allowed = access.authenticated === true && access.workspaceSwitching === false && access.dashboards?.some(item => item.dashboard === 'control-center' && item.role === 'super_admin' && item.organizationId === null);
@@ -1132,15 +1131,7 @@ export async function handleRequest(req, res) {
         });
       }
 
-      const accessResponse = await fetch(
-        `http://${host}:${port}/bff/dashboard/access`,
-        {
-          headers: {
-            cookie: req.headers.cookie || ''
-          },
-          signal: AbortSignal.timeout(10000)
-        }
-      );
+      const accessResponse = await internalDashboardAccess(req);
 
       if (accessResponse.status !== 200) {
         return json(
