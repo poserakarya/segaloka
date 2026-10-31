@@ -2,6 +2,7 @@ import http from 'node:http';
 import { existsSync } from 'node:fs';
 
 import { V7_ORIGINAL_SOURCE_URL, V7_PORTALS } from './v7-portal-source.mjs';
+import { HANDOFF_CALLBACK_PATH, HANDOFF_START_PATH, marketplaceOrigin } from './bff-marketplace-handoff.mjs';
 
 // Entry server portal: satu origin per dashboard.
 //   GET /, /login  -> halaman login V7 portal ini
@@ -55,9 +56,19 @@ function sendJson(res, status, data) {
 // Proxy /bff/* ke BFF lokal dengan pemeriksaan Origin: Origin publik yang
 // diizinkan dipetakan ke origin lokal (forwardedOrigin) sebelum diteruskan.
 // Dipakai entry portal dan server frontend Travel production.
-export function createBffProxy({ bffPort, origins, forwardedOrigin }) {
+export function createBffProxy({ bffPort, origins, forwardedOrigin, handoffOrigin = null }) {
   return function proxyBff(req, res) {
     const origin = req.headers.origin;
+    // Satu pengecualian: callback handoff (form POST dari Marketplace). Origin
+    // Marketplace diteruskan apa adanya dan diverifikasi ulang oleh BFF.
+    const handoffCallback = handoffOrigin !== null &&
+      req.method === 'POST' &&
+      origin === handoffOrigin &&
+      new URL(req.url, forwardedOrigin).pathname === HANDOFF_CALLBACK_PATH;
+
+    if (handoffCallback) {
+      return forward(req, res, { ...req.headers, host: `127.0.0.1:${bffPort}` });
+    }
 
     if (
       !['GET', 'HEAD'].includes(req.method) &&
@@ -72,6 +83,10 @@ export function createBffProxy({ bffPort, origins, forwardedOrigin }) {
 
     const headers = { ...req.headers, host: `127.0.0.1:${bffPort}` };
     if (origin !== undefined) headers.origin = forwardedOrigin;
+    return forward(req, res, headers);
+  };
+
+  function forward(req, res, headers) {
     delete headers.connection;
     delete headers['proxy-connection'];
 
@@ -98,7 +113,7 @@ export function createBffProxy({ bffPort, origins, forwardedOrigin }) {
     });
     res.on('close', () => upstream.destroy());
     req.pipe(upstream);
-  };
+  }
 }
 
 export function createPortalEntryServer({ role, port, bffPort, env = process.env }) {
@@ -110,7 +125,7 @@ export function createPortalEntryServer({ role, port, bffPort, env = process.env
   const origins = allowedPublicOrigins(port, env);
   const forwardedOrigin = localEntryOrigin(port);
 
-  const proxyBff = createBffProxy({ bffPort, origins, forwardedOrigin });
+  const proxyBff = createBffProxy({ bffPort, origins, forwardedOrigin, handoffOrigin: marketplaceOrigin(env) });
 
   return http.createServer((req, res) => {
     let path;
@@ -135,21 +150,10 @@ export function createPortalEntryServer({ role, port, bffPort, env = process.env
     }
 
     if (req.method === 'GET' && (path === '/' || path === '/login' || path === '/index.html')) {
-      // Dashboard non-admin tidak menyediakan formulir login sendiri.
-      // Tujuan login harus dikonfigurasi ke route login Marketplace existing.
-      const loginUrl = env.SEGALOKA_MARKETPLACE_LOGIN_URL;
-      if (!loginUrl) return sendJson(res, 503, { code: 'MARKETPLACE_LOGIN_NOT_CONFIGURED' });
-      let destination;
-      try {
-        destination = new URL(loginUrl);
-        if (destination.protocol !== 'https:' || destination.hostname !== 'segaloka.com' && destination.hostname !== 'www.segaloka.com' || destination.username || destination.password) {
-          throw new Error('INVALID_MARKETPLACE_LOGIN_URL');
-        }
-      } catch {
-        return sendJson(res, 503, { code: 'INVALID_MARKETPLACE_LOGIN_URL' });
-      }
+      // Dashboard non-admin tidak memiliki formulir login. BFF memulai
+      // handoff login Marketplace (atau langsung ke dashboard bila sesi sah).
       res.writeHead(302, {
-        Location: destination.toString(),
+        Location: HANDOFF_START_PATH,
         'Cache-Control': 'no-store',
         'Referrer-Policy': 'no-referrer',
         'X-Content-Type-Options': 'nosniff'

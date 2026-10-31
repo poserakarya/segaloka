@@ -8,6 +8,7 @@ import { registerControlCenterAuditLogRoutes } from './control-center/audit-log-
 import { registerTravelDemoRoutes } from './control-center/travel-demo-routes.js';
 import { registerMembershipPermissionRoutes } from './control-center/membership-permission-routes.js';
 import { registerDashboardAccessRoute } from './security/dashboard-access-route.js';
+import { registerMarketplaceHandoffRoutes } from './auth/marketplace-handoff-routes.js';
 import { registerTravelerCertificateRoutes } from './travel/certificate-routes.js';
 import Fastify from 'fastify';
 import { registerTravelStatusRoutes } from './travel/status-routes.js';
@@ -197,6 +198,7 @@ await registerDashboardHandoffRoutes(app, pool);
 await registerSecurityTwoFactorRoutes(app, pool);
 await registerMeRoute(app, pool);
 await registerDashboardAccessRoute(app, pool);
+await registerMarketplaceHandoffRoutes(app, pool);
 await registerControlCenterSummaryRoute(app, pool);
 await registerControlCenterTravelRoutes(app, pool);
 await registerControlCenterVendorRoutes(app, pool);

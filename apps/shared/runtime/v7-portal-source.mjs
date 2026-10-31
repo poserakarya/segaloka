@@ -845,7 +845,9 @@ export async function serveV7PortalUi(req, res, options) {
   const session = await getSession(req);
 
   if (!session) {
-    json(res, 401, { authenticated: false, code: 'AUTH_REQUIRED' });
+    // Belum login: mulai handoff login Marketplace (tanpa form login dashboard).
+    res.writeHead(302, { Location: '/bff/auth/handoff/start', 'Cache-Control': 'no-store' });
+    res.end();
     return true;
   }
 

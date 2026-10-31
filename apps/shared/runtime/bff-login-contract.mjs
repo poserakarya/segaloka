@@ -145,7 +145,9 @@ export function createBffLoginContract(options) {
     return 'ok';
   }
 
-  async function finishLogin(session) {
+  // binding: data tambahan sesi BFF, mis. { organizationId } workspace yang
+  // dipilih lewat handoff Marketplace (sudah diperiksa API).
+  async function finishLogin(session, binding = {}) {
     const accessToken = session.accessToken;
     const refreshToken = session.refreshToken;
     const me = await apiRequest('GET', '/auth/me', undefined, accessToken);
@@ -170,7 +172,8 @@ export function createBffLoginContract(options) {
       accessToken,
       refreshToken,
       user: me.data.user,
-      memberships: me.data.memberships
+      memberships: me.data.memberships,
+      ...(binding.organizationId ? { organizationId: binding.organizationId } : {})
     });
 
     return reply(200, {
@@ -354,6 +357,9 @@ export function createBffLoginContract(options) {
   };
 
   return {
+    // Dipakai handoff Marketplace: membuat sesi BFF dari sesi API yang sah
+    // (memeriksa /auth/me dan akses dashboard yang sama dengan login).
+    completeSession: finishLogin,
     handles: path => Object.hasOwn(handlers, path),
     // rawBody: Buffer berisi JSON. SyntaxError diteruskan ke pemanggil (400).
     async handle(path, rawBody) {
