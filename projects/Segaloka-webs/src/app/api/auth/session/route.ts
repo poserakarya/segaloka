@@ -1,4 +1,5 @@
 import { signIngressRequest } from "../../../../lib/segaloka-ingress-v3.mjs";
+import { clientIpUnavailable, requestClientIp } from "../../../../lib/client-ip";
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 
@@ -9,7 +10,10 @@ const noStore = {
   "Cache-Control": "no-store",
 };
 
-export async function GET() {
+export async function GET(request: Request) {
+  const clientIp = requestClientIp(request);
+  if (!clientIp) return clientIpUnavailable();
+
   const cookieStore = await cookies();
   const accessToken = cookieStore.get("segaloka_access")?.value;
 
@@ -36,7 +40,7 @@ export async function GET() {
   try {
     const sessionUrl = new URL("/auth/me", baseUrl);
     const sessionSignature = signIngressRequest(originSecret, {
-      ip: "127.0.0.1",
+      ip: clientIp,
       method: "GET",
       target: sessionUrl.pathname + sessionUrl.search,
       body: Buffer.alloc(0),

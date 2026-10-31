@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { clientIpUnavailable, requestClientIp } from "../../../../../lib/client-ip";
 import { signIngressRequest } from "../../../../../lib/segaloka-ingress-v3.mjs";
 
 export const runtime = "nodejs";
@@ -15,6 +16,9 @@ type AuthResult = {
 };
 
 export async function POST(request: NextRequest) {
+  const clientIp = requestClientIp(request);
+  if (!clientIp) return clientIpUnavailable();
+
   let input: unknown;
 
   try {
@@ -67,7 +71,7 @@ export async function POST(request: NextRequest) {
     );
 
     const signature = signIngressRequest(secret, {
-      ip: "127.0.0.1",
+      ip: clientIp,
       method: "POST",
       target: verifyUrl.pathname + verifyUrl.search,
       body: payload,
@@ -120,7 +124,7 @@ export async function POST(request: NextRequest) {
 
     const meUrl = new URL("/auth/me", baseUrl);
     const meSignature = signIngressRequest(secret, {
-      ip: "127.0.0.1",
+      ip: clientIp,
       method: "GET",
       target: meUrl.pathname + meUrl.search,
       body: Buffer.alloc(0),

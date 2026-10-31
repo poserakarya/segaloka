@@ -168,3 +168,24 @@ test('16 - malformed request target rejected', () => {
     /INVALID_INGRESS_REQUEST/
   );
 });
+test('client IP is canonicalised before signing; non-canonical forms are rejected', async () => {
+  const { canonicalClientIp } = await import('../src/security/ingress-identity-v3.js');
+  const secret = 'k'.repeat(64);
+  const body = Buffer.from('{}');
+  const signed = signIngressRequest(secret, { ip: '::FFFF:203.0.113.7', method: 'POST', target: '/auth/login', body });
+  assert.equal(signed['x-segaloka-client-ip'], '203.0.113.7');
+  assert.deepEqual(verifyIngressRequest(signed, secret, { method: 'POST', target: '/auth/login', body })?.ip, '203.0.113.7');
+
+  const v6 = signIngressRequest(secret, { ip: '2001:DB8::1', method: 'GET', target: '/auth/me', body: Buffer.alloc(0) });
+  assert.equal(v6['x-segaloka-client-ip'], '2001:db8::1');
+
+  // Header IP diubah ke bentuk lain (walau setara) membatalkan verifikasi.
+  for (const ip of ['::ffff:203.0.113.7', '2001:DB8::1']) {
+    const tampered = { ...signed, 'x-segaloka-client-ip': ip };
+    assert.equal(verifyIngressRequest(tampered, secret, { method: 'POST', target: '/auth/login', body }), null, ip);
+  }
+  for (const ip of ['fe80::1%eth0', 'localhost', '203.0.113.7, 10.0.0.1']) {
+    assert.equal(canonicalClientIp(ip), null);
+    assert.throws(() => signIngressRequest(secret, { ip, method: 'GET', target: '/', body: Buffer.alloc(0) }), /INVALID_INGRESS_REQUEST/);
+  }
+});

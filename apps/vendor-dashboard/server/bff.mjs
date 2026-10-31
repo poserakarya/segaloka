@@ -1,4 +1,11 @@
+// BFF Dashboard Vendor. Dua mode dengan handler yang sama (handleRequest):
+//   container  `node server/bff.mjs`: listen 127.0.0.1:4211 di belakang entry
+//              server-v7.mjs (IP klien dari x-real-ip entry, peer loopback).
+//   Vercel     api/index.mjs memanggil handleRequest langsung lewat
+//              createPortalRequestHandler (IP klien dari header edge Vercel).
+// Tidak ada request antarproses ke 127.0.0.1 di dalam handler.
 import http from 'node:http';
+import { AsyncLocalStorage } from 'node:async_hooks';
 import { createRequire } from 'node:module';
 import { createSessionStore } from './session-store.mjs';
 import { createBffLoginContract } from '../../shared/runtime/bff-login-contract.mjs';
@@ -6,6 +13,8 @@ import { createMarketplaceHandoff, sendHandoffResult } from '../../shared/runtim
 import { serveV7PortalUi } from '../../shared/runtime/v7-portal-source.mjs';
 import { serveSharedFont } from '../../shared/runtime/shared-fonts.mjs';
 import { createConfigReader, readDbConfig, readIngressSecret } from '../../shared/runtime/service-config.mjs';
+import { allowedPublicOrigins } from '../../shared/runtime/v7-portal-entry.mjs';
+import { createClientIpResolver } from '../../shared/runtime/client-ip.mjs';
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -26,10 +35,17 @@ const apiEnvFile = resolve(root, 'services/api/.env');
 const appEnvFile = resolve(root, 'apps/vendor-dashboard/server/.env');
 
 const ingressSecret = readIngressSecret(readConfig, apiEnvFile);
-const requireApi = createRequire(
-  new URL('../../../services/api/package.json', import.meta.url)
-);
-const { Pool } = requireApi('pg');
+// pg dari dependensi paket ini (Vercel, lewat ./pg.mjs agar ikut di-trace
+// bundler) atau dari services/api (image container tanpa node_modules paket ini).
+async function loadPg() {
+  try {
+    return (await import('./pg.mjs')).default;
+  } catch (error) {
+    if (error.code !== 'ERR_MODULE_NOT_FOUND') throw error;
+  }
+  return createRequire(new URL('../../../services/api/package.json', import.meta.url))('pg');
+}
+const { Pool } = await loadPg();
 
 const dbConfig = readDbConfig(readConfig, apiEnvFile);
 const bffConfig = {
@@ -46,6 +62,10 @@ const pool = new Pool({
   max: 5,
   connectionTimeoutMillis: 5000,
   idleTimeoutMillis: 30000
+});
+// Koneksi idle yang diputus server tidak boleh menjatuhkan proses.
+pool.on('error', error => {
+  console.error(JSON.stringify({ service: 'vendor-bff', event: 'db_pool_error', code: error.code || null }));
 });
 
 const sessions = createSessionStore(
@@ -122,15 +142,24 @@ async function getSession(req) {
   return id ? await sessions.get(id) : null;
 }
 
+// IP klien per request (rate limit dan audit di API), dari handleRequest.
+const requestContext = new AsyncLocalStorage();
+// Mode container: BFF hanya listen 127.0.0.1, peer = entry yang menimpa
+// x-real-ip, sehingga loopback dipercaya.
+const proxyClientIp = createClientIpResolver({ mode: 'proxy', trustLoopback: true });
+
 async function apiRequest(method, target, data, accessToken) {
   const body = data === undefined
     ? Buffer.alloc(0)
     : Buffer.from(JSON.stringify(data));
 
+  const clientIp = requestContext.getStore()?.clientIp;
+  if (!clientIp) throw new Error('CLIENT_IP_UNAVAILABLE');
+
   const signed = signIngressRequest(
     ingressSecret,
     {
-      ip: '127.0.0.1',
+      ip: clientIp,
       method,
       target,
       body
@@ -186,21 +215,13 @@ function vendorMembership(me) {
       return m.role === 'vendor';
     });
 }
+// Origin entry lokal (mode container, ditulis ulang entry) atau origin
+// publik SEGALOKA_PUBLIC_ORIGIN (mode Vercel, Origin browser asli).
+const allowedOrigins = allowedPublicOrigins(4204);
+
 function isAllowedOrigin(req) {
   const origin = req.headers.origin;
-
-  if (typeof origin !== 'string') {
-    return false;
-  }
-
-  try {
-    const parsed = new URL(origin);
-
-    return parsed.origin ===
-      'http://127.0.0.1:4204';
-  } catch {
-    return false;
-  }
+  return typeof origin === 'string' && allowedOrigins.has(origin);
 }
 
 function sessionCookie(value, clear = false) {
@@ -213,7 +234,166 @@ function sessionCookie(value, clear = false) {
     secure +
     (clear ? '; Max-Age=0' : '');
 }
-const server = http.createServer(async (req, res) => {
+// Akses Dashboard Vendor untuk sesi pada request (termasuk refresh token).
+// Dipakai GET /bff/dashboard/access, /bff/ui, dan /bff/vendor/verification
+// di proses yang sama.
+async function dashboardAccess(req) {
+  const session = await getSession(req);
+
+  if (!session) {
+    return { status: 401, body: {
+      authenticated: false,
+      code: 'AUTH_REQUIRED'
+    } };
+  }
+
+  let currentSession = session;
+
+  let me = await apiRequest(
+    'GET',
+    '/auth/me',
+    undefined,
+    currentSession.accessToken
+  );
+
+  if (me.status === 401) {
+    const sessionId = cookies(req).segaloka_vendor_session;
+    let invalidRefresh = false;
+
+    const updated = await sessions.refresh(
+      sessionId,
+      async current => {
+        if (current.accessToken !== session.accessToken) {
+          return current;
+        }
+
+        const refreshed = await apiRequest(
+          'POST',
+          '/auth/refresh',
+          { refreshToken: current.refreshToken }
+        );
+
+        if (refreshed.status === 401) {
+          invalidRefresh = true;
+          return null;
+        }
+
+        if (refreshed.status !== 200) {
+          throw new Error('REFRESH_SERVICE_UNAVAILABLE');
+        }
+
+        const accessToken = accessTokenOf(refreshed.data.session);
+        const refreshToken = refreshTokenOf(refreshed.data.session);
+
+        if (!accessToken || !refreshToken) {
+          throw new Error('INVALID_REFRESH_RESPONSE');
+        }
+
+        return {
+          ...current,
+          accessToken,
+          refreshToken
+        };
+      }
+    );
+
+    if (!updated || invalidRefresh) {
+      await sessions.revoke(sessionId);
+
+      return {
+        status: 401,
+        body: { authenticated: false, code: 'INVALID_SESSION' },
+        headers: { 'Set-Cookie': sessionCookie('', true) }
+      };
+    }
+
+    currentSession = updated;
+
+    me = await apiRequest(
+      'GET',
+      '/auth/me',
+      undefined,
+      currentSession.accessToken
+    );
+  }
+
+  if (me.status === 401) {
+    return { status: 401, body: {
+      authenticated: false,
+      code: 'INVALID_SESSION'
+    } };
+  }
+
+  if (me.status !== 200) {
+    return { status: 503, body: {
+      code: 'AUTH_SERVICE_UNAVAILABLE'
+    } };
+  }
+
+  if (!vendorMembership(me.data)) {
+    return { status: 403, body: {
+      code: 'VENDOR_ROLE_REQUIRED'
+    } };
+  }
+
+  const access = await apiRequest(
+    'GET',
+    '/dashboard/access',
+    undefined,
+    currentSession.accessToken
+  );
+
+  if (access.status === 401) {
+    return { status: 401, body: {
+      authenticated: false,
+      code: 'INVALID_SESSION'
+    } };
+  }
+
+  if (access.status !== 200) {
+    return { status: 503, body: {
+      code: 'DASHBOARD_ACCESS_UNAVAILABLE'
+    } };
+  }
+
+  const vendorDashboards = (
+    Array.isArray(access.data?.dashboards)
+      ? access.data.dashboards
+      : []
+  ).filter(item =>
+    item.dashboard === 'vendor' &&
+    item.role === 'vendor' &&
+    typeof item.organizationId === 'string' &&
+    item.organizationId.length > 0 &&
+    // Sesi dari handoff terikat ke workspace yang dipilih.
+    (!currentSession.organizationId || item.organizationId === currentSession.organizationId)
+  );
+
+  if (vendorDashboards.length === 0) {
+    return { status: 403, body: {
+      code: 'VENDOR_ACCESS_DENIED'
+    } };
+  }
+
+  return { status: 200, body: {
+    authenticated: true,
+    workspaceSwitching: false,
+    dashboards: vendorDashboards
+  } };
+}
+
+// fetchImpl untuk serveV7PortalUi: pemeriksaan akses tanpa hop HTTP.
+async function localAccessFetch(req) {
+  const result = await dashboardAccess(req);
+  return { status: result.status, json: async () => result.body };
+}
+
+export async function handleRequest(req, res, { clientIp = proxyClientIp(req) } = {}) {
+  if (!clientIp) return json(res, 503, { code: 'CLIENT_IP_UNAVAILABLE' });
+  return requestContext.run({ clientIp }, () => routeRequest(req, res));
+}
+
+async function routeRequest(req, res) {
   try {
     const handoffPath = new URL(req.url, `http://${host}:${port}`).pathname;
     if (marketplaceHandoff.handles(req.method, handoffPath)) {
@@ -248,149 +428,8 @@ const server = http.createServer(async (req, res) => {
     }
 
     if (req.method === 'GET' && path === '/bff/dashboard/access') {
-      const session = await getSession(req);
-
-      if (!session) {
-        return json(res, 401, {
-          authenticated: false,
-          code: 'AUTH_REQUIRED'
-        });
-      }
-
-      let currentSession = session;
-
-      let me = await apiRequest(
-        'GET',
-        '/auth/me',
-        undefined,
-        currentSession.accessToken
-      );
-
-      if (me.status === 401) {
-        const sessionId = cookies(req).segaloka_vendor_session;
-        let invalidRefresh = false;
-
-        const updated = await sessions.refresh(
-          sessionId,
-          async current => {
-            if (current.accessToken !== session.accessToken) {
-              return current;
-            }
-
-            const refreshed = await apiRequest(
-              'POST',
-              '/auth/refresh',
-              { refreshToken: current.refreshToken }
-            );
-
-            if (refreshed.status === 401) {
-              invalidRefresh = true;
-              return null;
-            }
-
-            if (refreshed.status !== 200) {
-              throw new Error('REFRESH_SERVICE_UNAVAILABLE');
-            }
-
-            const accessToken = accessTokenOf(refreshed.data.session);
-            const refreshToken = refreshTokenOf(refreshed.data.session);
-
-            if (!accessToken || !refreshToken) {
-              throw new Error('INVALID_REFRESH_RESPONSE');
-            }
-
-            return {
-              ...current,
-              accessToken,
-              refreshToken
-            };
-          }
-        );
-
-        if (!updated || invalidRefresh) {
-          await sessions.revoke(sessionId);
-
-          return json(
-            res,
-            401,
-            { authenticated: false, code: 'INVALID_SESSION' },
-            { 'Set-Cookie': sessionCookie('', true) }
-          );
-        }
-
-        currentSession = updated;
-
-        me = await apiRequest(
-          'GET',
-          '/auth/me',
-          undefined,
-          currentSession.accessToken
-        );
-      }
-
-      if (me.status === 401) {
-        return json(res, 401, {
-          authenticated: false,
-          code: 'INVALID_SESSION'
-        });
-      }
-
-      if (me.status !== 200) {
-        return json(res, 503, {
-          code: 'AUTH_SERVICE_UNAVAILABLE'
-        });
-      }
-
-      if (!vendorMembership(me.data)) {
-        return json(res, 403, {
-          code: 'VENDOR_ROLE_REQUIRED'
-        });
-      }
-
-      const access = await apiRequest(
-        'GET',
-        '/dashboard/access',
-        undefined,
-        currentSession.accessToken
-      );
-
-      if (access.status === 401) {
-        return json(res, 401, {
-          authenticated: false,
-          code: 'INVALID_SESSION'
-        });
-      }
-
-      if (access.status !== 200) {
-        return json(res, 503, {
-          code: 'DASHBOARD_ACCESS_UNAVAILABLE'
-        });
-      }
-
-      const vendorDashboards = (
-        Array.isArray(access.data?.dashboards)
-          ? access.data.dashboards
-          : []
-      ).filter(item =>
-        item.dashboard === 'vendor' &&
-        item.role === 'vendor' &&
-        typeof item.organizationId === 'string' &&
-        item.organizationId.length > 0 &&
-        // Sesi dari handoff terikat ke workspace yang dipilih.
-        (!currentSession.organizationId || item.organizationId === currentSession.organizationId)
-      );
-
-      if (vendorDashboards.length === 0) {
-        return json(res, 403, {
-          code: 'VENDOR_ACCESS_DENIED'
-        });
-      }
-
-      return json(res, 200, {
-        authenticated: true,
-        workspaceSwitching: false,
-        dashboards: vendorDashboards
-      });
+      const result = await dashboardAccess(req);
+      return json(res, result.status, result.body, result.headers);
     }
     // Status verifikasi Vendor dari pendaftaran di database (read-only).
     // Tanpa aplikasi pendaftaran untuk organisasi ini, status = null
@@ -398,15 +437,13 @@ const server = http.createServer(async (req, res) => {
     if (req.method === 'GET' && path === '/bff/vendor/verification') {
       const session = await getSession(req);
       if (!session) return json(res, 401, { authenticated: false, code: 'AUTH_REQUIRED' });
-      const accessResponse = await fetch(`http://127.0.0.1:${port}/bff/dashboard/access`, {
-        headers: { cookie: req.headers.cookie || '' }, signal: AbortSignal.timeout(10000)
-      });
-      if (accessResponse.status !== 200) {
-        return json(res, [401, 403].includes(accessResponse.status) ? accessResponse.status : 503, {
+      const access = await dashboardAccess(req);
+      if (access.status !== 200) {
+        return json(res, [401, 403].includes(access.status) ? access.status : 503, {
           code: 'VENDOR_ACCESS_DENIED'
-        });
+        }, access.headers);
       }
-      const organizationId = (await accessResponse.json()).dashboards?.[0]?.organizationId;
+      const organizationId = access.body.dashboards?.[0]?.organizationId;
       const fresh = await getSession(req);
       const result = await apiRequest('GET', '/registration/applications/mine', undefined, accessTokenOf(fresh || session));
       if (result.status !== 200 || !Array.isArray(result.data?.items)) {
@@ -559,7 +596,8 @@ const server = http.createServer(async (req, res) => {
       role: 'vendor',
       port,
       json,
-      getSession
+      getSession,
+      fetchImpl: () => localAccessFetch(req)
     })) {
       return;
     }
@@ -579,10 +617,13 @@ const server = http.createServer(async (req, res) => {
         : 'INVALID_REQUEST'
     });
   }
-});
+}
 
-server.listen(port, host, () => {
-  console.log(
-    `Segaloka Vendor BFF: http://${host}:${port}`
-  );
-});
+// Mode container: hanya bila berkas ini dijalankan langsung.
+if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+  http.createServer(handleRequest).listen(port, host, () => {
+    console.log(
+      `Segaloka Vendor BFF: http://${host}:${port}`
+    );
+  });
+}

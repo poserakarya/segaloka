@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { clientIpUnavailable, requestClientIp } from "../../../../../lib/client-ip";
 import { signIngressRequest } from "../../../../../lib/segaloka-ingress-v3.mjs";
 
 export const runtime = "nodejs";
@@ -13,6 +14,9 @@ type ExchangeResult = {
 };
 
 export async function GET(request: NextRequest) {
+  const clientIp = requestClientIp(request);
+  if (!clientIp) return clientIpUnavailable();
+
   const code = request.nextUrl.searchParams.get("code");
   if (!code || !/^[0-9a-f]{64}$/.test(code)) {
     return NextResponse.redirect(new URL("/masuk?error=google_invalid_code", request.url));
@@ -29,7 +33,7 @@ export async function GET(request: NextRequest) {
 
   try {
     const signature = signIngressRequest(secret, {
-      ip: "127.0.0.1",
+      ip: clientIp,
       method: "POST",
       target,
       body: bytes,

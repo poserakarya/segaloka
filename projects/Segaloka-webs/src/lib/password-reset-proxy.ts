@@ -1,10 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { signIngressRequest } from "./segaloka-ingress-v3.mjs";
+import { clientIpUnavailable, requestClientIp } from "./client-ip";
 
 export async function passwordResetProxy(
   request: NextRequest,
   action: "forgot" | "reset" | "verify",
 ) {
+  const clientIp = requestClientIp(request);
+  if (!clientIp) return clientIpUnavailable();
   const baseUrl = process.env.SEGALOKA_API_BASE_URL;
   const secret = process.env.INGRESS_IDENTITY_SECRET;
 
@@ -95,9 +98,9 @@ export async function passwordResetProxy(
   try {
     const url = new URL(target, baseUrl);
 
-    // Identitas IP milik proxy server, bukan klaim IP pengguna.
+    // IP klien dari sumber proxy tepercaya (lib/client-ip), bukan klaim browser.
     const signature = signIngressRequest(secret, {
-      ip: "127.0.0.1",
+      ip: clientIp,
       method: "POST",
       target,
       body: bytes,

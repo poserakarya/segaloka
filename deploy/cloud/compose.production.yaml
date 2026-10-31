@@ -218,3 +218,8 @@ networks:
     internal: true
   edge:
     driver: bridge
+    # Subnet tetap: entry dashboard hanya mempercayai X-Real-IP dari nginx di
+    # subnet ini (SEGALOKA_TRUSTED_PROXY_IPS di production.env).
+    ipam:
+      config:
+        - subnet: 172.30.0.0/24

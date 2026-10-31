@@ -61,6 +61,8 @@ export async function segalokaApiRequest<T>(
   headers.delete("x-segaloka-origin-auth");
   headers.delete("cf-connecting-ip");
   const body = init.body === undefined ? Buffer.alloc(0) : Buffer.from(String(init.body));
+  // Hanya untuk data publik/internal tanpa identitas pengguna (master data,
+  // health): identitas server sendiri, bukan IP klien.
   const signed = signIngressRequest(getOriginAuthSecret(), { ip: "127.0.0.1", method: String(init.method || "GET").toUpperCase(), target: url.pathname + url.search, body });
   Object.entries(signed).forEach(([key, value]) => headers.set(key, value));
 

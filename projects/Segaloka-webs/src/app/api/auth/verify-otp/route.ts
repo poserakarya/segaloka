@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { clientIpUnavailable, requestClientIp } from "../../../../lib/client-ip";
 import { signIngressRequest } from "../../../../lib/segaloka-ingress-v3.mjs";
 
 export const runtime = "nodejs";
@@ -14,6 +15,9 @@ type VerifyResult = {
 };
 
 export async function POST(request: NextRequest) {
+  const clientIp = requestClientIp(request);
+  if (!clientIp) return clientIpUnavailable();
+
   let body: unknown;
 
   try {
@@ -65,7 +69,7 @@ export async function POST(request: NextRequest) {
       "utf8",
     );
     const verifySignature = signIngressRequest(originSecret, {
-      ip: "127.0.0.1",
+      ip: clientIp,
       method: "POST",
       target: verifyUrl.pathname + verifyUrl.search,
       body: verifyBody,
@@ -128,7 +132,7 @@ export async function POST(request: NextRequest) {
     // sg-marketplace-me-v1
     const meUrl = new URL("/auth/me", baseUrl);
     const meSignature = signIngressRequest(originSecret, {
-      ip: "127.0.0.1",
+      ip: clientIp,
       method: "GET",
       target: meUrl.pathname + meUrl.search,
       body: Buffer.alloc(0),

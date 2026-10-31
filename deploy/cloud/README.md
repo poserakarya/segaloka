@@ -67,6 +67,25 @@ Hanya Control Center (Super Admin) yang punya halaman login sendiri. Travel, Ven
 
 Variabel website (Vercel project segaloka.com): `SEGALOKA_API_BASE_URL`, `SEGALOKA_ORIGIN_AUTH_SECRET` (sama dengan `ingress_identity_secret` API), dan opsional `SEGALOKA_DASHBOARD_ORIGINS` (JSON `{"vendor":"https://vendor.dashboard.segaloka.com",…}`; default hostname resmi, wajib https `*.segaloka.com` di production).
 
+### IP klien untuk rate limit dan audit
+API mencatat IP klien dari tanda tangan ingress (`x-segaloka-client-ip`). Pemanggil hanya mengambil IP dari sumber yang ditulis ulang proxy tepercaya, tidak pernah dari `X-Forwarded-For` mentah:
+
+| Pemanggil | Sumber IP | Konfigurasi |
+|---|---|---|
+| Website di Vercel | `x-vercel-forwarded-for`, lalu `x-real-ip` (ditimpa edge Vercel) | otomatis (`VERCEL=1`) atau `SEGALOKA_CLIENT_IP_SOURCE=vercel` |
+| Website self-hosted | `X-Real-IP` dari reverse proxy | `SEGALOKA_CLIENT_IP_SOURCE=x-real-ip`; production tanpa sumber menolak request (503) |
+| Entry dashboard (container) | `X-Real-IP` hanya dari peer di `SEGALOKA_TRUSTED_PROXY_IPS` (IP/CIDR nginx), selain itu IP peer TCP; entry selalu menimpa `x-real-ip` ke BFF | `SEGALOKA_TRUSTED_PROXY_IPS=172.30.0.0/24` (subnet jaringan `edge` di compose) |
+| BFF Vendor mode Vercel | header edge Vercel | otomatis (`api/index.mjs`) |
+
+IP dinormalisasi (IPv4-mapped IPv6 menjadi IPv4, IPv6 huruf kecil) sebelum ditandatangani; API menolak bentuk tidak kanonis.
+
+### Dashboard Vendor di Vercel (`apps/vendor-dashboard/vercel.json`)
+Satu Vercel Function (`api/index.mjs`) menjalankan entry dan BFF Vendor dalam satu handler, tanpa proses kedua dan tanpa hop `127.0.0.1`. `vercel.json` mengarahkan semua path ke function itu; output statis sengaja kosong (`scripts/vercel-build.mjs`), sehingga source, `original-v7/`, dan `index.html` lama tidak tersaji langsung. Mode container (`server-v7.mjs` + `server/bff.mjs`) tetap berjalan seperti sebelumnya.
+
+Syarat proyek Vercel (diatur pemilik proyek, belum diubah): Root Directory `apps/vendor-dashboard`, opsi *Include files outside the Root Directory* aktif (function memakai `apps/shared`, `services/api/src/security`, dan sumber V7 di `apps/travel-dashboard/original-v7`), Node.js 24.
+
+Env wajib (divalidasi saat startup; nama variabel saja yang tampil saat gagal): `NODE_ENV=production`, `API_ORIGIN` (https, bukan loopback), `INGRESS_IDENTITY_SECRET`, `BFF_SESSION_ENCRYPTION_KEY` (32 byte base64, khusus Vendor), `DB_HOST`/`DB_PORT`/`DB_NAME`/`DB_USER`/`DB_PASSWORD` dengan `DB_SSL=true` (host bukan loopback; endpoint pooler boleh, kunci sesi memakai `pg_advisory_xact_lock`), `SEGALOKA_PUBLIC_ORIGIN=https://vendor.dashboard.segaloka.com`, `SEGALOKA_MARKETPLACE_ORIGIN=https://www.segaloka.com`.
+
 ## Migrasi database (`database/migrate.mjs`)
 - Urutan: `database/migrations/*.sql` (tanpa `*.rollback.sql` dan `*.draft.sql`), lalu `database/postgres/migrations/*.sql`.
 - Versi yang sudah diterapkan dicatat di tabel `public.schema_migrations` yang sudah ada (dibuat migrasi 0001) dan tidak dijalankan lagi, jadi runner aman dijalankan berulang.

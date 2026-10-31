@@ -32,6 +32,17 @@ function validMethod(method) {
     /^[A-Z]+$/.test(method);
 }
 
+// Bentuk kanonis IP klien yang ditandatangani: IPv4-mapped IPv6 menjadi
+// IPv4, IPv6 huruf kecil. Satu klien = satu identitas untuk rate limit.
+export function canonicalClientIp(value) {
+  if (typeof value !== 'string' || value.length > 45 || value.includes('%')) return null;
+  const mapped = /^::ffff:(\d{1,3}(?:\.\d{1,3}){3})$/i.exec(value);
+  const ip = mapped ? mapped[1] : value;
+  const version = isIP(ip);
+  if (version === 0) return null;
+  return version === 6 ? ip.toLowerCase() : ip;
+}
+
 function signature(secret, data) {
   return createHmac('sha256', secret)
     .update([
@@ -52,11 +63,12 @@ export function signIngressRequest(
   timestamp = Date.now(),
   nonce = randomBytes(16).toString('hex')
 ) {
+  const clientIp = canonicalClientIp(ip);
+
   if (
     typeof secret !== 'string' ||
     secret.length < 32 ||
-    typeof ip !== 'string' ||
-    isIP(ip) === 0 ||
+    clientIp === null ||
     !validMethod(method) ||
     !validTarget(target) ||
     !Buffer.isBuffer(body) ||
@@ -67,7 +79,7 @@ export function signIngressRequest(
   }
 
   const data = {
-    ip,
+    ip: clientIp,
     method,
     target,
     timestamp: String(timestamp),
@@ -76,7 +88,7 @@ export function signIngressRequest(
   };
 
   return {
-    'x-segaloka-client-ip': ip,
+    'x-segaloka-client-ip': clientIp,
     'x-segaloka-client-time': data.timestamp,
     'x-segaloka-client-nonce': nonce,
     'x-segaloka-client-body-sha256': data.bodyHash,
@@ -110,7 +122,7 @@ export function verifyIngressRequest(
 
   if (
     typeof ip !== 'string' ||
-    isIP(ip) === 0 ||
+    canonicalClientIp(ip) !== ip ||
     typeof timestamp !== 'string' ||
     !/^\d{13}$/.test(timestamp) ||
     typeof nonce !== 'string' ||

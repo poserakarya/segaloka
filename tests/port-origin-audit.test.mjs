@@ -54,7 +54,12 @@ test('portal entry servers proxy to their own BFF and BFFs accept only that entr
     assert.equal(runtime.bffPort, item.bff, item.role);
 
     assert.match(bff, new RegExp(`const port = ${item.bff};`), item.role);
-    const origins = [...bff.matchAll(/http:\/\/127\.0\.0\.1:(\d{4})/g)].map(m => Number(m[1])).filter(port => port !== 4192);
+    // Origin entry: literal http://127.0.0.1:<entry>, atau
+    // allowedPublicOrigins(<entry>) (origin entry lokal + SEGALOKA_PUBLIC_ORIGIN).
+    const origins = [
+      ...[...bff.matchAll(/http:\/\/127\.0\.0\.1:(\d{4})/g)].map(m => Number(m[1])),
+      ...[...bff.matchAll(/allowedPublicOrigins\((\d{4})\)/g)].map(m => Number(m[1]))
+    ].filter(port => port !== 4192);
     assert.ok(bff.includes("process.env.API_ORIGIN || 'http://127.0.0.1:4192'"), item.role);
     assert.deepEqual([...new Set(origins)], [item.entry], `${item.role} BFF origins`);
   }

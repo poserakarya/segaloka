@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { clientIpUnavailable, requestClientIp } from "../../../../lib/client-ip";
 import { randomBytes } from "node:crypto";
 import { signIngressRequest } from "../../../../lib/segaloka-ingress-v3.mjs";
 
@@ -102,6 +103,9 @@ function loginRedirect(request: NextRequest) {
 }
 
 export async function GET(request: NextRequest) {
+  const clientIp = requestClientIp(request);
+  if (!clientIp) return clientIpUnavailable();
+
   const params = request.nextUrl.searchParams;
   const dashboard = params.get("dashboard") as Dashboard | null;
   const challenge = params.get("challenge") || "";
@@ -126,7 +130,7 @@ export async function GET(request: NextRequest) {
   let status: number;
   let result: { ticket?: string; code?: string; workspaces?: { organizationId: string; organizationName: string }[] };
   try {
-    const signature = signIngressRequest(secret, { ip: "127.0.0.1", method: "POST", target, body });
+    const signature = signIngressRequest(secret, { ip: clientIp, method: "POST", target, body });
     const upstream = await fetch(new URL(target, baseUrl), {
       method: "POST",
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${accessToken}`, ...signature },
