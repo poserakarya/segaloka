@@ -413,7 +413,7 @@ function branchResponseForUi(data) {
   };
 }
 
-const server = http.createServer(async (req, res) => {
+export async function handleRequest(req, res) {
   try {
     if (
       ['POST', 'PUT'].includes(req.method) &&
@@ -1348,10 +1348,13 @@ const server = http.createServer(async (req, res) => {
         : 'INVALID_REQUEST'
     });
   }
-});
+}
 
-server.listen(port, host, () => {
+const server = http.createServer(handleRequest);
+if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+  server.listen(port, host, () => {
   console.log(
-    `Segaloka Travel BFF: http://${host}:${port}`
-  );
-});
+    `Segaloka Control Center BFF: http://${host}:${port}`
+    );
+  });
+}
