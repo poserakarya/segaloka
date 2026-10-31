@@ -1,4 +1,5 @@
 import http from 'node:http';
+import { AsyncLocalStorage } from 'node:async_hooks';
 import { randomBytes } from 'node:crypto';
 import { createRequire } from 'node:module';
 import { createSessionStore } from './session-store.mjs';
@@ -8,6 +9,7 @@ import { renderTravelV7Source } from './v7-source.mjs';
 import { resolveAccountPreferences } from '../../shared/runtime/account-preferences.mjs';
 import { serveSharedFont } from '../../shared/runtime/shared-fonts.mjs';
 import { allowedPublicOrigins } from '../../shared/runtime/v7-portal-entry.mjs';
+import { createClientIpResolver } from '../../shared/runtime/client-ip.mjs';
 import { createConfigReader, readDbConfig, readIngressSecret } from '../../shared/runtime/service-config.mjs';
 import {
   createReadStream,
@@ -179,7 +181,12 @@ async function getSession(req) {
   return id ? await sessions.get(id) : null;
 }
 
+const requestContext = new AsyncLocalStorage();
+const proxyClientIp = createClientIpResolver({ mode: 'proxy', trustLoopback: true });
+
 async function apiRequest(method, target, data, accessToken) {
+  const clientIp = requestContext.getStore()?.clientIp;
+  if (!clientIp) throw new Error('CLIENT_IP_UNAVAILABLE');
   const body = data === undefined
     ? Buffer.alloc(0)
     : Buffer.from(JSON.stringify(data));
@@ -187,7 +194,7 @@ async function apiRequest(method, target, data, accessToken) {
   const signed = signIngressRequest(
     ingressSecret,
     {
-      ip: '127.0.0.1',
+      ip: requestContext.getStore()?.clientIp,
       method,
       target,
       body
@@ -403,7 +410,12 @@ const marketplaceHandoff = createMarketplaceHandoff({
   successPath: '/bff/dashboard'
 });
 
-export async function handleRequest(req, res) {
+export async function handleRequest(req, res, { clientIp = proxyClientIp(req) } = {}) {
+  if (!clientIp) return json(res, 503, { code: 'CLIENT_IP_UNAVAILABLE' });
+  return requestContext.run({ clientIp }, () => routeRequest(req, res));
+}
+
+async function routeRequest(req, res) {
   try {
     const handoffPath = new URL(req.url, `http://${host}:${port}`).pathname;
     if (marketplaceHandoff.handles(req.method, handoffPath)) {
@@ -505,7 +517,7 @@ export async function handleRequest(req, res) {
       const signed = signIngressRequest(
         ingressSecret,
         {
-          ip: '127.0.0.1',
+          ip: requestContext.getStore()?.clientIp,
           method: 'GET',
           target,
           body: Buffer.alloc(0)
