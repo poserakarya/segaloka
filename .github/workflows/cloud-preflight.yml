@@ -1,0 +1,42 @@
+name: Segaloka Cloud Preflight Tests
+
+on:
+  push:
+    branches: [e2e-02]
+    paths:
+      - 'deploy/cloud/preflight.mjs'
+      - 'deploy/cloud/tests/preflight.test.mjs'
+      - '.github/workflows/cloud-preflight.yml'
+  pull_request:
+    branches: [e2e-02]
+    paths:
+      - 'deploy/cloud/preflight.mjs'
+      - 'deploy/cloud/tests/preflight.test.mjs'
+      - '.github/workflows/cloud-preflight.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: cloud-preflight-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  preflight-unit-tests:
+    name: Read-only preflight unit tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Setup Node.js 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Syntax check
+        run: node --check deploy/cloud/preflight.mjs && node --check deploy/cloud/tests/preflight.test.mjs
+      - name: Run isolated configuration tests
+        run: node --test deploy/cloud/tests/preflight.test.mjs

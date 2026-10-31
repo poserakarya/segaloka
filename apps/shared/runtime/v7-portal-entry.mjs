@@ -1,8 +1,6 @@
 import http from 'node:http';
 import { existsSync } from 'node:fs';
 
-import { resolveAccountPreferences } from './account-preferences.mjs';
-import { renderV7LoginPage, v7StyleBlock, V7_LOGIN_HTML_HEADERS } from './v7-login-page.mjs';
 import { V7_ORIGINAL_SOURCE_URL, V7_PORTALS } from './v7-portal-source.mjs';
 
 // Entry server portal: satu origin per dashboard.
@@ -109,7 +107,6 @@ export function createPortalEntryServer({ role, port, bffPort, env = process.env
     throw new Error('V7_ORIGINAL_SOURCE_NOT_FOUND');
   }
 
-  const styleBlock = v7StyleBlock();
   const origins = allowedPublicOrigins(port, env);
   const forwardedOrigin = localEntryOrigin(port);
 
@@ -132,21 +129,32 @@ export function createPortalEntryServer({ role, port, bffPort, env = process.env
         service: `segaloka-${role}`,
         status: 'running',
         source: 'original-v7',
-        login: 'v7-login',
+        login: 'marketplace',
         dashboardAccess: 'protected'
       });
     }
 
     if (req.method === 'GET' && (path === '/' || path === '/login' || path === '/index.html')) {
-      const html = renderV7LoginPage({
-        role,
-        styleBlock,
-        preferences: resolveAccountPreferences({
-          acceptLanguage: req.headers['accept-language']
-        })
+      // Dashboard non-admin tidak menyediakan formulir login sendiri.
+      // Tujuan login harus dikonfigurasi ke route login Marketplace existing.
+      const loginUrl = env.SEGALOKA_MARKETPLACE_LOGIN_URL;
+      if (!loginUrl) return sendJson(res, 503, { code: 'MARKETPLACE_LOGIN_NOT_CONFIGURED' });
+      let destination;
+      try {
+        destination = new URL(loginUrl);
+        if (destination.protocol !== 'https:' || destination.hostname !== 'segaloka.com' && destination.hostname !== 'www.segaloka.com' || destination.username || destination.password) {
+          throw new Error('INVALID_MARKETPLACE_LOGIN_URL');
+        }
+      } catch {
+        return sendJson(res, 503, { code: 'INVALID_MARKETPLACE_LOGIN_URL' });
+      }
+      res.writeHead(302, {
+        Location: destination.toString(),
+        'Cache-Control': 'no-store',
+        'Referrer-Policy': 'no-referrer',
+        'X-Content-Type-Options': 'nosniff'
       });
-      res.writeHead(200, V7_LOGIN_HTML_HEADERS);
-      return res.end(html);
+      return res.end();
     }
 
     return sendJson(res, 404, { code: 'NOT_FOUND' });
