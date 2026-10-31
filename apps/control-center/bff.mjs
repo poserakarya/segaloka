@@ -1,4 +1,5 @@
 import http from 'node:http';
+import https from 'node:https';
 import { randomBytes } from 'node:crypto';
 import { createRequire } from 'node:module';
 import { createSessionStore } from './session-store.mjs';
@@ -114,7 +115,7 @@ const pool = new Pool({
   port: Number(
     isolatedTestConfig
       ? dbConfig.DB_PORT
-      : (process.env.CONTROL_CENTER_DB_PORT || '5434')
+      : (dbConfig.DB_PORT || process.env.CONTROL_CENTER_DB_PORT || '5434')
   ),
   database: dbConfig.DB_NAME,
   user: dbConfig.DB_USER,
@@ -123,6 +124,10 @@ const pool = new Pool({
   max: 5,
   connectionTimeoutMillis: 5000,
   idleTimeoutMillis: 30000
+});
+
+pool.on('error', (error) => {
+  console.error('CONTROL_CENTER_DATABASE_POOL_ERROR', error?.code || 'CONNECTION_ERROR');
 });
 
 const sessions = createSessionStore(
@@ -212,7 +217,7 @@ async function apiRequest(method, target, data, accessToken) {
   try {
     response = await new Promise((resolve, reject) => {
       const url = new URL(apiOrigin + target);
-      const request = http.request({
+      const request = (url.protocol === 'https:' ? https : http).request({
         protocol: url.protocol,
         hostname: url.hostname,
         port: url.port,
