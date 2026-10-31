@@ -7,6 +7,7 @@ import { classifyLoginResponse } from './login-flow.mjs';
 import { renderTravelV7Source } from './v7-source.mjs';
 import { resolveAccountPreferences } from '../../shared/runtime/account-preferences.mjs';
 import { serveSharedFont } from '../../shared/runtime/shared-fonts.mjs';
+import { allowedPublicOrigins } from '../../shared/runtime/v7-portal-entry.mjs';
 import { createConfigReader, readDbConfig, readIngressSecret } from '../../shared/runtime/service-config.mjs';
 import {
   createReadStream,
@@ -352,24 +353,13 @@ function contentType(path) {
     return types[extname(path).toLowerCase()] ||
       'application/octet-stream';
 }
+// Origin entry existing dan origin publik dashboard. Frontend legacy tetap
+// diterima untuk kompatibilitas container selama migrasi.
+const allowedOrigins = allowedPublicOrigins(port);
+allowedOrigins.add(process.env.FRONTEND_ORIGIN || 'http://127.0.0.1:4200');
 function isAllowedOrigin(req) {
   const origin = req.headers.origin;
-
-  if (typeof origin !== 'string') {
-    return false;
-  }
-
-  try {
-    const parsed = new URL(origin);
-
-    return parsed.origin === `http://${host}:${port}` ||
-      parsed.origin === (
-        process.env.FRONTEND_ORIGIN ||
-        'http://127.0.0.1:4200'
-      );
-  } catch {
-    return false;
-  }
+  return typeof origin === 'string' && allowedOrigins.has(origin);
 }
 
 function sessionCookie(value, clear = false) {
