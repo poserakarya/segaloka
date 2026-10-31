@@ -14,7 +14,7 @@ const FRONTEND = 4896;
 const BFF = 4897;
 const PUBLIC = 'https://travel.preview.example';
 
-test('travel production frontend: static build, SPA fallback, BFF proxy with origin mapping', { timeout: 30000 }, async () => {
+test('travel production frontend: Marketplace redirect, static assets, BFF proxy with origin mapping', { timeout: 30000 }, async () => {
   const dist = mkdtempSync(join(tmpdir(), 'travel-dist-'));
   mkdirSync(join(dist, 'assets'));
   writeFileSync(join(dist, 'index.html'), '<!doctype html><div id="root"></div><script type="module" src="/assets/app.js"></script>');
@@ -38,14 +38,14 @@ test('travel production frontend: static build, SPA fallback, BFF proxy with ori
     });
     const url = path => `http://127.0.0.1:${FRONTEND}${path}`;
 
-    const index = await fetch(url('/'));
-    assert.equal(index.status, 200);
-    assert.match(await index.text(), /id="root"/);
-    assert.equal(index.headers.get('cache-control'), 'no-store');
-    assert.match(index.headers.get('content-security-policy'), /frame-ancestors 'none'/);
-
-    const spa = await fetch(url('/login/apa-saja'));
-    assert.match(await spa.text(), /id="root"/);
+    // Tidak ada form login Travel: halaman mana pun -> handoff Marketplace.
+    for (const path of ['/', '/login/apa-saja']) {
+      const index = await fetch(url(path), { redirect: 'manual' });
+      assert.equal(index.status, 302, path);
+      assert.equal(index.headers.get('location'), '/bff/auth/handoff/start');
+      assert.equal(index.headers.get('cache-control'), 'no-store');
+      assert.match(index.headers.get('content-security-policy'), /frame-ancestors 'none'/);
+    }
 
     const asset = await fetch(url('/assets/app.js'));
     assert.equal(asset.status, 200);
@@ -54,7 +54,7 @@ test('travel production frontend: static build, SPA fallback, BFF proxy with ori
     // Parser URL menormalkan ../ (juga %2e%2e) sebelum routing: tidak ada
     // berkas di luar dist yang bisa dibaca.
     for (const path of ['/assets/%2e%2e/%2e%2e/package.json', '/assets/../server/bff.mjs', '/assets/..%2f..%2fpackage.json']) {
-      const response = await fetch(url(path));
+      const response = await fetch(url(path), { redirect: 'manual' });
       const body = await response.text();
       assert.ok(!body.includes('"name"') && !body.includes('import '), path);
     }
@@ -68,6 +68,17 @@ test('travel production frontend: static build, SPA fallback, BFF proxy with ori
     const noOrigin = await fetch(url('/bff/login'), { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' });
     assert.equal(noOrigin.status, 403);
     assert.equal(seen.length, 1, 'request ditolak tidak boleh sampai ke BFF');
+
+    // Callback handoff dari Marketplace diteruskan dengan Origin aslinya
+    // (diperiksa BFF); path lain dengan Origin Marketplace tetap ditolak.
+    const callback = await fetch(url('/bff/auth/handoff/callback'), {
+      method: 'POST', headers: { Origin: 'https://www.segaloka.com', 'Content-Type': 'application/x-www-form-urlencoded' }, body: 'ticket=x'
+    });
+    assert.equal(callback.status, 200);
+    assert.deepEqual(seen.at(-1), { method: 'POST', url: '/bff/auth/handoff/callback', origin: 'https://www.segaloka.com', host: `127.0.0.1:${BFF}` });
+    const marketplaceElsewhere = await fetch(url('/bff/logout'), { method: 'POST', headers: { Origin: 'https://www.segaloka.com' }, body: '{}' });
+    assert.equal(marketplaceElsewhere.status, 403);
+    assert.equal(seen.length, 2);
 
     assert.equal((await fetch(url('/'), { method: 'POST' })).status, 405);
   } finally {
